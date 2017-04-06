@@ -1,0 +1,15 @@
+{
+  "name": "bluesky-node-languageservers",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "Eclipse BlueSky",
+  "license": "EPL",
+  "dependencies": {
+  	"vscode-html-languageserver": "/usr/share/code/resources/app/extensions/html/server",
+  	"vscode-json-languageserver": "/usr/share/code/resources/app/extensions/json/server",
+  	"vscode-css-languageserver": "/usr/share/code/resources/app/extensions/css/server",
+  	"javascript-typescript-langserver": "^2.0.0-pre.9"
+  }
+}

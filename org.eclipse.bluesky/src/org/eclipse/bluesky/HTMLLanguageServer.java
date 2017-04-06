@@ -10,12 +10,17 @@
  *******************************************************************************/
 package org.eclipse.bluesky;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 
 public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
@@ -23,11 +28,15 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 	public HTMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
-		commands.add(InitializeLaunchConfigurations.getVSCodeLocation("/resources/app/extensions/html/server/out/htmlServerMain.js"));
-		commands.add("--stdio");
-		String workingDir = InitializeLaunchConfigurations.getVSCodeLocation("/resources/app/extensions/html/server/out");
-		setCommands(commands);
-		setWorkingDirectory(workingDir);
+		try {
+			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/vscode-html-languageserver/out/htmlServerMain.js"));
+			commands.add(url.getFile());
+			commands.add("--stdio");
+			setCommands(commands);
+			setWorkingDirectory(System.getProperty("user.dir"));
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
 	}
 
 	@Override

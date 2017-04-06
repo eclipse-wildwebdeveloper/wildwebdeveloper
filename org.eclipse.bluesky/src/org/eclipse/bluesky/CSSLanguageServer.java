@@ -10,13 +10,18 @@
  *******************************************************************************/
 package org.eclipse.bluesky;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.InitializeResult;
@@ -29,11 +34,15 @@ public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 	public CSSLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
-		commands.add(InitializeLaunchConfigurations.getVSCodeLocation("/resources/app/extensions/css/server/out/cssServerMain.js"));
-		commands.add("--stdio");
-		String workingDir = InitializeLaunchConfigurations.getVSCodeLocation("/resources/app/extensions/css/server/out");
-		setCommands(commands);
-		setWorkingDirectory(workingDir);
+		try {
+			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/vscode-css-languageserver/out/cssServerMain.js"));
+			commands.add(url.getFile());
+			commands.add("--stdio");
+			setCommands(commands);
+			setWorkingDirectory(System.getProperty("user.dir"));
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
 	}
 
 	@Override
