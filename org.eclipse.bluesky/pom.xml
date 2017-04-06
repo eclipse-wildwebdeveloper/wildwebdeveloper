@@ -22,10 +22,28 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://raw.githubusercontent.com/dotnet/csharp-tmLanguage/master/grammars/csharp.tmLanguage</url>
-							<outputDirectory>${project.basedir}/grammar</outputDirectory>
-							<skipCache>true</skipCache>
-							<overwrite>true</overwrite>
+							<url>https://az764295.vo.msecnd.net/stable/d9484d12b38879b7f4cdd1150efeb2fd2c1fbf39/code-stable-code_1.11.1-1491486998_amd64.tar.gz</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<id>npm-install</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>install</arguments>
+							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -34,7 +52,7 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
-					<jgit.ignore>pom.xml,grammar</jgit.ignore>
+					<jgit.ignore>pom.xml,language-servers/node_modules</jgit.ignore>
 				</configuration>
 			</plugin>
 		</plugins>

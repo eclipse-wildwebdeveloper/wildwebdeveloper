@@ -22,3 +22,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.core;bundle-version="3.11.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Eclipse-BundleShape: dir
