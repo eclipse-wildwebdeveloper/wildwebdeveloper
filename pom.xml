@@ -20,6 +20,7 @@
 	<modules>
 		<module>target-platform</module>
 		<module>org.eclipse.bluesky</module>
+		<module>org.eclipse.bluesky.feature</module>
 		<module>repository</module>
 	</modules>
 	<build>

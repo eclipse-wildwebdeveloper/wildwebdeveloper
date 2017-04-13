@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <bundle id="org.eclipse.bluesky" version="0.1.0.qualifier">
+   <feature id="org.eclipse.bluesky.feature" version="0.1.0.qualifier">
       <category name="BlueSky"/>
-   </bundle>
+   </feature>
    <feature id="tm-feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
@@ -51,10 +51,10 @@
    <bundle id="org.eclipse.mylyn.commons.workbench" version="3.22.0.v20161206-0357">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.wikitext.core" version="2.11.0.v20170124-1727">
+   <bundle id="org.eclipse.mylyn.wikitext" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.wikitext.markdown.core" version="2.11.0.v20170124-1727">
+   <bundle id="org.eclipse.mylyn.wikitext.markdown" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="com.google.guava" version="18.0.0.v20161115-1643">
