@@ -14,7 +14,7 @@
 	<properties>
 		<tycho-version>1.0.0</tycho-version>
 		<tycho-extras-version>${tycho-version}</tycho-extras-version>
-		<tycho.scmUrl>scm:git:https://github.com/mickaelistria/aCute.git</tycho.scmUrl>
+		<tycho.scmUrl>scm:git:https://github.com/mickaelistria/eclipse-bluesky.git</tycho.scmUrl>
 	</properties>
 
 	<modules>
@@ -110,7 +110,7 @@
 					<append>true</append>
 					<destFile>${sonar.jacoco.reportPath}</destFile>
 					<includes>
-						<include>org.eclipse.acute*</include>
+						<include>org.eclipse.bluesky*</include>
 					</includes>
 				</configuration>
 			</plugin>
