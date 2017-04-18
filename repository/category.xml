@@ -69,7 +69,7 @@
    <bundle id="org.eclipse.xtext.xbase.lib" version="2.11.0.v20170124-1424">
       <category name="Dependencies"/>
    </bundle>
-   <category-def name="aCute" label="BlueSky - Web Dev in Eclipse IDE"/>
+   <category-def name="BlueSky" label="BlueSky - Web Dev in Eclipse IDE"/>
    <category-def name="Dependencies" label="Dependencies"/>
    <repository-reference location="http://download.eclipse.org/lsp4e/snapshots" enabled="true" />
    <repository-reference location="http://download.eclipse.org/tm4e/snapshots" enabled="true" />
