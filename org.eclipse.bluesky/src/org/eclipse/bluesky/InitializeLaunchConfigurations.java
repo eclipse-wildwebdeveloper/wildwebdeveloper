@@ -21,8 +21,12 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 public class InitializeLaunchConfigurations {
+
+	private static boolean alreadyWarned;
 
 	public static String getVSCodeLocation(String appendPathSuffix) {
 		String res = null;
@@ -68,13 +72,25 @@ public class InitializeLaunchConfigurations {
 
 		// Try default install path as last resort
 		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
-			String defaultInstallPath = "/usr/local/bin/node";
-			if (Files.exists(Paths.get(defaultInstallPath))) {
-				return defaultInstallPath;
-			}
+			res = "/usr/local/bin/node";
 		}
 
-		return res;
+		if (Files.exists(Paths.get(res))) {
+			return res;
+		} else if (!alreadyWarned){
+			warnNodeJSMissing();
+			alreadyWarned = true;
+		}
+		return null;
+	}
+
+	private static void warnNodeJSMissing() {
+		Display.getDefault().asyncExec(() -> {
+			MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
+					"Missing node.js",
+					"Could not find node.js. This will result in editors missing key features.\n" +
+					"Please make sure node.js is installed and that your PATH environement variable contains the location to the `node` executable.");
+		});
 	}
 
 }
