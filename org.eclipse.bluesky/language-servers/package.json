@@ -10,6 +10,6 @@
   	"vscode-html-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/html/server",
   	"vscode-json-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/json/server",
   	"vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css/server",
-  	"javascript-typescript-langserver": "^2.0.0-pre.9"
+  	"javascript-typescript-langserver": "^2.0.0-pre.24"
   }
 }
