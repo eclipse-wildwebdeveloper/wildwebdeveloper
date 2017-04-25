@@ -5,6 +5,7 @@ BlueSky is a set of functionalities for the Eclipse IDE to provide simple and ef
 BlueSky is based on the Eclipse Generic Editor framework from Eclipse Platform, LSP4E and TM4E in order to provide editors based on TextMate grammars and VSCode Language Server. It also includes with Eclipse JSDT debuggers.
 
 See ▶️ http://www.screencast.com/t/BaC9DxHIqD
+![screenshot](bluesky-screenshot.png "BlueSky screenshot")
 
 
 ## Installation
