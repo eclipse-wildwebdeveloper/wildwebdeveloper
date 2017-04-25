@@ -62,7 +62,6 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
-				<version>${tycho-version}</version>
 				<configuration>
 					<sourceReferences>
 						<generate>true</generate>
@@ -91,7 +90,7 @@
 							<!-- disable until a first release took place -->
 							<skip>true</skip>
 							<baselines>
-								<url>http://repository.jboss.org/nexus/content/unzip/unzip/org/eclipse/bluesky/repository/0.1.0/repository-0.1.0.zip-unzip/t</url>
+								<url>Release repo</url>
 							</baselines>
 						</configuration>
 					</execution>
