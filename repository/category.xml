@@ -33,22 +33,22 @@
    <bundle id="com.google.gson" version="2.7.0.v20170129-0911">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.core" version="3.22.0.v20161024-1634">
+   <bundle id="org.eclipse.mylyn.commons.core" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.notifications.core" version="1.14.0.v20161006-2037">
+   <bundle id="org.eclipse.mylyn.commons.notifications.core" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.notifications.ui" version="1.14.0.v20161024-1634">
+   <bundle id="org.eclipse.mylyn.commons.notifications.ui" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.screenshots" version="3.22.0.v20161006-2037">
+   <bundle id="org.eclipse.mylyn.commons.screenshots" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.ui" version="3.22.0.v20170213-1708">
+   <bundle id="org.eclipse.mylyn.commons.ui" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.workbench" version="3.22.0.v20161206-0357">
+   <bundle id="org.eclipse.mylyn.commons.workbench" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="org.eclipse.mylyn.wikitext" version="0.0.0">
