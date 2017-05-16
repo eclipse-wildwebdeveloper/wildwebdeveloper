@@ -33,7 +33,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/insider/7efc373d6874511f730bdf7a30b4728ce84b22a8/code-insider-1.12.0-1492495843_amd64.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/insider/78636af970837c2c9c70ccccbaf4ea4ab0a3a03b/code-insider-1.13.0-1494928238_amd64.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
