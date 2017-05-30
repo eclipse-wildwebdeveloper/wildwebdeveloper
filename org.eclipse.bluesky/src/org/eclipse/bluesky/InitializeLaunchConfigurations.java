@@ -75,7 +75,7 @@ public class InitializeLaunchConfigurations {
 			res = "/usr/local/bin/node";
 		}
 
-		if (Files.exists(Paths.get(res))) {
+		if (res != null && Files.exists(Paths.get(res))) {
 			return res;
 		} else if (!alreadyWarned){
 			warnNodeJSMissing();
