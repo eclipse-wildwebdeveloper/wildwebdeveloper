@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="bluesky" sequenceNumber="6">
+<?pde version="3.8"?><target name="bluesky" sequenceNumber="7">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.lsp4e" version="0.0.0"/>
@@ -10,7 +10,7 @@
 <repository location="http://download.eclipse.org/tm4e/snapshots/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<repository location="http://download.eclipse.org/tools/orbit/S-builds/S20170505151127/repository"/>
+<repository location="http://download.eclipse.org/tools/orbit/R-builds/R20170516192513/repository"/>
 <unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -21,7 +21,7 @@
 <unit id="org.hamcrest" version="0.0.0"/>
 <unit id="org.junit" version="0.0.0"/>
 <unit id="org.mockito" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.7milestones/S-4.7M7-201705120500/"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.7milestones/S-4.7RC2-201705242000/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <repository location="http://download.eclipse.org/releases/oxygen/"/>

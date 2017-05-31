@@ -57,7 +57,7 @@
    <bundle id="org.eclipse.mylyn.wikitext.markdown" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="com.google.guava" version="18.0.0.v20161115-1643">
+   <bundle id="com.google.guava" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="org.apache.commons.lang" version="2.6.0.v201404270220">
