@@ -1,7 +1,6 @@
 package org.eclipse.bluesky;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +9,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
-import org.eclipse.lsp4j.jsonrpc.messages.Message;
-import org.eclipse.lsp4j.services.LanguageServer;
 
 public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -28,8 +25,4 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		}
 	}
 	
-	@Override
-	public void handleMessage(Message message, LanguageServer languageServer, URI rootURI) {
-		super.handleMessage(message, languageServer, rootURI);
-	}
 }
