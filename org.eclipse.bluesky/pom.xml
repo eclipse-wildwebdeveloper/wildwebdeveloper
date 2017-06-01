@@ -53,7 +53,9 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<executable>npm</executable>
-							<arguments>install</arguments>
+							<arguments>
+								<arg>install</arg>
+							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
 					</execution>

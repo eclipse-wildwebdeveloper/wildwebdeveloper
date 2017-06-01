@@ -1,0 +1,30 @@
+language: java
+jdk: oraclejdk8
+env:
+  global:
+    - secure: "IbRmspNHLx3ugAuWJsK8iUgEOjgdjugS7t2GS2sGE6qctSAn9+G7a2Fog4hO5F92ILOMvzspwkOsY/d7b+D5Hhy4cL8NzDdnCu1uKv78FEtwujZy1CC28h7qYzomIdQcijOnobuGOTRVfuhFFRiBEf9yR0h19eqqj85My0SRRuLPkPATGmtXorITnBHxOmUte8bXbnNYLeWoXKWT9lX7CLgiemt+I3FNEvs2IeaQAo/bLrkd+inr+U1F9d5EfhLme5YxZyBAaGJtNzMt+keAr9/LtPy3+pCYdCAnnv6E7kG9XZU4qthGllRSxAnCulor3oF/A6+kTwbywvumUgL0lFEFZunKvH4nYpKnlj4f+qqfXQkUxXJ5lP2qod4Mw4Pfa3I2LHuOSvN5GMDBKZ56j60OqY8DiNzRsjDUOrwgZsEm2wqNlroB+KDmYYPRGbaqCMAxz/EMBRZMqF+ME7PbwiY8lVo0NcB6FfS250L7Fcc2Fb9M/H6B0fBSFJ4F+D+HJn816vdN14mK+xCW7JyCWa4QrJYBNEY9ffn+vfEv9LsjXoddobCs/X5S9MG4IoONR0r0iPJxO7lpf5Acb9t8uPdseBR1i163S7Hoc9Oo7FQWWhY7ZCE1m+w0ADJR+O2eJD7IYcHIBQrrN8h7n/e+a1a1AyVJeUhTHw4PsCYQ9YI=" 
+#cache:
+#  directories:
+#  - "$HOME/apache-maven-3.5.0"
+#before_install:
+#- export M2_HOME=$HOME/apache-maven-3.5.0
+#- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz | tar zxf - -C $HOME; fi
+#- export PATH=$M2_HOME/bin:$PATH
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+  - nvm install 7
+install:
+  - true
+script:
+  - if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" ]] ; then
+       mvn clean install;
+    else
+       mvn clean verify;
+    fi
+after_success:
+  - if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" ]] ; then
+     cd repository/
+     mvn deploy
+    fi
