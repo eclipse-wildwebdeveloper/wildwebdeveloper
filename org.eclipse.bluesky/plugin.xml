@@ -103,7 +103,8 @@
       <server
             class="org.eclipse.bluesky.JSonLanguageServer"
             id="org.eclipse.bluesky.json"
-            label="JSon Language Server (VSCode)">
+            label="JSon Language Server (VSCode)"
+            serverInterface="org.eclipse.bluesky.JSonLanguageServerInterface" >
       </server>
       <contentTypeMapping
             contentType="org.eclipse.bluesky.json"
