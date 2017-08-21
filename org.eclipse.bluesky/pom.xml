@@ -65,7 +65,7 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
-					<jgit.ignore>pom.xml,language-servers/node_modules</jgit.ignore>
+					<jgit.ignore>pom.xml,server/node_modules</jgit.ignore>
 				</configuration>
 			</plugin>
 		</plugins>
