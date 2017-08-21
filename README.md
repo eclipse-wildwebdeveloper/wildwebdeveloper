@@ -1,5 +1,8 @@
 # BlueSky : Web dev in Eclipse IDE
 
+[![Eclipse License](http://img.shields.io/badge/license-Eclipse-brightgreen.svg)](https://github.com/mickaelistria/eclipse-bluesky/blob/master/LICENSE)
+[![Build Status](https://secure.travis-ci.org/mickaelistria/eclipse-bluesky.png)](http://travis-ci.org/mickaelistria/eclipse-bluesky)
+
 BlueSky is a set of functionalities for the Eclipse IDE to provide simple and efficient Web development (HTML, CSS, JS, JSon, Node.js...). It's meant to be an alternative to traditional Eclipse Web Tools Platform (WTP).
 
 BlueSky is based on the Eclipse Generic Editor framework from Eclipse Platform, LSP4E and TM4E in order to provide editors based on TextMate grammars and VSCode Language Server. It also includes with Eclipse JSDT debuggers.
