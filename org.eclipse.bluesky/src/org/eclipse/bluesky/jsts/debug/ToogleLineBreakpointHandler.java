@@ -1,4 +1,4 @@
-package org.eclipse.bluesky.debug;
+package org.eclipse.bluesky.jsts.debug;
 
 import java.util.HashMap;
 
