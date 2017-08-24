@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
+   <!-- BlueSky/Core -->
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
@@ -8,18 +10,71 @@
             id="org.eclipse.bluesky.parent"
             name="BlueSky supported web dev file"
             priority="normal"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.parent"
+            editorId="org.eclipse.ui.genericeditor.GenericEditor">
+      </editorContentTypeBinding>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.genericeditor.presentationReconcilers">
+      <presentationReconciler
+            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
+            contentType="org.eclipse.bluesky.parent">
+      </presentationReconciler>
+   </extension>
+
+   <!-- JSON Language -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.bluesky.parent"
+            file-extensions="json"
+            id="org.eclipse.bluesky.json"
+            name="JSON"
+            priority="normal">
+      </content-type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.bluesky.json.JSonLanguageServer"
+            id="org.eclipse.bluesky.json"
+            label="JSon Language Server (VSCode)"
+            serverInterface="org.eclipse.bluesky.json.JSonLanguageServerInterface" >
+      </server>
+      <contentTypeMapping
+            contentType="org.eclipse.bluesky.json"
+            id="org.eclipse.bluesky.json">
+      </contentTypeMapping>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/JSON.tmLanguage"
+            scopeName="source.json">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.json"
+            scopeName="source.json">
+      </scopeNameContentTypeBinding>
+   </extension>
+   
+   <!-- CSS Language -->
+      
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.bluesky.parent"
             file-extensions="less"
             id="org.eclipse.bluesky.less"
             name="LESS"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.bluesky.parent"
-            file-extensions="js"
-            id="org.eclipse.bluesky.js"
-            name="JavaScript"
             priority="normal">
       </content-type>
       <content-type
@@ -36,46 +91,12 @@
             name="CSS"
             priority="normal">
       </content-type>
-      <content-type
-            base-type="org.eclipse.bluesky.parent"
-            file-extensions="json"
-            id="org.eclipse.bluesky.json"
-            name="JSON"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.bluesky.parent"
-            file-extensions="yaml"
-            id="org.eclipse.bluesky.yaml"
-            name="YAML"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.bluesky.parent"
-            file-extensions="html"
-            id="org.eclipse.bluesky.html"
-            name="HTML"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.bluesky.parent"
-            file-extensions="ts"
-            id="org.eclipse.bluesky.ts"
-            name="TypeScript"
-            priority="normal">
-      </content-type>
    </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editorContentTypeBinding
-            contentTypeId="org.eclipse.bluesky.parent"
-            editorId="org.eclipse.ui.genericeditor.GenericEditor">
-      </editorContentTypeBinding>
-   </extension>
+
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
-            class="org.eclipse.bluesky.CSSLanguageServer"
+            class="org.eclipse.bluesky.css.CSSLanguageServer"
             id="org.eclipse.bluesky.css"
             label="CSS/LESS/SCSS Language Server (VSCode)">
       </server>
@@ -91,8 +112,36 @@
             contentType="org.eclipse.bluesky.less"
             id="org.eclipse.bluesky.css">
       </contentTypeMapping>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/css.plist"
+            scopeName="source.css">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.css"
+            scopeName="source.css">
+      </scopeNameContentTypeBinding>
+   </extension>
+      
+   <!-- HTML Language -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.bluesky.parent"
+            file-extensions="html"
+            id="org.eclipse.bluesky.html"
+            name="HTML"
+            priority="normal">
+      </content-type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
       <server
-            class="org.eclipse.bluesky.HTMLLanguageServer"
+            class="org.eclipse.bluesky.html.HTMLLanguageServer"
             id="org.eclipse.bluesky.html"
             label="HTML Language Server (VSCode)">
       </server>
@@ -100,18 +149,43 @@
             contentType="org.eclipse.bluesky.html"
             id="org.eclipse.bluesky.html">
       </contentTypeMapping>
+   </extension>
+
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/html.json"
+            scopeName="text.html.basic">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.html"
+            scopeName="text.html.basic">
+      </scopeNameContentTypeBinding>
+   </extension>
+
+   <!-- JavaScript/TypeScript Language -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.bluesky.parent"
+            file-extensions="js"
+            id="org.eclipse.bluesky.js"
+            name="JavaScript"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.bluesky.parent"
+            file-extensions="ts"
+            id="org.eclipse.bluesky.ts"
+            name="TypeScript"
+            priority="normal">
+      </content-type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
       <server
-            class="org.eclipse.bluesky.JSonLanguageServer"
-            id="org.eclipse.bluesky.json"
-            label="JSon Language Server (VSCode)"
-            serverInterface="org.eclipse.bluesky.JSonLanguageServerInterface" >
-      </server>
-      <contentTypeMapping
-            contentType="org.eclipse.bluesky.json"
-            id="org.eclipse.bluesky.json">
-      </contentTypeMapping>
-      <server
-            class="org.eclipse.bluesky.JSTSLanguageServer"
+            class="org.eclipse.bluesky.jsts.JSTSLanguageServer"
             id="org.eclipse.bluesky.jsts"
             label="JavaScript-TypeScript Language Server">
       </server>
@@ -124,24 +198,9 @@
             id="org.eclipse.bluesky.jsts">
       </contentTypeMapping>
    </extension>
+   
    <extension
          point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/css.plist"
-            scopeName="source.css">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.bluesky.css"
-            scopeName="source.css">
-      </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/html.json"
-            scopeName="text.html.basic">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.bluesky.html"
-            scopeName="text.html.basic">
-      </scopeNameContentTypeBinding>
       <grammar
             path="grammars/JavaScript.tmLanguage.json"
             scopeName="source.js">
@@ -149,22 +208,6 @@
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.bluesky.js"
             scopeName="source.js">
-      </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/JSON.tmLanguage"
-            scopeName="source.json">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.bluesky.json"
-            scopeName="source.json">
-      </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/YAML.tmLanguage"
-            scopeName="source.yaml">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.bluesky.yaml"
-            scopeName="source.yaml">
       </scopeNameContentTypeBinding>
       <grammar
             path="grammars/TypeScript.tmLanguage.json"
@@ -175,18 +218,37 @@
             scopeName="source.ts">
       </scopeNameContentTypeBinding>
    </extension>
-   <extension
-         point="org.eclipse.ui.genericeditor.presentationReconcilers">
-      <presentationReconciler
-            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
-            contentType="org.eclipse.bluesky.parent">
-      </presentationReconciler>
-   </extension>
+
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.eclipse.bluesky.debug.ToogleLineBreakpointHandler"
+            class="org.eclipse.bluesky.jsts.debug.ToogleLineBreakpointHandler"
             commandId="org.eclipse.debug.ui.commands.ToggleLineBreakpoint">
       </handler>
    </extension>
+   
+   <!-- YAML Language -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.bluesky.parent"
+            file-extensions="yaml"
+            id="org.eclipse.bluesky.yaml"
+            name="YAML"
+            priority="normal">
+      </content-type>
+   </extension>
+      
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/YAML.tmLanguage"
+            scopeName="source.yaml">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.yaml"
+            scopeName="source.yaml">
+      </scopeNameContentTypeBinding>
+   </extension>
+
 </plugin>

@@ -9,7 +9,7 @@
  *  Michał Niewrzał (Rogue Wave Software Inc.) - initial implementation
  *  Angelo Zerr <angelo.zerr@gmail.com> - JSON Schema support
  *******************************************************************************/
-package org.eclipse.bluesky;
+package org.eclipse.bluesky.json;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.bluesky.Activator;
+import org.eclipse.bluesky.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -89,7 +91,9 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	 * @param associations
 	 */
 	private void fillSchemaAssociationsForTypeScript(Map<String, List<String>> associations) {
+		associations.put("/tsconfig.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
 		associations.put("/tsconfig.*.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
+		associations.put("/typing.json", Arrays.asList("http://json.schemastore.org/typing"));
 	}
 	
 	/**

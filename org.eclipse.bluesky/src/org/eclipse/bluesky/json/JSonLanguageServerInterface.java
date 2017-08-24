@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.bluesky;
+package org.eclipse.bluesky.json;
 
 import java.util.List;
 import java.util.Map;

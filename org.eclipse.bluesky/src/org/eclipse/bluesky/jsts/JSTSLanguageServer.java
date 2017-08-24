@@ -1,10 +1,12 @@
-package org.eclipse.bluesky;
+package org.eclipse.bluesky.jsts;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.bluesky.Activator;
+import org.eclipse.bluesky.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
