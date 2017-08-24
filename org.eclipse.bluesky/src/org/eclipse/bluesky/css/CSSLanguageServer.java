@@ -8,7 +8,7 @@
  * Contributors:
  *  Michał Niewrzał (Rogue Wave Software Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.bluesky;
+package org.eclipse.bluesky.css;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.bluesky.Activator;
+import org.eclipse.bluesky.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

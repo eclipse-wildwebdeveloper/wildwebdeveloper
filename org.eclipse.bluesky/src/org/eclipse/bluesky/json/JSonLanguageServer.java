@@ -6,10 +6,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  MichaÅ‚ NiewrzaÅ‚ (Rogue Wave Software Inc.) - initial implementation
+ *  Michal‚ Niewrzal‚ (Rogue Wave Software Inc.) - initial implementation
  *  Angelo Zerr <angelo.zerr@gmail.com> - JSON Schema support
  *******************************************************************************/
-package org.eclipse.bluesky;
+package org.eclipse.bluesky.json;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.bluesky.Activator;
+import org.eclipse.bluesky.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -77,10 +79,10 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	 */
 	private void fillSchemaAssociationsForJavascript(Map<String, List<String>> associations) {
 		associations.put("package.json", Arrays.asList("http://json.schemastore.org/package"));
-		associations.put("/bower.json", Arrays.asList("http://json.schemastore.org/bower"));		
+		associations.put("/bower.json", Arrays.asList("http://json.schemastore.org/bower"));
 		associations.put("/.bower.json", Arrays.asList("http://json.schemastore.org/bower"));
 		associations.put("/.bowerrc", Arrays.asList("http://json.schemastore.org/bowercc"));
-		associations.put("/jsconfig.json", Arrays.asList("http://json.schemastore.org/jsconfig"));		
+		associations.put("/jsconfig.json", Arrays.asList("http://json.schemastore.org/jsconfig"));
 	}
 
 	/**
@@ -89,9 +91,11 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	 * @param associations
 	 */
 	private void fillSchemaAssociationsForTypeScript(Map<String, List<String>> associations) {
+		associations.put("/tsconfig.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
 		associations.put("/tsconfig.*.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
+		associations.put("/typing.json", Arrays.asList("http://json.schemastore.org/typing"));
 	}
-	
+
 	/**
 	 * JSON Schema contributions for TypeScript
 	 * 
