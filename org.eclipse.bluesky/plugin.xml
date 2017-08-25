@@ -57,7 +57,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/JSON.tmLanguage"
+            path="grammars/json/JSON.tmLanguage"
             scopeName="source.json">
       </grammar>
       <scopeNameContentTypeBinding
@@ -65,7 +65,15 @@
             scopeName="source.json">
       </scopeNameContentTypeBinding>
    </extension>
-   
+
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.json"
+            path="language-configurations/json/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+      
    <!-- CSS Language -->
       
    <extension
@@ -117,7 +125,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/css.plist"
+            path="grammars/css/css.plist"
             scopeName="source.css">
       </grammar>
       <scopeNameContentTypeBinding
@@ -125,7 +133,15 @@
             scopeName="source.css">
       </scopeNameContentTypeBinding>
    </extension>
-      
+
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.css"
+            path="language-configurations/css/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+         
    <!-- HTML Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -154,7 +170,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/html.json"
+            path="grammars/html/html.json"
             scopeName="text.html.basic">
       </grammar>
       <scopeNameContentTypeBinding
@@ -163,6 +179,14 @@
       </scopeNameContentTypeBinding>
    </extension>
 
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.html"
+            path="language-configurations/html/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
    <!-- JavaScript/TypeScript Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -202,7 +226,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/JavaScript.tmLanguage.json"
+            path="grammars/javascript/JavaScript.tmLanguage.json"
             scopeName="source.js">
       </grammar>
       <scopeNameContentTypeBinding
@@ -210,7 +234,7 @@
             scopeName="source.js">
       </scopeNameContentTypeBinding>
       <grammar
-            path="grammars/TypeScript.tmLanguage.json"
+            path="grammars/typescript/TypeScript.tmLanguage.json"
             scopeName="source.ts">
       </grammar>
       <scopeNameContentTypeBinding
@@ -219,6 +243,22 @@
       </scopeNameContentTypeBinding>
    </extension>
 
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.js"
+            path="language-configurations/javascript/javascript-language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.ts"
+            path="language-configurations/typescript/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
    <extension
          point="org.eclipse.ui.handlers">
       <handler
@@ -242,13 +282,21 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/YAML.tmLanguage"
+            path="grammars/yaml/YAML.tmLanguage"
             scopeName="source.yaml">
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.bluesky.yaml"
             scopeName="source.yaml">
       </scopeNameContentTypeBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.yaml"
+            path="language-configurations/yaml/language-configuration.json">
+      </languageConfiguration>
    </extension>
 
 </plugin>
