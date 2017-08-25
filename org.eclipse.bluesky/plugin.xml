@@ -57,7 +57,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/JSON.tmLanguage"
+            path="language-clients/json/JSON.tmLanguage"
             scopeName="source.json">
       </grammar>
       <scopeNameContentTypeBinding
@@ -70,7 +70,7 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.json"
-            path="language-configurations/json/language-configuration.json">
+            path="language-clients/json/language-configuration.json">
       </languageConfiguration>
    </extension>
       
@@ -125,7 +125,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/css.plist"
+            path="language-clients/css/css.plist"
             scopeName="source.css">
       </grammar>
       <scopeNameContentTypeBinding
@@ -138,7 +138,11 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.css"
+<<<<<<< HEAD
+            path="language-clients/css/language-configuration.json">
+=======
             path="language-configurations/css/language-configuration.json">
+>>>>>>> branch 'master' of https://github.com/angelozerr/eclipse-bluesky.git
       </languageConfiguration>
    </extension>
          
@@ -170,7 +174,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/html.json"
+            path="language-clients/html/html.json"
             scopeName="text.html.basic">
       </grammar>
       <scopeNameContentTypeBinding
@@ -183,7 +187,11 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.html"
+<<<<<<< HEAD
+            path="language-clients/html/language-configuration.json">
+=======
             path="language-configurations/html/language-configuration.json">
+>>>>>>> branch 'master' of https://github.com/angelozerr/eclipse-bluesky.git
       </languageConfiguration>
    </extension>
    
@@ -226,7 +234,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/JavaScript.tmLanguage.json"
+            path="language-clients/javascript/JavaScript.tmLanguage.json"
             scopeName="source.js">
       </grammar>
       <scopeNameContentTypeBinding
@@ -234,7 +242,7 @@
             scopeName="source.js">
       </scopeNameContentTypeBinding>
       <grammar
-            path="grammars/TypeScript.tmLanguage.json"
+            path="language-clients/typescript/TypeScript.tmLanguage.json"
             scopeName="source.ts">
       </grammar>
       <scopeNameContentTypeBinding
@@ -247,6 +255,17 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.js"
+<<<<<<< HEAD
+            path="language-clients/javascript/javascript-language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.ts"
+            path="language-clients/typescript/language-configuration.json">
+=======
             path="language-configurations/javascript/javascript-language-configuration.json">
       </languageConfiguration>
    </extension>
@@ -256,6 +275,7 @@
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.ts"
             path="language-configurations/typescript/language-configuration.json">
+>>>>>>> branch 'master' of https://github.com/angelozerr/eclipse-bluesky.git
       </languageConfiguration>
    </extension>
    
@@ -282,7 +302,7 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/YAML.tmLanguage"
+            path="language-clients/yaml/YAML.tmLanguage"
             scopeName="source.yaml">
       </grammar>
       <scopeNameContentTypeBinding
@@ -295,7 +315,11 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.yaml"
+<<<<<<< HEAD
+            path="language-clients/yaml/language-configuration.json">
+=======
             path="language-configurations/yaml/language-configuration.json">
+>>>>>>> branch 'master' of https://github.com/angelozerr/eclipse-bluesky.git
       </languageConfiguration>
    </extension>
 
