@@ -24,7 +24,7 @@
 						<configuration>
 							<associateSites>
 								<associateSite>http://download.eclipse.org/lsp4e/snapshots</associateSite>
-								<associateSite>http://oss.opensagres.fr/textmate/0.1.0-SNAPSHOT/</associateSite>
+								<associateSite>http://download.eclipse.org/tm4e/snapshots</associateSite>
 							</associateSites>
 						</configuration>
 					</execution>
