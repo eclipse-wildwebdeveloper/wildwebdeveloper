@@ -73,7 +73,15 @@
             path="language-configurations/json/language-configuration.json">
       </languageConfiguration>
    </extension>
-      
+
+   <extension
+         point="org.eclipse.ui.genericeditor.reconcilers">
+      <reconciler
+            class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
+            contentType="org.eclipse.bluesky.json">
+      </reconciler>
+   </extension>
+         
    <!-- CSS Language -->
       
    <extension
@@ -106,7 +114,8 @@
       <server
             class="org.eclipse.bluesky.css.CSSLanguageServer"
             id="org.eclipse.bluesky.css"
-            label="CSS/LESS/SCSS Language Server (VSCode)">
+            label="CSS/LESS/SCSS Language Server (VSCode)"
+            serverInterface="org.eclipse.bluesky.css.CSSLanguageServerInterface">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.bluesky.css"
@@ -140,6 +149,14 @@
             contentTypeId="org.eclipse.bluesky.css"
             path="language-configurations/css/language-configuration.json">
       </languageConfiguration>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.genericeditor.reconcilers">
+      <reconciler
+            class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
+            contentType="org.eclipse.bluesky.css">
+      </reconciler>
    </extension>
          
    <!-- HTML Language -->   
