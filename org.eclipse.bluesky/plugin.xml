@@ -298,5 +298,15 @@
             path="language-configurations/yaml/language-configuration.json">
       </languageConfiguration>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.jface.text.TextSelection"
+            class="org.eclipse.bluesky.jsts.debug.TextSelectionToJSVariableAdapterFactory">
+         <adapter
+               type="org.eclipse.debug.core.model.IVariable">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>
