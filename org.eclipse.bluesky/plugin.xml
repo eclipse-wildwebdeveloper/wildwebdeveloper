@@ -125,12 +125,28 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/css/css.plist"
+            path="grammars/css/css.tmLanguage.json"
             scopeName="source.css">
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.bluesky.css"
             scopeName="source.css">
+      </scopeNameContentTypeBinding>
+      <grammar
+            path="grammars/less/less.tmLanguage.json"
+            scopeName="source.css.less">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.less"
+            scopeName="source.css.less">
+      </scopeNameContentTypeBinding>
+      <grammar
+            path="grammars/scss/scss.json"
+            scopeName="source.css.scss">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.bluesky.scss"
+            scopeName="source.css.scss">
       </scopeNameContentTypeBinding>
    </extension>
 
@@ -139,6 +155,14 @@
       <languageConfiguration
             contentTypeId="org.eclipse.bluesky.css"
             path="language-configurations/css/language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.less"
+            path="language-configurations/less/language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="org.eclipse.bluesky.scss"
+            path="language-configurations/scss/language-configuration.json">
       </languageConfiguration>
    </extension>
          
