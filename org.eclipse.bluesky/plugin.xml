@@ -87,14 +87,14 @@
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            base-type="org.eclipse.bluesky.parent"
+            base-type="org.eclipse.bluesky.css"
             file-extensions="less"
             id="org.eclipse.bluesky.less"
             name="LESS"
             priority="normal">
       </content-type>
       <content-type
-            base-type="org.eclipse.bluesky.parent"
+            base-type="org.eclipse.bluesky.css"
             file-extensions="scss,sass"
             id="org.eclipse.bluesky.scss"
             name="SCSS/SASS"
