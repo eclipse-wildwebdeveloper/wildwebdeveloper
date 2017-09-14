@@ -38,7 +38,7 @@ class ColorSymbolDrawingStrategy implements IDrawingStrategy {
 			Rectangle bounds = textWidget.getTextBounds(offset, offset);
 			int x = bounds.x + fontMetrics.getLeading();
 			int y = bounds.y + fontMetrics.getDescent();
-			int size = fontMetrics.getHeight() - 2 * fontMetrics.getDescent();
+			int size = ColorSymbolSupport.getSquareSize(fontMetrics);
 			Rectangle rect = new Rectangle(x, y, size, size);
 
 			// Fill square

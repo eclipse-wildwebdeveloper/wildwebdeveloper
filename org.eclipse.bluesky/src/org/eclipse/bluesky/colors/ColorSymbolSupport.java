@@ -24,6 +24,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ISynchronizable;
 import org.eclipse.jface.text.ITextPresentationListener;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
@@ -38,16 +39,35 @@ import org.eclipse.jface.text.source.IAnnotationModelExtension2;
 import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.jface.text.source.IAnnotationModelListenerExtension;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.util.Geometry;
 import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4j.Range;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.GlyphMetrics;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.RGBA;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.ColorDialog;
+import org.eclipse.swt.widgets.Shell;
 
 /**
- * Color symbol support which draw in the viewer colorized squares be according
- * a list of color range to update.
+ * Color symbol support used to:
+ * 
+ * <ul>
+ * <li>draw in the viewer colorized squares be according a list of color range
+ * to update.</li>
+ * <li>click on colorized square to open a color picker and choose a color.</li>
+ * </ul>
  *
  */
 public class ColorSymbolSupport implements IColorProvider, ITextPresentationListener, IAnnotationModelListener,
@@ -57,6 +77,84 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 	 * Place taken by the drawn square.
 	 */
 	private static final int COLOR_SQUARE_WITH = 30;
+
+	class MouseTracker implements MouseTrackListener, MouseListener, MouseMoveListener {
+
+		private boolean hovered;
+
+		@Override
+		public void mouseHover(MouseEvent e) {
+			// Mouse hover is done
+			StyledText styledText = viewer.getTextWidget();
+			if (getColorAnnotationAtPoint(viewer, e.x, e.y) != null) {
+				// A colorized square is hovered, update the cursor with cursor hand.
+				styledText.setCursor(styledText.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
+				this.hovered = true;
+			}
+		}
+
+		@Override
+		public void mouseUp(MouseEvent e) {
+			if (e.button != 1) {
+				return;
+			}
+			// Mouse click is done
+			ColorSymbolAnnotation annotation = getColorAnnotationAtPoint(viewer, e.x, e.y);
+			if (annotation != null) {
+				// Colorized square was clicked, open the color dialog
+				// Compute location of Color dialog
+				StyledText styledText = viewer.getTextWidget();
+				Rectangle location = Geometry.toDisplay(styledText, new Rectangle(e.x, e.y, 1, 1));
+				Shell shell = new Shell(styledText.getDisplay());
+				shell.setLocation(location.x, location.y);
+				// Open color dialog
+				ColorDialog dialog = new ColorDialog(shell);
+				dialog.setRGB(annotation.getRGBA().rgb);
+				RGB color = dialog.open();
+				if (color != null) {
+					// Color was selected, update the viewer
+					try {
+						String rgb = ColorHelper.formatToRGB(color);
+						viewer.getDocument().replace(annotation.getPosition().getOffset(),
+								annotation.getPosition().getLength(), rgb);
+					} catch (BadLocationException e1) {
+
+					}
+				}
+			}
+		}
+
+		@Override
+		public void mouseMove(MouseEvent e) {
+			if (this.hovered) {
+				// Update hand cursor with orignal cursor.
+				StyledText styledText = viewer.getTextWidget();
+				styledText.setCursor(null);
+				this.hovered = false;
+			}
+		}
+
+		@Override
+		public void mouseEnter(MouseEvent e) {
+			// Do nothing
+		}
+
+		@Override
+		public void mouseExit(MouseEvent e) {
+			// Do nothing
+		}
+
+		@Override
+		public void mouseDoubleClick(MouseEvent e) {
+			// Do nothing
+		}
+
+		@Override
+		public void mouseDown(MouseEvent e) {
+			// Do nothing
+		}
+
+	}
 
 	/**
 	 * Viewer to update.
@@ -76,6 +174,8 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 
 	private Map<RGBA, Color> colorsMap;
 
+	private MouseTracker mouseTracker;
+
 	/**
 	 * Install color support for the given viewer.o
 	 * 
@@ -84,6 +184,12 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 	public void install(ISourceViewer viewer) {
 		this.viewer = viewer;
 		colorsMap = new HashMap<>();
+		// Install mouse tracker to open color picker when colorized square is clicked.
+		this.mouseTracker = new MouseTracker();
+		StyledText styledText = viewer.getTextWidget();
+		styledText.addMouseListener(mouseTracker);
+		styledText.addMouseTrackListener(mouseTracker);
+		styledText.addMouseMoveListener(mouseTracker);
 	}
 
 	/**
@@ -94,9 +200,16 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 			((ITextViewerExtension4) viewer).removeTextPresentationListener(this);
 			IAnnotationModel annotationModel = viewer.getAnnotationModel();
 			annotationModel.removeAnnotationModelListener(this);
+			// Uninstall mouse tracker
+			StyledText styledText = viewer.getTextWidget();
+			styledText.removeMouseListener(mouseTracker);
+			styledText.removeMouseTrackListener(mouseTracker);
+			styledText.removeMouseMoveListener(mouseTracker);
 		}
-		colorsMap.values().forEach(color -> color.dispose());
+		colorsMap.values().forEach(Color::dispose);
 		this.viewer = null;
+		this.mouseTracker = null;
+		this.colorsMap = null;
 	}
 
 	/**
@@ -335,5 +448,76 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 
 	private static boolean isIncluded(Annotation annotation) {
 		return (annotation instanceof ColorSymbolAnnotation);
+	}
+
+	/**
+	 * Returns the {@link ColorSymbolAnnotation} at the given point of the given
+	 * text viewer and null otherwise.
+	 * 
+	 * @param textViewer
+	 * @param x
+	 * @param y
+	 * @return the {@link ColorSymbolAnnotation} at the given point of the given
+	 *         text viewer and null otherwise.
+	 */
+	private static ColorSymbolAnnotation getColorAnnotationAtPoint(ITextViewer textViewer, int x, int y) {
+		try {
+			StyledText styledText = textViewer.getTextWidget();
+			// Try to retrieve ColorSymbolAnnotation of hovered region
+			int offset = styledText.getOffsetAtLocation(new Point(x, y));
+			ColorSymbolAnnotation annotation = getColorAnnotationAt(textViewer, offset);
+			if (annotation != null) {
+				// It exists a color symbol annotation, check if it's only the colorized square
+				// which is hovered.
+				// Compute size of colorized square
+				GC gc = new GC(styledText);
+				FontMetrics fontMetrics = gc.getFontMetrics();
+				int size = getSquareSize(fontMetrics);
+				gc.dispose();
+				// Get the point of the start of annotation
+				Point p = styledText.getLocationAtOffset(annotation.getPosition().getOffset());
+				if (x - p.x <= size) {
+					// Click was done inside the colorized square.
+					return annotation;
+				}
+			}
+		} catch (IllegalArgumentException ex) {
+			// Thrown when mouse hover is outside StyledText lines content.
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the {@link ColorSymbolAnnotation} at the given offset of the given
+	 * text viewer and null otherwise.
+	 * 
+	 * @param textViewer
+	 *            the viewer
+	 * @param offset
+	 *            the offset
+	 * @return {@link ColorSymbolAnnotation} at the given offset of th egiven text
+	 *         viewer and null otherwise.
+	 */
+	private static ColorSymbolAnnotation getColorAnnotationAt(ITextViewer textViewer, int offset) {
+		IAnnotationModel annotationModel = ((ISourceViewer) textViewer).getAnnotationModel();
+		Iterator<Annotation> iter = ((IAnnotationModelExtension2) annotationModel).getAnnotationIterator(offset, 1,
+				true, true);
+		while (iter.hasNext()) {
+			Annotation ann = iter.next();
+			if (ann instanceof ColorSymbolAnnotation) {
+				return (ColorSymbolAnnotation) ann;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the colorized square size.
+	 * 
+	 * @param fontMetrics
+	 * @return the colorized square size.
+	 */
+	public static int getSquareSize(FontMetrics fontMetrics) {
+		return fontMetrics.getHeight() - 2 * fontMetrics.getDescent();
 	}
 }

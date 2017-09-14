@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.RGBA;
 
 /**
@@ -263,12 +264,23 @@ public class ColorHelper {
 	}
 
 	/**
-	 * Convert the given rgb to hexa color.
+	 * Format the given rgb to hexa color.
 	 * 
 	 * @param rgb
 	 * @return the hexa color from the given rgb.
 	 */
-	public static String toHexa(RGBA rgb) {
-		return String.format("#%02x%02x%02x", rgb.rgb.red, rgb.rgb.green, rgb.rgb.blue);
+	public static String formatToHexa(RGB rgb) {
+		return String.format("#%02x%02x%02x", rgb.red, rgb.green, rgb.blue);
+	}
+
+	/**
+	 * Format the given rgb to hexa color.
+	 * 
+	 * @param rgb
+	 * @return the hexa color from the given rgb.
+	 */
+	public static String formatToRGB(RGB rgb) {
+		return new StringBuilder("rgb(").append(rgb.red).append(",").append(rgb.green).append(",").append(rgb.blue)
+				.append(")").toString();
 	}
 }
