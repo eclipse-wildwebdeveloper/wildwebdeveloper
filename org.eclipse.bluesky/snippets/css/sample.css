@@ -1,0 +1,319 @@
+.emphasis {
+	font-style: italic;
+}
+
+.strong {
+	font-weight: bold;
+}
+
+.header {
+	color: rgba(0, 0, 128, 1);
+}
+
+.comment {
+	color: rgba(96, 139, 78, 1);
+}
+
+.constant.language {
+	color: rgba(86, 156, 214, 1);
+}
+
+.constant.numeric {
+	color: rgba(181, 206, 168, 1);
+}
+
+.constant.regexp {
+	color: rgba(100, 102, 149, 1);
+}
+
+.constant.rgb-value {
+	color: rgba(212, 212, 212, 1);
+}
+
+.entity.name.tag {
+	color: rgba(86, 156, 214, 1);
+}
+
+.entity.name.tag.css {
+	color: rgba(215, 186, 125, 1);
+}
+
+.entity.name.selector {
+	color: rgba(215, 186, 125, 1);
+}
+
+.entity.other.attribute-name {
+	color: rgba(156, 220, 254, 1);
+}
+
+.entity.other.attribute-name.css {
+	color: rgba(215, 186, 125, 1);
+}
+
+.invalid {
+	color: rgba(244, 71, 71, 1);
+}
+
+.markup.underline {
+	text-decoration: underline;
+}
+
+.markup.bold {
+	font-weight: bold;
+	color: rgba(86, 156, 214, 1);
+}
+
+.markup.heading {
+	font-weight: bold;
+	color: rgba(86, 156, 214, 1);
+}
+
+.markup.italic {
+	font-style: italic;
+}
+
+.markup.inserted {
+	color: rgba(181, 206, 168, 1);
+}
+
+.markup.deleted {
+	color: rgba(206, 145, 120, 1);
+}
+
+.markup.changed {
+	color: rgba(86, 156, 214, 1);
+}
+
+.markup.punctuation.quote.beginning {
+	color: rgba(96, 139, 78, 1);
+}
+
+.markup.punctuation.list.beginning {
+	color: rgba(103, 150, 230, 1);
+}
+
+.markup.inline.raw {
+	color: rgba(206, 145, 120, 1);
+}
+
+.meta.selector {
+	color: rgba(215, 186, 125, 1);
+}
+
+.punctuation.definition.tag {
+	color: rgba(128, 128, 128, 1);
+}
+
+.meta.preprocessor {
+	color: rgba(86, 156, 214, 1);
+}
+
+.meta.preprocessor.string {
+	color: rgba(206, 145, 120, 1);
+}
+
+.meta.preprocessor.numeric {
+	color: rgba(181, 206, 168, 1);
+}
+
+.meta.structure.dictionary.key.python {
+	color: rgba(156, 220, 254, 1);
+}
+
+.meta.header.diff {
+	color: rgba(86, 156, 214, 1);
+}
+
+.storage {
+	color: rgba(86, 156, 214, 1);
+}
+
+.storage.type {
+	color: rgba(86, 156, 214, 1);
+}
+
+.storage.modifier {
+	color: rgba(86, 156, 214, 1);
+}
+
+.string {
+	color: rgba(206, 145, 120, 1);
+}
+
+.string.tag {
+	color: rgba(206, 145, 120, 1);
+}
+
+.string.value {
+	color: rgba(206, 145, 120, 1);
+}
+
+.string.regexp {
+	color: rgba(209, 105, 105, 1);
+}
+
+.support.type.property-name {
+	color: rgba(156, 220, 254, 1);
+}
+
+.keyword {
+	color: rgba(86, 156, 214, 1);
+}
+
+.keyword.control.less {
+	color: rgba(215, 186, 125, 1);
+}
+
+.keyword.operator {
+	color: rgba(212, 212, 212, 1);
+}
+
+.keyword.operator.new {
+	color: rgba(86, 156, 214, 1);
+}
+
+.keyword.operator.expression {
+	color: rgba(86, 156, 214, 1);
+}
+
+.keyword.other.unit {
+	color: rgba(181, 206, 168, 1);
+}
+
+.metatag.php {
+	color: rgba(86, 156, 214, 1);
+}
+
+.support.function.git-rebase {
+	color: rgba(156, 220, 254, 1);
+}
+
+.constant.sha.git-rebase {
+	color: rgba(181, 206, 168, 1);
+}
+
+.storage.modifier.import.java {
+	color: rgba(212, 212, 212, 1);
+}
+
+.storage.modifier.package.java {
+	color: rgba(212, 212, 212, 1);
+}
+
+.variable.language {
+	color: rgba(86, 156, 214, 1);
+}
+
+.entity.name.function {
+	color: rgba(220, 220, 170, 1);
+}
+
+.support.function {
+	color: rgba(220, 220, 170, 1);
+}
+
+.meta.return-type {
+	color: rgba(78, 201, 176, 1);
+}
+
+.support.class {
+	color: rgba(78, 201, 176, 1);
+}
+
+.support.type {
+	color: rgba(78, 201, 176, 1);
+}
+
+.entity.name.type {
+	color: rgba(78, 201, 176, 1);
+}
+
+.storage.type.cs {
+	color: rgba(78, 201, 176, 1);
+}
+
+.storage.type.java {
+	color: rgba(78, 201, 176, 1);
+}
+
+.meta.return.type {
+	color: rgba(78, 201, 176, 1);
+}
+
+.meta.type.cast.expr {
+	color: rgba(78, 201, 176, 1);
+}
+
+.meta.type.new.expr {
+	color: rgba(78, 201, 176, 1);
+}
+
+.support.constant.math {
+	color: rgba(78, 201, 176, 1);
+}
+
+.support.constant.dom {
+	color: rgba(78, 201, 176, 1);
+}
+
+.support.constant.json {
+	color: rgba(78, 201, 176, 1);
+}
+
+.keyword.control {
+	color: rgba(197, 134, 192, 1);
+}
+
+.variable.parameter {
+	color: rgba(156, 220, 254, 1);
+}
+
+.variable {
+	color: rgba(156, 220, 254, 1);
+}
+
+.variable.name {
+	color: rgba(156, 220, 254, 1);
+}
+
+.support.variable {
+	color: rgba(156, 220, 254, 1);
+}
+
+.object-literal.member.key {
+	color: rgba(156, 220, 254, 1);
+}
+
+.support.property-value {
+	color: rgba(206, 145, 120, 1);
+}
+
+.constant.rgb-value {
+	color: rgba(206, 145, 120, 1);
+}
+
+.support.property-value.scss {
+	color: rgba(206, 145, 120, 1);
+}
+
+.constant.rgb-value.scss {
+	color: rgba(206, 145, 120, 1);
+}
+
+.entity.name.function.tag {
+	color: rgba(86, 156, 214, 1);
+}
+
+.editor {
+	background-color: rgba(30, 30, 30, 1);
+	color: rgb(212, 212, 212);
+}
+
+.editor.lineHighlight {
+	background-color: rgba(40, 40, 40, 1);
+}
+
+.editor.selection {
+	
+}
+/**.editor.selection { background-color: rgba(73, 72, 62, 0.5); }**/

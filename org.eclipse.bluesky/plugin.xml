@@ -75,6 +75,15 @@
    </extension>
 
    <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="JSON Sample"
+            path="snippets/json/sample.json"
+            scopeName="source.json">
+      </snippet>
+   </extension>
+   
+   <extension
          point="org.eclipse.ui.genericeditor.reconcilers">
       <reconciler
             class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
@@ -152,6 +161,15 @@
    </extension>
 
    <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="CSS Sample"
+            path="snippets/css/sample.css"
+            scopeName="source.css">
+      </snippet>
+   </extension>
+
+   <extension
          point="org.eclipse.ui.genericeditor.reconcilers">
       <reconciler
             class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
@@ -203,7 +221,16 @@
             path="language-configurations/html/language-configuration.json">
       </languageConfiguration>
    </extension>
-   
+
+   <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="HTML Sample"
+            path="snippets/html/sample.html"
+            scopeName="text.html.basic">
+      </snippet>
+   </extension>
+      
    <!-- JavaScript/TypeScript Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -277,6 +304,24 @@
    </extension>
    
    <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="JavaScript Sample"
+            path="snippets/javascript/sample.js"
+            scopeName="source.js">
+      </snippet>
+   </extension>
+
+   <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="TypeScript Sample"
+            path="snippets/typescript/sample.ts"
+            scopeName="source.ts">
+      </snippet>
+   </extension>
+         
+   <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="org.eclipse.bluesky.jsts.debug.ToogleLineBreakpointHandler"
@@ -284,6 +329,17 @@
       </handler>
    </extension>
    
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.jface.text.TextSelection"
+            class="org.eclipse.bluesky.jsts.debug.TextSelectionToJSVariableAdapterFactory">
+         <adapter
+               type="org.eclipse.debug.core.model.IVariable">
+         </adapter>
+      </factory>
+   </extension>
+      
    <!-- YAML Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -315,15 +371,14 @@
             path="language-configurations/yaml/language-configuration.json">
       </languageConfiguration>
    </extension>
+
    <extension
-         point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.jface.text.TextSelection"
-            class="org.eclipse.bluesky.jsts.debug.TextSelectionToJSVariableAdapterFactory">
-         <adapter
-               type="org.eclipse.debug.core.model.IVariable">
-         </adapter>
-      </factory>
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="TypeScript Sample"
+            path="snippets/yaml/sample.yaml"
+            scopeName="source.yaml">
+      </snippet>
    </extension>
 
 </plugin>
