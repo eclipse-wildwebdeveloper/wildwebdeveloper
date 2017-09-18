@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.bluesky.colors.ColorSymbolAnnotation.IColorProvider;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -40,6 +41,8 @@ import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.jface.text.source.IAnnotationModelListenerExtension;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.util.Geometry;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.swt.SWT;
@@ -72,11 +75,6 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class ColorSymbolSupport implements IColorProvider, ITextPresentationListener, IAnnotationModelListener,
 		IAnnotationModelListenerExtension {
-
-	/**
-	 * Place taken by the drawn square.
-	 */
-	private static final int COLOR_SQUARE_WITH = 30;
 
 	class MouseTracker implements MouseTrackListener, MouseListener, MouseMoveListener {
 
@@ -153,7 +151,44 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 		public void mouseDown(MouseEvent e) {
 			// Do nothing
 		}
+	}
 
+	class FontPropertyChangeListener implements IPropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			if (viewer == null)
+				return;
+
+			String property = event.getProperty();
+			// FIXME: filter property name with
+			// AbstractTextEditor#getFontPropertyPreferenceKey which is protected
+			StyledText styledText = viewer.getTextWidget();
+			// Font changes was done (ex: zoom), GlyphMetrics width must be recomputed
+			IAnnotationModel annotationModel = viewer.getAnnotationModel();
+			Iterator<Annotation> annotations = annotationModel.getAnnotationIterator();
+			if (annotations.hasNext()) {
+				try {
+					styledText.setRedraw(false);
+					annotations.forEachRemaining(annotation -> {
+						if (isIncluded(annotation)) {
+							// Annotation is a color symbol
+							ColorSymbolAnnotation ann = (ColorSymbolAnnotation) annotation;
+							Position position = ann.getPosition();
+							if (position != null && !ann.isMarkedDeleted()) {
+								StyleRange style = styledText.getStyleRangeAtOffset(position.getOffset());
+								if (style != null && style.metrics != null) {
+									// Update the width metrics
+									style.metrics.width = getSquareWith(styledText);
+									styledText.setStyleRange(style);
+								}
+							}
+						}
+					});
+				} finally {
+					styledText.setRedraw(true);
+				}
+			}
+		}
 	}
 
 	/**
@@ -172,9 +207,21 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 	 */
 	private boolean painterInitialized;
 
+	/**
+	 * Color cache
+	 */
 	private Map<RGBA, Color> colorsMap;
 
+	/**
+	 * Mouse tracker used to open color dialog when user click on colorized square.
+	 */
 	private MouseTracker mouseTracker;
+
+	/**
+	 * Font listener used to recompute width of GlyphMetrics when Zoom In/Out is
+	 * done.
+	 */
+	private IPropertyChangeListener fFontPropertyChangeListener = new FontPropertyChangeListener();
 
 	/**
 	 * Install color support for the given viewer.o
@@ -187,6 +234,7 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 		// Install mouse tracker to open color picker when colorized square is clicked.
 		this.mouseTracker = new MouseTracker();
 		StyledText styledText = viewer.getTextWidget();
+		JFaceResources.getFontRegistry().addListener(fFontPropertyChangeListener);
 		styledText.addMouseListener(mouseTracker);
 		styledText.addMouseTrackListener(mouseTracker);
 		styledText.addMouseMoveListener(mouseTracker);
@@ -202,6 +250,7 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 			annotationModel.removeAnnotationModelListener(this);
 			// Uninstall mouse tracker
 			StyledText styledText = viewer.getTextWidget();
+			JFaceResources.getFontRegistry().removeListener(fFontPropertyChangeListener);
 			styledText.removeMouseListener(mouseTracker);
 			styledText.removeMouseTrackListener(mouseTracker);
 			styledText.removeMouseMoveListener(mouseTracker);
@@ -439,7 +488,8 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 							s.length = 1;
 							// if annotation is removed, update metrics to null otherwise, set a
 							// GlyphMetrics with a width
-							s.metrics = ann.isMarkedDeleted() ? null : new GlyphMetrics(0, 0, COLOR_SQUARE_WITH);
+							s.metrics = ann.isMarkedDeleted() ? null
+									: new GlyphMetrics(0, 0, getSquareWith(viewer.getTextWidget()));
 							textPresentation.mergeStyleRange(s);
 						}
 					}
@@ -519,5 +569,20 @@ public class ColorSymbolSupport implements IColorProvider, ITextPresentationList
 	 */
 	public static int getSquareSize(FontMetrics fontMetrics) {
 		return fontMetrics.getHeight() - 2 * fontMetrics.getDescent();
+	}
+
+	/**
+	 * Compute width of square
+	 * 
+	 * @param styledText
+	 * @return the width of square
+	 */
+	private static int getSquareWith(StyledText styledText) {
+		GC gc = new GC(styledText);
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		// width = 2 spaces + size width of square
+		int width = 2 * fontMetrics.getAverageCharWidth() + getSquareSize(fontMetrics);
+		gc.dispose();
+		return width;
 	}
 }
