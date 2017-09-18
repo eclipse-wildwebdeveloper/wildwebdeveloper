@@ -199,6 +199,14 @@
             class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
             contentType="org.eclipse.bluesky.css">
       </reconciler>
+      <reconciler
+            class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
+            contentType="org.eclipse.bluesky.less">
+      </reconciler>
+      <reconciler
+            class="org.eclipse.bluesky.colors.ColorSymbolReconciler"
+            contentType="org.eclipse.bluesky.scss">
+      </reconciler>      
    </extension>
          
    <!-- HTML Language -->   
