@@ -2,10 +2,12 @@ package org.eclipse.bluesky.jsts.debug;
 
 import java.util.HashMap;
 
+import org.eclipse.bluesky.Activator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.jface.text.ITextSelection;
@@ -37,8 +39,8 @@ public class ToogleLineBreakpointHandler extends AbstractHandler {
 		try {
 			return JavaScriptDebugModel.createLineBreakpoint(file, textSelection.getStartLine() + 1, -1, -1, new HashMap<>(), true);
 		} catch (DebugException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 			return null;
 		}
 	}

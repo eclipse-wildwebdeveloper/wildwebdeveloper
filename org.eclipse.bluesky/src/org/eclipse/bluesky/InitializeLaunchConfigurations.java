@@ -19,8 +19,10 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -65,7 +67,8 @@ public class InitializeLaunchConfigurations {
 			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			res = reader.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		} finally {
 			IOUtils.closeQuietly(reader);
 		}
