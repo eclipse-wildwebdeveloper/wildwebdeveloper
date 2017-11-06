@@ -13,7 +13,6 @@ import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.wst.jsdt.debug.core.model.IJavaScriptStackFrame;
@@ -131,7 +130,7 @@ public class TextSelectionToJSVariableAdapterFactory implements IAdapterFactory 
 		try {
 			Field documentField = TextSelection.class.getDeclaredField("fDocument"); //$NON-NLS-1$
 			documentField.setAccessible(true);
-			return (Document) documentField.get(sel);
+			return (IDocument) documentField.get(sel);
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 			return null;
