@@ -8,7 +8,7 @@ Bundle-Vendor: Red Hat Inc.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.apache.commons.io;bundle-version="2.2.0",
- org.eclipse.lsp4e;bundle-version="0.2.0",
+ org.eclipse.lsp4e;bundle-version="0.5.0",
  org.eclipse.lsp4j.jsonrpc;bundle-version="0.2.0",
  org.eclipse.lsp4j;bundle-version="0.2.0",
  org.eclipse.tm4e.registry;bundle-version="0.1.0",

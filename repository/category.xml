@@ -51,10 +51,10 @@
    <bundle id="org.eclipse.mylyn.commons.workbench" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.wikitext" version="0.0.0">
+   <feature id="org.eclipse.mylyn.wikitext_feature" version="0.0.0">
       <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.wikitext.markdown" version="0.0.0">
+   </feature>
+   <bundle id="org.jsoup" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="com.google.guava" version="0.0.0">
