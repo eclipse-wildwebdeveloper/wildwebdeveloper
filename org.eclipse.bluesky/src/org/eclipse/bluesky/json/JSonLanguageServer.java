@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Michal‚ Niewrzal‚ (Rogue Wave Software Inc.) - initial implementation
+ *  Michalï¿½ Niewrzalï¿½ (Rogue Wave Software Inc.) - initial implementation
  *  Angelo Zerr <angelo.zerr@gmail.com> - JSON Schema support
  *******************************************************************************/
 package org.eclipse.bluesky.json;
@@ -81,7 +81,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 		associations.put("package.json", Arrays.asList("http://json.schemastore.org/package"));
 		associations.put("/bower.json", Arrays.asList("http://json.schemastore.org/bower"));
 		associations.put("/.bower.json", Arrays.asList("http://json.schemastore.org/bower"));
-		associations.put("/.bowerrc", Arrays.asList("http://json.schemastore.org/bowercc"));
+		associations.put("/.bowerrc", Arrays.asList("http://json.schemastore.org/bowerrc"));
 		associations.put("/jsconfig.json", Arrays.asList("http://json.schemastore.org/jsconfig"));
 	}
 

@@ -7,9 +7,9 @@
   "author": "Eclipse BlueSky",
   "license": "EPL",
   "dependencies": {
-  	"vscode-html-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/html/server",
-  	"vscode-json-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/json/server",
-  	"vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css/server",
-  	"javascript-typescript-langserver": "^2.8.0"
+    "vscode-html-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server",
+    "vscode-json-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server",
+    "vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server",
+    "javascript-typescript-langserver": "2.10.0"
   }
 }
