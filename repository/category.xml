@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="org.eclipse.bluesky.feature" version="0.1.0.qualifier">
-      <category name="BlueSky"/>
+   <feature id="org.eclipse.wildwebdeveloper.feature" version="0.1.0.qualifier">
+      <category name="Wild Web Developer"/>
    </feature>
    <feature id="tm-feature" version="0.0.0">
       <category name="Dependencies"/>
@@ -69,7 +69,7 @@
    <bundle id="org.eclipse.xtext.xbase.lib" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <category-def name="BlueSky" label="BlueSky - Web Dev in Eclipse IDE"/>
+   <category-def name="Wild Web Developer" label="Wild Web Developer - Web Dev in Eclipse IDE"/>
    <category-def name="Dependencies" label="Dependencies"/>
    <repository-reference location="http://download.eclipse.org/lsp4e/snapshots" enabled="true" />
    <repository-reference location="http://download.eclipse.org/tm4e/snapshots" enabled="true" />

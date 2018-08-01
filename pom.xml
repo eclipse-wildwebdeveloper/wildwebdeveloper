@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.bluesky</groupId>
+  <groupId>org.eclipse.wildwebdeveloper</groupId>
   <artifactId>parent</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Eclipse BlueSky - Parent</name>
-  <description>BlueSky provides simple but efficient Web development tools in the Eclipse IDE</description>
+  <name>Eclipse Wild Web Developer - Parent</name>
+  <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
   
 
 	<prerequisites>
@@ -14,13 +14,13 @@
 	<properties>
 		<tycho-version>1.2.0</tycho-version>
 		<tycho-extras-version>${tycho-version}</tycho-extras-version>
-		<tycho.scmUrl>scm:git:https://github.com/mickaelistria/eclipse-bluesky.git</tycho.scmUrl>
+		<tycho.scmUrl>scm:git:https://github.com/mickaelistria/eclipse-wildwebdeveloper.git</tycho.scmUrl>
 	</properties>
 
 	<modules>
 		<module>target-platform</module>
-		<module>org.eclipse.bluesky</module>
-		<module>org.eclipse.bluesky.feature</module>
+		<module>org.eclipse.wildwebdeveloper</module>
+		<module>org.eclipse.wildwebdeveloper.feature</module>
 		<module>repository</module>
 	</modules>
 	<build>
@@ -109,7 +109,7 @@
 					<append>true</append>
 					<destFile>${sonar.jacoco.reportPath}</destFile>
 					<includes>
-						<include>org.eclipse.bluesky*</include>
+						<include>org.eclipse.wildwebdeveloper*</include>
 					</includes>
 				</configuration>
 			</plugin>
@@ -139,7 +139,7 @@
 					<configuration>
 						<baselineRepositories>
 							<repository>
-								<url>http://repository.jboss.org/nexus/content/unzip/unzip/org/eclipse/bluesky/repository/0.1.0-SNAPSHOT/repository-0.1.0-SNAPSHOT.zip-unzip/</url>
+								<url>http://repository.jboss.org/nexus/content/unzip/unzip/org/eclipse/wildwebdeveloper/repository/0.1.0-SNAPSHOT/repository-0.1.0-SNAPSHOT.zip-unzip/</url>
 							</repository>
 						</baselineRepositories>
 					</configuration>
