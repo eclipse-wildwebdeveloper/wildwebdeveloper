@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat Inc. and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Mickael Istria (Red Hat Inc.) - initial implementation
+ *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts.debug;
 
 import java.lang.reflect.Field;
 
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IAdapterFactory;
@@ -15,6 +24,7 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wst.jsdt.debug.core.model.IJavaScriptStackFrame;
 
 public class TextSelectionToJSVariableAdapterFactory implements IAdapterFactory {

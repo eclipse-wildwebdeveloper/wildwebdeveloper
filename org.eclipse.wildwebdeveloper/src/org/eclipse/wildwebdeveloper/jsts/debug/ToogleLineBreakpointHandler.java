@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat Inc. and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Mickael Istria (Red Hat Inc.) - initial implementation
+ *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts.debug;
 
 import java.util.HashMap;
 
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,6 +25,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wst.jsdt.debug.core.model.JavaScriptDebugModel;
 
 public class ToogleLineBreakpointHandler extends AbstractHandler {
