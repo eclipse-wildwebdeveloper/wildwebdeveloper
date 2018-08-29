@@ -1,12 +1,14 @@
 /**
- *  Copyright (c) 2017 Angelo ZERR.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2017 Angelo ZERR.
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.wildwebdeveloper.colors;
 
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.wildwebdeveloper.colors.ColorSymbolAnnotation.IColorProvider;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -62,6 +63,7 @@ import org.eclipse.swt.graphics.RGBA;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wildwebdeveloper.colors.ColorSymbolAnnotation.IColorProvider;
 
 /**
  * Color symbol support used to:
