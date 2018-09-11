@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="org.eclipse.wildwebdeveloper.feature" version="0.1.0.qualifier">
+      <category name="Wild Web Developer"/>
+   </feature>
+   <feature id="tm-feature" version="0.0.0">
+      <category name="Dependencies"/>
+   </feature>
+   <feature id="org.eclipse.mylyn.wikitext_feature" version="0.0.0">
+      <category name="Dependencies"/>
+   </feature>
+   <bundle id="org.eclipse.ui.genericeditor" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.apache.commons.io" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.joni" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.jcodings" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.objectweb.asm" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.lsp4e" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.lsp4j" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.lsp4j.jsonrpc" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="com.google.gson" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.mylyn.commons.core" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.mylyn.commons.notifications.core" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.mylyn.commons.notifications.ui" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.mylyn.commons.screenshots" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.mylyn.commons.ui" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.mylyn.commons.workbench" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.jsoup" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="com.google.guava" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.apache.commons.lang" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="com.google.guava" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.xtext.xbase.lib" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
+   <category-def name="Wild Web Developer" label="Wild Web Developer - Web Dev in Eclipse IDE"/>
+   <category-def name="Dependencies" label="Dependencies"/>
+   <repository-reference location="http://download.eclipse.org/lsp4e/snapshots" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/tm4e/snapshots" enabled="true" />
+</site>

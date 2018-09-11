@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>repository</artifactId>
+	<parent>
+  	<groupId>org.eclipse.wildwebdeveloper</groupId>
+		<artifactId>parent</artifactId>
+	  <version>0.1.0-SNAPSHOT</version>
+	</parent>
+  <packaging>eclipse-repository</packaging>
+  
+	<build>
+		<plugins>
+			<!-- workaround https://bugs.eclipse.org/bugs/show_bug.cgi?id=453708 -->
+			<plugin>
+				<groupId>org.jboss.tools.tycho-plugins</groupId>
+				<artifactId>repository-utils</artifactId>
+				<version>0.26.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>generate-repository-facade</goal>
+						</goals>
+						<configuration>
+							<associateSites>
+								<associateSite>http://download.eclipse.org/lsp4e/snapshots</associateSite>
+								<associateSite>http://download.eclipse.org/tm4e/snapshots</associateSite>
+							</associateSites>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>jboss-snapshots-repository</id>
+			<name>JBoss Snapshots Repository</name>
+			<url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+</project>
