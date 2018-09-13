@@ -11,7 +11,7 @@ See ▶️ http://www.screencast.com/t/BaC9DxHIqD
 ## Installation
 
 Install into Eclipse IDE:
-* With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wildwebdeveloper-web-development-eclipse-ide-experimental, choose one of:
+* With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-web-development-eclipse-ide-experimental, choose one of:
   * *Help > Eclipse Marketplace*, search `Wild Web Developer` then click `Install` or
   * drag <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3394048" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a> into Eclipse IDE, or
 * With [Help > Install New Software...](http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Ftasks%2Ftasks-124.htm) with p2 repo http://repository.jboss.org/nexus/content/unzip/unzip/org/eclipse/wildwebdeveloper/repository/0.1.0-SNAPSHOT/repository-0.1.0-SNAPSHOT.zip-unzip/
