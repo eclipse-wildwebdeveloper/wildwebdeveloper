@@ -82,14 +82,6 @@
             scopeName="source.json">
       </snippet>
    </extension>
-   
-   <extension
-         point="org.eclipse.ui.genericeditor.reconcilers">
-      <reconciler
-            class="org.eclipse.wildwebdeveloper.colors.ColorSymbolReconciler"
-            contentType="org.eclipse.wildwebdeveloper.json">
-      </reconciler>
-   </extension>
          
    <!-- CSS Language -->
       
@@ -123,8 +115,7 @@
       <server
             class="org.eclipse.wildwebdeveloper.css.CSSLanguageServer"
             id="org.eclipse.wildwebdeveloper.css"
-            label="CSS/LESS/SCSS Language Server (VSCode)"
-            serverInterface="org.eclipse.wildwebdeveloper.css.CSSLanguageServerInterface">
+            label="CSS/LESS/SCSS Language Server (VSCode)">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.css"
@@ -193,22 +184,6 @@
       </snippet>
    </extension>
 
-   <extension
-         point="org.eclipse.ui.genericeditor.reconcilers">
-      <reconciler
-            class="org.eclipse.wildwebdeveloper.colors.ColorSymbolReconciler"
-            contentType="org.eclipse.wildwebdeveloper.css">
-      </reconciler>
-      <reconciler
-            class="org.eclipse.wildwebdeveloper.colors.ColorSymbolReconciler"
-            contentType="org.eclipse.wildwebdeveloper.less">
-      </reconciler>
-      <reconciler
-            class="org.eclipse.wildwebdeveloper.colors.ColorSymbolReconciler"
-            contentType="org.eclipse.wildwebdeveloper.scss">
-      </reconciler>      
-   </extension>
-         
    <!-- HTML Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
