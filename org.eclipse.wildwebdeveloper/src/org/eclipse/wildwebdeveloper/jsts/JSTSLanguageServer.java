@@ -30,8 +30,9 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js"));
+			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/typescript-language-server/lib/cli.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
+			commands.add("--stdio");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
