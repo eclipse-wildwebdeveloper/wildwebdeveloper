@@ -10,15 +10,10 @@
  */
 package org.eclipse.wildwebdeveloper.json;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.wildwebdeveloper.colors.DocumentColorProvider;
-import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
-import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageServer;
 
 /**
@@ -32,7 +27,7 @@ import org.eclipse.lsp4j.services.LanguageServer;
  * </ul>
  *
  */
-public interface JSonLanguageServerInterface extends LanguageServer, DocumentColorProvider {
+public interface JSonLanguageServerInterface extends LanguageServer {
 
 	/**
 	 * Send the JSON Schema associations waited by the VSCode JSON Language Server.
@@ -42,9 +37,5 @@ public interface JSonLanguageServerInterface extends LanguageServer, DocumentCol
 	 */
 	@JsonNotification("json/schemaAssociations")
 	void sendJSonchemaAssociations(Map<String, List<String>> schemaAssociations);
-
-	@Override
-	@JsonRequest("json/colorSymbols")
-	CompletableFuture<List<Range>> findDocumentColors(URI uri);
 
 }
