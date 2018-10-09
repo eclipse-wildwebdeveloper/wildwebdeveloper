@@ -14,7 +14,7 @@
 	<properties>
 		<tycho-version>1.2.0</tycho-version>
 		<tycho-extras-version>${tycho-version}</tycho-extras-version>
-		<tycho.scmUrl>scm:git:https://github.com/mickaelistria/eclipse-wildwebdeveloper.git</tycho.scmUrl>
+		<tycho.scmUrl>scm:git:https://github.com/eclipse/wildwebdeveloper.git</tycho.scmUrl>
 	</properties>
 
 	<modules>
@@ -139,7 +139,7 @@
 					<configuration>
 						<baselineRepositories>
 							<repository>
-								<url>http://repository.jboss.org/nexus/content/unzip/unzip/org/eclipse/wildwebdeveloper/repository/0.1.0-SNAPSHOT/repository-0.1.0-SNAPSHOT.zip-unzip/</url>
+								<url>https://jenkins.eclipse.org/wildwebdeveloper/job/Wildwebdeveloper/job/master/lastSuccessfulBuild/artifact/repository/target/repository/</url>
 							</repository>
 						</baselineRepositories>
 					</configuration>
