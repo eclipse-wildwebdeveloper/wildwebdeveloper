@@ -1,22 +1,48 @@
 pipeline {
-	agent any
 	options {
 		buildDiscarder(logRotator(numToKeepStr:'10'))
 	}
+  agent {
+    kubernetes {
+      label 'buildtestPod'
+      defaultContainer 'container'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: container
+    image: maven:latest
+    command: [ "echo" ]
+    tty: true
+    securityContext:
+      runAsUser: 0
+"""
+    }
+  }
 	stages {
-		stage('Prepare') {
+		stage('Prepare-source') {
 			steps {
 				git url: 'https://github.com/eclipse/wildwebdeveloper.git'
 				cleanWs()
 				checkout scm
 			}
 		}
+		stage('Prepare environment') {
+			steps {
+				container('container') {
+					sh 'sudo apt-get install -y --no-install-recommends Xvnc gedit' 
+				}
+			}
+		}
 		stage('Build') {
 			steps {
-				wrap([$class: 'Xvnc', useXauthority: true]) {
-					withEnv([]) { // Which environment variable we should use for node ?
-						withMaven(maven: 'apache-maven-latest', jdk: 'jdk1.8.0-latest', mavenLocalRepo: '.repository') {
-							sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign'
+				container('container') {
+					wrap([$class: 'Xvnc', useXauthority: true]) {
+						withEnv([]) { // Which environment variable we should use for node ?
+							withMaven(maven: 'apache-maven-latest', jdk: 'jdk1.8.0-latest', mavenLocalRepo: '.repository') {
+								sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign'
+							}
 						}
 					}
 				}
