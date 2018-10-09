@@ -15,14 +15,6 @@ spec:
     image: kdvolder/mvn-plus-npm
     tty: true
     command: [ "cat" ]
-    volumeMounts:
-    - mountPath: download.eclipse.org
-      name: download.eclipse.org
-  volumes:
-  - name: download.eclipse.org
-    hostPath:
-      path: /home/data/httpd/download.eclipse.org
-      type: Directory
 """
     }
   }
@@ -54,18 +46,17 @@ spec:
 				}
 			}
 		}
-		stage('Deploy') {
-			when {
-				branch 'master'
-				// TODO deploy all branch from Eclipse.org Git repo
-			}
-			steps {
-				// TODO compute the target URL (snapshots) according to branch name (0.5-snapshots...)
-				sh 'rm -rf download.eclipse.org/wildwebdeveloper/snapshots'
-				sh 'mkdir -p download.eclipse.org/wildwebdeveloper/snapshots'
-				sh 'cp -r repository/target/repository/* download.eclipse.org/wildwebdeveloper/snapshots'
-				sh 'zip -R download.eclipse.org/wildwebdeveloper/snapshots/repository.zip repository/target/repository/*'
-			}
-		}
+//		stage('Deploy') {
+//			when {
+//				branch 'master'
+//			}
+//			steps {
+//				// TODO compute the target URL (snapshots) according to branch name (0.5-snapshots...)
+//				sh 'rm -rf download.eclipse.org/wildwebdeveloper/snapshots'
+//				sh 'mkdir -p download.eclipse.org/wildwebdeveloper/snapshots'
+//				sh 'cp -r repository/target/repository/* download.eclipse.org/wildwebdeveloper/snapshots'
+//				sh 'zip -R download.eclipse.org/wildwebdeveloper/snapshots/repository.zip repository/target/repository/*'
+//			}
+//		}
 	}
 }
