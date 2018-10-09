@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Bluesky: web development in Eclipse IDE
+Bundle-Name: Wild Web Developer: web development in Eclipse IDE
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: org.eclipse.wildwebdeveloper.Activator
-Bundle-Vendor: Red Hat Inc.
+Bundle-Vendor: Eclipse Wild Web Developer project
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.apache.commons.io;bundle-version="2.2.0",
