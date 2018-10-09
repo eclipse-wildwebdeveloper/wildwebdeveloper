@@ -99,7 +99,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.9</version>
+				<version>0.8.2</version>
 				<executions>
 					<execution>
 						<goals><goal>prepare-agent</goal></goals>
@@ -171,7 +171,7 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-jarsigner-plugin</artifactId>
-						<version>1.1.3</version>
+						<version>1.1.5</version>
 						<executions>
 							<execution>
 								<id>sign</id>
@@ -236,19 +236,5 @@
 			<url>https://repo.eclipse.org/content/groups/cbi</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</pluginRepository>
-		<pluginRepository>
-			<id>jboss</id>
-			<url>https://repository.jboss.org/</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</pluginRepository>
 	</pluginRepositories>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>jboss-snapshots-repository</id>
-			<name>JBoss Snapshots Repository</name>
-			<url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
-			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
-	</distributionManagement>
 </project>
