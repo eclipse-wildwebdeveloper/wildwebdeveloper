@@ -29,15 +29,15 @@ spec:
 			}
 		}
 		stage('Prepare-environment') {
-			container('container') {
-				steps {
+			steps {
+				container('container') {
 					sh 'npm config set cache="$(pwd)/target/npm-cache"'
 				}
 			}
 		}
 		stage('Build') {
-			container('container') {
-				steps {
+			steps {
+				container('container') {
 					sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -DskipTests -PpackAndSign -Dmaven.repo.local=/tmp/.m2/repository'
 				}
 			}
