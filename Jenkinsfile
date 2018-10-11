@@ -52,7 +52,6 @@ spec:
 				branch 'master'
 			}
 			steps {
-				zip zipFile: 'repository/target/repository/repository.zip', dir: 'repository/target/repository'
 				sshagent ( ['project-storage.eclipse.org-bot-ssh']) {
 					sh '''
 						ssh genie.wildwebdeveloper@build.eclipse.org "
