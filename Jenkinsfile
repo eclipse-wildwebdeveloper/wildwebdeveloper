@@ -5,7 +5,6 @@ pipeline {
   agent {
     kubernetes {
       label 'buildtestPod'
-      defaultContainer 'container'
       yaml """
 apiVersion: v1
 kind: Pod
@@ -30,14 +29,17 @@ spec:
 			}
 		}
 		stage('Prepare-environment') {
-			steps {
-				sh 'npm config set cache="$(pwd)/target/npm-cache"'
+			container('container') {
+				steps {
+					sh 'npm config set cache="$(pwd)/target/npm-cache"'
+				}
 			}
 		}
 		stage('Build') {
-			steps {
-				sh 'mvn --version'
-				sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -DskipTests -PpackAndSign -Dmaven.repo.local=/tmp/.m2/repository'
+			container('container') {
+				steps {
+					sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -DskipTests -PpackAndSign -Dmaven.repo.local=/tmp/.m2/repository'
+				}
 			}
 			post {
 				always {
