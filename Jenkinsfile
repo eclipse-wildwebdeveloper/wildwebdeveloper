@@ -13,7 +13,8 @@ spec:
   - name: container
     image: kdvolder/mvn-plus-npm
     tty: true
-    command: [ "cat" ]
+    command:
+      - cat
 """
     }
   }
@@ -21,6 +22,13 @@ spec:
 		NPM_CONFIG_USERCONFIG = "$WORKSPACE/.npmrc"
 	}
 	stages {
+		stage('Test-ssh') {
+			steps {
+				sshagent ( ['project-storage.eclipse.org-bot-ssh']) {
+					sh 'ssh genie.wildwebdeveloper@build.eclipse.org ls -l /home/data/httpd/download.eclipse.org/wildwebdeveloper/'
+				}
+			}
+		}
 		stage('Prepare-source') {
 			steps {
 				git url: 'https://github.com/eclipse/wildwebdeveloper.git'
@@ -31,14 +39,14 @@ spec:
 		stage('Prepare-environment') {
 			steps {
 				container('container') {
-					sh 'npm config set cache="$(pwd)/target/npm-cache"'
+					sh 'npm config set cache="$WORKSPACE/npm-cache"'
 				}
 			}
 		}
 		stage('Build') {
 			steps {
 				container('container') {
-					sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -DskipTests -PpackAndSign -Dmaven.repo.local=/tmp/.m2/repository'
+					sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -DskipTests -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
 				}
 			}
 			post {
