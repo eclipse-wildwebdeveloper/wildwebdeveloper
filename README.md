@@ -14,10 +14,10 @@ Install into Eclipse IDE (pick one way or another):
 * With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-web-development-eclipse-ide-experimental, choose one of:
   * *Help > Eclipse Marketplace*, search `Wild Web Developer` then click `Install` or
   * drag <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3394048" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a> into Eclipse IDE, or
-* With [Help > Install New Software...](http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Ftasks%2Ftasks-124.htm) with p2 repo https://jenkins.eclipse.org/wildwebdeveloper/job/Wildwebdeveloper/job/master/lastSuccessfulBuild/artifact/repository/target/repository/
+* With [Help > Install New Software...](http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Ftasks%2Ftasks-124.htm) with p2 repo http://download.eclipse.org/wildwebdeveloper/snapshots
 
 In an Eclipse target platform definition:
-* Use https://jenkins.eclipse.org/wildwebdeveloper/job/Wildwebdeveloper/job/master/lastSuccessfulBuild/artifact/repository/target/repository/ p2 repo
+* Use http://download.eclipse.org/wildwebdeveloper/snapshots p2 repo
 
 ## Support and Contribution
 

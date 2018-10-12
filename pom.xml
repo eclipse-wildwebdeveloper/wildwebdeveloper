@@ -87,7 +87,7 @@
 							<goal>compare-version-with-baselines</goal>
 						</goals>
 						<configuration>
-							<!-- disable until a first release took place -->
+							<!-- disable until a first release occurred -->
 							<skip>true</skip>
 							<baselines>
 								<url>Release repo</url>
@@ -137,9 +137,10 @@
 					<artifactId>tycho-p2-plugin</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
+						<baselineMode>replace</baselineMode>
 						<baselineRepositories>
 							<repository>
-								<url>https://jenkins.eclipse.org/wildwebdeveloper/job/Wildwebdeveloper/job/master/lastSuccessfulBuild/artifact/repository/target/repository/</url>
+								<url>http://download.eclipse.org/wildwebdeveloper/snapshots/</url>
 							</repository>
 						</baselineRepositories>
 					</configuration>
