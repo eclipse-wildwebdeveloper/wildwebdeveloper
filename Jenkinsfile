@@ -5,7 +5,6 @@ pipeline {
   agent {
     kubernetes {
       label 'buildtestPod'
-      defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
 kind: Pod
@@ -16,18 +15,6 @@ spec:
     tty: true
     command:
       - cat
-  - name: jnlp
-    image: eclipsecbi/jenkins-jnlp-agent
-    command:
-    - cat
-    tty: true
-    volumeMounts:
-    - mountPath: /home/jenkins/.ssh
-      name: volume-known-hosts
-  volumes:
-  - configMap:
-      name: known-hosts
-    name: volume-known-hosts
 """
     }
   }
