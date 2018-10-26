@@ -60,6 +60,7 @@
             path="grammars/json/JSON.tmLanguage"
             scopeName="source.json">
       </grammar>
+      
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.json"
             scopeName="source.json">
@@ -345,6 +346,48 @@
                type="org.eclipse.debug.core.model.IVariable">
          </adapter>
       </factory>
+   </extension>
+   
+   <!-- Vue Language -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+         <content-type
+         	base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="vue"
+            id="org.eclipse.wildwebdeveloper.vue"
+            name="Vue"
+            priority="normal">
+         </content-type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/vue/postcss.json"
+            scopeName="source.css.postcss">
+      </grammar>
+      <grammar
+      		path="grammars/vue/vue-html.json"
+            scopeName="text.html.vue-html">
+      </grammar>
+      <grammar
+            path="grammars/vue/vue-generated.json"
+            scopeName="source.vue">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.vue"
+            scopeName="source.vue">
+      </scopeNameContentTypeBinding>
+   </extension>
+      
+   
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.vue"
+            path="language-configurations/vue/vue-language-configuration.json">
+      </languageConfiguration>
    </extension>
       
    <!-- YAML Language -->   

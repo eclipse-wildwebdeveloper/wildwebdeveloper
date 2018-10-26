@@ -2,7 +2,7 @@
 <?pde version="3.8"?><target name="wildwebdeveloper" sequenceNumber="10">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-	<repository location="http://download.eclipse.org/eclipse/updates/4.8/"/>
+	<repository location="http://download.eclipse.org/eclipse/updates/4.9/"/>
 	<unit id="org.eclipse.ui.tests.harness" version="0.0.0"/>
 	<unit id="org.hamcrest" version="0.0.0"/>
 	<unit id="org.junit" version="0.0.0"/>
@@ -18,17 +18,17 @@
 	<unit id="org.eclipse.platform.ide" version="0.0.0"/>
 	<unit id="org.eclipse.ui.genericeditor" version="0.0.0"/>
 	<unit id="org.eclipse.wst.jsdt.nodejs.feature.feature.group" version="0.0.0"/>
-	<unit id="org.eclipse.xtend.lib" version="2.15.0.v20180916-1130"/>
+	<unit id="org.eclipse.xtend.lib" version="0.0.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 		<unit id="org.eclipse.lsp4e" version="0.0.0"/>
-		<repository location="http://download.eclipse.org/lsp4e/snapshots"/>
+		<repository location="http://download.eclipse.org/lsp4e/releases/0.7.0/"/>
 </location>
 <location type="InstallableUnit">
 	<unit id="org.eclipse.lsp4j" version="0.0.0"/>
 	<unit id="org.eclipse.lsp4j.jsonrpc" version="0.0.0"/>
 	<unit id="org.eclipse.lsp4j.generator" version="0.0.0"/>
-	<repository location="http://services.typefox.io/open-source/jenkins/job/lsp4j/job/master/lastSuccessfulBuild/artifact/build/p2-repository/"/>
+	<repository location="http://download.eclipse.org/lsp4j/updates/releases/0.5.0/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<repository location="http://download.eclipse.org/cbi/updates/license/"/>

@@ -5,11 +5,12 @@
   "scripts": {},
   "keywords": [],
   "author": "Eclipse Wild Web Developer",
-  "license": "EPL",
+  "license": "EPL-2.0",
   "dependencies": {
+    "typescript-language-server": "0.3.5",
+    "vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server",
     "vscode-html-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server",
     "vscode-json-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server",
-    "vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server",
-    "typescript-language-server": "0.3.5"
+    "vue-language-server": "0.0.35"
   }
 }
