@@ -46,7 +46,7 @@
 				<version>1.6.0</version>
 				<executions>
 					<execution>
-						<id>npm-install</id>
+						<id>npm-ci</id>
 						<goals>
 							<goal>exec</goal>
 						</goals>
@@ -54,7 +54,7 @@
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
-								<arg>install</arg>
+								<arg>ci</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
