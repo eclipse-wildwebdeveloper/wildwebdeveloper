@@ -359,6 +359,19 @@
             priority="normal">
          </content-type>
    </extension>
+ 
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.vue.VueLanguageServer"
+            id="org.eclipse.wildwebdeveloper.vue"
+            label="Vue Language Server (Vetur)" >
+      </server>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.vue"
+            id="org.eclipse.wildwebdeveloper.vue">
+      </contentTypeMapping>
+   </extension>
    
    <extension
          point="org.eclipse.tm4e.registry.grammars">
@@ -379,8 +392,6 @@
             scopeName="source.vue">
       </scopeNameContentTypeBinding>
    </extension>
-      
-   
    
    <extension
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
