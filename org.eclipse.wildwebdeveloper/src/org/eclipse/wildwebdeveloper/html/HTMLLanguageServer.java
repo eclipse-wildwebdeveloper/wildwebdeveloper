@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,6 +29,8 @@ import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -39,7 +39,7 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
 			URL url = FileLocator.toFileURL(getClass()
-					.getResource("/language-servers/node_modules/vscode-html-languageserver/out/htmlServerMain.js"));
+					.getResource("/language-servers/node_modules/vscode-html-languageserver/dist/htmlServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
