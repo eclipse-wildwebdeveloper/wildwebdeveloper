@@ -10,6 +10,7 @@
     "vscode-html-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server",
     "vscode-json-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server",
     "vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server",
-    "typescript-language-server": "0.3.5"
+    "typescript-language-server": "0.3.5",
+    "typescript": "2.8.3"
   }
 }
