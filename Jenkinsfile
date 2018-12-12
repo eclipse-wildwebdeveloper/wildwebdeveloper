@@ -4,7 +4,7 @@ pipeline {
 	}
   agent {
     kubernetes {
-      label 'build-test-pod'
+      label 'wildwebdeveloper-buildtest-pod'
       defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
@@ -12,10 +12,9 @@ kind: Pod
 spec:
   containers:
   - name: container
-    image: kdvolder/mvn-plus-npm
+    image: mickaelistria/wildwebdeveloper-build-test-dependencies@sha256:953ba8b8850ca81a4fe465a8f9f5e5d3b18985b75ecc0ba44d7d2178a232fa9c
     tty: true
-    command:
-      - cat
+    command: [ "uid_entrypoint", "cat" ]
   - name: jnlp
     image: 'eclipsecbi/jenkins-jnlp-agent'
     args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
@@ -33,29 +32,25 @@ spec:
 		NPM_CONFIG_USERCONFIG = "$WORKSPACE/.npmrc"
 	}
 	stages {
-		stage('Prepare-source') {
-			steps {
-				git url: 'https://github.com/eclipse/wildwebdeveloper.git'
-				cleanWs()
-				checkout scm
-			}
-		}
 		stage('Prepare-environment') {
 			steps {
 				container('container') {
 					sh 'npm config set cache="$WORKSPACE/npm-cache"'
+					sh 'mkdir -p ${HOME}/.vnc && echo "123456" | vncpasswd -f > ${HOME}/.vnc/passwd && chmod 600 ${HOME}/.vnc/passwd'
 				}
 			}
 		}
 		stage('Build') {
 			steps {
 				container('container') {
-					sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -DskipTests -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
+					wrap([$class: 'Xvnc', useXauthority: true]) {
+						sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
+					}
 				}
 			}
 			post {
 				always {
-					//junit '*/target/surefire-reports/TEST-*.xml'
+					junit '*/target/surefire-reports/TEST-*.xml'
 					archiveArtifacts artifacts: 'repository/target/repository/**' 
 				}
 			}
