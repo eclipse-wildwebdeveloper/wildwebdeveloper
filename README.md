@@ -19,6 +19,12 @@ Install into Eclipse IDE (pick one way or another):
 In an Eclipse target platform definition:
 * Use http://download.eclipse.org/wildwebdeveloper/snapshots p2 repo
 
-## Support and Contribution
+## Get involved
 
-Community support is currently available via GitHub issues. Contribution of Code and Documentation are welcome as GitHub Pull Request. 
+Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues). 
+
+Contribution of Code and Documentation are welcome as [GitHub Pull Request](https://github.com/eclipse/wildwebdeveloper/pulls).
+
+Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
+
+Quality analysis is available on [SonarCloud](https://sonarcloud.io/dashboard?id=eclipse-wildwebdeveloper).
