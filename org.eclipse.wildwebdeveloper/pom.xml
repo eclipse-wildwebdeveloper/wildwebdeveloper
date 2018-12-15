@@ -25,6 +25,8 @@
 								<exclude>.bin/tsc.cmd</exclude>
 								<exclude>.bin/tsserver</exclude>
 								<exclude>.bin/tsserver.cmd</exclude>
+								<exclude>.bin/typescript-language-server</exclude>
+								<exclude>.bin/typescript-language-server.cmd</exclude>
 							</excludes>
 						</fileset>
 					</filesets>
