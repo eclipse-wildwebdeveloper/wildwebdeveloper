@@ -17,6 +17,15 @@
 					<filesets>
 						<fileset>
 							<directory>language-servers/node_modules</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+							<excludes>
+								<exclude>.bin/tsc</exclude>
+								<exclude>.bin/tsc.cmd</exclude>
+								<exclude>.bin/tsserver</exclude>
+								<exclude>.bin/tsserver.cmd</exclude>
+							</excludes>
 						</fileset>
 					</filesets>
 				</configuration>
@@ -55,6 +64,7 @@
 							<executable>npm</executable>
 							<arguments>
 								<arg>install</arg>
+								<arg>--no-bin-links</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
