@@ -18,6 +18,10 @@
 						<fileset>
 							<directory>language-servers/node_modules</directory>
 						</fileset>
+						<fileset>
+							<directory>language-servers/</directory>
+							<includes>*.tgz</includes>
+						</fileset>
 					</filesets>
 				</configuration>
 			</plugin>
@@ -46,7 +50,25 @@
 				<version>1.6.0</version>
 				<executions>
 					<execution>
-						<id>npm-install</id>
+						<id>local install VSCode Language servers</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<arg>pack</arg>
+								<arg>--no-bin-links</arg>
+								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
+								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
+								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
+							</arguments>
+							<workingDirectory>language-servers/</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>provision servers and deps</id>
 						<goals>
 							<goal>exec</goal>
 						</goals>
@@ -55,6 +77,7 @@
 							<executable>npm</executable>
 							<arguments>
 								<arg>install</arg>
+								<arg>--no-bin-links</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
@@ -65,7 +88,10 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
-					<jgit.ignore>pom.xml,server/node_modules</jgit.ignore>
+					<jgit.ignore>
+						pom.xml
+						language-servers/node_modules
+					</jgit.ignore>
 				</configuration>
 			</plugin>
 		</plugins>

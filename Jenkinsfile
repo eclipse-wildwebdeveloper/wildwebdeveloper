@@ -44,14 +44,14 @@ spec:
 			steps {
 				container('container') {
 					wrap([$class: 'Xvnc', useXauthority: true]) {
-						sh 'mvn clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
+						sh 'mvn clean verify -B -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
 					}
 				}
 			}
 			post {
 				always {
 					junit '*/target/surefire-reports/TEST-*.xml'
-					archiveArtifacts artifacts: 'repository/target/repository/**' 
+					archiveArtifacts artifacts: 'repository/target/repository/**,*/target/work/configuration/*.log,*/target/work/data/.metadata/.log,*/target/work/data/languageServers-log/**' 
 				}
 			}
 		}

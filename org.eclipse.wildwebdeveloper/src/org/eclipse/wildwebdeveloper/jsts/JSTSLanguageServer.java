@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/typescript-language-server/lib/cli.js"));
-			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
+			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));

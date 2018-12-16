@@ -2,15 +2,16 @@
   "name": "wildwebdeveloper-node-languageservers",
   "version": "0.1.0",
   "description": "",
-  "scripts": {},
   "keywords": [],
   "author": "Eclipse Wild Web Developer",
   "license": "EPL",
+  "scripts": {
+  },
   "dependencies": {
-    "vscode-html-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server",
-    "vscode-json-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server",
-    "vscode-css-languageserver": "../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server",
-    "typescript-language-server": "0.3.5",
+    "vscode-html-languageserver": "./vscode-html-languageserver-1.0.0.tgz",
+    "vscode-json-languageserver": "./vscode-json-languageserver-1.0.1.tgz",
+    "vscode-css-languageserver": "./vscode-css-languageserver-1.0.0.tgz",
+    "typescript-language-server": "0.3.7",
     "typescript": "2.8.3"
   }
 }
