@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.lsp4e.LanguageServerPlugin;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
@@ -35,6 +36,10 @@ public class TestLanguageServers {
 
 	@Before
 	public void setUpProject() throws Exception {
+		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.css.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.html.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
 		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.nanoTime());
 		project.create(null);
 		project.open(null);
@@ -70,6 +75,24 @@ public class TestLanguageServers {
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
+		assertTrue("Diagnostic not published", new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+				} catch (CoreException e) {
+					return false;
+				}
+			}
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
+	}
+
+	@Test
+	public void testJSONFile() throws Exception {
+		final IFile file = project.getFile("blah.json");
+		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("ERROR");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
 			protected boolean condition() {
