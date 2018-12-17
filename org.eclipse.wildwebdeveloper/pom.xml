@@ -60,9 +60,11 @@
 							<arguments>
 								<arg>pack</arg>
 								<arg>--no-bin-links</arg>
+								<arg>--ignore-scripts</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
+								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
@@ -78,8 +80,34 @@
 							<arguments>
 								<arg>install</arg>
 								<arg>--no-bin-links</arg>
+								<arg>--ignore-scripts</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<id>workaround-vscode-node-debug-issue-187</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>${basedir}/language-servers/node_modules/node-debug/out/node/sourceMaps.js</include>
+							</includes>
+							<replacements>
+								<replacement>
+									<token>../../node_modules/source-map/lib/util.js</token>
+									<value>../../../source-map/lib/util.js</value>
+								</replacement>
+							</replacements>
 						</configuration>
 					</execution>
 				</executions>

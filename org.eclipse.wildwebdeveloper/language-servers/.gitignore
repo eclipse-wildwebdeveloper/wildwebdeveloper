@@ -2,6 +2,4 @@
 npm-debug.log
 /node/
 /etc/
-/vscode-css-languageserver-1.0.0.tgz
-/vscode-html-languageserver-1.0.0.tgz
-/vscode-json-languageserver-1.0.1.tgz
+/*.tgz

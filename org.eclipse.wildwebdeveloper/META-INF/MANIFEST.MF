@@ -14,13 +14,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.tm4e.registry;bundle-version="0.1.0",
  org.eclipse.ui.genericeditor;bundle-version="1.0.0",
  org.eclipse.tm4e.ui;bundle-version="0.1.0",
- org.eclipse.wst.jsdt.debug.core;bundle-version="3.2.200";resolution:=optional,
  org.eclipse.jface.text;bundle-version="3.12.0",
  org.eclipse.ui.editors,
  org.eclipse.ui.ide;bundle-version="3.13.0",
  org.eclipse.core.resources;bundle-version="3.12.0",
  org.eclipse.debug.core;bundle-version="3.11.0",
- org.eclipse.debug.ui;bundle-version="3.11.0"
+ org.eclipse.debug.ui;bundle-version="3.11.0",
+ org.eclipse.lsp4e.debug;bundle-version="0.3.0",
+ com.google.gson;bundle-version="2.8.2",
+ org.eclipse.core.expressions;bundle-version="3.6.200"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir

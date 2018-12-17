@@ -327,26 +327,7 @@
             scopeName="source.ts">
       </snippet>
    </extension>
-         
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="org.eclipse.wildwebdeveloper.jsts.debug.ToogleLineBreakpointHandler"
-            commandId="org.eclipse.debug.ui.commands.ToggleLineBreakpoint">
-      </handler>
-   </extension>
-   
-   <extension
-         point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.jface.text.TextSelection"
-            class="org.eclipse.wildwebdeveloper.jsts.debug.TextSelectionToJSVariableAdapterFactory">
-         <adapter
-               type="org.eclipse.debug.core.model.IVariable">
-         </adapter>
-      </factory>
-   </extension>
-      
+
    <!-- YAML Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -386,6 +367,93 @@
             path="snippets/yaml/sample.yaml"
             scopeName="source.yaml">
       </snippet>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.debug.NodeRunDAPDebugDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"
+            modes="run,debug"
+            name="Node.js application"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.eclipse.wildwebdeveloper.debug.NodeDebugLaunchShortcut"
+            icon="icons/node_16.png"
+            id="org.eclipse.wildwebdeveloper.nodeRunShortcut"
+            label="Node program"
+            modes="run,debug">
+         <configurationType
+               id="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug">
+         </configurationType>
+         <contextualLaunch>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.wildwebdeveloper.isNodeResource">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+         <enablement>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate>
+                  <adapt
+                        type="org.eclipse.core.resources.IResource">
+                     <test
+                           forcePluginActivation="true"
+                           property="org.eclipse.wildwebdeveloper.isNodeResource">
+                     </test>
+                  </adapt>
+               </iterate>
+            </with>
+         </enablement>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.eclipse.wildwebdeveloper.IsNodeProjectPropertyTester"
+            id="org.eclipse.wildwebdeveloper.propertyTester.isNodeResource"
+            namespace="org.eclipse.wildwebdeveloper"
+            properties="isNodeResource"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"
+            icon="icons/node_16.png"
+            id="org.eclipse.wildwebdeveloper.nodeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.debug.NodeDebugTabGroup"
+            id="org.eclipse.wildwebdeveloper.nodeTabGroup"
+            type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug">
+      </launchConfigurationTabGroup>
    </extension>
 
 </plugin>
