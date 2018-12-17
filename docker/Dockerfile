@@ -1,10 +1,10 @@
-FROM eclipsecbi/ubuntu-gtk3-metacity:18.10-gtk3.24
+FROM eclipsecbi/fedora-gtk3-mutter:29-gtk3.24
 
 # Back to root for install
 USER 0
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	openjdk-8-jdk maven
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN dnf update && dnf -y install \
+	java-openjdk maven
+RUN dnf update && dnf -y install \
 	nodejs npm
 
 #Back to named user

@@ -12,12 +12,11 @@ kind: Pod
 spec:
   containers:
   - name: container
-    image: mickaelistria/wildwebdeveloper-build-test-dependencies@sha256:953ba8b8850ca81a4fe465a8f9f5e5d3b18985b75ecc0ba44d7d2178a232fa9c
+    image: mickaelistria/wildwebdeveloper-build-test-dependencies@sha256:c9336c2b3ab06cc803e7465c2c1a3cea58bd09cbe5cbaf44f3630a77a9290e2f
     tty: true
     command: [ "uid_entrypoint", "cat" ]
   - name: jnlp
     image: 'eclipsecbi/jenkins-jnlp-agent'
-    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
     volumeMounts:
     - mountPath: /home/jenkins/.ssh
       name: volume-known-hosts
@@ -36,7 +35,6 @@ spec:
 			steps {
 				container('container') {
 					sh 'npm config set cache="$WORKSPACE/npm-cache"'
-					sh 'mkdir -p ${HOME}/.vnc && echo "123456" | vncpasswd -f > ${HOME}/.vnc/passwd && chmod 600 ${HOME}/.vnc/passwd'
 				}
 			}
 		}
