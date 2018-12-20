@@ -64,7 +64,7 @@
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
-								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug</arg>
+								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>

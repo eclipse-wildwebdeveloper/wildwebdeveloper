@@ -7,11 +7,11 @@
   "license": "EPL",
   "scripts": {},
   "dependencies": {
+    "vscode-css-languageserver": "./vscode-css-languageserver-1.0.0.tgz",
     "vscode-html-languageserver": "./vscode-html-languageserver-1.0.0.tgz",
     "vscode-json-languageserver": "./vscode-json-languageserver-1.0.1.tgz",
-    "vscode-css-languageserver": "./vscode-css-languageserver-1.0.0.tgz",
-    "typescript-language-server": "0.3.7",
     "typescript": "2.8.3",
-    "node-debug": "./node-debug-1.25.4.tgz"
+    "typescript-language-server": "0.3.7",
+    "node-debug2": "./node-debug2-1.25.5.tgz"
   }
 }
