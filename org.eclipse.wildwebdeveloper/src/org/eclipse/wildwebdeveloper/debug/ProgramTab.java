@@ -113,7 +113,7 @@ public class ProgramTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public String getName() {
-		return "▶️ Program";
+		return "\u25b6\ufe0f Program";
 	}
 
 }
