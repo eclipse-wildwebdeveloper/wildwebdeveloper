@@ -83,7 +83,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		wc.setAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, true);
 		wc.setAttribute(DSPPlugin.ATTR_DSP_CMD, InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
-			wc.setAttribute(DSPPlugin.ATTR_DSP_ARGS, Collections.singletonList(FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/node-debug/out/node/nodeDebug.js")).getPath()));
+			wc.setAttribute(DSPPlugin.ATTR_DSP_ARGS, Collections.singletonList(FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js")).getPath()));
 			configuration = wc.doSave();
 			super.launch(configuration, mode, launch, monitor);
 		} catch (IOException e) {
