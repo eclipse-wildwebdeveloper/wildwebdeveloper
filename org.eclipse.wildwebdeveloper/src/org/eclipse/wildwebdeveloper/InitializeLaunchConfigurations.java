@@ -58,6 +58,13 @@ public class InitializeLaunchConfigurations {
 	}
 
 	public static String getNodeJsLocation() {
+		{
+			String nodeJsLocation = System.getProperty("NodeJsLocation");
+			if (nodeJsLocation != null && Files.exists(Paths.get(nodeJsLocation))) {
+				return nodeJsLocation;
+			}
+		}
+		
 		String res = "/path/to/node";
 		String[] command = new String[] {"/bin/bash", "-c", "which node"};
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
