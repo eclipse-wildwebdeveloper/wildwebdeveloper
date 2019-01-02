@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
 
-public class ProgramTab extends AbstractLaunchConfigurationTab {
+public class RunProgramTab extends AbstractLaunchConfigurationTab {
 
 	private Text programPathText;
 	private Text argumentsText;
@@ -40,7 +40,7 @@ public class ProgramTab extends AbstractLaunchConfigurationTab {
 	public void createControl(Composite parent) {
 		Composite resComposite = new Composite(parent, SWT.NONE);
 		resComposite.setLayout(new GridLayout(2, false));
-		new Label(resComposite, SWT.NONE).setText("Program");
+		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_program);
 		this.programPathText = new Text(resComposite, SWT.BORDER);
 		this.programPathText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		ControlDecoration decoration = new ControlDecoration(programPathText, SWT.TOP | SWT.LEFT);
@@ -51,17 +51,17 @@ public class ProgramTab extends AbstractLaunchConfigurationTab {
 			setDirty(true);
 			File file = new File(programPathText.getText());
 			if (!file.isFile()) {
-				String errorMessage = "Given path doesn't reference a file.";
+				String errorMessage = Messages.RunProgramTab_error_unknownFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
-			} else if (!file.getName().endsWith(".js")){
-				String errorMessage = "File is not a JS file.";
+			} else if (!file.getName().endsWith(".js")){ //$NON-NLS-1$
+				String errorMessage = Messages.RunProgramTab_error_notJSFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
 			} if (!file.canRead()) {
-				String errorMessage = "Not allowed to read file.";
+				String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
@@ -71,14 +71,14 @@ public class ProgramTab extends AbstractLaunchConfigurationTab {
 			}
 			updateLaunchConfigurationDialog();
 		});
-		new Label(resComposite, SWT.NONE).setText("Arguments");
+		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_argument);
 		this.argumentsText = new Text(resComposite, SWT.BORDER);
 		this.argumentsText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		this.argumentsText.addModifyListener(e -> {
 			setDirty(true);
 			updateLaunchConfigurationDialog();
 		});
-		new Label(resComposite, SWT.NONE).setText("Working directory");
+		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_workingDirectory);
 		this.workingDirectoryText = new Text(resComposite, SWT.BORDER);
 		this.workingDirectoryText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		this.workingDirectoryText.addModifyListener(e -> {
@@ -96,9 +96,9 @@ public class ProgramTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			this.programPathText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, ""));
-			this.argumentsText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, ""));
-			this.workingDirectoryText.setText(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, ""));
+			this.programPathText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, "")); //$NON-NLS-1$
+			this.argumentsText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
+			this.workingDirectoryText.setText(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "")); //$NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -113,7 +113,7 @@ public class ProgramTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public String getName() {
-		return "\u25b6\ufe0f Program";
+		return Messages.RunProgramTab_title;
 	}
 
 }

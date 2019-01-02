@@ -379,11 +379,20 @@
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.debug.NodeAttachDebugDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach"
+            modes="debug"
+            name="Running Node.js application"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.eclipse.wildwebdeveloper.debug.NodeDebugLaunchShortcut"
+            class="org.eclipse.wildwebdeveloper.debug.NodeRunDebugLaunchShortcut"
             icon="icons/node_16.png"
             id="org.eclipse.wildwebdeveloper.nodeRunShortcut"
             label="Node program"
@@ -446,13 +455,23 @@
             icon="icons/node_16.png"
             id="org.eclipse.wildwebdeveloper.nodeImage">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach"
+            icon="icons/node_16.png"
+            id="org.eclipse.wildwebdeveloper.nodeImage">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.NodeDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.NodeRunDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.nodeTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.debug.NodeAttachDebugTabGroup"
+            id="org.eclipse.wildwebdeveloper.nodeAttachTabGroup"
+            type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach">
       </launchConfigurationTabGroup>
    </extension>
 

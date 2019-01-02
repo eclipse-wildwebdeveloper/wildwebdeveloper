@@ -36,7 +36,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wildwebdeveloper.Activator;
 
-public class NodeDebugLaunchShortcut implements ILaunchShortcut2 {
+public class NodeRunDebugLaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
 	public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
@@ -90,7 +90,7 @@ public class NodeDebugLaunchShortcut implements ILaunchShortcut2 {
 					configurations[0].launch(mode, new NullProgressMonitor());
 				} catch (CoreException e) {
 					Activator.getDefault().getLog().log(e.getStatus());
-					ErrorDialog.openError(Display.getDefault().getActiveShell(), "error", e.getMessage(), e.getStatus());
+					ErrorDialog.openError(Display.getDefault().getActiveShell(), "error", e.getMessage(), e.getStatus()); //$NON-NLS-1$
 				}
 			});
 		} else if (configurations.length > 1) {
@@ -113,7 +113,7 @@ public class NodeDebugLaunchShortcut implements ILaunchShortcut2 {
 			ILaunchConfiguration[] existing = Arrays.stream(launchManager.getLaunchConfigurations(configType))
 				.filter(launchConfig -> {
 					try {
-						return launchConfig.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, "").equals(resource.getLocation().toFile().toString());
+						return launchConfig.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, "").equals(resource.getLocation().toFile().toString()); //$NON-NLS-1$
 					} catch (CoreException e) {
 						Activator.getDefault().getLog().log(e.getStatus());
 						return false;
@@ -129,7 +129,7 @@ public class NodeDebugLaunchShortcut implements ILaunchShortcut2 {
 			wc.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, resource.getLocation().removeLastSegments(1).toString());
 			return new ILaunchConfiguration[] { wc };
 		} catch (CoreException e) {
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), "error", e.getMessage(), e.getStatus());
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), "error", e.getMessage(), e.getStatus()); //$NON-NLS-1$
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
 		return null;
