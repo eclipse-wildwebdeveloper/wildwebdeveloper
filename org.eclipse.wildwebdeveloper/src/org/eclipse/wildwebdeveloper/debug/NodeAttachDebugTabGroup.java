@@ -16,6 +16,7 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
+import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
 
 public class NodeAttachDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
 
@@ -23,6 +24,7 @@ public class NodeAttachDebugTabGroup extends AbstractLaunchConfigurationTabGroup
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		setTabs(new ILaunchConfigurationTab[] {
 			new AttachTab(),
+			new DSPOverrideSettingsTab(),
 			new CommonTab()
 		});
 	}
