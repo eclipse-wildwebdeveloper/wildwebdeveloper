@@ -13,7 +13,11 @@
 package org.eclipse.wildwebdeveloper.debug;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -22,16 +26,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 
@@ -42,20 +41,24 @@ public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 	static final String PORT = "port"; //$NON-NLS-1$
 
 	@Override
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		ILaunchConfigurationWorkingCopy wc = configuration.getWorkingCopy();
+	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+			throws CoreException {
 		// user settings
-		JsonObject param = new JsonObject();
-		param.addProperty(ADDRESS, wc.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
-		param.addProperty(PORT, wc.getAttribute(PORT, -1));
-		wc.setAttribute(DSPPlugin.ATTR_DSP_PARAM, new Gson().toJson(param));
-		wc.setAttribute(DSPPlugin.ATTR_DSP_MODE, DSPPlugin.DSP_MODE_LAUNCH); // we LAUNCH the adapter then CONNECTS to node
-		wc.setAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, true);
-		wc.setAttribute(DSPPlugin.ATTR_DSP_CMD, InitializeLaunchConfigurations.getNodeJsLocation());
+		Map<String, Object> param = new HashMap<>();
+		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
+		param.put(PORT, configuration.getAttribute(PORT, -1));
 		try {
-			wc.setAttribute(DSPPlugin.ATTR_DSP_ARGS, Collections.singletonList(FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js")).getPath())); //$NON-NLS-1$
-			configuration = wc.doSave();
-			super.launch(configuration, mode, launch, monitor);
+			URL fileURL = FileLocator.toFileURL(
+					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));
+			List<String> debugCmdArgs = Collections.singletonList(fileURL.getPath());
+
+			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
+					monitor);
+			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
+			builder.setMonitorDebugAdapter(true);
+			builder.setDspParameters(param);
+
+			super.launch(builder);
 		} catch (IOException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2019 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -17,6 +17,7 @@ import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.EnvironmentTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
+import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
 
 public class NodeRunDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
 
@@ -25,6 +26,7 @@ public class NodeRunDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
 		setTabs(new ILaunchConfigurationTab[] {
 			new RunProgramTab(),
 			new EnvironmentTab(),
+			new DSPOverrideSettingsTab(),
 			new CommonTab()
 		});
 	}
