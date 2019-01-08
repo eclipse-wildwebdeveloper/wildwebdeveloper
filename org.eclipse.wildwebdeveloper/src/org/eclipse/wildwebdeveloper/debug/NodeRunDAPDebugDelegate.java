@@ -30,9 +30,9 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
+import org.eclipse.lsp4e.debug.launcher.InitializeLaunchConfigurations;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
