@@ -54,7 +54,8 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		// Nothing to do
+		configuration.setAttribute(NodeAttachDebugDelegate.ADDRESS, "localhost");
+		configuration.setAttribute(NodeAttachDebugDelegate.PORT, 9229);
 	}
 
 	@Override
