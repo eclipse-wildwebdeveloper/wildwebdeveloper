@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>org.eclipse.wildwebdeveloper</artifactId>
 	<parent>
@@ -7,7 +9,7 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -40,6 +42,18 @@
 							<url>https://az764295.vo.msecnd.net/stable/0f080e5267e829de46638128001aeb7ca2d6d50e/code-stable-code_1.25.0-1530796411_amd64.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>fetch-xml</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://github.com/angelozerr/lsp4xml/releases/download/v0.0.2/org.eclipse.lsp4xml-all.jar</url>
+							<unpack>false</unpack>
+							<outputDirectory>language-servers/server</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
