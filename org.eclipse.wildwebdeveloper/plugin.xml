@@ -346,7 +346,7 @@
             priority="normal">
       </content-type>
       <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
+            base-type="org.eclipse.wildwebdeveloper.xml"
             file-extensions="xsd"
             id="org.eclipse.wildwebdeveloper.xsd"
             name="XSD"
@@ -404,18 +404,10 @@
             contentTypeId="org.eclipse.wildwebdeveloper.xsl"
             scopeName="source.xml.xsl">
       </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/xml/xml.tmLanguage.json"
-            scopeName="source.xml">
-      </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.xsd"
             scopeName="source.xml">
       </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/xml/xml.tmLanguage.json"
-            scopeName="source.xml">
-      </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.dtd"
             scopeName="source.xml">
