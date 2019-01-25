@@ -345,6 +345,20 @@
             name="XSL"
             priority="normal">
       </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.xml"
+            file-extensions="xsd"
+            id="org.eclipse.wildwebdeveloper.xsd"
+            name="XSD"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="dtd"
+            id="org.eclipse.wildwebdeveloper.dtd"
+            name="DTD"
+            priority="normal">
+      </content-type>
    </extension>
    
    <extension
@@ -360,7 +374,15 @@
       </contentTypeMapping>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.xsl"
-            id="org.eclipse.wildwebdeveloper.xsl">
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.xsd"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.dtd"
+            id="org.eclipse.wildwebdeveloper.xml">
       </contentTypeMapping>
    </extension>
  
@@ -381,6 +403,14 @@
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.xsl"
             scopeName="source.xml.xsl">
+      </scopeNameContentTypeBinding>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.xsd"
+            scopeName="source.xml">
+      </scopeNameContentTypeBinding>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.dtd"
+            scopeName="source.xml">
       </scopeNameContentTypeBinding>
    </extension>
    
