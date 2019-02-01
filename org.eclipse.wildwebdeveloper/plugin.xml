@@ -189,7 +189,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="html"
+            file-extensions="html,htm"
             id="org.eclipse.wildwebdeveloper.html"
             name="HTML"
             priority="normal">
