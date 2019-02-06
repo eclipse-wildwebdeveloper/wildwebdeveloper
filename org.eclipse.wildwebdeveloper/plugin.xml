@@ -509,40 +509,18 @@
          </configurationType>
          <contextualLaunch>
             <enablement>
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
+               <with variable="selection">
+                  <count value="1"/>
                   <iterate>
-                     <adapt
-                           type="org.eclipse.core.resources.IResource">
+                     <adapt type="org.eclipse.core.resources.IResource">
                         <test
                               forcePluginActivation="true"
-                              property="org.eclipse.wildwebdeveloper.isNodeResource">
-                        </test>
+                              property="org.eclipse.wildwebdeveloper.isNodeResource"/>
                      </adapt>
                   </iterate>
                </with>
             </enablement>
          </contextualLaunch>
-         <enablement>
-            <with
-                  variable="selection">
-               <count
-                     value="1">
-               </count>
-               <iterate>
-                  <adapt
-                        type="org.eclipse.core.resources.IResource">
-                     <test
-                           forcePluginActivation="true"
-                           property="org.eclipse.wildwebdeveloper.isNodeResource">
-                     </test>
-                  </adapt>
-               </iterate>
-            </with>
-         </enablement>
       </shortcut>
    </extension>
    <extension
@@ -580,6 +558,15 @@
             id="org.eclipse.wildwebdeveloper.nodeAttachTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach">
       </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <actionSet
+               id="org.eclipse.debug.ui.launchActionSet">
+         </actionSet>
+      </perspectiveExtension>
    </extension>
 
 </plugin>
