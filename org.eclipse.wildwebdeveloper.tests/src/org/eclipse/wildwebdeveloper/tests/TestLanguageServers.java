@@ -175,7 +175,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 10000));
 	}
 
 	@Test
