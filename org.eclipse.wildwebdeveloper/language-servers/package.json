@@ -12,6 +12,7 @@
     "vscode-json-languageserver": "./vscode-json-languageserver-1.0.1.tgz",
     "typescript": "2.8.3",
     "typescript-language-server": "0.3.7",
-    "node-debug2": "./node-debug2-1.25.5.tgz"
+    "node-debug2": "./node-debug2-1.25.5.tgz",
+    "yaml-language-server": "0.3.2"
   }
 }
