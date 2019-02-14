@@ -330,6 +330,19 @@
    
    <!-- YAML Language -->   
    <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.yaml.YAMLLanguageServer"
+            id="org.eclipse.wildwebdeveloper.yaml"
+            label="YAML Language Server (VSCode)">
+      </server>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.yaml"
+            id="org.eclipse.wildwebdeveloper.yaml">
+      </contentTypeMapping>
+   </extension>
+
+   <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
@@ -368,6 +381,27 @@
             scopeName="source.yaml">
       </snippet>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
+            id="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
+            name="YAML">
+      </page>
+      <page
+			category="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
+            class="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
+            id="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
+            name="YAML Schemas">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+         <initializer
+            class="org.eclipse.wildwebdeveloper.yaml.YAMLPreferenceInitializer">
+		</initializer>
+   </extension>
+
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
