@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.eclipse.wildwebdeveloper</groupId>
   <artifactId>parent</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Eclipse Wild Web Developer - Parent</name>
   <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
@@ -20,6 +20,7 @@
 	<modules>
 		<module>target-platform</module>
 		<module>org.eclipse.wildwebdeveloper</module>
+		<module>org.eclipse.wildwebdeveloper.xml</module>
 		<module>org.eclipse.wildwebdeveloper.tests</module>
 		<module>org.eclipse.wildwebdeveloper.feature</module>
 		<module>repository</module>
@@ -88,10 +89,8 @@
 							<goal>compare-version-with-baselines</goal>
 						</goals>
 						<configuration>
-							<!-- disable until a first release occurred -->
-							<skip>true</skip>
 							<baselines>
-								<url>Release repo</url>
+								<url>http://download.eclipse.org/wildwebdeveloper/releases/latest</url>
 							</baselines>
 						</configuration>
 					</execution>

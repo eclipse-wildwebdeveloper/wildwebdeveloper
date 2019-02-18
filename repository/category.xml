@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="org.eclipse.wildwebdeveloper.feature" version="0.1.0.qualifier">
+   <feature id="org.eclipse.wildwebdeveloper.feature" version="0.2.0.qualifier">
       <category name="Wild Web Developer"/>
    </feature>
+   <feature id="org.eclipse.wildwebdeveloper.feature.source" version="0.2.0.qualifier">
+      <category name="Sources"/>
+   </feature>
+   <bundle id="org.eclipse.wildwebdeveloper.tests" version="0.2.0.qualifier">
+      <category name="Sources"/>
+   </bundle>
+   <bundle id="org.eclipse.wildwebdeveloper.tests.source" version="0.2.0.qualifier">
+      <category name="Sources"/>
+   </bundle>
    <feature id="tm-feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
@@ -80,6 +89,7 @@
    </bundle>
    <category-def name="Wild Web Developer" label="Wild Web Developer - Web Dev in Eclipse IDE"/>
    <category-def name="Dependencies" label="Dependencies"/>
+   <category-def name="Sources" label="Sources and Tests"/>
    <repository-reference location="http://download.eclipse.org/lsp4e/snapshots" enabled="true" />
    <repository-reference location="http://download.eclipse.org/tm4e/snapshots" enabled="true" />
 </site>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <!-- Wild Web Developer/Core -->
+   <!-- Duplicate or org.eclipse.wildwebdeveloper -->
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            id="org.eclipse.wildwebdeveloper.parent"
+            name="Wild Web Developer supported web dev file"
+            priority="normal"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.parent"
+            editorId="org.eclipse.ui.genericeditor.GenericEditor">
+      </editorContentTypeBinding>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.genericeditor.presentationReconcilers">
+      <presentationReconciler
+            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
+            contentType="org.eclipse.wildwebdeveloper.parent">
+      </presentationReconciler>
+   </extension>
+
+
+   <!-- XML Language -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="xml"
+            id="org.eclipse.wildwebdeveloper.xml"
+            name="XML"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="xsl"
+            id="org.eclipse.wildwebdeveloper.xsl"
+            name="XSL"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.xml"
+            file-extensions="xsd"
+            id="org.eclipse.wildwebdeveloper.xsd"
+            name="XSD"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="dtd"
+            id="org.eclipse.wildwebdeveloper.dtd"
+            name="DTD"
+            priority="normal">
+      </content-type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.xml.XMLLanguageServer"
+            id="org.eclipse.wildwebdeveloper.xml"
+            label="XML Language Server">
+      </server>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.xml"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.xsl"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.xsd"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.dtd"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+   </extension>
+ 
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/xml/xml.tmLanguage.json"
+            scopeName="source.xml">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.xml"
+            scopeName="source.xml">
+      </scopeNameContentTypeBinding>
+      <grammar
+            path="grammars/xsl/xsl.tmLanguage.json"
+            scopeName="source.xml.xsl">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.xsl"
+            scopeName="source.xml.xsl">
+      </scopeNameContentTypeBinding>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.xsd"
+            scopeName="source.xml">
+      </scopeNameContentTypeBinding>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.dtd"
+            scopeName="source.xml">
+      </scopeNameContentTypeBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.xml"
+            path="language-configurations/xml/xml.language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.xsl"
+            path="language-configurations/xsl/xsl.language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="XML Sample"
+            path="snippets/xml/sample.xml"
+            scopeName="source.xml">
+      </snippet>
+   </extension>
+
+</plugin>

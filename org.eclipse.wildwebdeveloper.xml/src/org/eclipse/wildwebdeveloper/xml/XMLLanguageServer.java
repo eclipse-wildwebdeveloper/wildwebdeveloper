@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
-import org.eclipse.wildwebdeveloper.Activator;
 
 public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
