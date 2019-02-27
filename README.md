@@ -28,3 +28,6 @@ Contribution of Code and Documentation are welcome as [GitHub Pull Request](http
 Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
 
 Quality analysis is available on [SonarCloud](https://sonarcloud.io/dashboard?id=eclipse-wildwebdeveloper).
+
+## Video Library
+Demo of XML editor support: https://youtu.be/fikUdUZFdzg
