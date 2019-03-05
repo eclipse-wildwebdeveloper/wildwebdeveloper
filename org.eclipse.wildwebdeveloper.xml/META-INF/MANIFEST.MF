@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.tm4e.registry;bundle-version="0.3.0",
  org.eclipse.tm4e.ui;bundle-version="0.1.0",
  org.eclipse.lsp4e;bundle-version="0.5.0",
  org.eclipse.core.runtime;bundle-version="3.10.0",
- org.eclipse.ui;bundle-version="3.105.0"
+ org.eclipse.ui;bundle-version="3.105.0",
+ org.eclipse.ui.genericeditor;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.wildwebdeveloper.xml.Activator
