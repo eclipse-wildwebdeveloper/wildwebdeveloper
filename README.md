@@ -19,7 +19,7 @@ In an Eclipse target platform definition:
 
 ## ⌨️ Get involved
 
-Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues). 
+Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues).
 
 Contribution of Code and Documentation are welcome as [GitHub Pull Request](https://github.com/eclipse/wildwebdeveloper/pulls).
 
@@ -28,8 +28,8 @@ Continuous integration is available on https://jenkins.eclipse.org/wildwebdevelo
 Quality analysis is available on [SonarCloud](https://sonarcloud.io/dashboard?id=eclipse-wildwebdeveloper).
 
 ## 🎬 Video Library
+▶️ [Mar 2019] Demo of YAML editor support: https://youtu.be/P9ETtuHiUco
 
 ▶️ [Feb 2019] Demo of XML editor support: https://youtu.be/fikUdUZFdzg
 
-▶️ [Apr 2017] http://www.screencast.com/t/BaC9DxHIqD (old) demo 
-
+▶️ [Apr 2017] http://www.screencast.com/t/BaC9DxHIqD (old) demo
