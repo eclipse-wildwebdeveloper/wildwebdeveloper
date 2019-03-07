@@ -346,7 +346,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="yaml"
+            file-extensions="yaml,yml"
             id="org.eclipse.wildwebdeveloper.yaml"
             name="YAML"
             priority="normal">
