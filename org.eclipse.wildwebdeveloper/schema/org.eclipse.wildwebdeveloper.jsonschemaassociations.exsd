@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.wildwebdeveloper" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.wildwebdeveloper" id="org.eclipse.wildwebdeveloper.schemaassociations" name="JSON Schema Associations"/>
+      </appinfo>
+      <documentation>
+         This extension point allows extenders to configure specific JSON schemas for JSON files that match certain file patterns.
+&lt;p&gt;
+It is possible to define JSON schemas in two ways:
+&lt;ul&gt;
+ &lt;li&gt;via an URL where the schema is hosted (e.g. on &lt;a href=&quot;http://schemastore.org/json/&quot;&gt;JSON Schema Store&lt;/a&gt;)&lt;/li&gt;
+ &lt;li&gt;via a JSON schema file in the filesystem&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+The structure of the extension point is kept generic, such that it becomes possible to create schema associations with &quot;many-to-many&quot; relationships between file patterns and schemas.
+This might be necessary when assigning a JSON schema to more than one file pattern or vice versa (latter might be less often the case).
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;strong&gt;Important hint for developing plug-ins using this extension point:&lt;/strong&gt;&lt;/br&gt;
+It is possible to use a JSON schema file, that is stored in another plug-in by declaring an additional bundle-id in the schema association.
+At the moment, it is necessary to unpack the bundle after installation to access the file at runtime.
+To achieve this, set the header &lt;code&gt;Eclipse-BundleShape&lt;/code&gt; to the value &lt;code&gt;dir&lt;/code&gt;.
+&lt;/br&gt;
+Requirements (MANIFEST.MF):
+&lt;ul&gt;
+	&lt;li&gt;&lt;code&gt;Require-Bundle: org.eclipse.wildwebdeveloper;bundle-version=&quot;0.3.0&quot;&lt;/code&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;code&gt;Eclipse-BundleShape: dir&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/br&gt;
+* If it becomes necessary to retrieve the file and keep the bundle as a jar, the implementation of the file locating needs to be adjusted and support a bundle directory.
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="schemaAssociations" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The identifier of the target extension point
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  An optional identifier of the extension instance
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  An optional name of the extension instance
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="schemaAssociations">
+      <annotation>
+         <documentation>
+            Sequence of all JSON schema associations
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <sequence minOccurs="1" maxOccurs="unbounded">
+               <choice>
+                  <element ref="bundleFilePath"/>
+                  <element ref="url"/>
+               </choice>
+            </sequence>
+            <sequence minOccurs="1" maxOccurs="unbounded">
+               <element ref="filePattern"/>
+            </sequence>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Title of schema association
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="bundleFilePath">
+      <complexType>
+         <attribute name="relativePath" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The relative path of the JSON schema file within the bundle (i.e. the plug-in).
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="bundleId" type="string">
+            <annotation>
+               <documentation>
+                  An optional symbolic ID of the bundle (i.e. the plug-in ID).
+If the bundle ID is not specified, the bundle ID of the plug-in registering this extension is used.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="url">
+      <complexType>
+         <attribute name="url" type="string" use="required">
+            <annotation>
+               <documentation>
+                  JSON schema file location, such as &lt;a href=&quot;http://json.schemastore.org/tsconfig&quot;&gt;http://json.schemastore.org/tsconfig&lt;/a&gt;.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="filePattern">
+      <complexType>
+         <attribute name="filePattern" type="string" use="required">
+            <annotation>
+               <documentation>
+                  JSON file pattern for which schema(s) should be applied.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.3.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         This is an example of a schema association for two different file patterns using different schema sources:
+ &lt;ul&gt;
+  &lt;li&gt;package.json consumes its JSON schema from the given URL&lt;/li&gt;
+  &lt;li&gt;custom.json consumes its JSON schema directly from the filesystem&lt;/li&gt;
+ &lt;/ul&gt;
+
+&lt;pre&gt;
+  &lt;extension point=&quot;org.eclipse.wildwebdeveloper.schemaassociations&quot;&gt;
+      &lt;schemaAssociations id=&quot;package.json&quot;&gt;
+         &lt;filePattern
+            filePattern=&quot;package.json&quot;&gt;
+         &lt;/filePattern&gt;
+         &lt;url
+          url=&quot;http://json.schemastore.org/package&quot;&gt;
+         &lt;/url&gt;
+      &lt;/schemaAssociations&gt;
+      &lt;schemaAssociations id=&quot;custom-schema.json&quot;&gt;
+         &lt;filePattern
+          filePattern=&quot;custom.json&quot;&gt;
+         &lt;/filePattern&gt;
+         &lt;bundleFilePath
+          bundleId=&quot;org.eclipse.wildwebdeveloper&quot;
+            relativePath=&quot;some-folder/custom-schema.json&quot;&gt;
+         &lt;/bundleFilePath&gt;
+      &lt;/schemaAssociations&gt;
+  &lt;/extension&gt;
+&lt;/pre&gt;
+
+This is an example of creating a schema association for two file patterns using one JSON schema:
+&lt;pre&gt;
+  &lt;extension point=&quot;org.eclipse.wildwebdeveloper.schemaassociations&quot;&gt;
+      &lt;schemaAssociations id=&quot;tsconfig.json&quot;&gt;
+         &lt;filePattern
+               filePattern=&quot;/tsconfig.json&quot;&gt;
+         &lt;/filePattern&gt;
+         &lt;filePattern
+               filePattern=&quot;/tsconfig.*.json&quot;&gt;
+         &lt;/filePattern&gt;
+         &lt;url
+               url=&quot;http://json.schemastore.org/tsconfig&quot;&gt;
+         &lt;/url&gt;
+      &lt;/schemaAssociations&gt;
+  &lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         The org.eclipse.wilddeveloper plug-in provides schema associations for the following JSON files:
+&lt;ul&gt;
+ &lt;li&gt;package.json&lt;/li&gt;
+ &lt;li&gt;bower.json&lt;/li&gt;
+ &lt;li&gt;.bowerrc&lt;/li&gt;
+ &lt;li&gt;jsconfig.json&lt;/li&gt;
+ &lt;li&gt;tsconfig.json&lt;/li&gt;
+ &lt;li&gt;omnisharp.json&lt;/li&gt;
+&lt;/ul&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which accompanies this distribution, and is available at
+&lt;a href=&quot;https://www.eclipse.org/legal/epl-2.0&quot;&gt;https://www.eclipse.org/legal/epl-v20.html&lt;/a&gt;/SPDX-License-Identifier: EPL-2.0
+      </documentation>
+   </annotation>
+
+</schema>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point
+   		id="org.eclipse.wildwebdeveloper.schemaassociations"
+   		name="Schema Associations"
+   		schema="schema/org.eclipse.wildwebdeveloper.jsonschemaassociations.exsd"/>
 
    <!-- Wild Web Developer/Core -->
    <extension
@@ -545,6 +549,69 @@
             contentMergeViewerId="org.eclipse.ui.genericeditor.compareViewer"
             contentTypeId="org.eclipse.wildwebdeveloper.parent">
       </contentTypeBinding>
+   </extension>
+   <extension
+         point="org.eclipse.wildwebdeveloper.schemaassociations">
+      <schemaAssociations
+            id="package.json">
+         <filePattern
+               filePattern="package.json">
+         </filePattern>
+         <url
+               url="http://json.schemastore.org/package">
+         </url>
+      </schemaAssociations>
+      <schemaAssociations
+            id="bower.json">
+         <filePattern
+               filePattern="/bower.json">
+         </filePattern>
+         <filePattern
+               filePattern="/.bower.json">
+         </filePattern>
+         <url
+               url="http://json.schemastore.org/bower">
+         </url>
+      </schemaAssociations>
+      <schemaAssociations
+            id=".bowerrc">
+         <filePattern
+               filePattern="/.bowerrc">
+         </filePattern>
+         <url
+               url="http://json.schemastore.org/bowerrc">
+         </url>
+      </schemaAssociations>
+      <schemaAssociations
+            id="jsconfig.json">
+         <filePattern
+               filePattern="/jsconfig.json">
+         </filePattern>
+         <url
+               url="http://json.schemastore.org/jsconfig">
+         </url>
+      </schemaAssociations>
+      <schemaAssociations
+            id="tsconfig.json">
+         <filePattern
+               filePattern="/tsconfig.json">
+         </filePattern>
+         <filePattern
+               filePattern="/tsconfig.*.json">
+         </filePattern>
+         <url
+               url="http://json.schemastore.org/tsconfig">
+         </url>
+      </schemaAssociations>
+      <schemaAssociations
+            id="omnisharp.json">
+         <filePattern
+               filePattern="/omnisharp.json">
+         </filePattern>
+         <url
+               url="http://json.schemastore.org/omnisharp">
+         </url>
+      </schemaAssociations>
    </extension>
 
 </plugin>

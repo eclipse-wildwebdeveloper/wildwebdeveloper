@@ -17,21 +17,26 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.osgi.framework.Bundle;
 
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -59,51 +64,111 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 				// Send json/schemaAssociations notification to register JSON Schema on JSON
 				// Language server side.
 				JSonLanguageServerInterface server = (JSonLanguageServerInterface) languageServer;
-				Map<String, List<String>> schemaAssociations = getSchemaAssociations();
-				server.sendJSonchemaAssociations(schemaAssociations);
+				server.sendJSonchemaAssociations(getSchemaAssociations());
 			}
 		}
 	}
 
+	/**
+	 * Returns JSON Schema associations defined in extension point
+	 * 
+	 * @return associations
+	 */
 	private Map<String, List<String>> getSchemaAssociations() {
-		// TODO: provide eclipse extension point to defines JSON Schema associations.
 		Map<String, List<String>> associations = new HashMap<>();
-		fillSchemaAssociationsForJavascript(associations);
-		fillSchemaAssociationsForTypeScript(associations);
-		fillSchemaAssociationsForOmnisharp(associations);
+		
+		IExtensionPoint point = Platform.getExtensionRegistry()
+				.getExtensionPoint("org.eclipse.wildwebdeveloper.schemaassociations");
+		if (point == null)
+			return null;
+		
+		IExtension[] extensions = point.getExtensions();
+		for (IExtension e : extensions) {
+			IConfigurationElement[] schemaAssociation = e.getConfigurationElements();
+			for (IConfigurationElement s : schemaAssociation) {
+				
+				// collect all file patterns
+				IConfigurationElement[] filePatterns = s.getChildren("filePattern");
+				List<String> filePatternList = new ArrayList<>();
+				for (IConfigurationElement pattern: filePatterns) {
+					String filePattern = pattern.getAttribute("filePattern");
+					if (filePattern != null) {
+						filePatternList.add(filePattern);
+					} else {
+						logExtensionWarning("File pattern must not be empty!", null);
+					}
+				}
+				// collect all schema paths
+				IConfigurationElement[] schemaPaths = s.getChildren();
+				List<String> schemaPathList = new ArrayList<>();
+				for (IConfigurationElement location : schemaPaths) {
+					String filePath = null;
+					switch (location.getName()) {
+					case "filePattern":
+						continue;
+					case "bundleFilePath":
+						filePath = getPathFromBundleFilePath(location, e);
+						break;
+					case "url":
+						filePath = location.getAttribute("url");
+						break;
+					}
+					if (filePath != null) {
+						schemaPathList.add(filePath);
+					} else {
+						logExtensionWarning("Couldn't read file path from schema association extension " + e.getLabel(),
+								null);
+					}
+				}
+
+				for (String pattern : filePatternList) {
+					associations.put(pattern, schemaPathList);
+				}
+			}
+		}
+
 		return associations;
 	}
 
 	/**
-	 * JSON Schema contributions for JavaScript
+	 * Returns exact file location in a plug-in. If the bundle ID is not specified,
+	 * the bundle ID of the plug-in registering this extension is used.
 	 * 
-	 * @param associations
+	 * @param  location   the schema path configuration element
+	 * @param  extension  the extension of the schema association extension point, where location is configured
+	 * @return            the absolute file path
 	 */
-	private void fillSchemaAssociationsForJavascript(Map<String, List<String>> associations) {
-		associations.put("package.json", Arrays.asList("http://json.schemastore.org/package"));
-		associations.put("/bower.json", Arrays.asList("http://json.schemastore.org/bower"));
-		associations.put("/.bower.json", Arrays.asList("http://json.schemastore.org/bower"));
-		associations.put("/.bowerrc", Arrays.asList("http://json.schemastore.org/bowerrc"));
-		associations.put("/jsconfig.json", Arrays.asList("http://json.schemastore.org/jsconfig"));
+	private String getPathFromBundleFilePath(IConfigurationElement location, IExtension extension) {
+		try {
+			String relativePath = location.getAttribute("relativePath");
+			String bundleId;
+			if (location.getAttribute("bundleId") != null) {
+				bundleId = location.getAttribute("bundleId");
+			} else {
+				bundleId = extension.getContributor().getName();
+			}
+
+			if (relativePath == null || bundleId == null) {
+				return null;
+			}
+
+			Bundle bundle = Platform.getBundle(bundleId);
+			if (bundle == null) {
+				return null;
+			}
+
+			URL url = FileLocator.find(bundle, new Path(relativePath), null);
+			URL fileUrl = FileLocator.toFileURL(url);
+			
+			return "file://" +  new java.io.File(fileUrl.getPath()).getAbsolutePath();
+		} catch (IOException e) {
+			logExtensionWarning("Error while reading schema association extension " + extension.getLabel(), e);
+			return null;
+		}
 	}
 
-	/**
-	 * JSON Schema contributions for TypeScript
-	 * 
-	 * @param associations
-	 */
-	private void fillSchemaAssociationsForTypeScript(Map<String, List<String>> associations) {
-		associations.put("/tsconfig.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
-		associations.put("/tsconfig.*.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
-		associations.put("/typing.json", Arrays.asList("http://json.schemastore.org/typing"));
-	}
-
-	/**
-	 * JSON Schema contributions for TypeScript
-	 * 
-	 * @param associations
-	 */
-	private void fillSchemaAssociationsForOmnisharp(Map<String, List<String>> associations) {
-		associations.put("/omnisharp.json", Arrays.asList("http://json.schemastore.org/omnisharp"));
+	private void logExtensionWarning(String msg, Exception ex) {
+		Activator.getDefault().getLog()
+				.log(new Status(IStatus.WARNING, Activator.getDefault().getBundle().getSymbolicName(), msg, ex));
 	}
 }

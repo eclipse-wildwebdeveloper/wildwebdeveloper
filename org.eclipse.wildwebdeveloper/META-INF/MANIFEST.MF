@@ -28,4 +28,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
-Export-Package: org.eclipse.wildwebdeveloper.debug;x-internal:=true
+Export-Package: org.eclipse.wildwebdeveloper.debug;x-internal:=true,
+ org.eclipse.wildwebdeveloper,
+ org.eclipse.wildwebdeveloper.json
