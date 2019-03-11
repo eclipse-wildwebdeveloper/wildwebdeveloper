@@ -1,8 +1,40 @@
 # Eclipse Wild Web Developer : 🌐 Web dev in Eclipse IDE 🌘
 
-Eclipse Wild Web Developer is a set of functionalities for the Eclipse IDE to provide simple and efficient Web development (HTML, CSS, JS, JSon, Node.js, XML...). It's meant to be an alternative to traditional Eclipse Web Tools Platform (WTP).
+Eclipse Wild Web Developer enables simple and rich edition of typical main web and configuration files (HTML, CSS, JS, TS, JSon, YAML, XML -with schema support-) and debugging of Node.js apps in the Eclipse IDE.
 
-Wild Web Developer is based on the Eclipse Generic Editor framework from Eclipse Platform, LSP4E and TM4E in order to provide editors based on TextMate grammars, VSCode Language Server, xml-languageserver, and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and VSCode Node Debug Adapter to provide debugging.
+Supported file formats for edition:
+
+* HTML
+* CSS, SCSS, SASS, LESS
+* JavaScript (EcmaScript 9)
+* TypeScript 3.3
+* JSon (including schema support)
+* Yaml (ncluding schema support, Kubernetes schema built-in)
+* XML (including schema support), XSL, XSD, DTD
+
+Supported frameworks (file specialization) for edition:
+
+* Kubernetes
+
+Supported feature for edition are
+
+* Validation (diagnostics, markers)
+* Code Completion
+* Hover
+* Outline
+* Rename refactoring
+* Jump to declaration
+* Find references
+* Color preview
+* ... and other features part of the Language Server Protocol
+
+Supported debugging target
+
+* Node.js
+
+
+
+Wild Web Developer is based on the Eclipse Generic Editor framework from Eclipse Platform, LSP4E and TM4E in order to provide editors based on TextMate grammars, VSCode Language Server, xml-languageserver and yaml-language servers from Red Hat; and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and VSCode Node Debug Adapter to provide debugging.
 
 ![screenshot](wildwebdeveloper-screenshot.png "Wild Web Developer screenshot")
 
