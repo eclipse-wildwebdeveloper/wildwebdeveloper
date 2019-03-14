@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.eclipse.wildwebdeveloper</groupId>
   <artifactId>parent</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Eclipse Wild Web Developer - Parent</name>
   <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
@@ -43,7 +43,7 @@
 						<artifact>
 							<groupId>org.eclipse.wildwebdeveloper</groupId>
 							<artifactId>target-platform</artifactId>
-							<version>0.1.0-SNAPSHOT</version>
+							<version>0.1.1-SNAPSHOT</version>
 						</artifact>
 					</target>
 				</configuration>
