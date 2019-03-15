@@ -14,9 +14,12 @@ package org.eclipse.wildwebdeveloper.jsts;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
@@ -39,6 +42,21 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+	}
+	
+	@Override
+	public Object getInitializationOptions(URI rootUri) {
+		Map<String, Object> options = new HashMap<>();
+		List<Map<String, String>> plugins = new ArrayList<>();
+		try {
+			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/@angular/language-service"));
+			plugins.add(new TypeScriptPlugin("@angular/language-service", url.getPath()).toMap());
+			options.put("plugins", plugins);
+			
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
+		return options;
 	}
 	
 }
