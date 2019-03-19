@@ -9,7 +9,7 @@ Supported file formats for edition:
 * JavaScript (EcmaScript 9)
 * TypeScript 3.3
 * JSon (including schema support)
-* Yaml (ncluding schema support, Kubernetes schema built-in)
+* Yaml (including schema support, Kubernetes schema built-in)
 * XML (including schema support), XSL, XSD, DTD
 
 Supported frameworks (file specialization) for edition:
