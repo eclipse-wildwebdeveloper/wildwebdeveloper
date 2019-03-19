@@ -35,29 +35,6 @@
 					<useUIHarness>true</useUIHarness>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<id>local install test angular</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<phase>generate-resources</phase>
-						<configuration>
-							<executable>npm</executable>
-							<arguments>
-								<arg>install</arg>
-								<arg>--no-bin-links</arg>
-								<arg>--ignore-scripts</arg>
-							</arguments>
-							<workingDirectory>testProjects/angular-app</workingDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>

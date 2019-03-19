@@ -14,10 +14,15 @@ package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -28,6 +33,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -250,6 +256,8 @@ public class TestLanguageServers {
 		File folder = new File(url.getFile());
 		if (folder.exists()) {
 			FileUtils.copyDirectory(folder, project.getLocation().toFile());
+			Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
+			while (process.isAlive());
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());			
 			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts");
 			String fileContent = IOUtils.toString(file.getContents(), StandardCharsets.UTF_8);
@@ -276,6 +284,34 @@ public class TestLanguageServers {
 			}
 			assertTrue("No error found in line 6", foundError);
 		}
+	}
+	
+	public static String getNpmLocation () {
+		String res = "/path/to/npm";
+		String[] command = new String[] {"/bin/bash", "-c", "which npm"};
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			command = new String[] {"cmd", "/c", "where npm"};
+		}
+		BufferedReader reader = null;
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			res = reader.readLine();
+		} catch (IOException e) {
+			return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
+		}
+
+		// Try default install path as last resort
+		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
+			res = "/usr/local/bin/npm";
+		} else if (res == null && Platform.getOS().equals(Platform.OS_LINUX)) {
+			res = "/usr/bin/npm";
+		}
+
+		if (res != null && Files.exists(Paths.get(res))) {
+			return res;
+		} 
+		return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
 	}
 	
 }
