@@ -259,26 +259,41 @@ public class TestLanguageServers {
 			Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
 			while (process.isAlive());
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());			
-			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts");
+			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts.content");
 			String fileContent = IOUtils.toString(file.getContents(), StandardCharsets.UTF_8);
-			ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+			
+			IFile appComponentFile = project.getFolder("src").getFolder("app").getFile("app.component.ts");
+			appComponentFile.create(new ByteArrayInputStream("".getBytes()), true, null);
+			assertTrue("Diagnostic published on empty file", new DisplayHelper() {
+				@Override
+				protected boolean condition() {
+					try {
+						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length == 0;
+					} catch (CoreException e) {
+						return false;
+					}
+				}
+			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
+			
+			
+			ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
 			editor.getDocumentProvider().getDocument(editor.getEditorInput()).set(fileContent);
 			assertTrue("Diagnostic not published", new DisplayHelper() {
 				@Override
 				protected boolean condition() {
 					try {
-						return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
 					} catch (CoreException e) {
 						return false;
 					}
 				}
 			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
 			
-			IMarker [] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+			IMarker [] markers = appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
 			boolean foundError = false;
 			for (IMarker marker : markers) {
 				int lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, -1);
-				if (lineNumber == 6) {
+				if (lineNumber == 6 && marker.getAttribute(IMarker.MESSAGE, "").contains("template")) {
 					foundError = true;
 				}
 			}
