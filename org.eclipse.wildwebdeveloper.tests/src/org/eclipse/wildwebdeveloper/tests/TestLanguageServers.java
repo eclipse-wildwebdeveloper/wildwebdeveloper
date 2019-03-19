@@ -15,13 +15,22 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.lsp4e.LanguageServerPlugin;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -233,5 +242,40 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-
+	
+	@Test
+	public void testAngularTSFile() throws Exception {
+		URL url = FileLocator.find(Platform.getBundle("org.eclipse.wildwebdeveloper.tests"), Path.fromPortableString("testProjects/angular-app"), null);
+		url = FileLocator.toFileURL(url);
+		File folder = new File(url.getFile());
+		if (folder.exists()) {
+			FileUtils.copyDirectory(folder, project.getLocation().toFile());
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());			
+			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts");
+			String fileContent = IOUtils.toString(file.getContents(), StandardCharsets.UTF_8);
+			ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+			editor.getDocumentProvider().getDocument(editor.getEditorInput()).set(fileContent);
+			assertTrue("Diagnostic not published", new DisplayHelper() {
+				@Override
+				protected boolean condition() {
+					try {
+						return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+					} catch (CoreException e) {
+						return false;
+					}
+				}
+			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
+			
+			IMarker [] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+			boolean foundError = false;
+			for (IMarker marker : markers) {
+				int lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, -1);
+				if (lineNumber == 6) {
+					foundError = true;
+				}
+			}
+			assertTrue("No error found in line 6", foundError);
+		}
+	}
+	
 }
