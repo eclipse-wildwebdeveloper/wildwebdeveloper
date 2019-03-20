@@ -14,14 +14,29 @@ package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.lsp4e.LanguageServerPlugin;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -233,5 +248,85 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
+	
+	@Test
+	public void testAngularTSFile() throws Exception {
+		URL url = FileLocator.find(Platform.getBundle("org.eclipse.wildwebdeveloper.tests"), Path.fromPortableString("testProjects/angular-app"), null);
+		url = FileLocator.toFileURL(url);
+		File folder = new File(url.getFile());
+		if (folder.exists()) {
+			FileUtils.copyDirectory(folder, project.getLocation().toFile());
+			Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
+			while (process.isAlive());
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());			
+			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts.content");
+			String fileContent = IOUtils.toString(file.getContents(), StandardCharsets.UTF_8);
+			
+			IFile appComponentFile = project.getFolder("src").getFolder("app").getFile("app.component.ts");
+			appComponentFile.create(new ByteArrayInputStream("".getBytes()), true, null);
+			assertTrue("Diagnostic published on empty file", new DisplayHelper() {
+				@Override
+				protected boolean condition() {
+					try {
+						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length == 0;
+					} catch (CoreException e) {
+						return false;
+					}
+				}
+			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
+			
+			
+			ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
+			editor.getDocumentProvider().getDocument(editor.getEditorInput()).set(fileContent);
+			assertTrue("Diagnostic not published", new DisplayHelper() {
+				@Override
+				protected boolean condition() {
+					try {
+						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+					} catch (CoreException e) {
+						return false;
+					}
+				}
+			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
+			
+			IMarker [] markers = appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+			boolean foundError = false;
+			for (IMarker marker : markers) {
+				int lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, -1);
+				if (lineNumber == 6 && marker.getAttribute(IMarker.MESSAGE, "").contains("template")) {
+					foundError = true;
+				}
+			}
+			assertTrue("No error found in line 6", foundError);
+		}
+	}
+	
+	public static String getNpmLocation () {
+		String res = "/path/to/npm";
+		String[] command = new String[] {"/bin/bash", "-c", "which npm"};
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			command = new String[] {"cmd", "/c", "where npm"};
+		}
+		BufferedReader reader = null;
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			res = reader.readLine();
+		} catch (IOException e) {
+			return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
+		}
 
+		// Try default install path as last resort
+		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
+			res = "/usr/local/bin/npm";
+		} else if (res == null && Platform.getOS().equals(Platform.OS_LINUX)) {
+			res = "/usr/bin/npm";
+		}
+
+		if (res != null && Files.exists(Paths.get(res))) {
+			return res;
+		} 
+		return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
+	}
+	
 }

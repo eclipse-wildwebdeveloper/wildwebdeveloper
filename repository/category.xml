@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="org.eclipse.wildwebdeveloper.feature" version="0.2.0.qualifier">
+   <feature id="org.eclipse.wildwebdeveloper.feature" version="0.0.0">
       <category name="Wild Web Developer"/>
    </feature>
-   <feature id="org.eclipse.wildwebdeveloper.feature.source" version="0.2.0.qualifier">
+   <feature id="org.eclipse.wildwebdeveloper.feature.source" version="0.0.0">
       <category name="Sources"/>
    </feature>
-   <bundle id="org.eclipse.wildwebdeveloper.tests" version="0.2.0.qualifier">
+   <bundle id="org.eclipse.wildwebdeveloper.tests" version="0.0.0">
       <category name="Sources"/>
    </bundle>
-   <bundle id="org.eclipse.wildwebdeveloper.tests.source" version="0.2.0.qualifier">
+   <bundle id="org.eclipse.wildwebdeveloper.tests.source" version="0.0.0">
       <category name="Sources"/>
    </bundle>
    <feature id="tm-feature" version="0.0.0">
