@@ -11,7 +11,6 @@
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<repository location="http://download.eclipse.org/staging/2019-03/"/>
 	<unit id="tm-feature.feature.group" version="0.0.0"/>
-	<unit id="org.apache.commons.io" version="0.0.0"/>
 	<unit id="org.objectweb.asm" version="0.0.0"/>
 	<unit id="org.eclipse.mylyn.wikitext_feature.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>

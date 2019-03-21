@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -70,16 +69,12 @@ public class InitializeLaunchConfigurations {
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 			command = new String[] {"cmd", "/c", "where node"};
 		}
-		BufferedReader reader = null;
-		try {
-			Process p = Runtime.getRuntime().exec(command);
-			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));){		
 			res = reader.readLine();
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
-		} finally {
-			IOUtils.closeQuietly(reader);
 		}
 
 		// Try default install path as last resort
