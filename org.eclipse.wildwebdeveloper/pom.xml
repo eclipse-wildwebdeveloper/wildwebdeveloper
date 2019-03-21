@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.eclipse.wildwebdeveloper</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
 	<version>0.3.0-SNAPSHOT</version>
