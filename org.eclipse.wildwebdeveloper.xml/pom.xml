@@ -48,7 +48,6 @@
 				<configuration>
 					<jgit.ignore>
 						pom.xml
-						language-servers/server
 					</jgit.ignore>
 				</configuration>
 			</plugin>

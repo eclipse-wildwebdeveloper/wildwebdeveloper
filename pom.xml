@@ -92,6 +92,7 @@
 							<baselines>
 								<url>http://download.eclipse.org/wildwebdeveloper/releases/latest</url>
 							</baselines>
+							<comparator>zip</comparator>
 						</configuration>
 					</execution>
 				</executions>
