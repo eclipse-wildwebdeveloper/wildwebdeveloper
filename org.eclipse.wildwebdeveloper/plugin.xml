@@ -495,5 +495,19 @@
          </actionSet>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.compare.contentViewers">
+      <contentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.parent"
+            contentViewerId="org.eclipse.ui.genericeditor.compareViewer">
+      </contentTypeBinding>
+   </extension>
+   <extension
+         point="org.eclipse.compare.contentMergeViewers">
+      <contentTypeBinding
+            contentMergeViewerId="org.eclipse.ui.genericeditor.compareViewer"
+            contentTypeId="org.eclipse.wildwebdeveloper.parent">
+      </contentTypeBinding>
+   </extension>
 
 </plugin>
