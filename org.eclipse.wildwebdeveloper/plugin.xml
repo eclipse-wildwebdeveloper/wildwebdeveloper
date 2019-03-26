@@ -255,6 +255,20 @@
             name="TypeScript"
             priority="normal">
       </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="jsx"
+            id="org.eclipse.wildwebdeveloper.jsx"
+            name="JSX"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="tsx"
+            id="org.eclipse.wildwebdeveloper.tsx"
+            name="TSX"
+            priority="normal">
+      </content-type>
    </extension>
    
    <extension
@@ -272,6 +286,14 @@
             contentType="org.eclipse.wildwebdeveloper.ts"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
+            <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.jsx"
+            id="org.eclipse.wildwebdeveloper.jsts">
+      </contentTypeMapping>
+            <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.tsx"
+            id="org.eclipse.wildwebdeveloper.jsts">
+      </contentTypeMapping>
    </extension>
    
    <extension
@@ -284,12 +306,22 @@
             contentTypeId="org.eclipse.wildwebdeveloper.js"
             scopeName="source.js">
       </scopeNameContentTypeBinding>
+      <!-- TODO replace with a more specific JSX grammar when we include one -->
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.jsx"
+            scopeName="source.js">
+      </scopeNameContentTypeBinding>
       <grammar
             path="grammars/typescript/TypeScript.tmLanguage.json"
             scopeName="source.ts">
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.ts"
+            scopeName="source.ts">
+      </scopeNameContentTypeBinding>
+      <!-- TODO replace with a more specific JSX grammar when we include one -->
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.tsx"
             scopeName="source.ts">
       </scopeNameContentTypeBinding>
    </extension>
@@ -300,15 +332,21 @@
             contentTypeId="org.eclipse.wildwebdeveloper.js"
             path="language-configurations/javascript/javascript-language-configuration.json">
       </languageConfiguration>
-   </extension>
-   
-   <extension
-         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.ts"
             path="language-configurations/typescript/language-configuration.json">
       </languageConfiguration>
+      <!-- TODO replace with more specific language configuration if we include some -->
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.jsx"
+            path="language-configurations/javascript/javascript-language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.tsx"
+            path="language-configurations/typescript/language-configuration.json">
+      </languageConfiguration>
    </extension>
+   
    
    <extension
          point="org.eclipse.tm4e.ui.snippets">
