@@ -16,5 +16,4 @@ Require-Bundle: org.eclipse.wildwebdeveloper,
  org.eclipse.ui.tests.harness,
  org.eclipse.ui,
  org.eclipse.lsp4e,
- org.eclipse.wildwebdeveloper.xml;bundle-version="0.1.0",
- org.apache.commons.io
+ org.eclipse.wildwebdeveloper.xml;bundle-version="0.1.0"

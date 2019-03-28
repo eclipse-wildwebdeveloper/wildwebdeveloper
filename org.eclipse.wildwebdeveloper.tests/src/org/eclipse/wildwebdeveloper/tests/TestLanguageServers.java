@@ -20,12 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -33,7 +32,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -52,12 +50,18 @@ public class TestLanguageServers {
 
 	@Before
 	public void setUpProject() throws Exception {
-		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.css.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.html.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore()
+				.putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore()
+				.putValue("org.eclipse.wildwebdeveloper.css.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore()
+				.putValue("org.eclipse.wildwebdeveloper.html.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore()
+				.putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore()
+				.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
+		LanguageServerPlugin.getDefault().getPreferenceStore()
+				.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
 		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.nanoTime());
 		project.create(null);
 		project.open(null);
@@ -73,7 +77,8 @@ public class TestLanguageServers {
 	public void testCSSFile() throws Exception {
 		final IFile file = project.getFile("blah.css");
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -91,7 +96,8 @@ public class TestLanguageServers {
 	public void testHTMLFile() throws Exception {
 		final IFile file = project.getFile("blah.html");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -104,12 +110,13 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testYAMLFile() throws Exception {
 		final IFile file = project.getFile("blah.yaml");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("hello: ");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -122,12 +129,13 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testXMLFile() throws Exception {
 		final IFile file = project.getFile("blah.xml");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<plugin></");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -140,12 +148,13 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testXSLFile() throws Exception {
 		final IFile file = project.getFile("blah.xsl");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -158,12 +167,13 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testXSDFile() throws Exception {
 		final IFile file = project.getFile("blah.xsd");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -176,12 +186,13 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testDTDFile() throws Exception {
 		final IFile file = project.getFile("blah.dtd");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -194,12 +205,13 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testJSONFile() throws Exception {
 		final IFile file = project.getFile("blah.json");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("ERROR");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -217,7 +229,8 @@ public class TestLanguageServers {
 	public void testJSFile() throws Exception {
 		final IFile file = project.getFile("blah.js");
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -235,7 +248,8 @@ public class TestLanguageServers {
 	public void testTSFile() throws Exception {
 		final IFile file = project.getFile("blah.ts");
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
@@ -248,48 +262,67 @@ public class TestLanguageServers {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
 	}
-	
+
 	@Test
 	public void testAngularTSFile() throws Exception {
-		URL url = FileLocator.find(Platform.getBundle("org.eclipse.wildwebdeveloper.tests"), Path.fromPortableString("testProjects/angular-app"), null);
+		URL url = FileLocator.find(Platform.getBundle("org.eclipse.wildwebdeveloper.tests"),
+				Path.fromPortableString("testProjects/angular-app"), null);
 		url = FileLocator.toFileURL(url);
 		File folder = new File(url.getFile());
 		if (folder.exists()) {
-			FileUtils.copyDirectory(folder, project.getLocation().toFile());
-			Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
-			while (process.isAlive());
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());			
-			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts.content");
-			String fileContent = IOUtils.toString(file.getContents(), StandardCharsets.UTF_8);
 			
+			java.nio.file.Path sourceFolder = folder.toPath();
+			java.nio.file.Path destFolder = project.getLocation().toFile().toPath();
+			
+			Files.walk(sourceFolder).forEach(source -> {
+				try {
+					Files.copy(source, destFolder.resolve(sourceFolder.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}	
+			});
+			
+			Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts")
+					.directory(project.getLocation().toFile()).start();
+			while (process.isAlive())
+				;
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+
+			IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts.content");
+			String fileContent = new BufferedReader(new InputStreamReader(file.getContents())).lines()
+					.collect(Collectors.joining("\n"));
+
 			IFile appComponentFile = project.getFolder("src").getFolder("app").getFile("app.component.ts");
 			appComponentFile.create(new ByteArrayInputStream("".getBytes()), true, null);
 			assertTrue("Diagnostic published on empty file", new DisplayHelper() {
 				@Override
 				protected boolean condition() {
 					try {
-						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length == 0;
+						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+								IResource.DEPTH_ZERO).length == 0;
 					} catch (CoreException e) {
 						return false;
 					}
 				}
 			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
-			
-			
-			ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
+
+			ITextEditor editor = (ITextEditor) IDE
+					.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
 			editor.getDocumentProvider().getDocument(editor.getEditorInput()).set(fileContent);
 			assertTrue("Diagnostic not published", new DisplayHelper() {
 				@Override
 				protected boolean condition() {
 					try {
-						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+						return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+								IResource.DEPTH_ZERO).length != 0;
 					} catch (CoreException e) {
 						return false;
 					}
 				}
 			}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
-			
-			IMarker [] markers = appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+
+			IMarker[] markers = appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+					IResource.DEPTH_ZERO);
 			boolean foundError = false;
 			for (IMarker marker : markers) {
 				int lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, -1);
@@ -300,12 +333,12 @@ public class TestLanguageServers {
 			assertTrue("No error found in line 6", foundError);
 		}
 	}
-	
-	public static String getNpmLocation () {
+
+	public static String getNpmLocation() {
 		String res = "/path/to/npm";
-		String[] command = new String[] {"/bin/bash", "-c", "which npm"};
+		String[] command = new String[] { "/bin/bash", "-c", "which npm" };
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			command = new String[] {"cmd", "/c", "where npm"};
+			command = new String[] { "cmd", "/c", "where npm" };
 		}
 		BufferedReader reader = null;
 		try {
@@ -325,8 +358,8 @@ public class TestLanguageServers {
 
 		if (res != null && Files.exists(Paths.get(res))) {
 			return res;
-		} 
+		}
 		return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
 	}
-	
+
 }
