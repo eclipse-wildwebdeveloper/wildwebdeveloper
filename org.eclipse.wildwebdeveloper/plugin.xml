@@ -300,29 +300,28 @@
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
             path="grammars/javascript/JavaScript.tmLanguage.json"
-            scopeName="source.js">
-      </grammar>
+            scopeName="source.js"/>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.js"
-            scopeName="source.js">
-      </scopeNameContentTypeBinding>
-      <!-- TODO replace with a more specific JSX grammar when we include one -->
+            scopeName="source.js"/>
+      <grammar
+            path="grammars/javascript/JavaScriptReact.tmLanguage.json"
+            scopeName="source.jsx"/>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.jsx"
-            scopeName="source.js">
-      </scopeNameContentTypeBinding>
+            scopeName="source.jsx"/>
       <grammar
             path="grammars/typescript/TypeScript.tmLanguage.json"
-            scopeName="source.ts">
-      </grammar>
+            scopeName="source.ts"/>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.ts"
-            scopeName="source.ts">
-      </scopeNameContentTypeBinding>
-      <!-- TODO replace with a more specific JSX grammar when we include one -->
+            scopeName="source.ts"/>
+      <grammar
+            path="grammars/typescript/TypeScriptReact.tmLanguage.json"
+            scopeName="source.tsx"/>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.tsx"
-            scopeName="source.ts">
+            scopeName="source.tsx">
       </scopeNameContentTypeBinding>
    </extension>
 

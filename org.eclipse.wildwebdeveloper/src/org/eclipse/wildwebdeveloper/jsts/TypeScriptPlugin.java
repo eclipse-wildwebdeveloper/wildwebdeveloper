@@ -9,16 +9,19 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.eclipse.core.runtime.FileLocator;
 
 public class TypeScriptPlugin {
 	private String pluginName;
 	private String pluginProbeLocation;
 	
-	public TypeScriptPlugin(String name, String location) {
+	public TypeScriptPlugin(String name) throws IOException {
 		pluginName = name;
-		pluginProbeLocation = location;
+		pluginProbeLocation = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/" + name)).toString();
 	}
 	
 	public Map<String, String> toMap() {
