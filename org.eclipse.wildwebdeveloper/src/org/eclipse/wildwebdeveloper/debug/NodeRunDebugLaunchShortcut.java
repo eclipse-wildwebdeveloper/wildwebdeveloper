@@ -18,13 +18,13 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationSelectionDialog;
+import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.ILaunchShortcut2;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -85,14 +85,7 @@ public class NodeRunDebugLaunchShortcut implements ILaunchShortcut2 {
 
 	private void launch(String mode, ILaunchConfiguration[] configurations) {
 		if (configurations.length == 1) {
-			CompletableFuture.runAsync(() -> {
-				try {
-					configurations[0].launch(mode, new NullProgressMonitor());
-				} catch (CoreException e) {
-					Activator.getDefault().getLog().log(e.getStatus());
-					ErrorDialog.openError(Display.getDefault().getActiveShell(), "error", e.getMessage(), e.getStatus()); //$NON-NLS-1$
-				}
-			});
+			CompletableFuture.runAsync(() -> DebugUITools.launch(configurations[0], mode));
 		} else if (configurations.length > 1) {
 			LaunchConfigurationSelectionDialog dialog = new LaunchConfigurationSelectionDialog(Display.getDefault().getActiveShell(), configurations);
 			if (dialog.open() == IDialogConstants.OK_ID) {
