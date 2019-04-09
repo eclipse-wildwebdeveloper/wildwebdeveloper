@@ -286,7 +286,7 @@
             contentType="org.eclipse.wildwebdeveloper.ts"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
-            <contentTypeMapping
+      <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.jsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
@@ -306,10 +306,10 @@
             scopeName="source.js"/>
       <grammar
             path="grammars/javascript/JavaScriptReact.tmLanguage.json"
-            scopeName="source.jsx"/>
+            scopeName="source.js.jsx"/>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.jsx"
-            scopeName="source.jsx"/>
+            scopeName="source.js.jsx"/>
       <grammar
             path="grammars/typescript/TypeScript.tmLanguage.json"
             scopeName="source.ts"/>
