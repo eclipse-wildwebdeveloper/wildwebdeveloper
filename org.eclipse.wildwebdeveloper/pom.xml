@@ -38,7 +38,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/stable/0f080e5267e829de46638128001aeb7ca2d6d50e/code-stable-code_1.25.0-1530796411_amd64.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/stable/0dd516dd412d42323fc3464531b1c715d51c4c1a/code-stable-1554390792.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
@@ -100,13 +100,33 @@
 							<goal>replace</goal>
 						</goals>
 						<configuration>
+							<basedir>${project.basedir}</basedir>
 							<includes>
-								<include>${basedir}/language-servers/node_modules/node-debug/out/node/sourceMaps.js</include>
+								<include>language-servers/node_modules/node-debug/out/node/sourceMaps.js</include>
 							</includes>
 							<replacements>
 								<replacement>
 									<token>../../node_modules/source-map/lib/util.js</token>
 									<value>../../../source-map/lib/util.js</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enable-formatting</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<basedir>${basedir}</basedir>
+							<includes>
+								<include>language-servers/node_modules/vscode-json-languageserver/out/jsonServerMain.js</include>
+							</includes>
+							<replacements>
+								<replacement>
+									<token>documentRangeFormattingProvider: false</token>
+									<value>documentRangeFormattingProvider: true</value>
 								</replacement>
 							</replacements>
 						</configuration>

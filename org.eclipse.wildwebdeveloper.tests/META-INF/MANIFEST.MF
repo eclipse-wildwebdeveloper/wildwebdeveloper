@@ -19,4 +19,5 @@ Require-Bundle: org.eclipse.wildwebdeveloper,
  org.eclipse.wildwebdeveloper.xml;bundle-version="0.1.0",
  org.eclipse.lsp4j,
  org.eclipse.lsp4j.jsonrpc,
- org.eclipse.debug.ui
+ org.eclipse.debug.ui,
+ org.eclipse.core.filesystem
