@@ -35,6 +35,8 @@ spec:
 		stage('Prepare-environment') {
 			steps {
 				container('container') {
+					sh 'node --version'
+					sh 'npm --version'
 					sh 'npm config set cache="$WORKSPACE/npm-cache"'
 				}
 			}
