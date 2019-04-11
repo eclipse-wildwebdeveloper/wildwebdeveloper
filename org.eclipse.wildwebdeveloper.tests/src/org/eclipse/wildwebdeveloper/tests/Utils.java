@@ -12,10 +12,13 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.eclipse.core.resources.IProject;
@@ -59,6 +62,34 @@ public class Utils {
 			return project;
 		}
 		return null;
+	}
+	
+	public static String getNpmLocation() {
+		String res = "/path/to/npm";
+		String[] command = new String[] { "/bin/bash", "-c", "which npm" };
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			command = new String[] { "cmd", "/c", "where npm" };
+		}
+		BufferedReader reader = null;
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			res = reader.readLine();
+		} catch (IOException e) {
+			return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
+		}
+
+		// Try default install path as last resort
+		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
+			res = "/usr/local/bin/npm";
+		} else if (res == null && Platform.getOS().equals(Platform.OS_LINUX)) {
+			res = "/usr/bin/npm";
+		}
+
+		if (res != null && Files.exists(Paths.get(res))) {
+			return res;
+		}
+		return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
 	}
 
 }

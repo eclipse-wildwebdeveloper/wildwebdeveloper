@@ -1,0 +1,263 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Gautier de Saint Martin Lacaze and others.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ */
+{
+	"emmet": {
+		"showExpandedAbbreviation": "always",
+		"showAbbreviationSuggestions": true,
+		"includeLanguages": {},
+		"variables": {},
+		"syntaxProfiles": {},
+		"excludeLanguages": [
+			"markdown"
+		],
+		"extensionsPath": null,
+		"triggerExpansionOnTab": false,
+		"preferences": {},
+		"showSuggestionsAsSnippets": false,
+		"optimizeStylesheetParsing": true
+	},
+	"html": {
+		"experimental": {
+			"customData": []
+		},
+		"format": {
+			"enable": true,
+			"wrapLineLength": 120,
+			"unformatted": "wbr",
+			"contentUnformatted": "pre,code,textarea",
+			"indentInnerHtml": false,
+			"preserveNewLines": true,
+			"maxPreserveNewLines": null,
+			"indentHandlebars": false,
+			"endWithNewline": false,
+			"extraLiners": "head, body, /html",
+			"wrapAttributes": "auto"
+		},
+		"suggest": {
+			"html5": true
+		},
+		"validate": {
+			"scripts": true,
+			"styles": true
+		},
+		"autoClosingTags": true,
+		"trace": {
+			"server": "off"
+		}
+	},
+	"typescript": {
+		"tsdk": null,
+		"disableAutomaticTypeAcquisition": false,
+		"npm": null,
+		"check": {
+			"npmIsInstalled": true
+		},
+		"referencesCodeLens": {
+			"enabled": true
+		},
+		"implementationsCodeLens": {
+			"enabled": true
+		},
+		"tsserver": {
+			"log": "off",
+			"pluginPaths": [],
+			"trace": "off"
+		},
+		"suggest": {
+			"completeFunctionCalls": false,
+			"paths": true,
+			"autoImports": true,
+			"completeJSDocs": true,
+			"enabled": true
+		},
+		"reportStyleChecksAsWarnings": true,
+		"validate": {
+			"enable": true
+		},
+		"format": {
+			"enable": true,
+			"insertSpaceAfterCommaDelimiter": true,
+			"insertSpaceAfterConstructor": false,
+			"insertSpaceAfterSemicolonInForStatements": true,
+			"insertSpaceBeforeAndAfterBinaryOperators": true,
+			"insertSpaceAfterKeywordsInControlFlowStatements": true,
+			"insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+			"insertSpaceBeforeFunctionParenthesis": false,
+			"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+			"insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+			"insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+			"insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+			"insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+			"insertSpaceAfterTypeAssertion": false,
+			"placeOpenBraceOnNewLineForFunctions": false,
+			"placeOpenBraceOnNewLineForControlBlocks": false
+		},
+		"tsc": {
+			"autoDetect": "on"
+		},
+		"locale": null,
+		"suggestionActions": {
+			"enabled": true
+		},
+		"preferences": {
+			"quoteStyle": "auto",
+			"importModuleSpecifier": "auto",
+			"renameShorthandProperties": true
+		},
+		"updateImportsOnFileMove": {
+			"enabled": "always"
+		},
+		"autoClosingTags": true,
+		"surveys": {
+			"enabled": true
+		}
+	},
+	"javascript": {
+		"referencesCodeLens": {
+			"enabled": true
+		},
+		"suggest": {
+			"completeFunctionCalls": false,
+			"names": true,
+			"paths": true,
+			"autoImports": true,
+			"completeJSDocs": true,
+			"enabled": true
+		},
+		"validate": {
+			"enable": true
+		},
+		"format": {
+			"enable": true,
+			"insertSpaceAfterCommaDelimiter": true,
+			"insertSpaceAfterConstructor": false,
+			"insertSpaceAfterSemicolonInForStatements": true,
+			"insertSpaceBeforeAndAfterBinaryOperators": true,
+			"insertSpaceAfterKeywordsInControlFlowStatements": true,
+			"insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+			"insertSpaceBeforeFunctionParenthesis": false,
+			"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+			"insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+			"insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+			"insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+			"insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+			"placeOpenBraceOnNewLineForFunctions": false,
+			"placeOpenBraceOnNewLineForControlBlocks": false
+		},
+		"implicitProjectConfig": {
+			"checkJs": false,
+			"experimentalDecorators": false
+		},
+		"suggestionActions": {
+			"enabled": true
+		},
+		"preferences": {
+			"quoteStyle": "auto",
+			"importModuleSpecifier": "auto",
+			"renameShorthandProperties": true
+		},
+		"updateImportsOnFileMove": {
+			"enabled": "always"
+		},
+		"autoClosingTags": true
+	},
+	"vetur": {
+		"useWorkspaceDependencies": false,
+		"completion": {
+			"autoImport": true,
+			"useScaffoldSnippets": true,
+			"tagCasing": "kebab"
+		},
+		"grammar": {
+			"customBlocks": {
+				"docs": "md",
+				"i18n": "json"
+			}
+		},
+		"validation": {
+			"template": true,
+			"style": true,
+			"script": true
+		},
+		"format": {
+			"enable": true,
+			"options": {
+				"tabSize": 2,
+				"useTabs": false
+			},
+			"defaultFormatter": {
+				"html": "prettyhtml",
+				"css": "prettier",
+				"postcss": "prettier",
+				"scss": "prettier",
+				"less": "prettier",
+				"stylus": "stylus-supremacy",
+				"js": "prettier",
+				"ts": "prettier"
+			},
+			"defaultFormatterOptions": {
+				"js-beautify-html": {
+					"wrap_attributes": "force-expand-multiline"
+				},
+				"prettyhtml": {
+					"printWidth": 100,
+					"singleQuote": false,
+					"wrapAttributes": false,
+					"sortAttributes": false
+				}
+			},
+			"styleInitialIndent": false,
+			"scriptInitialIndent": false
+		},
+		"trace": {
+			"server": "verbose"
+		},
+		"dev": {
+			"vlsPath": "",
+			"vlsPort": -1,
+			"logLevel": "INFO"
+		},
+		"experimental": {
+			"templateInterpolationService": false
+		}
+	},
+	"stylusSupremacy": {
+		"insertColons": true,
+		"insertSemicolons": true,
+		"insertBraces": true,
+		"insertNewLineAroundImports": true,
+		"insertNewLineAroundBlocks": true,
+		"insertNewLineAroundProperties": false,
+		"insertNewLineAroundOthers": false,
+		"insertNewLineBetweenSelectors": false,
+		"preserveNewLinesBetweenPropertyValues": false,
+		"insertSpaceBeforeComment": true,
+		"insertSpaceAfterComment": true,
+		"insertSpaceAfterComma": true,
+		"insertSpaceInsideParenthesis": false,
+		"insertParenthesisAfterNegation": false,
+		"insertParenthesisAroundIfCondition": true,
+		"insertNewLineBeforeElse": false,
+		"insertLeadingZeroBeforeFraction": true,
+		"selectorSeparator": ", ",
+		"quoteChar": "'",
+		"sortProperties": false,
+		"alwaysUseImport": false,
+		"alwaysUseNot": false,
+		"alwaysUseAtBlock": false,
+		"alwaysUseExtends": false,
+		"alwaysUseNoneOverZero": false,
+		"alwaysUseZeroWithoutUnit": false,
+		"reduceMarginAndPaddingValues": false,
+		"ignoreFiles": []
+	},
+	"prettier": {}
+}

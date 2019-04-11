@@ -90,6 +90,7 @@
 								<arg>./vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>./vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>vscode-json-languageserver@1.2.1</arg>
+								<arg>vue-language-server@0.0.57</arg>
 								<arg>yaml-language-server@0.5.2</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>

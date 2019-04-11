@@ -1,0 +1,23 @@
+# *****************************************************************************
+# Copyright (c) 2019 Gautier de Saint Martin Lacaze and others.
+# 
+# This program and the accompanying materials are made
+# available under the terms of the Eclipse Public License 2.0
+# which is available at https://www.eclipse.org/legal/epl-2.0/
+# 
+# SPDX-License-Identifier: EPL-2.0
+# 
+# Initial code from https://github.com/vuejs/vetur/
+# Initial copyright Copyright (c) 2017 Pine Wu
+# Initial license: MIT
+# 
+# Contributors:
+#  - https://github.com/octref
+#  - https://github.com/Patcher56
+# 
+# @see https://github.com/microsoft/vscode/blob/4e4e6f9b44dd9e6a53d1f08565c52b8ea9f61a5e/extensions/pug/syntaxes/directives.YAML
+# [PackageDev] target_format: plist, ext: tmLanguage
+scopeName: vue.pug.interpolations
+injectionSelector: "L:text.pug"
+patterns:
+  - include: source.vue#vue-interpolations

@@ -28,7 +28,29 @@
       </presentationReconciler>
    </extension>
 
-   <!-- JSON Language -->
+   <!-- Coffeescript Language -->    
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/coffeescript/coffeescript.tmLanguage.json"
+            scopeName="source.coffee">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.coffeescript"
+            scopeName="source.coffee">
+      </scopeNameContentTypeBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.coffeescript"
+            path="language-configurations/coffeescript/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+
+   <!-- JSON Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
@@ -380,7 +402,140 @@
      <icon contentType="org.eclipse.wildwebdeveloper.js" icon="icons/jsEditorIcon.png"/>
      <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
    </extension>
-
+   
+   <!-- Markdown Language -->
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/markdown/markdown.tmLanguage.json"
+            scopeName="source.coffee">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.markdown"
+            scopeName="text.html.markdown">
+      </scopeNameContentTypeBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.markdown"
+            path="language-configurations/markdown/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+   <!-- Pug Language -->
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="pug"
+            id="org.eclipse.wildwebdeveloper.pug"
+            name="Pug"
+            priority="normal">
+      </content-type>
+   </extension>
+      
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/pug/pug.tmLanguage.json"
+            scopeName="source.pug">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.pug"
+            scopeName="source.pug">
+      </scopeNameContentTypeBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.pug"
+            path="language-configurations/pug/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+   
+   <!-- Vue Language -->
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.vue.VueLanguageServer"
+            id="org.eclipse.wildwebdeveloper.vue"
+            label="Vue Language Server (Vetur)">
+      </server>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.vue"
+            id="org.eclipse.wildwebdeveloper.vue">
+      </contentTypeMapping>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="vue"
+            id="org.eclipse.wildwebdeveloper.vue"
+            name="Vue"
+            priority="normal">
+      </content-type>
+   </extension>
+      
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/vue/vue-generated.json"
+            scopeName="source.vue">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.vue"
+            scopeName="source.vue">
+      </scopeNameContentTypeBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/vue/vue-postcss.json"
+            scopeName="source.css.postcss">
+      </grammar>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/vue/vue-html.tmLanguage.json"
+            scopeName="text.html.vue-html">
+      </grammar>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/pug/directives.tmLanguage.json"
+            scopeName="vue.pug.directives">
+      </grammar>
+      <injection
+            scopeName="vue.pug.directives" injectTo="source.vue">
+      </injection>
+      <grammar
+            path="grammars/pug/interpolations.tmLanguage.json"
+            scopeName="vue.pug.interpolations">
+      </grammar>
+      <injection
+            scopeName="vue.pug.interpolations" injectTo="source.vue">
+      </injection>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.vue"
+            path="language-configurations/vue/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
    <!-- YAML Language -->   
    <extension
          point="org.eclipse.lsp4e.languageServer">
