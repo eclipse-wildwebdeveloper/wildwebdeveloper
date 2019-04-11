@@ -8,7 +8,7 @@
   "scripts": {},
   "dependencies": {
     "@angular/language-service": "^7.2.9",
-    "node-debug2": "./node-debug2-1.33.0.tgz",
+    "node-debug2": "./node-debug2-1.25.5.tgz",
     "typescript": "2.8.3",
     "typescript-language-server": "0.3.7",
     "vscode-css-languageserver": "./vscode-css-languageserver-1.0.0.tgz",
