@@ -59,7 +59,10 @@ Continuous integration is available on https://jenkins.eclipse.org/wildwebdevelo
 
 Quality analysis is available on [SonarCloud](https://sonarcloud.io/dashboard?id=eclipse-wildwebdeveloper).
 
-## 🎬 Video Library
+## 🎬 Media Library
+
+📰 [Apr 2019] [Eclipse Wild Web Developer adds a powerful YAML editor with built-in Kubernetes support](https://developers.redhat.com/blog/2019/04/10/eclipse-wild-web-developer-adds-a-powerful-yaml-editor-with-built-in-kubernetes-support/) on Red Hat Developers blog
+
 ▶️ [Mar 2019] Demo of YAML editor support: https://youtu.be/P9ETtuHiUco
 
 ▶️ [Feb 2019] Demo of XML editor support: https://youtu.be/fikUdUZFdzg
