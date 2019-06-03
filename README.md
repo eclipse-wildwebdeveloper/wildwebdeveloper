@@ -38,11 +38,7 @@ Supported debugging targets
 
 ![screenshot](wildwebdeveloper-screenshot.png "Wild Web Developer screenshot")
 
-## 💡 Design
-
-Wild Web Developer is based on the Eclipse Generic Editor framework from Eclipse Platform, LSP4E and TM4E in order to provide editors based on TextMate grammars, VSCode Language Server, xml-languageserver and yaml-language servers from Red Hat; and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and VSCode Node Debug Adapter to provide debugging.
-
-## ⬇️ Installation
+## ⬇️ Get it Now!
 
 Install into Eclipse IDE (pick one way or another):
 * With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-web-development-eclipse-ide-experimental, choose one of:
@@ -53,6 +49,25 @@ Install into Eclipse IDE (pick one way or another):
 In an Eclipse target platform definition:
 * Use http://download.eclipse.org/wildwebdeveloper/snapshots p2 repo
 
+## 🎬 Media Library
+
+▶️ [Jun 2019] Demo of Terminal and Build integration for NPM: https://www.screencast.com/t/BbWiKutjYI95
+
+📰 [Apr 2019] [Eclipse Wild Web Developer adds a powerful YAML editor with built-in Kubernetes support](https://developers.redhat.com/blog/2019/04/10/eclipse-wild-web-developer-adds-a-powerful-yaml-editor-with-built-in-kubernetes-support/) on Red Hat Developers blog
+
+▶️ [Mar 2019] Demo of YAML editor support: https://youtu.be/P9ETtuHiUco
+
+▶️ [Feb 2019] Demo of XML editor support: https://youtu.be/fikUdUZFdzg
+
+▶️ [Jan 2019] Demo of Node.js launch and debug: https://www.screencast.com/t/0QRpxSA3M7Qy
+
+▶️ [Apr 2017] XML, JSON, CSS, JavaScript, TypeScript demo http://www.screencast.com/t/BaC9DxHIqD
+
+
+## 💡 Design and Architecture
+
+Wild Web Developer is based on the Eclipse Generic Editor framework from [Eclipse Platform](https://projects.eclipse.org/projects/eclipse.platform), [Eclipse LSP4E](https://projects.eclipse.org/projects/technology.lsp4e) and [Eclipse TM4E](https://github.com/eclipse/tm4e) in order to provide editors based on TextMate grammars, Visual Studio Code HTML CSS & JSON Language Servers, Theia's [TypeScript and JavaScript language servers](https://github.com/theia-ide/typescript-language-server), Red Hat's [xml-languageserver](https://github.com/angelozerr/lsp4xml) and [yaml-language-server](https://github.com/redhat-developer/yaml-language-server/) from Red Hat; and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and Visual Studio Code Node Debug Adapter to provide debugging.
+
 ## ⌨️ Get involved
 
 Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues).
@@ -62,13 +77,3 @@ Contribution of Code and Documentation are welcome as [GitHub Pull Request](http
 Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
 
 Quality analysis is available on [SonarCloud](https://sonarcloud.io/dashboard?id=eclipse-wildwebdeveloper).
-
-## 🎬 Media Library
-
-📰 [Apr 2019] [Eclipse Wild Web Developer adds a powerful YAML editor with built-in Kubernetes support](https://developers.redhat.com/blog/2019/04/10/eclipse-wild-web-developer-adds-a-powerful-yaml-editor-with-built-in-kubernetes-support/) on Red Hat Developers blog
-
-▶️ [Mar 2019] Demo of YAML editor support: https://youtu.be/P9ETtuHiUco
-
-▶️ [Feb 2019] Demo of XML editor support: https://youtu.be/fikUdUZFdzg
-
-▶️ [Apr 2017] XML, JSON, CSS, JavaScript, TypeScript demo http://www.screencast.com/t/BaC9DxHIqD
