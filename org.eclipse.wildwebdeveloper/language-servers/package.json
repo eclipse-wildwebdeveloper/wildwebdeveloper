@@ -7,7 +7,7 @@
   "license": "EPL",
   "scripts": {},
   "dependencies": {
-    "@angular/language-service": "^7.2.9",
+    "@angular/language-service": "8.0.0",
     "node-debug2": "./node-debug2-1.25.5.tgz",
     "typescript": "2.8.3",
     "typescript-language-server": "0.3.7",
