@@ -67,7 +67,8 @@
       <server
             class="org.eclipse.wildwebdeveloper.xml.XMLLanguageServer"
             id="org.eclipse.wildwebdeveloper.xml"
-            label="XML Language Server">
+            label="XML Language Server"
+            singleton="true">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.xml"

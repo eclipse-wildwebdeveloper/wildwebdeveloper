@@ -46,7 +46,8 @@
             class="org.eclipse.wildwebdeveloper.json.JSonLanguageServer"
             id="org.eclipse.wildwebdeveloper.json"
             label="JSon Language Server (VSCode)"
-            serverInterface="org.eclipse.wildwebdeveloper.json.JSonLanguageServerInterface" >
+            serverInterface="org.eclipse.wildwebdeveloper.json.JSonLanguageServerInterface"
+            singleton="true">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.json"
@@ -115,7 +116,8 @@
       <server
             class="org.eclipse.wildwebdeveloper.css.CSSLanguageServer"
             id="org.eclipse.wildwebdeveloper.css"
-            label="CSS/LESS/SCSS Language Server (VSCode)">
+            label="CSS/LESS/SCSS Language Server (VSCode)"
+            singleton="true">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.css"
@@ -201,7 +203,8 @@
       <server
             class="org.eclipse.wildwebdeveloper.html.HTMLLanguageServer"
             id="org.eclipse.wildwebdeveloper.html"
-            label="HTML Language Server (VSCode)">
+            label="HTML Language Server (VSCode)"
+            singleton="true">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.html"
@@ -371,7 +374,8 @@
       <server
             class="org.eclipse.wildwebdeveloper.yaml.YAMLLanguageServer"
             id="org.eclipse.wildwebdeveloper.yaml"
-            label="YAML Language Server (VSCode)">
+            label="YAML Language Server (VSCode)"
+            singleton="true">
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.yaml"
