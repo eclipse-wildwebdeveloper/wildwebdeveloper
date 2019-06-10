@@ -9,12 +9,13 @@
   
 
 	<prerequisites>
-		<maven>3.1.1</maven>
+		<maven>3.3.9</maven>
 	</prerequisites>
 	<properties>
-		<tycho-version>1.3.0</tycho-version>
+		<tycho-version>1.4.0</tycho-version>
 		<tycho-extras-version>${tycho-version}</tycho-extras-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/wildwebdeveloper.git</tycho.scmUrl>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<modules>
@@ -100,7 +101,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.2</version>
+				<version>0.8.4</version>
 				<executions>
 					<execution>
 						<goals><goal>prepare-agent</goal></goals>
@@ -145,6 +146,11 @@
 							</repository>
 						</baselineRepositories>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
