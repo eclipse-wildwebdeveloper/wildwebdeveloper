@@ -185,7 +185,7 @@ public class TestLanguageServers {
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!");
+		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!--<!-- -->");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
 			protected boolean condition() {

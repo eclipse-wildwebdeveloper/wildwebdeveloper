@@ -7,7 +7,7 @@
 		<version>0.4.1-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.4.0-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -35,7 +35,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://github.com/angelozerr/lsp4xml/releases/download/v0.0.2/org.eclipse.lsp4xml-all.jar</url>
+							<url>http://jcenter.bintray.com/org/lsp4xml/org.eclipse.lsp4xml/0.7.0/org.eclipse.lsp4xml-0.7.0-uber.jar</url>
 							<unpack>false</unpack>
 							<outputDirectory>language-servers/server</outputDirectory>
 						</configuration>
