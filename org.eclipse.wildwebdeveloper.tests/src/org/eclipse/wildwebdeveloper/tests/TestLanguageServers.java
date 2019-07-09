@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2019 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -21,11 +21,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.lsp4e.LanguageServerPlugin;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.After;
@@ -38,18 +39,13 @@ public class TestLanguageServers {
 
 	@Before
 	public void setUpProject() throws Exception {
-		LanguageServerPlugin.getDefault().getPreferenceStore()
-				.putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore()
-				.putValue("org.eclipse.wildwebdeveloper.css.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore()
-				.putValue("org.eclipse.wildwebdeveloper.html.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore()
-				.putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore()
-				.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
-		LanguageServerPlugin.getDefault().getPreferenceStore()
-				.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
+		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
+		prefs.putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.css.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.html.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
 		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.nanoTime());
 		project.create(null);
 		project.open(null);
