@@ -26,7 +26,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -38,8 +37,7 @@ public class TestJSON {
 	public void testFormatEnabled() throws IOException, PartInitException, CoreException {
 		File file = File.createTempFile("test", ".json");
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		ITextEditor editor = (ITextEditor) IDE
-				.openEditorOnFileStore(activePage, EFS.getStore(file.toURI()));
+		IDE.openEditorOnFileStore(activePage, EFS.getStore(file.toURI()));
 		ICommandService service = activePage.getWorkbenchWindow().getService(ICommandService.class);
 		Command formatCommand = service.getCommand("org.eclipse.lsp4e.format");
 		assertNotNull("Format command not found", formatCommand);
