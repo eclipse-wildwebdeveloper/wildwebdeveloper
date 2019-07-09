@@ -22,9 +22,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -79,27 +77,19 @@ public class YAMLSchemaPreferencePage extends PreferencePage implements IWorkben
 		buttonsBar.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
 		Button addButton = new Button(buttonsBar, SWT.PUSH);
 		addButton.setText("Add");
-		addButton.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				AddShemaGlobPatternDialog dialog = new AddShemaGlobPatternDialog(parent.getShell());
-				dialog.create();
-				if (dialog.open() == Window.OK) {
-					TableItem newItem = new TableItem(schemaTable, SWT.NONE);
-					newItem.setText(0, dialog.getSchemaKey());
-					newItem.setText(1, dialog.getGlobPattern());
-				}
+		addButton.addListener(SWT.Selection, event -> {
+			AddShemaGlobPatternDialog dialog = new AddShemaGlobPatternDialog(parent.getShell());
+			dialog.create();
+			if (dialog.open() == Window.OK) {
+				TableItem newItem = new TableItem(schemaTable, SWT.NONE);
+				newItem.setText(0, dialog.getSchemaKey());
+				newItem.setText(1, dialog.getGlobPattern());
 			}
 		});
 		
 		Button removeButton = new Button(buttonsBar, SWT.PUSH);
 		removeButton.setText("Remove");
-		removeButton.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				schemaTable.remove(schemaTable.getSelectionIndex());
-			}
-		});
+		removeButton.addListener(SWT.Selection, event -> schemaTable.remove(schemaTable.getSelectionIndex()));
 		
 		schemaCol.pack();
 		globPatternCol.pack();

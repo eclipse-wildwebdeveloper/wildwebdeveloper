@@ -12,8 +12,7 @@ package org.eclipse.wildwebdeveloper.yaml;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,15 +37,12 @@ public class YAMLPreferencePage extends PreferencePage implements IWorkbenchPref
 		container.setLayout(new GridLayout(1, false));
 		Link yamlSchemasLink = new Link(container, SWT.NONE);
 		yamlSchemasLink.setText("See <A>'Schemas'</A> to associate schemas to YAML files in the current workspace");
-		yamlSchemasLink.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (getContainer() instanceof IWorkbenchPreferenceContainer) {
-					((IWorkbenchPreferenceContainer) getContainer())
-							.openPage("org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage", null);
-				}
+		yamlSchemasLink.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			if (getContainer() instanceof IWorkbenchPreferenceContainer) {
+				((IWorkbenchPreferenceContainer) getContainer())
+						.openPage("org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage", null);
 			}
-		});
+		}));
 
 		return parent;
 	}
