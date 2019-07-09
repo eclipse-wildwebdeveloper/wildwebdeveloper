@@ -63,6 +63,7 @@ public class TestAngular {
 					return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
 							IResource.DEPTH_ZERO).length != 0;
 				} catch (CoreException e) {
+					e.printStackTrace();
 					return false;
 				}
 			}
