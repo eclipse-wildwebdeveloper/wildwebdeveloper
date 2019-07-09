@@ -21,13 +21,13 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
-import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -36,6 +36,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wildwebdeveloper.debug.NodeRunDebugLaunchShortcut;
@@ -53,7 +54,8 @@ public class TestDebug {
 	public void setUpLaunch() throws DebugException {
 		this.launchManager = DebugPlugin.getDefault().getLaunchManager();
 		removeAllLaunches();
-		DebugUIPlugin.getDefault().getPreferenceStore().setValue("org.eclipse.debug.ui.switch_perspective_on_suspend", MessageDialogWithToggle.ALWAYS);
+		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.debug.ui");
+		prefs.setValue("org.eclipse.debug.ui.switch_perspective_on_suspend", MessageDialogWithToggle.ALWAYS);
 	}
 
 	private void removeAllLaunches() throws DebugException {
