@@ -33,7 +33,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="json"
+            file-extensions="json, jsonc"
             id="org.eclipse.wildwebdeveloper.json"
             name="JSON"
             priority="normal">
