@@ -9,68 +9,52 @@
  *
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
+ *   Gautier de Saint Martin Lacaze - Issue #55 Warn missing or incompatible node.js
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.osgi.framework.Version;
 
 public class InitializeLaunchConfigurations {
 
+	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Collections
+			.unmodifiableSet(new HashSet<>(Arrays.asList(8, 9, 10)));
+
 	private static boolean alreadyWarned;
-
-	public static String getVSCodeLocation(String appendPathSuffix) {
-		String res = null;
-		if (Platform.getOS().equals(Platform.OS_LINUX)) {
-			res = "/usr/share/code";
-		} else if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			res = "C:/Program Files (x86)/Microsoft VS Code";
-		} else if (Platform.getOS().equals(Platform.OS_MACOSX)) {
-			res = "/Applications/Visual Studio Code.app";
-
-			IPath path = new Path(appendPathSuffix);
-			// resources/ maps to Contents/Resources on macOS
-			if (path.segmentCount() > 1 && path.segment(0).equals("resources")) {
-				path = path.removeFirstSegments(1);
-				appendPathSuffix = new Path("/Contents/Resources").append(path).toOSString();
-			}
-		}
-		if (res != null && new File(res).isDirectory()) {
-			if (res.contains(" ") && Platform.getOS().equals(Platform.OS_WIN32)) {
-				return "\"" + res + appendPathSuffix + "\"";
-			}
-			return res + appendPathSuffix;
-		}
-		return "/unknown/path/to/VSCode" + appendPathSuffix;
-	}
 
 	public static String getNodeJsLocation() {
 		{
 			String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
 			if (nodeJsLocation != null && Files.exists(Paths.get(nodeJsLocation))) {
+				validateNodeVersion(nodeJsLocation);
 				return nodeJsLocation;
 			}
 		}
-		
+
 		String res = "/path/to/node";
-		String[] command = new String[] {"/bin/bash", "-c", "which node"};
+		String[] command = new String[] { "/bin/bash", "-c", "which node" };
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			command = new String[] {"cmd", "/c", "where node"};
+			command = new String[] { "cmd", "/c", "where node" };
 		}
-		
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));){		
+
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
 			res = reader.readLine();
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(
@@ -83,20 +67,56 @@ public class InitializeLaunchConfigurations {
 		}
 
 		if (res != null && Files.exists(Paths.get(res))) {
+
+			validateNodeVersion(res);
+
 			return res;
-		} else if (!alreadyWarned){
+		} else if (!alreadyWarned) {
 			warnNodeJSMissing();
 			alreadyWarned = true;
 		}
 		return null;
 	}
 
+	private static void validateNodeVersion(String nodeJsLocation) {
+
+		String nodeVersion = null;
+		String[] nodeVersionCommand = new String[] { "/bin/bash", "-c", nodeJsLocation + " -v" };
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			nodeVersionCommand = new String[] { "cmd", "/c", nodeJsLocation + " -v" };
+		}
+
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(Runtime.getRuntime().exec(nodeVersionCommand).getInputStream()));) {
+			nodeVersion = reader.readLine();
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
+
+		Version parsedVersion = Version
+				.parseVersion(nodeVersion.startsWith("v") ? nodeVersion.replace("v", "") : nodeVersion);
+
+		if (!SUPPORT_NODEJS_MAJOR_VERSIONS.contains(parsedVersion.getMajor())) {
+			warnNodeJSVersionUnsupported(nodeVersion);
+		}
+	}
+
 	private static void warnNodeJSMissing() {
 		Display.getDefault().asyncExec(() -> {
-			MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
-					"Missing node.js",
-					"Could not find node.js. This will result in editors missing key features.\n" +
-					"Please make sure node.js is installed and that your PATH environement variable contains the location to the `node` executable.");
+			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Missing node.js",
+					"Could not find node.js. This will result in editors missing key features.\n"
+							+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable.");
+		});
+	}
+
+	private static void warnNodeJSVersionUnsupported(String version) {
+		Display.getDefault().asyncExec(() -> {
+			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js " + version + " is not supported",
+					"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
+							+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
+							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
+									.map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
 		});
 	}
 
