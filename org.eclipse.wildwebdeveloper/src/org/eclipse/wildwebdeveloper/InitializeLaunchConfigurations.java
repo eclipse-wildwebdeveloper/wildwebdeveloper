@@ -81,10 +81,7 @@ public class InitializeLaunchConfigurations {
 	private static void validateNodeVersion(String nodeJsLocation) {
 
 		String nodeVersion = null;
-		String[] nodeVersionCommand = new String[] { "/bin/bash", "-c", nodeJsLocation + " -v" };
-		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			nodeVersionCommand = new String[] { "cmd", "/c", nodeJsLocation + " -v" };
-		}
+		String[] nodeVersionCommand = new String[] { nodeJsLocation, "-v" };
 
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(nodeVersionCommand).getInputStream()));) {
@@ -94,11 +91,15 @@ public class InitializeLaunchConfigurations {
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
 
-		Version parsedVersion = Version
-				.parseVersion(nodeVersion.startsWith("v") ? nodeVersion.replace("v", "") : nodeVersion);
-
-		if (!SUPPORT_NODEJS_MAJOR_VERSIONS.contains(parsedVersion.getMajor())) {
-			warnNodeJSVersionUnsupported(nodeVersion);
+		if (nodeVersion == null) {
+			warnNodeJSVersionCouldNotBeDetermined();
+		} else {
+			Version parsedVersion = Version
+					.parseVersion(nodeVersion.startsWith("v") ? nodeVersion.replace("v", "") : nodeVersion);
+			
+			if (!SUPPORT_NODEJS_MAJOR_VERSIONS.contains(parsedVersion.getMajor())) {
+				warnNodeJSVersionUnsupported(nodeVersion);
+			}
 		}
 	}
 
@@ -115,6 +116,15 @@ public class InitializeLaunchConfigurations {
 			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js " + version + " is not supported",
 					"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
 							+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
+							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
+									.map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
+		});
+	}
+
+	private static void warnNodeJSVersionCouldNotBeDetermined() {
+		Display.getDefault().asyncExec(() -> {
+			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js version could not be determined",
+					"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
 							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
 									.map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
 		});
