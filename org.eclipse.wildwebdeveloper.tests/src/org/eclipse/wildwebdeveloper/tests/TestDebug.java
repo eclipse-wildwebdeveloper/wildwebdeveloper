@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -33,6 +31,7 @@ import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -65,7 +64,7 @@ public class TestDebug {
 	}
 
 	@After
-	public void trearDownLaunch() throws DebugException {
+	public void tearDownLaunch() throws DebugException {
 		removeAllLaunches();
 	}
 
@@ -78,19 +77,15 @@ public class TestDebug {
 		TextSelection selection = new TextSelection(doc, 0, 0);
 		IToggleBreakpointsTarget toggleBreakpointsTarget = DebugUITools.getToggleBreakpointsTargetManager().getToggleBreakpointsTarget(editor, selection);
 		toggleBreakpointsTarget.toggleLineBreakpoints(editor, selection);
-		Set<IDebugTarget> before = new HashSet<>(Arrays.asList(launchManager.getDebugTargets()));
-		DisplayHelper.sleep(1000);
+		assertFalse("Some existing DAP Launch config already running", Arrays.stream(launchManager.getDebugTargets()).map(IDebugTarget::getModelIdentifier).anyMatch(DSPPlugin.ID_DSP_DEBUG_MODEL::equals));
 		new NodeRunDebugLaunchShortcut().launch(editor, ILaunchManager.DEBUG_MODE);
 		assertTrue("New Debug Target not created", new DisplayHelper() {
 			@Override
 			public boolean condition() {
-				return launchManager.getDebugTargets().length > before.size();
+				return Arrays.stream(launchManager.getDebugTargets()).map(IDebugTarget::getModelIdentifier).anyMatch(DSPPlugin.ID_DSP_DEBUG_MODEL::equals);
 			}
-		}.waitForCondition(Display.getDefault(), 30000));
-		Set<IDebugTarget> after = new HashSet<>(Arrays.asList(launchManager.getDebugTargets()));
-		after.removeAll(before);
-		assertEquals("Extra DebugTarget not found", 1, after.size());
-		IDebugTarget target = after.iterator().next();
+		}.waitForCondition(Display.getDefault(), 45000));
+		IDebugTarget target = Arrays.stream(launchManager.getDebugTargets()).filter(debugTarget -> debugTarget.getModelIdentifier().equals(DSPPlugin.ID_DSP_DEBUG_MODEL)).findAny().get();
 		assertTrue("Debug Target shows no threads", new DisplayHelper() {
 			@Override
 			public boolean condition() {
