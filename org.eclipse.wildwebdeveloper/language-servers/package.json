@@ -14,7 +14,7 @@
     "vscode-css-languageserver": "./vscode-css-languageserver-1.0.0.tgz",
     "vscode-html-languageserver": "./vscode-html-languageserver-1.0.0.tgz",
     "vscode-json-languageserver": "./vscode-json-languageserver-1.0.1.tgz",
-    "yaml-language-server": "0.3.2",
+    "yaml-language-server": "0.5.2",
     "typescript-plugin-css-modules": "1.2.1",
     "typescript-lit-html-plugin": "0.9.0"
   }
