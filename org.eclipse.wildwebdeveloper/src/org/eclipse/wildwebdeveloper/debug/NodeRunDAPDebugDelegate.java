@@ -9,9 +9,11 @@
  *
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
+ *   Pierre-Yves B. - Issue #180 Wrong path to nodeDebug.js
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -76,7 +78,8 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		try {
 			URL fileURL = FileLocator.toFileURL(
 					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));
-			List<String> debugCmdArgs = Collections.singletonList(fileURL.getPath());
+			File file = new File(fileURL.getPath());
+			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
 
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
 					monitor);
