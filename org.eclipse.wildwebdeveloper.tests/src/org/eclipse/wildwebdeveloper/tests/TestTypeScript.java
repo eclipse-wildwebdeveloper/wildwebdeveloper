@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.junit.After;
 import org.junit.Assert;
@@ -65,6 +66,7 @@ public class TestTypeScript {
 		file.create(getClass().getResourceAsStream("/testProjects/htmlIn.tsx"), true, null);
 		AbstractTextEditor editor = (AbstractTextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = LSPEclipseUtils.getDocument(editor);
+		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a didChange
 		Hover hover = LanguageServiceAccessor.getLanguageServers(document, null).get().get(0).getTextDocumentService().hover(LSPEclipseUtils.toTextDocumentPosistionParams(18, document)).get();
 		Assert.assertTrue(hover.getContents().toString().contains("button"));
 	}

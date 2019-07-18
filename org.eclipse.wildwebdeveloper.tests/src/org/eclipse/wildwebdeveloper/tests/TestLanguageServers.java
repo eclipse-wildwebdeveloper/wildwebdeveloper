@@ -219,6 +219,7 @@ public class TestLanguageServers {
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a didChange
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override

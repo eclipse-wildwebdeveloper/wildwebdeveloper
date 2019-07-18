@@ -16,12 +16,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -30,6 +28,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
@@ -49,27 +48,14 @@ public class TestAngular {
 		assertEquals("npm install didn't complete property", 0, process.waitFor());
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
-		IFile file = project.getFolder("src").getFolder("app").getFile("app.component.ts.content");
-		String fileContent = new BufferedReader(new InputStreamReader(file.getContents())).lines()
-				.collect(Collectors.joining("\n"));
-
 		IFile appComponentFile = project.getFolder("src").getFolder("app").getFile("app.component.ts");
-		appComponentFile.create(new ByteArrayInputStream("".getBytes()), true, null);
-		assertTrue("Diagnostic published on empty file", new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-							IResource.DEPTH_ZERO).length == 0;
-				} catch (CoreException e) {
-					return false;
-				}
-			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 3000));
-
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
-		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set(fileContent);
+		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
+		// make an edit
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		document.set(document.get() + "\n");
+
 		assertTrue("Diagnostic not published", new DisplayHelper() {
 			@Override
 			protected boolean condition() {
