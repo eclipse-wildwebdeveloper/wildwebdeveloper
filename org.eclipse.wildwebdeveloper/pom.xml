@@ -38,7 +38,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/stable/0f080e5267e829de46638128001aeb7ca2d6d50e/code-stable-code_1.25.0-1530796411_amd64.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/stable/51b0b28134d51361cf996d2f0a1c698247aeabd8/code-stable-1554971043.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
@@ -78,7 +78,7 @@
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
-								<arg>ci</arg>
+								<arg>install</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 							</arguments>
