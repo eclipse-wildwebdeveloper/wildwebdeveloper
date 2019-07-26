@@ -79,7 +79,7 @@
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
-								<arg>install</arg>
+								<arg>ci</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 							</arguments>
