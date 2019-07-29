@@ -4,10 +4,10 @@
 	<parent>
 		<groupId>org.eclipse.wildwebdeveloper</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.4.1-SNAPSHOT</version>
+		<version>0.4.2-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.3.2-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -63,7 +63,6 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
-								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
 							</arguments>
@@ -79,7 +78,7 @@
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
-								<arg>ci</arg>
+								<arg>install</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 							</arguments>
