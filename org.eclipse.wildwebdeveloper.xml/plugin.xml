@@ -136,5 +136,12 @@
             scopeName="source.xml">
       </snippet>
    </extension>
+   <extension
+         point="org.eclipse.ui.genericeditor.icons">
+      <icon
+            contentType="org.eclipse.wildwebdeveloper.xml"
+            icon="icons/xmlEditorIcon.png">
+      </icon>
+   </extension>
 
 </plugin>

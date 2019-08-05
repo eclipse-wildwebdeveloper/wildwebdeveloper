@@ -28,7 +28,7 @@
       </presentationReconciler>
    </extension>
 
-   <!-- JSON Language -->   
+   <!-- JSON Language -->
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
@@ -186,6 +186,10 @@
       </snippet>
    </extension>
 
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.wildwebdeveloper.css" icon="icons/cssEditorIcon.png"/>
+  </extension>
+
    <!-- HTML Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -240,7 +244,11 @@
             scopeName="text.html.basic">
       </snippet>
    </extension>
-      
+
+   <extension point="org.eclipse.ui.genericeditor.icons">
+     <icon contentType="org.eclipse.wildwebdeveloper.html" icon="icons/htmlEditorIcon.png"/>
+   </extension>
+
    <!-- JavaScript/TypeScript Language -->   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -367,7 +375,12 @@
             scopeName="source.ts">
       </snippet>
    </extension>
-   
+
+   <extension point="org.eclipse.ui.genericeditor.icons">
+     <icon contentType="org.eclipse.wildwebdeveloper.js" icon="icons/jsEditorIcon.png"/>
+     <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
+   </extension>
+
    <!-- YAML Language -->   
    <extension
          point="org.eclipse.lsp4e.languageServer">
@@ -412,6 +425,10 @@
             contentTypeId="org.eclipse.wildwebdeveloper.yaml"
             path="language-configurations/yaml/language-configuration.json">
       </languageConfiguration>
+   </extension>
+
+   <extension point="org.eclipse.ui.genericeditor.icons">
+     <icon contentType="org.eclipse.wildwebdeveloper.yaml" icon="icons/yamlEditorIcon.png"/>
    </extension>
 
    <extension
