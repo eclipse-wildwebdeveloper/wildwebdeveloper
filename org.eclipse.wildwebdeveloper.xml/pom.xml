@@ -35,7 +35,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>http://jcenter.bintray.com/org/lsp4xml/org.eclipse.lsp4xml/0.7.0/org.eclipse.lsp4xml-0.7.0-uber.jar</url>
+							<url>https://jcenter.bintray.com/org/lsp4xml/org.eclipse.lsp4xml/0.8.0/org.eclipse.lsp4xml-0.8.0-uber.jar</url>
 							<unpack>false</unpack>
 							<outputDirectory>language-servers/server</outputDirectory>
 						</configuration>
