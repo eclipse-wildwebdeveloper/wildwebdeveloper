@@ -27,7 +27,6 @@ public class YAMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	
 	private static String getDefaultYamlSchema() {
 		JsonObject schemaJson = new JsonObject();
-		schemaJson.addProperty("Kubernetes", "/*.yaml");
 		return schemaJson.toString();
 	}
 	
