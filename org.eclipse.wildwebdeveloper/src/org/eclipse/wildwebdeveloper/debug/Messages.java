@@ -19,6 +19,7 @@ public class Messages extends NLS {
 	public static String AttachTab_address;
 	public static String AttachTab_port;
 	public static String AttachTab_title;
+	public static String FirefoxDebugTab_File;
 	public static String RunProgramTab_argument;
 	public static String RunProgramTab_error_nonReadableFile;
 	public static String RunProgramTab_error_notJSFile;

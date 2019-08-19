@@ -480,6 +480,24 @@
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.debug.FirefoxAttachDebugDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug"
+            modes="debug"
+            name="Running Firefox Debugger"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.debug.FirefoxRunDABDebugDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfigurationType1"
+            modes="debug"
+            name="Launch Firefox Debugger"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
@@ -507,6 +525,30 @@
             </enablement>
          </contextualLaunch>
       </shortcut>
+      <shortcut
+            class="org.eclipse.wildwebdeveloper.debug.FirefoxRunDebugLaunchShortcut"
+            icon="icons/firefoxIconSmall.png"
+            id="org.eclipse.wildwebdeveloper.firefoxRunShortcut"
+            label="Firefox"
+            modes="run,debug">
+         <configurationType
+               id="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug">
+         </configurationType>
+         <contextualLaunch>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                     </adapt>
+                  </iterate>
+               </with></enablement>
+         </contextualLaunch>
+      </shortcut>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -530,6 +572,16 @@
             icon="icons/node_16.png"
             id="org.eclipse.wildwebdeveloper.nodeImage">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfigurationType1"
+            icon="icons/firefoxIconSmall.png"
+            id="org.eclipse.wildwebdeveloper.firefoxImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug"
+            icon="icons/firefoxIconSmall.png"
+            id="org.eclipse.wildwebdeveloper.firefoxImage">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -542,6 +594,16 @@
             class="org.eclipse.wildwebdeveloper.debug.NodeAttachDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.nodeAttachTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.debug.FirefoxRunDebugTabGroup"
+            id="org.eclipse.wildwebdeveloper.nodeTabGroup"
+            type="org.eclipse.wildwebdeveloper.launchConfigurationType1">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.debug.FirefoxAttachDebugTabGroup"
+            id="org.eclipse.wildwebdeveloper.launchConfigurationTabGroup1"
+            type="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug">
       </launchConfigurationTabGroup>
    </extension>
    <extension
