@@ -4,11 +4,11 @@
   "description": "",
   "keywords": [],
   "author": "Eclipse Wild Web Developer",
-  "license": "EPL",
+  "license": "EPL-2.0",
   "scripts": {},
   "dependencies": {
     "@angular/language-service": "^8.1.1",
-    "node-debug2": "./node-debug2-1.25.5.tgz",
+    "node-debug2": "./node-debug2-1.33.0.tgz",
     "typescript": "3.5.3",
     "typescript-language-server": "0.3.8",
     "typescript-lit-html-plugin": "0.9.0",

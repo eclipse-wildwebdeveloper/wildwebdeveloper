@@ -74,7 +74,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		if (!cwd.isEmpty()) {
 			param.put(CWD, cwd);
 		}
-
+		param.put("sourceMaps", false);
 		try {
 			URL fileURL = FileLocator.toFileURL(
 					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));
