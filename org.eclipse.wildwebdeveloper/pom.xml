@@ -78,9 +78,19 @@
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
-								<arg>ci</arg>
+								<arg>install</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
+								<arg>@angular/language-service@8.1.1</arg>
+								<arg>./node-debug2-1.25.5.tgz</arg>
+								<arg>typescript@3.5.3</arg>
+								<arg>typescript-language-server@0.3.8</arg>
+								<arg>typescript-lit-html-plugin@0.9.0</arg>
+								<arg>typescript-plugin-css-modules@1.2.1</arg>
+								<arg>./vscode-css-languageserver-1.0.0.tgz</arg>
+								<arg>./vscode-html-languageserver-1.0.0.tgz</arg>
+								<arg>vscode-json-languageserver@1.2.1</arg>
+								<arg>yaml-language-server@0.5.2</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>

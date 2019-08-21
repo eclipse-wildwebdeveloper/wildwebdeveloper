@@ -1,3 +1,0 @@
-This file is meant to force update of the bundle (bypass baseline replacements) for cases where the content of the language-servers/ folder change at build-time without a payload commit to mark the folder as modified.
-
-- Modification of jsonServerMain.js at build-time
