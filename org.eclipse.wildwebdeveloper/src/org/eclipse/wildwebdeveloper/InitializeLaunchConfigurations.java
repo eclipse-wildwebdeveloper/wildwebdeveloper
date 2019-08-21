@@ -35,7 +35,7 @@ import org.osgi.framework.Version;
 public class InitializeLaunchConfigurations {
 
 	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Collections
-			.unmodifiableSet(new HashSet<>(Arrays.asList(8, 9, 10)));
+			.unmodifiableSet(new HashSet<>(Arrays.asList(8, 9, 10, 11, 12, 13)));
 
 	private static boolean alreadyWarned;
 
