@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -32,6 +30,8 @@ import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -39,7 +39,7 @@ public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/vscode-css-languageserver/out/cssServerMain.js"));
+			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/vscode-css-languageserver/dist/cssServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
@@ -60,6 +60,8 @@ public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 		settings.put("css", Collections.singletonMap("validate", true));
 		settings.put("scss", Collections.singletonMap("validate", true));
 		settings.put("less", Collections.singletonMap("validate", true));
+		// workaround https://github.com/microsoft/vscode/issues/79599
+		settings.put("dataPaths", Collections.emptyList());
 		return settings;
 	}
 	

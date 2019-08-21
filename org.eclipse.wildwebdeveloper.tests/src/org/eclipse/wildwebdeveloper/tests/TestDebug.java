@@ -101,7 +101,7 @@ public class TestDebug {
 					return false;
 				}
 			}
-		}.waitForCondition(Display.getDefault(), 3000));target.getThreads();
+		}.waitForCondition(Display.getDefault(), 30000));
 		assertTrue("No thread is suspended", new DisplayHelper() {
 			@Override
 			public boolean condition() {
