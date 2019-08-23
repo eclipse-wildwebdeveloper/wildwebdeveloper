@@ -28,6 +28,8 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
+import org.eclipse.debug.core.model.IThread;
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -75,7 +77,7 @@ public class TestDebug {
 		IFile jsFile = project.getFile("hello.js");
 		ITextEditor editor = (ITextEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), jsFile);
 		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		TextSelection selection = new TextSelection(doc, 0, 0);
+		TextSelection selection = new TextSelection(doc, doc.getLineOffset(1) + 1, 0);
 		IToggleBreakpointsTarget toggleBreakpointsTarget = DebugUITools.getToggleBreakpointsTargetManager().getToggleBreakpointsTarget(editor, selection);
 		toggleBreakpointsTarget.toggleLineBreakpoints(editor, selection);
 		Set<IDebugTarget> before = new HashSet<>(Arrays.asList(launchManager.getDebugTargets()));
@@ -113,6 +115,27 @@ public class TestDebug {
 				}
 			}
 		}.waitForCondition(Display.getDefault(), 3000));
+		IThread suspendedThread = Arrays.stream(target.getThreads()).filter(ISuspendResume::isSuspended).findFirst().get();
+		assertTrue("Suspended Thread doesn't show variables", new DisplayHelper() {
+			@Override protected boolean condition() {
+				try {
+					return suspendedThread.getStackFrames().length > 0 && suspendedThread.getStackFrames()[0].getVariables().length > 0;
+				} catch (Exception ex) {
+					// ignore
+					return false;
+				}
+			}
+		}.waitForCondition(Display.getDefault(), 3000));
+		IVariable localVariable = suspendedThread.getStackFrames()[0].getVariables()[0];
+		assertEquals("Local", localVariable.getName());
+		IVariable nVariable = Arrays.stream(localVariable.getValue().getVariables()).filter(var -> {
+			try {
+				return "n".equals(var.getName());
+			} catch (DebugException e) {
+				return false;
+			}
+		}).findAny().get();
+		assertEquals("1605", nVariable.getValue().getValueString());
 	}
 
 }
