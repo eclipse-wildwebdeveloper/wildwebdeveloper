@@ -5,7 +5,7 @@ pipeline {
 	}
   agent {
     kubernetes {
-      label 'wildwebdeveloper-buildtest-pod'
+      label 'wildwebdeveloper-buildtest-pod-f30-take1'
       defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
@@ -13,7 +13,7 @@ kind: Pod
 spec:
   containers:
   - name: container
-    image: mickaelistria/wildwebdeveloper-build-test-dependencies@sha256:c9336c2b3ab06cc803e7465c2c1a3cea58bd09cbe5cbaf44f3630a77a9290e2f
+    image: mickaelistria/fedora-gtk3-mutter-java-node@sha256:5362b90f4b41ec8391441c17e74aeb9a02ac5a04a5ff4a3030f77fdb627b9f24
     tty: true
     command: [ "uid_entrypoint", "cat" ]
   - name: jnlp
