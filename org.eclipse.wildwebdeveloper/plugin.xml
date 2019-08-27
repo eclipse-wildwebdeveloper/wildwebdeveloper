@@ -498,6 +498,24 @@
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.debug.ChromeRunDAPDebugDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"
+            modes="debug"
+            name="Chrome Debug"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.debug.ChromeAttachDebugDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug"
+            modes="debug"
+            name="Running Chrome Debug Instance"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
@@ -554,6 +572,30 @@
                </with></enablement>
          </contextualLaunch>
       </shortcut>
+      <shortcut
+            class="org.eclipse.wildwebdeveloper.debug.ChromeRunDebugLaunchShortcut"
+            icon="icons/ChromeIcon.png"
+            id="org.eclipse.wildwebdeveloper.chromeRunShortcut"
+            label="Chrome Debug "
+            modes="debug">
+         <configurationType
+               id="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"></configurationType>
+         <contextualLaunch>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
    </extension>
     <extension
          point="org.eclipse.core.runtime.adapters">
@@ -604,6 +646,16 @@
             icon="icons/firefoxIconSmall.png"
             id="org.eclipse.wildwebdeveloper.firefoxImage">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"
+            icon="icons/ChromeIcon.png"
+            id="org.eclipse.wildwebdeveloper.chromeImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug"
+            icon="icons/ChromeIcon.png"
+            id="org.eclipse.wildwebdeveloper.chromeImage">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -626,6 +678,16 @@
             class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxAttachDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.launchConfigurationTabGroup1"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.debug.ChromeRunDebugTabGroup"
+            id="org.eclipse.wildwebdeveloper.ChromeRunDebugTabGroup"
+            type="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.debug.ChromeAttachDebugTabGroup"
+            id="org.eclipse.wildwebdeveloper.ChromeAttachDebugTabGroup"
+            type="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug">
       </launchConfigurationTabGroup>
    </extension>
    <extension
