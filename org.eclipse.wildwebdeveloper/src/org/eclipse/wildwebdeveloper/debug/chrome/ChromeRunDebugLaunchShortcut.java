@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Red Hat Inc. and others.
+ * Copyright (c) 2018 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -10,7 +10,7 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug.firefox;
+package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import java.io.File;
 
@@ -21,10 +21,9 @@ import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 
-public class FirefoxRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
-
-	public FirefoxRunDebugLaunchShortcut() {
-		super(FirefoxRunDABDebugDelegate.ID, "org.eclipse.wildwebdeveloper.html");
+public class ChromeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
+	public ChromeRunDebugLaunchShortcut() {
+		super(ChromeRunDAPDebugDelegate.ID, "org.eclipse.wildwebdeveloper.html");
 	}
 
 	@Override
