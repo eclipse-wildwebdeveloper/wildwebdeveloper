@@ -38,7 +38,6 @@ public class InitializeLaunchConfigurations {
 			.unmodifiableSet(new HashSet<>(Arrays.asList(8, 9, 10, 11, 12, 13)));
 
 	private static boolean alreadyWarned;
-
 	public static String getNodeJsLocation() {
 		{
 			String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
@@ -104,7 +103,6 @@ public class InitializeLaunchConfigurations {
 		} else {
 			Version parsedVersion = Version
 					.parseVersion(nodeVersion.startsWith("v") ? nodeVersion.replace("v", "") : nodeVersion);
-			
 			if (!SUPPORT_NODEJS_MAJOR_VERSIONS.contains(parsedVersion.getMajor())) {
 				warnNodeJSVersionUnsupported(nodeVersion);
 			}
