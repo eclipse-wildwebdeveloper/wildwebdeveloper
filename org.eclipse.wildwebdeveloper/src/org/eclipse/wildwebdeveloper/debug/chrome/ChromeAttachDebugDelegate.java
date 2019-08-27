@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,7 +11,7 @@
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *   Pierre-Yves B. - Issue #180 Wrong path to nodeDebug.js
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug.firefox;
+package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,23 +23,25 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
-public class FirefoxAttachDebugDelegate extends AbstractHTMLDebugDelegate {
+public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 	
-	static final String ID = "org.eclipse.wildwebdeveloper.runFirefoxDebug"; //$NON-NLS-1$
-	
-	private static final String REQUEST = "request"; //$NON-NLS-1$
+	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"; //$NON-NLS-1$
 
-	// see https://github.com/firefox-devtools/vscode-firefox-debug/blob/master/src/adapter/configuration.ts for launch/attach configuration parameters
+	static final String ADDRESS = "address"; //$NON-NLS-1$
+
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
 		// user settings
-		Map<String, Object> param = new HashMap<>(); 
-		param.put(REQUEST, "attach"); //$NON-NLS-1$
-		int port = configuration.getAttribute(NodeAttachDebugDelegate.PORT, 4711);
-		param.put(AbstractHTMLDebugDelegate.PORT, port);
+		Map<String, Object> param = new HashMap<>();
+		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
+		param.put(AbstractHTMLDebugDelegate.PORT, configuration.getAttribute(NodeAttachDebugDelegate.PORT, 9229));
+		param.put("webRoot", "/home/aobuchow/Documents/Firefox Debugger Testing");
+		param.put("url", "https://www.google.ca/");
+		param.put("runtimeExecutable", "/usr/bin/chromium-browser");
 		
-		super.launchWithParameters(configuration, mode, launch, monitor, param, FirefoxRunDABDebugDelegate.findDebugAdapter());
+		super.launchWithParameters(configuration, mode, launch, monitor, param, ChromeRunDAPDebugDelegate.findDebugAdapter());
+
 	}
 
 }

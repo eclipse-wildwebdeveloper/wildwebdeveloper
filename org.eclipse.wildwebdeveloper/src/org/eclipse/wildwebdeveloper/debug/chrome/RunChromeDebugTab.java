@@ -10,7 +10,7 @@
  * Contributors:
  *   Andrew Obuchowicz (Red Hat Inc.) 
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug.firefox;
+package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.swt.SWT;
@@ -19,29 +19,28 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wildwebdeveloper.debug.AbstractRunHTMLDebugTab;
 
-public class RunFirefoxDebugTab extends AbstractRunHTMLDebugTab {	
-	private Button reloadOnChange;
-
-	public RunFirefoxDebugTab() {
-		 super.shortcut = new FirefoxRunDebugLaunchShortcut(); // contains many utilities
+public class RunChromeDebugTab extends AbstractRunHTMLDebugTab {
+	private Button verboseConsoleOutput;
+	
+	public RunChromeDebugTab() {
+		super.shortcut = new ChromeRunDebugLaunchShortcut();
 	}
-
+	
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
-		reloadOnChange = new Button(resComposite, SWT.CHECK);
-		reloadOnChange.setText("Reload on change");
-		reloadOnChange.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
+		verboseConsoleOutput = new Button(resComposite, SWT.CHECK);
+		verboseConsoleOutput.setText("Verbose console output");
+		verboseConsoleOutput.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
 			setDirty(true);
 			updateLaunchConfigurationDialog();
 		}));
-		
 	}
 	
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		super.performApply(configuration);
-		configuration.setAttribute(FirefoxRunDABDebugDelegate.RELOAD_ON_CHANGE, reloadOnChange.getSelection());
+		configuration.setAttribute(ChromeRunDAPDebugDelegate.VERBOSE, verboseConsoleOutput.getSelection());
 	}
 
 }
