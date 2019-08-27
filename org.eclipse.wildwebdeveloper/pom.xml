@@ -43,8 +43,23 @@
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
 					</execution>
+					<execution>
+						<id>fetch-chrome-debug-adapter</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://marketplace.visualstudio.com/_apis/public/gallery/publishers/msjsdiag/vsextensions/debugger-for-chrome/4.11.7/vspackage</url>
+							<outputFileName>chromeDebugAdapter.zip</outputFileName>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
+
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -65,6 +80,7 @@
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
+								<arg>../target/chrome-debug-adapter/extension/</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
@@ -92,12 +108,16 @@
 								<arg>vscode-json-languageserver@1.2.1</arg>
 								<arg>yaml-language-server@0.5.2</arg>
 								<arg>firefox-debugadapter@2.0.1</arg>
+								<arg>debugger-for-chrome-4.11.7.tgz</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+			
+			
 			<plugin>
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>replacer</artifactId>

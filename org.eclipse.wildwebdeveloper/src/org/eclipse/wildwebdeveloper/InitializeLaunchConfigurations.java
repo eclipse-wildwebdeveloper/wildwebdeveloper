@@ -38,7 +38,6 @@ public class InitializeLaunchConfigurations {
 			.unmodifiableSet(new HashSet<>(Arrays.asList(8, 9, 10, 11, 12, 13)));
 
 	private static boolean alreadyWarned;
-
 	public static String getNodeJsLocation() {
 		{
 			String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
@@ -53,21 +52,47 @@ public class InitializeLaunchConfigurations {
 			res = "/path/to/node";
 		}
 
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+			res = reader.readLine();
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
+
 		// Try default install path as last resort
 		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
 			res = "/usr/local/bin/node";
 		}
-
 		if (res != null && Files.exists(Paths.get(res))) {
-
+			
+			
 			validateNodeVersion(res);
-
+			
+			
 			return res;
 		} else if (!alreadyWarned) {
 			warnNodeJSMissing();
 			alreadyWarned = true;
 		}
 		return null;
+		
+	}
+	
+	public static String which(String program) {
+		String res = null;
+		String[] command = new String[] { "/bin/bash", "-c", "which " + program};
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			command = new String[] { "cmd", "/c", "where " + program };
+		}
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+			res = reader.readLine();
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
+		return res;
 	}
 
 	public static String which(String progrgam) {
