@@ -32,7 +32,7 @@
 				<version>1.4.1</version>
 				<executions>
 					<execution>
-						<id>fetch-grammar</id>
+						<id>fetch-vscode</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>wget</goal>
@@ -91,6 +91,7 @@
 								<arg>./vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>vscode-json-languageserver@1.2.1</arg>
 								<arg>yaml-language-server@0.5.2</arg>
+								<arg>firefox-debugadapter@2.0.1</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>

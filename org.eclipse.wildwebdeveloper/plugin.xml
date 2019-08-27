@@ -463,7 +463,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.debug.NodeRunDAPDebugDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"
             modes="run,debug"
             name="Node.js application"
@@ -472,7 +472,7 @@
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.debug.NodeAttachDebugDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach"
             modes="debug"
             name="Running Node.js application"
@@ -481,7 +481,7 @@
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.debug.FirefoxAttachDebugDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxAttachDebugDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug"
             modes="debug"
             name="Running Firefox Debugger"
@@ -490,7 +490,7 @@
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.debug.FirefoxRunDABDebugDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDABDebugDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfigurationType1"
             modes="debug"
             name="Launch Firefox Debugger"
@@ -502,7 +502,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.eclipse.wildwebdeveloper.debug.NodeRunDebugLaunchShortcut"
+            class="org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugLaunchShortcut"
             icon="icons/node_16.png"
             id="org.eclipse.wildwebdeveloper.nodeRunShortcut"
             label="Node program"
@@ -526,7 +526,7 @@
          </contextualLaunch>
       </shortcut>
       <shortcut
-            class="org.eclipse.wildwebdeveloper.debug.FirefoxRunDebugLaunchShortcut"
+            class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDebugLaunchShortcut"
             icon="icons/firefoxIconSmall.png"
             id="org.eclipse.wildwebdeveloper.firefoxRunShortcut"
             label="Firefox"
@@ -586,22 +586,22 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.NodeRunDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.nodeTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.NodeAttachDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.nodeAttachTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.FirefoxRunDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.nodeTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfigurationType1">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.FirefoxAttachDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxAttachDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.launchConfigurationTabGroup1"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug">
       </launchConfigurationTabGroup>

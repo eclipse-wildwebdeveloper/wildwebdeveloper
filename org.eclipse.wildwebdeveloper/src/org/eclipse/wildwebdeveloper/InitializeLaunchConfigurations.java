@@ -48,18 +48,9 @@ public class InitializeLaunchConfigurations {
 			}
 		}
 
-		String res = "/path/to/node";
-		String[] command = new String[] { "/bin/bash", "-c", "which node" };
-		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			command = new String[] { "cmd", "/c", "where node" };
-		}
-
-		try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
-			res = reader.readLine();
-		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		String res = which("node");
+		if (res == null) {
+			res = "/path/to/node";
 		}
 
 		// Try default install path as last resort
@@ -77,6 +68,22 @@ public class InitializeLaunchConfigurations {
 			alreadyWarned = true;
 		}
 		return null;
+	}
+
+	public static String which(String progrgam) {
+		String res = null;
+		String[] command = new String[] { "/bin/bash", "-c", "which " + progrgam};
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+			command = new String[] { "cmd", "/c", "where " + progrgam };
+		}
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+			res = reader.readLine();
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
+		return res;
 	}
 
 	private static void validateNodeVersion(String nodeJsLocation) {
@@ -105,30 +112,30 @@ public class InitializeLaunchConfigurations {
 	}
 
 	private static void warnNodeJSMissing() {
-		Display.getDefault().asyncExec(() -> {
+		Display.getDefault().asyncExec(() -> 
 			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Missing node.js",
 					"Could not find node.js. This will result in editors missing key features.\n"
-							+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable.");
-		});
+							+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable.")
+		);
 	}
 
 	private static void warnNodeJSVersionUnsupported(String version) {
-		Display.getDefault().asyncExec(() -> {
+		Display.getDefault().asyncExec(() ->
 			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js " + version + " is not supported",
 					"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
 							+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
 							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-									.map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
-		});
+									.map(String::valueOf).collect(Collectors.joining(", ")))
+		);
 	}
 
 	private static void warnNodeJSVersionCouldNotBeDetermined() {
-		Display.getDefault().asyncExec(() -> {
+		Display.getDefault().asyncExec(() ->
 			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js version could not be determined",
 					"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
 							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-									.map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
-		});
+									.map(String::valueOf).collect(Collectors.joining(", ")))
+		);
 	}
 
 }

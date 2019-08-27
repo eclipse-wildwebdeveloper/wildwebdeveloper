@@ -11,84 +11,58 @@
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *   Pierre-Yves B. - Issue #180 Wrong path to nodeDebug.js
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.debug.firefox;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
-public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
+public class FirefoxAttachDebugDelegate extends DSPLaunchDelegate {
 
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug"; //$NON-NLS-1$
+	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"; //$NON-NLS-1$
 
 	// see https://github.com/firefox-devtools/vscode-firefox-debug/blob/master/src/adapter/configuration.ts for launch/attach configuration parameters
 	static final String PORT = "port"; //$NON-NLS-1$
 	static final String REQUEST = "request"; //$NON-NLS-1$
-	static final String PREFERENCES = "preferences"; //$NON-NLS-1$
-	static final String TMP_DIRS = "tmpdirs"; //$NON-NLS-1$
-	static final String TYPE = "type"; //$NON-NLS-1$
-	static final String DETACHED = "detached"; //$NON-NLS-1$
-	static final String FIREFOX_EXECUTABLE = "firefoxExecutable"; //$NON-NLS-1$
-	static final String PROFILE_DIR = "profileDir"; //$NON-NLS-1$
-	static final String CONFIGURATION = "configuration"; //$NON-NLS-1$
-	static final String RELOAD_ON_CHANGE = "reloadOnChange"; //$NON-NLS-1$
-	static final String ARGUMENTS = "args"; //$NON-NLS-1$
-	static final String FILE = "file"; //$NON-NLS-1$
 
-
-	public static final String WORKING_DIRECTORY = "";
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
 		// user settings
-		String fileToDebug = configuration.getAttribute(FILE, "").trim(); //$NON-NLS-1$
 		Map<String, Object> param = new HashMap<>(); 
-		param.put(REQUEST, "launch"); //$NON-NLS-1$
-		param.put( FIREFOX_EXECUTABLE, "/usr/bin/firefox"); //$NON-NLS-1$
-		param.put(PROFILE_DIR, "/home/aobuchow/.mozilla/firefox/guoqedcl.default"); //$NON-NLS-1$
-		param.put(FILE, fileToDebug); //$NON-NLS-1$
-		param.put(PREFERENCES, "{}"); //$NON-NLS-1$
-		param.put(TMP_DIRS, "/tmp"); //$NON-NLS-1$
-		param.put(TYPE, "firefox"); //$NON-NLS-1$
-		param.put(DETACHED, Boolean.FALSE);
-		if (configuration.getAttribute(RELOAD_ON_CHANGE, false) == true) {
-			String workspaceDir = configuration.getAttribute(WORKING_DIRECTORY, ""); 
-			param.put(RELOAD_ON_CHANGE, workspaceDir);
-		}
+		param.put(REQUEST, "attach"); //$NON-NLS-1$
+		int port = configuration.getAttribute(NodeAttachDebugDelegate.PORT, 4711);
+		param.put(PORT, port);
 
 		try {
-			// TODO: Properly package Firefox Debug Adapter
-			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/org.eclipse.wildwebdeveloper/language-servers/node_modules/vscode-firefox-debug/out/adapter/firefoxDebugAdapter.js"));
-			File file = new File("/home/aobuchow/git/vscode-firefox-debug/out/adapter/firefoxDebugAdapter.js");
-			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
+			List<String> debugCmdArgs = Collections.singletonList(FirefoxRunDABDebugDelegate.findDebugAdapter().getAbsolutePath());
 
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
 					monitor);
 			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
-			builder.setMonitorDebugAdapter(true);
+			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
 			builder.setDspParameters(param);
 
 			super.launch(builder);
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
 			ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$

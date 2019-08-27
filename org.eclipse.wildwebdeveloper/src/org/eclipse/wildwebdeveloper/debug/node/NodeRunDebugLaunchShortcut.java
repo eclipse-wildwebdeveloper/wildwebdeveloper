@@ -10,7 +10,7 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.debug.node;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;

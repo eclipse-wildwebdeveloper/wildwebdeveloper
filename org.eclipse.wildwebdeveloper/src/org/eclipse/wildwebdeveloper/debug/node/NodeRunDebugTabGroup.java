@@ -10,7 +10,7 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.debug.node;
 
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
@@ -19,12 +19,12 @@ import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
 
-public class FirefoxRunDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
+public class NodeRunDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		setTabs(new ILaunchConfigurationTab[] {
-			new RunFirefoxDebugTab(),
+			new RunProgramTab(),
 			new EnvironmentTab(),
 			new DSPOverrideSettingsTab(),
 			new CommonTab()

@@ -10,7 +10,7 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.debug.firefox;
 
 
 import java.io.File;
@@ -19,7 +19,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -39,6 +41,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.Messages;
+import org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate;
 
 public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 
@@ -178,15 +182,14 @@ public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 			Object sel = currentSelection.getFirstElement();
 			IFile file = Platform.getAdapterManager().getAdapter(sel, IFile.class);
 			if (file == null && sel instanceof IAdaptable) {
-					file = ((IAdaptable) sel).getAdapter(IFile.class);
-				}
+				file = ((IAdaptable) sel).getAdapter(IFile.class);
+			}
 			if (file != null) {
 				return file.getRawLocation().makeAbsolute().toOSString();
 			}
 
 		} catch (Exception e) {
-			// TODO: Log this exception
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
 		return "";
 	}
@@ -205,8 +208,7 @@ public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 			}
 			
 		} catch (Exception e) {
-			// TODO: Log this exception
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
 		return "";
 	}

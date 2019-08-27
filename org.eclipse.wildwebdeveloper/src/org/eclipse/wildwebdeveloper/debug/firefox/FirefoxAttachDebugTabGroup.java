@@ -10,13 +10,14 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.debug.firefox;
 
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
+import org.eclipse.wildwebdeveloper.debug.node.AttachTab;
 
 public class FirefoxAttachDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
 

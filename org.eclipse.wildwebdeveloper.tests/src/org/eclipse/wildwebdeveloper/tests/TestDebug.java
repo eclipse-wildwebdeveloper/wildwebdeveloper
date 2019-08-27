@@ -41,7 +41,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.wildwebdeveloper.debug.NodeRunDebugLaunchShortcut;
+import org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugLaunchShortcut;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
