@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,20 +68,19 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 		if (message instanceof ResponseMessage) {
 			ResponseMessage responseMessage = (ResponseMessage) message;
 			if (responseMessage.getResult() instanceof InitializeResult) {
-				Map<String, Object> options = new HashMap<>();
-				options.put("scripts", true);
-				options.put("styles", true);
+				Map<String, Object> htmlOptions = new HashMap<>();
 
-				Map<String, Object> validate = new HashMap<>();
-				validate.put("validate", options);
+				Map<String, Object> validateOptions = new HashMap<>();
+				validateOptions.put("scripts", true);
+				validateOptions.put("styles", true);
+				htmlOptions.put("validate", validateOptions);
+
+				htmlOptions.put("format", Collections.singletonMap("enable", Boolean.TRUE));
 
 				Map<String, Object> html = new HashMap<>();
-				html.put("html", validate);
+				html.put("html", htmlOptions);
 
-				Map<String, Object> settings = new HashMap<>();
-				settings.put("settings", html);
-
-				DidChangeConfigurationParams params = new DidChangeConfigurationParams(settings);
+				DidChangeConfigurationParams params = new DidChangeConfigurationParams(html);
 				languageServer.getWorkspaceService().didChangeConfiguration(params);
 			}
 		}
@@ -90,4 +90,5 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 	public String toString() {
 		return "HTML Language Server: " + super.toString();
 	}
+
 }

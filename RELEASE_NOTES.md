@@ -8,7 +8,10 @@ This page describes the noteworthy improvements provided by each release of Ecli
 ![icons](artwork/editorIcons.png)
 ##### Upgraded all language servers (many small improvements to edition features)
 ##### Work with Node.js 11 and 12
-##### Debugging doesn't log miscanellous messages in the Console any more
+##### Format HTML
+![HTML Format](documentation-files/html-format.gif)
+##### Debugging doesn't log noisy messages in the Console any more
+This messages were useful for debugging integration with debug adapter. They can still be enabled in the Launch Configuration "Debug Adapter" tab; they're simply turned off by default.
 ##### Change variable values during debug
 ![set veriable in debug](documentation-files/setVariable.gif)
 ##### Debug with Firefox Debug Adapter
