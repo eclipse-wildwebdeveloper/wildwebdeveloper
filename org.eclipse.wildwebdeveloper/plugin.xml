@@ -381,6 +381,13 @@
      <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
    </extension>
 
+   <!-- Angular -->
+   <extension point="org.eclipse.lsp4e.languageServer">
+     <server id="org.eclipse.wildwebdeveloper.angular" class="org.eclipse.wildwebdeveloper.angular.AngularLanguageServer" label="Angular Language Server"/>
+     <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.ts" id="org.eclipse.wildwebdeveloper.angular"/>
+     <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.html" id="org.eclipse.wildwebdeveloper.angular"/>
+   </extension>
+
    <!-- YAML Language -->   
    <extension
          point="org.eclipse.lsp4e.languageServer">

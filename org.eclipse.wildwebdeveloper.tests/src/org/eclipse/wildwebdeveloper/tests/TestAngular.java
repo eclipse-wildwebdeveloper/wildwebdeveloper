@@ -21,8 +21,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -42,44 +44,51 @@ public class TestAngular {
 	@Rule public AllCleanRule cleanRule = new AllCleanRule();
 
 	@Test
-	public void testAngularTSFile() throws Exception {
+	public void testAngular() throws Exception {
 		IProject project = Utils.provisionTestProject("angular-app");
 		Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts")
 				.directory(project.getLocation().toFile()).start();
 		assertEquals("npm install didn't complete property", 0, process.waitFor());
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+		IFolder appFolder = project.getFolder("src").getFolder("app");
 
-		IFile appComponentFile = project.getFolder("src").getFolder("app").getFile("app.component.ts");
+		IFile appComponentFile = appFolder.getFile("app.component.ts");
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
 		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
 		// make an edit
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.set(document.get() + "\n");
-
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue("Diagnostic not published in standalone component file", new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
-					return appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-							IResource.DEPTH_ZERO).length != 0;
+					return Arrays.stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+							IResource.DEPTH_ZERO)).anyMatch(marker -> marker.getAttribute(IMarker.LINE_NUMBER, -1) == 5 && marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;
 				}
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
+		editor.close(false);
 
-		IMarker[] markers = appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-				IResource.DEPTH_ZERO);
-		boolean foundError = false;
-		for (IMarker marker : markers) {
-			int lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, -1);
-			if (lineNumber == 6 && marker.getAttribute(IMarker.MESSAGE, "").contains("template")) {
-				foundError = true;
+		editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appFolder.getFile("app.componentWithHtml.ts"));
+		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
+		IFile appComponentHTML = appFolder.getFile("app.componentWithHtml.html");
+		editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentHTML);
+		assertTrue("No error found on erroneous HTML component file", new DisplayHelper() {
+			@Override protected boolean condition() {
+				IMarker[] markers;
+				try {
+					markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+							IResource.DEPTH_ZERO);
+					return Arrays.stream(markers).anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
+				} catch (CoreException e) {
+					return false;
+				}
 			}
-		}
-		assertTrue("No error found in line 6", foundError);
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 3000));
 	}
 
 	public static String getNpmLocation() {

@@ -43,16 +43,16 @@ public class AllCleanRule extends TestWatcher {
 		prefs.putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
-		clear();
+		clearProjects();
 	}
 
 	@Override
 	protected void finished(Description description) {
-		clear();
+		clearProjects();
 		super.finished(description);
 	}
 
-	private void clear() {
+	private void clearProjects() {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			try {
