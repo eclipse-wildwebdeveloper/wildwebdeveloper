@@ -121,6 +121,31 @@
 							</replacements>
 						</configuration>
 					</execution>
+					<execution>
+						<id>workaround-vscode-chrome-debug-core-issue-516</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<basedir>${basedir}</basedir>
+							<includes>
+								<include>language-servers/node_modules/vscode-chrome-debug-core/out/src/chrome/chromeDebugAdapter.js</include>
+							</includes>
+							<replacements>
+								<replacement>
+									<!--token>reportBpTelemetry(args) {</token-->
+									<token>reportBpTelemetry\(args\) \{</token>
+									<value>// Added by Wild Web Developer at build time
+    setVariable(args) {
+        return this._variablesManager.setVariable(args);
+    }
+    // end of "Added by Wild Web Developer at build time"
+    reportBpTelemetry(args) {</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
