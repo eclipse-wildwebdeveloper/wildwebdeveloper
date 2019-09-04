@@ -38,7 +38,7 @@ import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
 
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug"; //$NON-NLS-1$
+	static final String ID = "org.eclipse.wildwebdeveloper.runFirefoxDebug"; //$NON-NLS-1$
 
 	// see https://github.com/firefox-devtools/vscode-firefox-debug/blob/master/src/adapter/configuration.ts for launch/attach configuration parameters
 	static final String PORT = "port"; //$NON-NLS-1$

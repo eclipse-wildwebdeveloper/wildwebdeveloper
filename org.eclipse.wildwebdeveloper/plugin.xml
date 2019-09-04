@@ -491,7 +491,7 @@
       </launchConfigurationType>
       <launchConfigurationType
             delegate="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDABDebugDelegate"
-            id="org.eclipse.wildwebdeveloper.launchConfigurationType1"
+            id="org.eclipse.wildwebdeveloper.runFirefoxDebug"
             modes="debug"
             name="Launch Firefox Debugger"
             public="true"
@@ -530,9 +530,9 @@
             icon="icons/firefoxIconSmall.png"
             id="org.eclipse.wildwebdeveloper.firefoxRunShortcut"
             label="Firefox"
-            modes="run,debug">
+            modes="debug">
          <configurationType
-               id="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug">
+               id="org.eclipse.wildwebdeveloper.runFirefoxDebug">
          </configurationType>
          <contextualLaunch>
             <enablement>
