@@ -12,8 +12,8 @@
 	<unit id="org.mockito" version="0.0.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-	<repository location="https://download.eclipse.org/releases/2019-06/"/>
-	<unit id="tm-feature.feature.group" version="0.0.0"/>
+	<repository location="https://download.eclipse.org/staging/2019-09/"/>
+	<unit id="org.eclipse.tm4e.feature.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.mylyn.wikitext_feature.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.xtend.lib" version="0.0.0"/>
 	<unit id="org.eclipse.lsp4e" version="0.0.0"/>
