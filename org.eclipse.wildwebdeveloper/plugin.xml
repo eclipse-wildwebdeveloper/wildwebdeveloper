@@ -545,11 +545,25 @@
                   <iterate>
                      <adapt
                            type="org.eclipse.core.resources.IResource">
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.wildwebdeveloper.isHTMLLaunchable">
+                        </test>
                      </adapt>
                   </iterate>
                </with></enablement>
          </contextualLaunch>
       </shortcut>
+   </extension>
+    <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.core.resources.IResource"
+            class="org.eclipse.wildwebdeveloper.debug.HTMLLaunchableAdapterFactory">
+         <adapter
+               type="org.eclipse.debug.ui.actions.ILaunchable">
+         </adapter>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -558,6 +572,13 @@
             id="org.eclipse.wildwebdeveloper.propertyTester.isNodeResource"
             namespace="org.eclipse.wildwebdeveloper"
             properties="isNodeResource"
+            type="java.lang.Object">
+      </propertyTester>
+      <propertyTester
+            class="org.eclipse.wildwebdeveloper.debug.IsLaunchableHTMLTester"
+            id="org.eclipse.wildwebdeveloper.propertyTester.isHTMLLaunchable"
+            namespace="org.eclipse.wildwebdeveloper"
+            properties="isHTMLLaunchable"
             type="java.lang.Object">
       </propertyTester>
    </extension>
