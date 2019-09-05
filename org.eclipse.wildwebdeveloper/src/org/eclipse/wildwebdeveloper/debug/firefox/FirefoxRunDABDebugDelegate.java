@@ -89,7 +89,14 @@ public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
 		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
+			Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+
+					ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
+			}
+			});
+
 		}
 	}
 
