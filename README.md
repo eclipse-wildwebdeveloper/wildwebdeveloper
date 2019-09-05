@@ -36,7 +36,7 @@ Supported debugging targets
 
 * Node.js
 
-![screenshot](wildwebdeveloper-screenshot.png "Wild Web Developer screenshot")
+![screenshot](documentation-files/wildwebdeveloper-screenshot.png "Wild Web Developer screenshot")
 
 ## ⬇️ Get it Now!
 
