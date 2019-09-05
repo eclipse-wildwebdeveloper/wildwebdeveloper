@@ -518,7 +518,8 @@
                      <adapt type="org.eclipse.core.resources.IResource">
                         <test
                               forcePluginActivation="true"
-                              property="org.eclipse.wildwebdeveloper.isNodeResource"/>
+                              property="org.eclipse.wildwebdeveloper.isNodeResource">
+                        </test>
                      </adapt>
                   </iterate>
                </with>
@@ -573,7 +574,7 @@
             id="org.eclipse.wildwebdeveloper.nodeImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
-            configTypeID="org.eclipse.wildwebdeveloper.launchConfigurationType1"
+            configTypeID="org.eclipse.wildwebdeveloper.runFirefoxDebug"
             icon="icons/firefoxIconSmall.png"
             id="org.eclipse.wildwebdeveloper.firefoxImage">
       </launchConfigurationTypeImage>
@@ -598,7 +599,7 @@
       <launchConfigurationTabGroup
             class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.nodeTabGroup"
-            type="org.eclipse.wildwebdeveloper.launchConfigurationType1">
+            type="org.eclipse.wildwebdeveloper.runFirefoxDebug">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
             class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxAttachDebugTabGroup"

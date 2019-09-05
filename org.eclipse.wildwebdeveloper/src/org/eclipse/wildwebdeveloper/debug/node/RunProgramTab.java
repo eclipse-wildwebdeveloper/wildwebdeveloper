@@ -12,6 +12,10 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.node;
 
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
+
 import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
@@ -36,6 +40,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 	private Text programPathText;
 	private Text argumentsText;
 	private Text workingDirectoryText;
+	private final NodeRunDebugLaunchShortcut shortcut = new NodeRunDebugLaunchShortcut();
 
 	@Override
 	public void createControl(Composite parent) {
@@ -56,7 +61,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
-			} else if (!file.getName().endsWith(".js")){ //$NON-NLS-1$
+			} else if (!shortcut.canLaunch(file)){ //$NON-NLS-1$
 				String errorMessage = Messages.RunProgramTab_error_notJSFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
@@ -97,9 +102,10 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			this.programPathText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, "")); //$NON-NLS-1$
+			String defaultSelectedFile = pathOrEmpty(getSelectedFile(shortcut::canLaunch));
+			this.programPathText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, defaultSelectedFile)); //$NON-NLS-1$
 			this.argumentsText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
-			this.workingDirectoryText.setText(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "")); //$NON-NLS-1$
+			this.workingDirectoryText.setText(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject()))); //$NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
