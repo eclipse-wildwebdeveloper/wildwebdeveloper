@@ -37,6 +37,7 @@ import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate;
 
 import com.google.gson.JsonObject;
 

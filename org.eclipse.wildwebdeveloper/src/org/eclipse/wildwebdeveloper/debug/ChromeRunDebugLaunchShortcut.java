@@ -35,6 +35,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate;
 
 public class ChromeRunDebugLaunchShortcut implements ILaunchShortcut2 {
 

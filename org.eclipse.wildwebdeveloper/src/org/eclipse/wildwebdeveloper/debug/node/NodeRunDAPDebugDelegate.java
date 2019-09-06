@@ -42,10 +42,10 @@ import com.google.gson.JsonObject;
 
 public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"; //$NON-NLS-1$
+	public static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"; //$NON-NLS-1$
 
 	// see https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/nodeDebug.ts LaunchRequestArguments
-	static final String PROGRAM = "program"; //$NON-NLS-1$
+	public static final String PROGRAM = "program"; //$NON-NLS-1$
 	public static final String ARGUMENTS = "args"; //$NON-NLS-1$
 	private static final String CWD = "cwd"; //$NON-NLS-1$
 	private static final String ENV = "env"; //$NON-NLS-1$
