@@ -4,7 +4,7 @@ Simple and rich **edition** of typical main web and configuration files (HTML, C
 
 To see it in action, open the desired file with the Generic Editor that's included by default in the Eclipse IDE.
 
-Supported file formats for edition:
+Rich edition for:
 
 * HTML
 * CSS, SCSS, SASS, LESS
@@ -14,7 +14,7 @@ Supported file formats for edition:
 * YAML (including schema support, Kubernetes schema built-in)
 * XML (including schema support), XSL, XSD, DTD
 
-Supported frameworks (file specialization) for edition:
+and
 
 * Kubernetes
 * Angular (Components in TypeScript files)
@@ -32,13 +32,14 @@ Supported feature for edition are
 * Color preview
 * ... and other features part of the Language Server Protocol
 
-Supported debugging targets
+Supported 🦟🔫 debugging targets
 
 * Node.js
+* 🔥🦊 Firefox
 
 ![screenshot](documentation-files/wildwebdeveloper-screenshot.png "Wild Web Developer screenshot")
 
-## ⬇️ Get it Now!
+## 📥 Get it Now!
 
 Install into Eclipse IDE (pick one way or another):
 * With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-web-development-eclipse-ide-experimental, choose one of:
