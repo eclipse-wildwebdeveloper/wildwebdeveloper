@@ -11,7 +11,7 @@
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *   Pierre-Yves B. - Issue #180 Wrong path to nodeDebug.js
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import java.io.File;
 import java.io.IOException;

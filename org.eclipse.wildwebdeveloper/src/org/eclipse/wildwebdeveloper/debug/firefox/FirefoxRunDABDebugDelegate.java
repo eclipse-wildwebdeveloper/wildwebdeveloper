@@ -35,6 +35,7 @@ import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
 
 public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
 
@@ -61,18 +62,17 @@ public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
 		// user settings
-		String fileToDebug = configuration.getAttribute(FILE, "").trim(); //$NON-NLS-1$
 		Map<String, Object> param = new HashMap<>(); 
 		param.put(REQUEST, "launch"); //$NON-NLS-1$
+		// TODO: Let user set location of firefox executable 
 		param.put(FIREFOX_EXECUTABLE, findFirefoxLocation()); //$NON-NLS-1$
-		//param.put(PROFILE_DIR, "/home/aobuchow/.mozilla/firefox/guoqedcl.default"); //$NON-NLS-1$
-		param.put(FILE, fileToDebug); //$NON-NLS-1$
+		param.put(FILE, configuration.getAttribute(AbstractDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$); //$NON-NLS-1$
 		param.put(PREFERENCES, "{}"); //$NON-NLS-1$
 		param.put(TMP_DIRS, System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		param.put(TYPE, "firefox"); //$NON-NLS-1$
 		param.put(DETACHED, Boolean.FALSE);
 		if (configuration.getAttribute(RELOAD_ON_CHANGE, false)) {
-			String workspaceDir = configuration.getAttribute(WORKING_DIRECTORY, ""); 
+			String workspaceDir = configuration.getAttribute(AbstractDebugDelegate.CWD, ""); 
 			param.put(RELOAD_ON_CHANGE, workspaceDir);
 		}
 
