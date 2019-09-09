@@ -10,7 +10,7 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug.firefox;
+package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
@@ -19,6 +19,7 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -26,7 +27,6 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,17 +41,22 @@ import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 
-public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
+public class RunHTMLDebugTab extends AbstractLaunchConfigurationTab {
 
 	private Text programPathText;
 	private Text argumentsText;
 	private Text workingDirectoryText;
-	private Button reloadOnChange;
-	private final AbstractDebugAdapterLaunchShortcut shortcut = new FirefoxRunDebugLaunchShortcut(); // contains many utilities
+	private Button verboseConsoleOutput;
+	Composite resComposite;
+	private final AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut(); // contains many
+																									// utilities
+
+	public RunHTMLDebugTab() {
+	}
 
 	@Override
 	public void createControl(Composite parent) {
-		Composite resComposite = new Composite(parent, SWT.NONE);
+		resComposite = new Composite(parent, SWT.NONE);
 		resComposite.setLayout(new GridLayout(3, false));
 		new Label(resComposite, SWT.NONE).setText(Messages.FirefoxDebugTab_File);
 		this.programPathText = new Text(resComposite, SWT.BORDER);
@@ -73,8 +78,7 @@ public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
-			}
-			else if (!file.canRead()) {
+			} else if (!file.canRead()) {
 				String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
@@ -85,27 +89,19 @@ public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 			}
 			updateLaunchConfigurationDialog();
 		});
-		Button filePath = new Button( resComposite, SWT.PUSH);
+		Button filePath = new Button(resComposite, SWT.PUSH);
 		filePath.setText("Browse...");
-		filePath.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog filePathDialog = new FileDialog(resComposite.getShell());
-				filePathDialog.setFilterPath(workingDirectoryText.getText());
-				filePathDialog.setText("Select a .html file to debug");
-				String path = filePathDialog.open();
-				if (path != null) {
-					programPathText.setText(path);
-					setDirty(true);
-					updateLaunchConfigurationDialog();
-				}
+		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
+			FileDialog filePathDialog = new FileDialog(resComposite.getShell());
+			filePathDialog.setFilterPath(workingDirectoryText.getText());
+			filePathDialog.setText("Select a .html file to debug");
+			String path = filePathDialog.open();
+			if (path != null) {
+				programPathText.setText(path);
+				setDirty(true);
+				updateLaunchConfigurationDialog();
 			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				this.widgetSelected(e);
-			}
-		});
+		}));
 
 		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_argument);
 		this.argumentsText = new Text(resComposite, SWT.BORDER);
@@ -123,59 +119,37 @@ public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 			setDirty(true);
 			updateLaunchConfigurationDialog();
 		});
-		Button workingDirectoryButton = new Button( resComposite, SWT.PUSH);
+		Button workingDirectoryButton = new Button(resComposite, SWT.PUSH);
 		workingDirectoryButton.setText("Browse...");
-		workingDirectoryButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog workingDirectoryDialog = new DirectoryDialog(resComposite.getShell());
-				workingDirectoryDialog.setFilterPath(workingDirectoryText.getText());
-				workingDirectoryDialog.setText("Select folder to watch for changes");
-				String path = workingDirectoryDialog.open();
-				if (path != null) {
-					workingDirectoryText.setText(path);
-					setDirty(true);
-					updateLaunchConfigurationDialog();
-				}
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				this.widgetSelected(e);
-				
-			}
-		});
-		
-		reloadOnChange = new Button(resComposite, SWT.CHECK);
-		reloadOnChange.setText("Reload on change");
-		reloadOnChange.addSelectionListener(new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+		workingDirectoryButton.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
+			DirectoryDialog workingDirectoryDialog = new DirectoryDialog(resComposite.getShell());
+			workingDirectoryDialog.setFilterPath(workingDirectoryText.getText());
+			workingDirectoryDialog.setText("Select folder to watch for changes");
+			String path = workingDirectoryDialog.open();
+			if (path != null) {
+				workingDirectoryText.setText(path);
 				setDirty(true);
 				updateLaunchConfigurationDialog();
 			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				this.widgetSelected(e);
-			}
-		});
+		}));
+
 		setControl(resComposite);
 	}
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		// Nothing to do
-		}
+	}
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
 			String defaultSelectedFile = pathOrEmpty(getSelectedFile(shortcut::canLaunch));
-			this.programPathText.setText(configuration.getAttribute(AbstractDebugDelegate.PROGRAM, defaultSelectedFile)); // $NON-NLS-1$
+			this.programPathText
+					.setText(configuration.getAttribute(AbstractDebugDelegate.PROGRAM, defaultSelectedFile)); // $NON-NLS-1$
 			this.argumentsText.setText(configuration.getAttribute(AbstractDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
-			this.workingDirectoryText.setText(configuration.getAttribute(AbstractDebugDelegate.CWD, pathOrEmpty(getSelectedProject()))); //$NON-NLS-1$
+			this.workingDirectoryText.setText(
+					configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject()))); // $NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -185,8 +159,8 @@ public class RunFirefoxDebugTab extends AbstractLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(AbstractDebugDelegate.PROGRAM, this.programPathText.getText());
 		configuration.setAttribute(AbstractDebugDelegate.ARGUMENTS, this.argumentsText.getText());
-		configuration.setAttribute(AbstractDebugDelegate.CWD, this.workingDirectoryText.getText());
-		configuration.setAttribute(FirefoxRunDABDebugDelegate.RELOAD_ON_CHANGE, reloadOnChange.getSelection());
+		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, this.workingDirectoryText.getText());
+	
 	}
 
 	@Override

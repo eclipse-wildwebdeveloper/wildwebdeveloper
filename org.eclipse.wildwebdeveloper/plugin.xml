@@ -499,7 +499,7 @@
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.debug.ChromeRunDAPDebugDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"
             modes="debug"
             name="Chrome Debug"
@@ -508,7 +508,7 @@
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.debug.ChromeAttachDebugDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.chrome.ChromeAttachDebugDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug"
             modes="debug"
             name="Running Chrome Debug Instance"
@@ -573,7 +573,7 @@
          </contextualLaunch>
       </shortcut>
       <shortcut
-            class="org.eclipse.wildwebdeveloper.debug.ChromeRunDebugLaunchShortcut"
+            class="org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugLaunchShortcut"
             icon="icons/ChromeIcon.png"
             id="org.eclipse.wildwebdeveloper.chromeRunShortcut"
             label="Chrome Debug "
@@ -680,12 +680,12 @@
             type="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.ChromeRunDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.ChromeRunDebugTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.debug.ChromeAttachDebugTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.chrome.ChromeAttachDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.ChromeAttachDebugTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug">
       </launchConfigurationTabGroup>
