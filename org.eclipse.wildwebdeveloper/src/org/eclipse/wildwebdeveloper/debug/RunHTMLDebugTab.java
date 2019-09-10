@@ -10,7 +10,7 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug.chrome;
+package org.eclipse.wildwebdeveloper.debug;
 
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
@@ -19,7 +19,6 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -37,9 +36,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
-import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
-import org.eclipse.wildwebdeveloper.debug.Messages;
+import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugLaunchShortcut;
 
 public class RunHTMLDebugTab extends AbstractLaunchConfigurationTab {
 
@@ -47,8 +44,8 @@ public class RunHTMLDebugTab extends AbstractLaunchConfigurationTab {
 	private Text argumentsText;
 	private Text workingDirectoryText;
 	private Button verboseConsoleOutput;
-	Composite resComposite;
-	private final AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut(); // contains many
+	protected Composite resComposite;
+	protected AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut(); // contains many
 																									// utilities
 
 	public RunHTMLDebugTab() {
@@ -149,7 +146,7 @@ public class RunHTMLDebugTab extends AbstractLaunchConfigurationTab {
 					.setText(configuration.getAttribute(AbstractDebugDelegate.PROGRAM, defaultSelectedFile)); // $NON-NLS-1$
 			this.argumentsText.setText(configuration.getAttribute(AbstractDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
 			this.workingDirectoryText.setText(
-					configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject()))); // $NON-NLS-1$
+					configuration.getAttribute(AbstractDebugDelegate.CWD, pathOrEmpty(getSelectedProject()))); // $NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -159,7 +156,7 @@ public class RunHTMLDebugTab extends AbstractLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(AbstractDebugDelegate.PROGRAM, this.programPathText.getText());
 		configuration.setAttribute(AbstractDebugDelegate.ARGUMENTS, this.argumentsText.getText());
-		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, this.workingDirectoryText.getText());
+		configuration.setAttribute(AbstractDebugDelegate.CWD, this.workingDirectoryText.getText());
 	
 	}
 

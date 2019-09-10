@@ -17,9 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -30,14 +28,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.lsp4e.debug.DSPPlugin;
-import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
 
-public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
+public class FirefoxRunDABDebugDelegate extends AbstractDebugDelegate {
 
 	static final String ID = "org.eclipse.wildwebdeveloper.runFirefoxDebug"; //$NON-NLS-1$
 
@@ -47,16 +43,10 @@ public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
 	static final String PREFERENCES = "preferences"; //$NON-NLS-1$
 	static final String TMP_DIRS = "tmpdirs"; //$NON-NLS-1$
 	static final String TYPE = "type"; //$NON-NLS-1$
-	static final String DETACHED = "detached"; //$NON-NLS-1$
 	static final String FIREFOX_EXECUTABLE = "firefoxExecutable"; //$NON-NLS-1$
 	static final String PROFILE_DIR = "profileDir"; //$NON-NLS-1$
-	static final String CONFIGURATION = "configuration"; //$NON-NLS-1$
 	static final String RELOAD_ON_CHANGE = "reloadOnChange"; //$NON-NLS-1$
-	static final String ARGUMENTS = "args"; //$NON-NLS-1$
 	static final String FILE = "file"; //$NON-NLS-1$
-
-
-	public static final String WORKING_DIRECTORY = "";
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -65,45 +55,38 @@ public class FirefoxRunDABDebugDelegate extends DSPLaunchDelegate {
 		Map<String, Object> param = new HashMap<>(); 
 		param.put(REQUEST, "launch"); //$NON-NLS-1$
 		// TODO: Let user set location of firefox executable 
-		param.put(FIREFOX_EXECUTABLE, findFirefoxLocation()); //$NON-NLS-1$
+		param.put(FIREFOX_EXECUTABLE, findFirefoxLocation());
 		param.put(FILE, configuration.getAttribute(AbstractDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$); //$NON-NLS-1$
 		param.put(PREFERENCES, "{}"); //$NON-NLS-1$
 		param.put(TMP_DIRS, System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		param.put(TYPE, "firefox"); //$NON-NLS-1$
-		param.put(DETACHED, Boolean.FALSE);
 		if (configuration.getAttribute(RELOAD_ON_CHANGE, false)) {
 			String workspaceDir = configuration.getAttribute(AbstractDebugDelegate.CWD, ""); 
 			param.put(RELOAD_ON_CHANGE, workspaceDir);
 		}
 
+		File debugAdapter = findDebugAdapter();
+		super.launchWithParameters(configuration, mode, launch, monitor, param, debugAdapter);
+	}
+
+	static File findDebugAdapter() {
+		URL fileURL;
 		try {
-			List<String> debugCmdArgs = Collections.singletonList(findDebugAdapter().getAbsolutePath());
-
-			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
-					monitor);
-			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
-			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
-			builder.setDspParameters(param);
-
-			super.launch(builder);
+			fileURL = FileLocator.toFileURL(
+					FirefoxRunDABDebugDelegate.class.getResource("/language-servers/node_modules/firefox-debugadapter/adapter.bundle.js"));
+			return new File(fileURL.toURI());
 		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
 			Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-
 					ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
 			}
 			});
-
 		}
-	}
-
-	static File findDebugAdapter() throws IOException, URISyntaxException {
-		URL fileURL = FileLocator.toFileURL(
-				FirefoxRunDABDebugDelegate.class.getResource("/language-servers/node_modules/firefox-debugadapter/adapter.bundle.js"));
-		return new File(fileURL.toURI());
+		return null;
+		
 	}
 
 	private static String findFirefoxLocation() {

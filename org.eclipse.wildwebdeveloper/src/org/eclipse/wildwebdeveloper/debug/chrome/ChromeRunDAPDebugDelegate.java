@@ -15,11 +15,11 @@ package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -30,8 +30,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.lsp4e.debug.DSPPlugin;
-import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
@@ -39,8 +37,8 @@ import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
 
 import com.google.gson.JsonObject;
 
-public class ChromeRunDAPDebugDelegate extends DSPLaunchDelegate {
-
+public class ChromeRunDAPDebugDelegate extends AbstractDebugDelegate {
+	
 	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"; //$NON-NLS-1$
 
 	// see
@@ -57,7 +55,7 @@ public class ChromeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		Map<String, Object> param = new HashMap<>();
 		
 		// File to debug 
-		param.put("file", configuration.getAttribute(AbstractDebugDelegate.PROGRAM, "no program path defined"));
+		param.put("file", configuration.getAttribute(AbstractDebugDelegate.PROGRAM, "no program path defined")); //$NON-NLS-1$
 		// Chrome executable arguments
 		String argsString = configuration.getAttribute(AbstractDebugDelegate.ARGUMENTS, "").trim(); //$NON-NLS-1$
 		if (!argsString.isEmpty()) {
@@ -87,32 +85,35 @@ public class ChromeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		// is released in VSCode
 		param.put(AbstractDebugDelegate.SOURCE_MAPS, false);
 		
-		// TODO: Let user point to the location of their chrome executable
+		// TODO: Let user point to the location of their Chrome executable
 		param.put(RUNTIME_EXECUTABLE, findChromeLocation());
 		
 		if (configuration.getAttribute(VERBOSE, false)) {
 			param.put(TRACE, VERBOSE);
 		}
 
+		super.launchWithParameters(configuration, mode, launch, monitor, param, findDebugAdapter());
+	}
+	
+	static File findDebugAdapter() {
+		URL fileURL;
 		try {
-			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/language-servers/chrome-debug-adapter/package/out/src/chromeDebug.js"));
-			// "/language-servers/node_modules/vscode-firefox-debug/out/adapter/firefoxDebugAdapter.js"
-			File file = new File(fileURL.getPath());
-			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
-
-			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
-					monitor);
-			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
-			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
-			builder.setDspParameters(param);
-
-			super.launch(builder);
-		} catch (IOException e) {
+			// TODO: Change location of Chrome Debug Adapter to node_modules folder
+			fileURL = FileLocator.toFileURL(
+					ChromeRunDAPDebugDelegate.class.getResource("/language-servers/chrome-debug-adapter/package/out/src/chromeDebug.js"));
+			return new File(fileURL.toURI());
+		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
+			Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+					ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
+			}
+			});
 		}
+		return null;
+		
 	}
 
 	private String findChromeLocation() {
