@@ -13,32 +13,19 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.lsp4e.debug.DSPPlugin;
-import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
-public class ChromeAttachDebugDelegate extends DSPLaunchDelegate {
-
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeAttach"; //$NON-NLS-1$
+public class ChromeAttachDebugDelegate extends AbstractDebugDelegate {
+	
+	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"; //$NON-NLS-1$
 
 	// see https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/nodeDebug.ts LaunchRequestArguments
 	static final String ADDRESS = "address"; //$NON-NLS-1$
@@ -54,25 +41,8 @@ public class ChromeAttachDebugDelegate extends DSPLaunchDelegate {
 		param.put("webRoot", "/home/aobuchow/Documents/Firefox Debugger Testing");
 		param.put("url", "https://www.google.ca/");
 		param.put("runtimeExecutable", "/usr/bin/chromium-browser");
-		try {
-			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));
-			File file = new File("/home/aobuchow/.vscode/extensions/msjsdiag.debugger-for-chrome-4.11.7/out/src/chromeDebug.js");
-			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
-
-			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
-					monitor);
-			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
-			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
-			builder.setDspParameters(param);
-
-			super.launch(builder);
-		}
-			catch (IOException e) {
-			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-			//Activator.getDefault().getLog().log(errorStatus);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
-		}
+		
+		super.launchWithParameters(configuration, mode, launch, monitor, param, ChromeRunDAPDebugDelegate.findDebugAdapter());
 
 	}
 

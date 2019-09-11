@@ -19,6 +19,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
+import org.eclipse.wildwebdeveloper.debug.AbstractDebugDelegate;
 
 public class FirefoxRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
@@ -28,14 +29,14 @@ public class FirefoxRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchSho
 
 	@Override
 	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
-		wc.setAttribute(FirefoxRunDABDebugDelegate.FILE, file.getAbsolutePath());
-		wc.setAttribute(FirefoxRunDABDebugDelegate.WORKING_DIRECTORY, file.getParentFile().getAbsolutePath());
+		wc.setAttribute(AbstractDebugDelegate.PROGRAM, file.getAbsolutePath());
+		wc.setAttribute(AbstractDebugDelegate.CWD, file.getParentFile().getAbsolutePath());
 	}
 
 	@Override
 	public boolean match(ILaunchConfiguration launchConfig, File selectedFile) {
 		try {
-			return launchConfig.getAttribute(FirefoxRunDABDebugDelegate.FILE, "").equals(selectedFile.getAbsolutePath()); //$NON-NLS-1$
+			return launchConfig.getAttribute(AbstractDebugDelegate.PROGRAM, "").equals(selectedFile.getAbsolutePath()); //$NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 			return false;
