@@ -56,8 +56,8 @@ public class ChromeAttachDebugDelegate extends DSPLaunchDelegate {
 		param.put("runtimeExecutable", "/usr/bin/chromium-browser");
 		try {
 			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));
-			File file = new File("/home/aobuchow/.vscode/extensions/msjsdiag.debugger-for-chrome-4.11.7/out/src/chromeDebug.js");
+					getClass().getResource("/language-servers/node_modules/debugger-for-chrome/out/src/chromeDebug.js"));
+			File file = new File(fileURL.getPath());
 			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
 
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,

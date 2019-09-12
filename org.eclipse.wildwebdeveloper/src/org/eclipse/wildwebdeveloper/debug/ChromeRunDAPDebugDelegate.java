@@ -86,7 +86,7 @@ public class ChromeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 		try {
 			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/language-servers/chrome-debug-adapter/extension/out/src/chromeDebug.js"));
+					getClass().getResource("/language-servers/node_modules/debugger-for-chrome/out/src/chromeDebug.js"));
 			//"/language-servers/node_modules/vscode-firefox-debug/out/adapter/firefoxDebugAdapter.js"
 			File file = new File(fileURL.getPath());
 			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
