@@ -69,10 +69,10 @@
 					<goal>run</goal>
 				</goals>
 				<configuration>
-					<tasks>
+					<target>
 						<delete
-							file="${project.build.outputDirectory}/chrome-debug-adapter/extension/.gitignore" />
-					</tasks>
+							file="${project.build.directory}/chrome-debug-adapter/extension/.gitignore" />
+					</target>
 				</configuration>
 			</execution>
 		</executions>
