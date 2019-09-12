@@ -52,31 +52,21 @@ public class InitializeLaunchConfigurations {
 			res = "/path/to/node";
 		}
 
-		try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
-			res = reader.readLine();
-		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
-		}
-
 		// Try default install path as last resort
 		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
 			res = "/usr/local/bin/node";
 		}
+
 		if (res != null && Files.exists(Paths.get(res))) {
-			
-			
+
 			validateNodeVersion(res);
-			
-			
+
 			return res;
 		} else if (!alreadyWarned) {
 			warnNodeJSMissing();
 			alreadyWarned = true;
 		}
 		return null;
-		
 	}
 	
 	public static String which(String program) {
@@ -95,21 +85,6 @@ public class InitializeLaunchConfigurations {
 		return res;
 	}
 
-	public static String which(String progrgam) {
-		String res = null;
-		String[] command = new String[] { "/bin/bash", "-c", "which " + progrgam};
-		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			command = new String[] { "cmd", "/c", "where " + progrgam };
-		}
-		try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
-			res = reader.readLine();
-		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
-		}
-		return res;
-	}
 
 	private static void validateNodeVersion(String nodeJsLocation) {
 
