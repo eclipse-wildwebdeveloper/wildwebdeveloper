@@ -2,6 +2,14 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 0.6.0
+
+📅 Release Date: _not yet decided, probably between end of September and mid-October_
+
+##### Debug with Chrome
+🎥 coming soon
+ 
+
 ## 0.5.0 (2019 Sep 18th)
 
 ##### Added icons for supported file types
