@@ -590,6 +590,10 @@
                   <iterate>
                      <adapt
                            type="org.eclipse.core.resources.IResource">
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.wildwebdeveloper.isHTMLLaunchable">
+                        </test>
                      </adapt>
                   </iterate>
                </with>
