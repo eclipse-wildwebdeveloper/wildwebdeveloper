@@ -1,6 +1,6 @@
 # Eclipse Wild Web Developer : 🌐 Web dev in Eclipse IDE 🌘
 
-Simple and rich 🖊️ **edition** of HTML, CSS, JavaScript, TypeScrit, JSON+schema, XML+schema, YAML+schema+Kubernetes and 🦟🔫 **debugging** of Node.js and HTML+JS web-apps in the Eclipse IDE.
+🖊️ **Edit** of HTML, CSS, JavaScript, TypeScript, JSON+schema, XML+schema, YAML+schema+Kubernetes and 🦟🔫 **debug** Node.js and HTML+JS web-apps simply and efficiently in the 🌘 Eclipse IDE.
 
 To see it in action, open the desired file with the Generic Editor that's included by default in the Eclipse IDE.
 
