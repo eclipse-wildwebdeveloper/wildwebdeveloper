@@ -26,7 +26,7 @@ public class IsLaunchableHTMLTester extends PropertyTester {
 			if (resource == null) {
 				return false;
 			}
-			return new FirefoxRunDebugLaunchShortcut().canLaunch(resource.getLocation().toFile());
+			return new FirefoxRunDebugLaunchShortcut().canLaunchResource(resource);
 		}
 		return false;
 	}

@@ -22,6 +22,7 @@ import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 
 public class ChromeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
+	
 	public ChromeRunDebugLaunchShortcut() {
 		super(ChromeRunDAPDebugDelegate.ID, "org.eclipse.wildwebdeveloper.html");
 	}

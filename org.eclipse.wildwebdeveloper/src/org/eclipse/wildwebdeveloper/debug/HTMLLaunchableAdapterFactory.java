@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.debug.ui.actions.ILaunchable;
 import org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDebugLaunchShortcut;
 
-// Based off of https://github.com/eclipse/aCute/blob/master/org.eclipse.acute/src/org/eclipse/acute/IsLaunchableHTMLTester.java
+// Based off of https://github.com/eclipse/aCute/blob/master/org.eclipse.acute/src/org/eclipse/acute/Tester.java
 
 public class HTMLLaunchableAdapterFactory implements IAdapterFactory {
 
@@ -33,8 +33,6 @@ public class HTMLLaunchableAdapterFactory implements IAdapterFactory {
 			IResource resource = Adapters.adapt(adaptableObject, IResource.class);
 			if  (new FirefoxRunDebugLaunchShortcut().canLaunch(resource.getLocation().toFile())) {
 				return adapterType.cast(DUMMY);
-			
-			
 		}
 
 		return null;
