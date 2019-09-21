@@ -66,7 +66,6 @@ public class SelectionUtils {
 		}
 		IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if (editor != null) {
-			IEditorInput input = editor.getEditorInput();
 			File file = getFile(editor.getEditorInput(), condition);
 			if (file != null) {
 				return file;
