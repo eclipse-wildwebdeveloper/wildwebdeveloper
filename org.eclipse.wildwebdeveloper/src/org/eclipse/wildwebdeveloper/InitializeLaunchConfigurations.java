@@ -11,6 +11,7 @@
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *   Gautier de Saint Martin Lacaze - Issue #55 Warn missing or incompatible node.js
  *   Pierre-Yves B. - Issue #196 NullPointerException when validating Node.js version
+ *   Pierre-Yves B. - Issue #238 Why does wildweb do "/bin/bash -c which node" ?
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper;
 
@@ -69,11 +70,11 @@ public class InitializeLaunchConfigurations {
 		return null;
 	}
 
-	public static String which(String progrgam) {
+	public static String which(String program) {
 		String res = null;
-		String[] command = new String[] { "/bin/bash", "-c", "which " + progrgam};
+		String[] command = new String[] { "/bin/bash", "-c", "-l", "which " + program};
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			command = new String[] { "cmd", "/c", "where " + progrgam };
+			command = new String[] { "cmd", "/c", "where " + program };
 		}
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
