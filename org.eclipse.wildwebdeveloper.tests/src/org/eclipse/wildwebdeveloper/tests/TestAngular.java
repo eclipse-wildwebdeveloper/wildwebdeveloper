@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
+ *   Pierre-Yves B. - Issue #238 Why does wildweb do "/bin/bash -c which node" ?
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
@@ -83,7 +84,7 @@ public class TestAngular {
 
 	public static String getNpmLocation() {
 		String res = "/path/to/npm";
-		String[] command = new String[] { "/bin/bash", "-c", "which npm" };
+		String[] command = new String[] { "/bin/bash", "-c", "-l", "which npm" };
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 			command = new String[] { "cmd", "/c", "where npm" };
 		}
