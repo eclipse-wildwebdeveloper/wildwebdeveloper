@@ -12,6 +12,7 @@
  *   Gautier de Saint Martin Lacaze - Issue #55 Warn missing or incompatible node.js
  *   Pierre-Yves B. - Issue #196 NullPointerException when validating Node.js version
  *   Pierre-Yves B. - Issue #238 Why does wildweb do "/bin/bash -c which node" ?
+ *   Pierre-Yves B. - Issue #268 Incorrect default Node.js location for macOS
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper;
 
@@ -50,15 +51,10 @@ public class InitializeLaunchConfigurations {
 
 		String res = which("node");
 		if (res == null) {
-			res = "/path/to/node";
+			res = getDefaultNodePath();
 		}
 
-		// Try default install path as last resort
-		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
-			res = "/usr/local/bin/node";
-		}
-
-		if (res != null && Files.exists(Paths.get(res))) {
+		if (Files.exists(Paths.get(res))) {
 
 			validateNodeVersion(res);
 
@@ -84,6 +80,17 @@ public class InitializeLaunchConfigurations {
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
 		return res;
+	}
+	
+	private static String getDefaultNodePath() {
+		switch (Platform.getOS()) {
+			case Platform.OS_MACOSX:
+				return "/usr/local/bin/node";
+			case Platform.OS_WIN32:
+				return "C:\\Program Files\\nodejs\\node.exe";
+			default:
+				return "/usr/bin/node";
+		}
 	}
 
 	private static void validateNodeVersion(String nodeJsLocation) {
