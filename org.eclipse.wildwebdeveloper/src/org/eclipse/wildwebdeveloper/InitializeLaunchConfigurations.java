@@ -89,7 +89,7 @@ public class InitializeLaunchConfigurations {
 			case Platform.OS_WIN32:
 				return "C:\\Program Files\\nodejs\\node.exe";
 			default:
-				return "/usr/bin/nodejs";
+				return "/usr/bin/node";
 		}
 	}
 
