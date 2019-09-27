@@ -2,15 +2,24 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+### Next release...
+
+
 ## 0.6.0
 
-📅 Release Date: _not yet decided, probably between end of September and mid-October_
+📅 Release Date: September 27th, 2019
 
 ##### Debug with Chrome
-🎥 coming soon
- 
+
+##### Improved Debug As > Firefox/Chrome shortcuts to run on folders when they have some .html file 
+
+Full list of changes: https://github.com/eclipse/wildwebdeveloper/compare/0.5.0...0.6.0
+
+See also https://projects.eclipse.org/projects/tools.wildwebdeveloper/releases/0.6.0
 
 ## 0.5.0 (2019 Sep 18th)
+
+📅 Release Date: September 18th, 2019
 
 ##### Added icons for supported file types
 ![icons](artwork/editorIcons.png)
