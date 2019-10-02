@@ -4,6 +4,17 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.7.0
+
+📅 Release Date: Mid-October, 2019
+
+##### Angular template edition assistance (in HTML and TypeScript)
+
+Wild Web Developer adopts new version of the ng-language-server, and includes support for rich edition
+assistance (validation, completion, go to definition...) for template strings in TypeScript files and
+template HTML files, among other Angular-specific features.
+
+▶️ TODO https://github.com/eclipse/wildwebdeveloper/issues/167
 
 ## 0.6.0
 
