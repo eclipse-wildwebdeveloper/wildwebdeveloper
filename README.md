@@ -4,12 +4,12 @@
 
 To see it in action, open the desired file with the Generic Editor that's included by default in the Eclipse IDE.
 
-Rich edition for:
+Rich 🖊️edition for:
 
 * HTML
 * CSS, SCSS, SASS, LESS
-* JavaScript (EcmaScript 2018 - 9th edition)
-* TypeScript 3.3
+* JavaScript / ECMAScript
+* TypeScript
 * JSON (including schema support)
 * YAML (including schema support, Kubernetes schema built-in)
 * XML (including schema support), XSL, XSD, DTD
@@ -17,10 +17,10 @@ Rich edition for:
 and
 
 * Kubernetes
-* Angular (Components in TypeScript files)
+* Angular (Components & Templates, in TypeScript and HTML files)
 * React (JSX, TSX, embedded HTML)
 
-Supported feature for edition are
+Supported features for edition are
 
 * Validation (diagnostics, markers)
 * Code Completion
@@ -36,6 +36,7 @@ Supported 🦟🔫 debugging targets
 
 * Node.js
 * 🔥🦊 Firefox
+* Chromium / Chrome
 
 ![screenshot](documentation-files/wildwebdeveloper-screenshot.png "Wild Web Developer screenshot")
 
@@ -51,6 +52,8 @@ In an Eclipse target platform definition:
 * Use http://download.eclipse.org/wildwebdeveloper/snapshots p2 repo
 
 ## 🎬 Media Library
+
+♨️ See [Release Notes](RELEASE_NOTES.md) for details about recent major improvement in the project.
 
 📰 [June 2019] [The Eclipse IDE for Web and JavaScript developers strikes back](https://www.eclipse.org/community/eclipse_newsletter/2019/june/eclipsetldr.php) on Eclipse Foundation newsletter.
 
@@ -69,7 +72,7 @@ In an Eclipse target platform definition:
 
 ## 💡 Design and Architecture
 
-Wild Web Developer is based on the Eclipse Generic Editor framework from [Eclipse Platform](https://projects.eclipse.org/projects/eclipse.platform), [Eclipse LSP4E](https://projects.eclipse.org/projects/technology.lsp4e) and [Eclipse TM4E](https://github.com/eclipse/tm4e) in order to provide editors based on TextMate grammars, Visual Studio Code HTML CSS & JSON Language Servers, Theia's [TypeScript and JavaScript language servers](https://github.com/theia-ide/typescript-language-server), Red Hat's [xml-languageserver](https://github.com/angelozerr/lsp4xml) and [yaml-language-server](https://github.com/redhat-developer/yaml-language-server/) from Red Hat; and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and Visual Studio Code Node Debug Adapter to provide debugging.
+Wild Web Developer is based on the Eclipse Generic Editor framework from [Eclipse Platform](https://projects.eclipse.org/projects/eclipse.platform), [Eclipse LSP4E](https://projects.eclipse.org/projects/technology.lsp4e) and [Eclipse TM4E](https://github.com/eclipse/tm4e) in order to provide editors based on TextMate grammars, Visual Studio Code HTML CSS & JSON Language Servers, Theia's [TypeScript and JavaScript language servers](https://github.com/theia-ide/typescript-language-server), Red Hat's [xml-languageserver](https://github.com/angelozerr/lsp4xml) and [yaml-language-server](https://github.com/redhat-developer/yaml-language-server/)...; and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and Visual Studio Code Node Debug Adapter... to provide debugging.
 
 ## ⌨️ Get involved
 
