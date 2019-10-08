@@ -70,9 +70,11 @@ spec:
 			}
 			steps {
 				sshagent ( ['project-storage.eclipse.org-bot-ssh']) {
-					sh 'ssh genie.wildwebdeveloper@build.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots'
-					sh 'ssh genie.wildwebdeveloper@build.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots'
-					sh 'scp -r repository/target/repository/* genie.wildwebdeveloper@build.eclipse.org:/home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots'
+					sh '''
+						ssh genie.wildwebdeveloper@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots
+						ssh genie.wildwebdeveloper@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots
+						scp -r repository/target/repository/* genie.wildwebdeveloper@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots
+					'''
 				}
 			}
 		}
