@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.wildwebdeveloper.Activator;
@@ -30,6 +31,10 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/ng-template-server/server.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
+			commands.add("--logFile");
+			commands.add(Platform.getLogFileLocation().removeLastSegments(1).append("angular-language-server-" + System.currentTimeMillis() + ".log").toFile().getAbsolutePath());
+			commands.add("--logVerbosity");
+			commands.add("terse");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
