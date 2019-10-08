@@ -69,7 +69,7 @@ spec:
 				branch 'master'
 			}
 			steps {
-				sshagent ( ['project-storage.eclipse.org-bot-ssh']) {
+				sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
 					sh '''
 						ssh genie.wildwebdeveloper@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots
 						ssh genie.wildwebdeveloper@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/wildwebdeveloper/snapshots
