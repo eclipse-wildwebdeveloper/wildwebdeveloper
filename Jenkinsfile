@@ -16,6 +16,13 @@ spec:
     image: mickaelistria/fedora-gtk3-mutter-java-node@sha256:5362b90f4b41ec8391441c17e74aeb9a02ac5a04a5ff4a3030f77fdb627b9f24
     tty: true
     command: [ "uid_entrypoint", "cat" ]
+    resources:
+      limits:
+        memory: "4Gi"
+        cpu: "2000m"
+      requests:
+        memory: "4Gi"
+        cpu: "1000m"
   - name: jnlp
     image: 'eclipsecbi/jenkins-jnlp-agent'
     volumeMounts:
@@ -30,6 +37,7 @@ spec:
   }
 	environment {
 		NPM_CONFIG_USERCONFIG = "$WORKSPACE/.npmrc"
+		MAVEN_OPTS="-Xmx1024m"
 	}
 	stages {
 		stage('Prepare-environment') {
