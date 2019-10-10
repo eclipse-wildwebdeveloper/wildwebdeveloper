@@ -56,19 +56,6 @@
 							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
 						</configuration>
 					</execution>
-					<execution>
-						<id>fetch-angular-extensiok</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-							<url>https://github.com/angular/vscode-ng-language-service/releases/download/v0.900.0-next.0/ngls.vsix</url>
-							<unpack>true</unpack>
-							<outputFileName>ngls.zip</outputFileName>
-							<outputDirectory>${project.build.directory}/angular</outputDirectory>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -86,18 +73,6 @@
 								<delete
 									file="${project.build.directory}/chrome-debug-adapter/extension/.gitignore" />
 							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<id>add-version-to-angular-package.json</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<replace file="target/angular/extension/server/package.json" token='"private": true' value='"version": "0.9.0"'/>
-							</target> 
 						</configuration>
 					</execution>
 				</executions>
@@ -123,7 +98,6 @@
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
 								<arg>../target/chrome-debug-adapter/extension/</arg>
-								<arg>../target/angular/extension/server</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
@@ -152,7 +126,7 @@
 								<arg>firefox-debugadapter@2.0.1</arg>
 								<arg>debugger-for-chrome-4.11.7.tgz</arg>
 								<arg>@angular/language-service@9.0.0-next.8</arg>
-								<arg>./ng-template-server-0.9.0.tgz</arg>
+								<arg>@angular/language-server@0.900.0-next.1</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>

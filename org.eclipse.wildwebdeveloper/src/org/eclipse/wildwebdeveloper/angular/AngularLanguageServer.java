@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.angular;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,8 +29,13 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/ng-template-server/server.js"));
+			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/@angular/language-server/index.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
+			File nodeModules = new File(url.getPath()).getParentFile().getParentFile().getParentFile();
+			commands.add("--ngProbeLocations");
+			commands.add(new File(nodeModules, "@angular/language-service").getAbsolutePath());
+			commands.add("--tsProbeLocations");
+			commands.add(new File(nodeModules, "typescript").getAbsolutePath());
 			commands.add("--stdio");
 			commands.add("--logFile");
 			commands.add(Platform.getLogFileLocation().removeLastSegments(1).append("angular-language-server-" + System.currentTimeMillis() + ".log").toFile().getAbsolutePath());

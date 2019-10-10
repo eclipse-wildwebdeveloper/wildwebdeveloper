@@ -88,7 +88,7 @@ public class TestAngular {
 					return false;
 				}
 			}
-		}.waitForCondition(editor.getSite().getShell().getDisplay(), 3000));
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
 	}
 
 	public static String getNpmLocation() {
