@@ -55,6 +55,8 @@ In an Eclipse target platform definition:
 
 ♨️ See [Release Notes](RELEASE_NOTES.md) for details about recent major improvement in the project.
 
+▶️ [October 2019] Demo debugging JavaScript in HTML with Chrome https://youtu.be/6L071ZtnUOk
+
 ▶️ [October 2019] Demo Angular template edition assistance https://www.screencast.com/t/6GTi4jf6svR
 
 ▶️ [September 2019] Demo debugging JavaScript in HTML with Firefox https://www.youtube.com/watch?v=4Q_-CtvsEjY
