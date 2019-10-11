@@ -14,7 +14,7 @@ Wild Web Developer adopts new version of the ng-language-server, and includes su
 assistance (validation, completion, go to definition...) for template strings in TypeScript files and
 template HTML files, among other Angular-specific features.
 
-▶️ TODO https://github.com/eclipse/wildwebdeveloper/issues/167
+▶️ https://www.screencast.com/t/6GTi4jf6svR
 
 ## 0.6.0
 
