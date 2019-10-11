@@ -57,6 +57,8 @@ In an Eclipse target platform definition:
 
 ▶️ [October 2019] Demo Angular template edition assistance https://www.screencast.com/t/6GTi4jf6svR
 
+▶️ [September 2019] Demo debugging JavaScript in HTML with Firefox https://www.youtube.com/watch?v=4Q_-CtvsEjY
+
 📰 [June 2019] [The Eclipse IDE for Web and JavaScript developers strikes back](https://www.eclipse.org/community/eclipse_newsletter/2019/june/eclipsetldr.php) on Eclipse Foundation newsletter.
 
 ▶️ [Jun 2019] Demo of Terminal and Build integration for NPM: https://www.screencast.com/t/BbWiKutjYI95
