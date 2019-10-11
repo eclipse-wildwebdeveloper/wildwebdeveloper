@@ -32,10 +32,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -53,7 +55,7 @@ public class TestAngular {
 		IFolder appFolder = project.getFolder("src").getFolder("app");
 
 		IFile appComponentFile = appFolder.getFile("app.component.ts");
-		ITextEditor editor = (ITextEditor) IDE
+		TextEditor editor = (TextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
 		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
 		// make an edit
@@ -73,10 +75,11 @@ public class TestAngular {
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
 		editor.close(false);
 
-		editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appFolder.getFile("app.componentWithHtml.ts"));
+		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appFolder.getFile("app.componentWithHtml.ts"));
 		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
 		IFile appComponentHTML = appFolder.getFile("app.componentWithHtml.html");
-		editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentHTML);
+		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentHTML);
+		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		assertTrue("No error found on erroneous HTML component file", new DisplayHelper() {
 			@Override protected boolean condition() {
 				IMarker[] markers;
@@ -89,6 +92,11 @@ public class TestAngular {
 				}
 			}
 		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
+		// test completion
+		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
+		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor), document.get().indexOf("}}"));
+		proposals[0].apply(document);
+		assertEquals("Incorrect completion insertion", "<h1>{{title}}</h1>", document.get());
 	}
 
 	public static String getNpmLocation() {
