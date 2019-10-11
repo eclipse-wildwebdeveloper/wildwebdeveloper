@@ -55,6 +55,8 @@ In an Eclipse target platform definition:
 
 ♨️ See [Release Notes](RELEASE_NOTES.md) for details about recent major improvement in the project.
 
+▶️ [October 2019] Demo Angular template edition assistance https://www.screencast.com/t/6GTi4jf6svR
+
 📰 [June 2019] [The Eclipse IDE for Web and JavaScript developers strikes back](https://www.eclipse.org/community/eclipse_newsletter/2019/june/eclipsetldr.php) on Eclipse Foundation newsletter.
 
 ▶️ [Jun 2019] Demo of Terminal and Build integration for NPM: https://www.screencast.com/t/BbWiKutjYI95
