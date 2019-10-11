@@ -4,9 +4,14 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.8.0
+
+📅 Release Date: mid-November, 2019
+
+
 ## 0.7.0
 
-📅 Release Date: Mid-October, 2019
+📅 Release Date: October 11th, 2019
 
 ##### Angular template edition assistance (in HTML and TypeScript)
 
