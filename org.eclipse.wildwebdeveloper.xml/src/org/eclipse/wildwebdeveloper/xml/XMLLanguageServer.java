@@ -36,7 +36,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add("-classpath");
 		try {
 			URL url = FileLocator
-					.toFileURL(getClass().getResource("/language-servers/server/org.eclipse.lsp4xml-0.8.0-uber.jar"));
+					.toFileURL(getClass().getResource("/language-servers/server/org.eclipse.lsp4xml-0.9.1-uber.jar"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("org.eclipse.lsp4xml.XMLServerLauncher");
 			setCommands(commands);
