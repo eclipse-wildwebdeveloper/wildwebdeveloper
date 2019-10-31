@@ -14,6 +14,7 @@ package org.eclipse.wildwebdeveloper.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -26,6 +27,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 public class Utils {
 
@@ -59,6 +62,17 @@ public class Utils {
 			return project;
 		}
 		return null;
+	}
+
+	public static ISourceViewer getViewer(AbstractTextEditor editor) {
+		try {
+			Method method = AbstractTextEditor.class.getDeclaredMethod("getSourceViewer");
+			method.setAccessible(true);
+			return (ISourceViewer)method.invoke(editor);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
