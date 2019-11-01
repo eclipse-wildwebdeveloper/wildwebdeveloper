@@ -51,11 +51,12 @@ public class InitializeLaunchConfigurations {
 
 		String res = which("node");
 		if (res == null) {
-			res = getDefaultNodePath();
+			if (Files.exists(Paths.get(getDefaultNodePath()))) {
+				res = getDefaultNodePath();
+			}
 		}
 
-		if (Files.exists(Paths.get(res))) {
-
+		if (res != null) {
 			validateNodeVersion(res);
 
 			return res;
