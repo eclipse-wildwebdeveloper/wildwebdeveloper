@@ -27,6 +27,7 @@ public class Messages extends NLS {
 	public static String RunProgramTab_program;
 	public static String RunProgramTab_title;
 	public static String RunProgramTab_workingDirectory;
+	public static String firefoxAttachNote;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
