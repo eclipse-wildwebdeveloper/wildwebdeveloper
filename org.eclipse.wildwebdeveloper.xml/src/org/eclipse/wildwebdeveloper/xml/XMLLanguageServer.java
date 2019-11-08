@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2019 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Xi Yan (Red Hat Inc.) - initial implementation
+ *   Andrew Obuchowicz (Red Hat Inc.) - Add support for XML LS extension jars
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml;
 
@@ -32,12 +33,17 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
+		List<String> jarPaths = new ArrayList<>();
 		commands.add(computeJavaPath());
 		commands.add("-classpath");
 		try {
 			URL url = FileLocator
 					.toFileURL(getClass().getResource("/language-servers/server/org.eclipse.lsp4xml-0.9.1-uber.jar"));
-			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
+			List<String> extensionJarPaths = getExtensionJarPaths();
+			String uberJarPath = new java.io.File(url.getPath()).getAbsolutePath();
+			jarPaths.add(uberJarPath);
+			jarPaths.addAll(extensionJarPaths);
+			commands.add(String.join(System.getProperty("path.separator"), jarPaths));
 			commands.add("org.eclipse.lsp4xml.XMLServerLauncher");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
@@ -45,6 +51,18 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+	}
+
+	/**
+	 * Returns a list of XML extension jar paths (relative to the root of their
+	 * contributing plug-in)
+	 *
+	 * @return List of extension jar paths (relative to the root of their
+	 *         contributing plug-in)
+	 */
+	private List<String> getExtensionJarPaths() {
+		XMLExtensionRegistry extensionJarRegistry = new XMLExtensionRegistry();
+		return extensionJarRegistry.getXMLExtensionJars();
 	}
 
 	private String computeJavaPath() {
