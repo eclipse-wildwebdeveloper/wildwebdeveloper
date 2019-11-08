@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.wildwebdeveloper.xml" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.wildwebdeveloper.xml" id="xmllsExtension" name="%ExtPoint.xmllsExtension"/>
+      </appinfo>
+      <documentation>
+         This extension point is used to contribute LSP4XML extension jars to extend the functionality of the XML language server.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="jar" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="jar">
+      <complexType>
+         <attribute name="path" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.5.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         &lt;br&gt; &amp;lt;extension &lt;br&gt;
+        &lt;span style=&quot;margin-left:2em&quot;&gt; point=&amp;quot;org.eclipse.wildwebdeveloper.xml.XMLExtensions&amp;quot;&amp;gt;&lt;br&gt;
+     &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;jar&lt;br&gt;
+           &lt;span style=&quot;margin-left:3em&quot;&gt; path=&amp;quot;/path/to/extension.jar&amp;quot;&amp;gt;&lt;br&gt;
+    &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;/jar&amp;gt;&lt;br&gt;
+    &amp;lt;/extension&amp;gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         &lt;p&gt;The extension jars must implement the &lt;b&gt;IXMLExtension&lt;/b&gt; interface and must register with Java Service Provider Interface (SPI) mechanism in the &lt;b&gt;/META-INF/services/org.eclipse.lsp4xml.services.extensions.IXMLExtension&lt;/b&gt; file.
+&lt;/p&gt;
+&lt;p&gt;
+See https://github.com/redhat-developer/vscode-xml#custom-xml-extensions for more information.
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+
+
+</schema>
