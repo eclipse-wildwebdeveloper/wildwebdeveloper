@@ -39,7 +39,7 @@ public class SelectionUtils {
 
 	private static IFile getSelectedIFile() {
 		try {
-			ISelection selection = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+			ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 			if (selection instanceof IStructuredSelection) {
 				return Adapters.adapt(((IStructuredSelection)selection).getFirstElement(), IFile.class);
 			}
