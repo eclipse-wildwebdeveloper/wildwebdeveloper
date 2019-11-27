@@ -35,6 +35,7 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 	public void createControl(Composite parent) {
 		Composite resComposite = new Composite(parent, SWT.NONE);
 		resComposite.setLayout(new GridLayout(2, false));
+		resComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		new Label(resComposite, SWT.NONE).setText(Messages.AttachTab_address);
 		this.addressText = new Text(resComposite, SWT.BORDER);
 		this.addressText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));

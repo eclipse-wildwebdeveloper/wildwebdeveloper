@@ -4,10 +4,31 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.8.1
+
+📅 Release Date: Mid-December, 2019
+
 ## 0.8.0
 
-📅 Release Date: mid-November, 2019
+📅 Release Date: 19th November, 2019
 
+#### XML language server extension support
+
+XML-LS extension jars can now be integrated into Wild Web Developer through the xmllsExtension extension point, allowing additional functionality to be provided from the language server.
+
+The extension jars must implement the **IXMLExtension interface** and must register with Java Service Provider Interface (SPI) mechanism in the **/META-INF/services/org.eclipse.lsp4xml.services.extensions.IXMLExtension** file.
+To use the extension point, create an xmllsExtension extension in a plug-in project and set the path to the location of the extension jar (which must reside within the plug-in project).
+
+Usage example:
+
+```xml
+    <extension
+          point="org.eclipse.wildwebdeveloper.xml.xmllsExtension">
+       <jar
+             path="path/to/extension.jar">
+       </jar>
+    </extension>
+```
 
 ## 0.7.0
 
