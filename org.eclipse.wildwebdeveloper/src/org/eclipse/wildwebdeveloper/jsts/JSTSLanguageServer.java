@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
+ *   Andrew Obuchowicz (Red Hat Inc.) - Add ESLint support
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts;
 
@@ -36,12 +37,14 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/typescript-language-server/lib/cli.js"));
 			URL tsServer = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/typescript/lib/tsserver.js"));
+			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/language-servers/"));
 			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			commands.add("--tsserver-path");
 			commands.add(new File(tsServer.getPath()).getAbsolutePath());
 			setCommands(commands);
-			setWorkingDirectory(System.getProperty("user.dir"));
+			setWorkingDirectory(nodeDependencies.getPath()); //Required for typescript-eslint-language-service to find it's dependencies
+
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
@@ -55,6 +58,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 			plugins.add(new TypeScriptPlugin("@angular/language-service"));
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
+			plugins.add(new TypeScriptPlugin("typescript-eslint-language-service"));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));

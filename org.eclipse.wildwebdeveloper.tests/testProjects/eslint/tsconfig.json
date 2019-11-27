@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"module": "commonjs",
+		"target": "es5",
+		"plugins": [
+			{
+				"name": "typescript-eslint-language-service"
+			}
+		]
+	}
+}
