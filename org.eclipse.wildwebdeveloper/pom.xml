@@ -115,7 +115,7 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>./node-debug2-1.33.0.tgz</arg>
-								<arg>typescript@3.5.3</arg>
+								<arg>typescript@3.6.4</arg>
 								<arg>typescript-language-server@0.3.8</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@1.2.1</arg>
@@ -127,6 +127,10 @@
 								<arg>debugger-for-chrome-4.11.7.tgz</arg>
 								<arg>@angular/language-service@9.0.0-next.8</arg>
 								<arg>@angular/language-server@0.900.0-next.1</arg>
+								<arg>typescript-eslint-language-service@1.4.0</arg>
+								<arg>eslint@6.0.0</arg>
+								<arg>@typescript-eslint/eslint-plugin@2.7.0</arg>
+								<arg>@typescript-eslint/parser@2.7.0</arg>
 							</arguments>
 							<workingDirectory>language-servers/</workingDirectory>
 						</configuration>
