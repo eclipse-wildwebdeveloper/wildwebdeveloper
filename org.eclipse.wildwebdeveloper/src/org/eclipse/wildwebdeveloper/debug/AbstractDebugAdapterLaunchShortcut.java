@@ -6,12 +6,14 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Pierre-Yves B. - Issue #309 Launch called from the wrong thread
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -154,7 +156,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 
 	private void launch(String mode, ILaunchConfiguration[] configurations) {
 		if (configurations.length == 1) {
-			CompletableFuture.runAsync(() -> DebugUITools.launch(configurations[0], mode));
+			Display.getDefault().asyncExec(() -> DebugUITools.launch(configurations[0], mode));
 		} else if (configurations.length > 1) {
 			LaunchConfigurationSelectionDialog dialog = new LaunchConfigurationSelectionDialog(
 					Display.getDefault().getActiveShell(), configurations);
