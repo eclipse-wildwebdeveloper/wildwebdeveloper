@@ -7,6 +7,8 @@
       </appinfo>
       <documentation>
          This extension point is used to contribute LSP4XML extension jars to extend the functionality of the XML language server.
+
+Jars can be contributed as an extension resource (by pointing to the path of the jar) or programmatically, by providing an implementation of the &lt;b&gt;XMLLSClasspathExtensionProvider&lt;/b&gt; interface.
       </documentation>
    </annotation>
 
@@ -18,7 +20,8 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="jar" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="jar" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="classpathExtensionProvider" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -49,13 +52,28 @@
 
    <element name="jar">
       <complexType>
-         <attribute name="path" type="string" use="required">
+         <attribute name="path" type="string">
             <annotation>
                <documentation>
                   
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="classpathExtensionProvider">
+      <complexType>
+         <attribute name="provider" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.wildwebdeveloper.xml.XMLLSClasspathExtensionProvider"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -76,11 +94,22 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         &lt;br&gt; &amp;lt;extension &lt;br&gt;
-        &lt;span style=&quot;margin-left:2em&quot;&gt; point=&amp;quot;org.eclipse.wildwebdeveloper.xml.XMLExtensions&amp;quot;&amp;gt;&lt;br&gt;
+         &lt;br&gt;&lt;b&gt;&lt;u&gt;Providing a jar as a resource&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
+
+&lt;br&gt; &amp;lt;extension &lt;br&gt;
+        &lt;span style=&quot;margin-left:2em&quot;&gt;point=&amp;quot;org.eclipse.wildwebdeveloper.xml.xmllsExtension&amp;quot;&amp;gt;&lt;br&gt;
      &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;jar&lt;br&gt;
            &lt;span style=&quot;margin-left:3em&quot;&gt; path=&amp;quot;/path/to/extension.jar&amp;quot;&amp;gt;&lt;br&gt;
     &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;/jar&amp;gt;&lt;br&gt;
+    &amp;lt;/extension&amp;gt;
+&lt;br&gt;
+&lt;br&gt;    
+&lt;b&gt;&lt;u&gt;Providing a jar programmatically&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt; &amp;lt;extension &lt;br&gt;
+     &lt;span style=&quot;margin-left:2em&quot;&gt; point=&amp;quot;org.eclipse.wildwebdeveloper.xml.xmllsExtension&amp;quot;&amp;gt;&lt;br&gt;
+           &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;classpathExtensionProvider&lt;br&gt;
+                 &lt;span style=&quot;margin-left:3em&quot;&gt;provider=&amp;quot;org.eclipse.wildwebdeveloper.xml.XMLLSClasspathExtensionProvider&amp;quot;&amp;gt;&lt;br&gt;
+           &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;/classpathExtensionProvider&amp;gt;&lt;br&gt;
     &amp;lt;/extension&amp;gt;
       </documentation>
    </annotation>
@@ -95,9 +124,21 @@
 &lt;p&gt;
 See https://github.com/redhat-developer/vscode-xml#custom-xml-extensions for more information.
 &lt;/p&gt;
+
+&lt;p&gt;
+In order to provide jars to the XML LS programmatically, contributing extensions must implement the &lt;b&gt;XMLLSClasspathExtensionProvider&lt;/b&gt; interface.
+&lt;/p&gt;
       </documentation>
    </annotation>
 
 
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright (c) 2019 Red Hat Inc.
+      </documentation>
+   </annotation>
 
 </schema>
