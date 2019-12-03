@@ -67,9 +67,9 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		Map<String, String> res = new HashMap<>();
 		for (Entry<Object, Object> entry : System.getProperties().entrySet()) {
 			if (entry.getKey() instanceof String && entry.getValue() instanceof String) {
-				String property = (String)entry.getKey();
+				String property = (String) entry.getKey();
 				if (property.toLowerCase().contains("proxy") || property.toLowerCase().contains("proxies")) {
-					res.put(property, (String)entry.getValue());
+					res.put(property, (String) entry.getValue());
 				}
 			}
 		}
@@ -91,19 +91,26 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 				}
 			}
 		}
-		return res.entrySet().stream().map(entry -> "-D" + entry.getKey() + '=' + entry.getValue()).collect(Collectors.toSet());
+		return res.entrySet().stream().map(entry -> "-D" + entry.getKey() + '=' + entry.getValue())
+				.collect(Collectors.toSet());
 	}
 
 	/**
-	 * Returns a list of XML extension jar paths (relative to the root of their
-	 * contributing plug-in)
+	 * Returns a list of XML extension jar paths. If the jar is contributed as a
+	 * resource in the xmllsExtension extension point, it's path will be relative to
+	 * the root of the contributing plug-in. If the jar is contributed through a
+	 * class implementing XMLLSClasspathExtensionProvider, it's path will be
+	 * absolute.
 	 *
 	 * @return List of extension jar paths (relative to the root of their
-	 *         contributing plug-in)
+	 *         contributing plug-in, or absolute if provided by a class implementing
+	 *         XMLLSClasspathExtensionProvider)
 	 */
 	private List<String> getExtensionJarPaths() {
 		XMLExtensionRegistry extensionJarRegistry = new XMLExtensionRegistry();
-		return extensionJarRegistry.getXMLExtensionJars();
+		List<String> extensionJarPaths = extensionJarRegistry.getXMLExtensionJars();
+		extensionJarPaths.addAll(extensionJarRegistry.getXMLLSClassPathExtensions());
+		return extensionJarPaths;
 	}
 
 	private String computeJavaPath() {

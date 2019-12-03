@@ -13,10 +13,12 @@
 package org.eclipse.wildwebdeveloper.xml;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,9 +66,39 @@ public class XMLExtensionRegistry {
 								.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 						return null;
 					}
-				})
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
+				}).filter(Objects::nonNull).collect(Collectors.toList());
+	}
+
+	public List<String> getXMLLSClassPathExtensions() {
+		Map<IConfigurationElement, XMLLSClasspathExtensionProvider> extensionProviders = getRegisteredClassPathProviders();
+
+		List<String> classpathExtensions = new ArrayList<>();
+		extensionProviders.entrySet().stream()
+				.map(Entry<IConfigurationElement, XMLLSClasspathExtensionProvider>::getValue)
+				.map(XMLLSClasspathExtensionProvider::get)
+				.forEach(list -> list.forEach(jar -> classpathExtensions.add(jar.getAbsolutePath())));
+
+		return classpathExtensions;
+	}
+
+	private Map<IConfigurationElement, XMLLSClasspathExtensionProvider> getRegisteredClassPathProviders() {
+		Map<IConfigurationElement, XMLLSClasspathExtensionProvider> extensionProviders = new HashMap<>();
+		for (IConfigurationElement extension : Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(EXTENSION_POINT_ID)) {
+			try {
+				if (extension.getAttribute("provider") != null) {
+					final Object executableExtension = extension.createExecutableExtension("provider");
+					if (executableExtension instanceof XMLLSClasspathExtensionProvider) {
+						extensionProviders.put(extension, (XMLLSClasspathExtensionProvider) executableExtension);
+					}
+				}
+			} catch (Exception ex) {
+				Activator.getDefault().getLog()
+						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex));
+
+			}
+		}
+		return extensionProviders;
 	}
 
 	private void sync() {
@@ -76,7 +108,9 @@ public class XMLExtensionRegistry {
 			toRemoveExtensions.remove(extension);
 			if (!this.extensions.containsKey(extension)) {
 				try {
-					this.extensions.put(extension, extension.getAttribute("path"));
+					if (extension.getAttribute("path") != null) {
+						this.extensions.put(extension, extension.getAttribute("path"));
+					}
 				} catch (Exception ex) {
 					Activator.getDefault().getLog()
 							.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex));
