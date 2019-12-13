@@ -19,15 +19,24 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -35,6 +44,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		List<String> jarPaths = new ArrayList<>();
 		commands.add(computeJavaPath());
+		commands.addAll(getProxySettings());
 		commands.add("-classpath");
 		try {
 			URL url = FileLocator
@@ -51,6 +61,37 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+	}
+
+	private Collection<? extends String> getProxySettings() {
+		Map<String, String> res = new HashMap<>();
+		for (Entry<Object, Object> entry : System.getProperties().entrySet()) {
+			if (entry.getKey() instanceof String && entry.getValue() instanceof String) {
+				String property = (String)entry.getKey();
+				if (property.toLowerCase().contains("proxy") || property.toLowerCase().contains("proxies")) {
+					res.put(property, (String)entry.getValue());
+				}
+			}
+		}
+		BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
+		ServiceReference<IProxyService> serviceRef = bundleContext.getServiceReference(IProxyService.class);
+		if (serviceRef != null) {
+			IProxyService service = bundleContext.getService(serviceRef);
+			if (service != null) {
+				for (IProxyData data : service.getProxyData()) {
+					if (data.getHost() != null) {
+						res.put(data.getType().toLowerCase() + ".proxyHost", data.getHost());
+						res.put(data.getType().toLowerCase() + ".proxyPort", Integer.toString(data.getPort()));
+					}
+				}
+				String nonProxiedHosts = String.join("|", service.getNonProxiedHosts());
+				if (!nonProxiedHosts.isEmpty()) {
+					res.put("http.nonProxyHosts", nonProxiedHosts);
+					res.put("https.nonProxyHosts", nonProxiedHosts);
+				}
+			}
+		}
+		return res.entrySet().stream().map(entry -> "-D" + entry.getKey() + '=' + entry.getValue()).collect(Collectors.toSet());
 	}
 
 	/**
