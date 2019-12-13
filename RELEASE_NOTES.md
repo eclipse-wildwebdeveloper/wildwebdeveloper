@@ -6,7 +6,11 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 0.8.1
 
-📅 Release Date: Mid-December, 2019
+📅 Release Date: Mid-January, 2020
+
+#### Proxy honored for XML resolution
+
+The proxy settings are now used by the XML edition assistance (eg to resolve XSD elements). The network settings of Eclipse IDE are used, and if the network settings are blank, the related System Properties of the running/host Eclipse process itself are forwarded to XML resolution. _This fixes issue #192._  
 
 ## 0.8.0
 
