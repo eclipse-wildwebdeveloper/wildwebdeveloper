@@ -459,6 +459,17 @@
             id="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
             name="YAML Schemas">
       </page>
+      <page
+            class="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
+            id="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
+            name="JSON">
+      </page>
+      <page
+            category="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
+            class="org.eclipse.wildwebdeveloper.json.JSONSchemaPreferencePage"
+            id="org.eclipse.wildwebdeveloper.json.JSONSchemaPreferencePage"
+            name="JSON Schemas">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -723,6 +734,14 @@
             contentMergeViewerId="org.eclipse.ui.genericeditor.compareViewer"
             contentTypeId="org.eclipse.wildwebdeveloper.parent">
       </contentTypeBinding>
+   </extension>
+   <extension
+         id="JSONPreferenceInitializer"
+         name="JSONPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.json.JSONPreferenceInitializer">
+      </initializer>
    </extension>
 
 </plugin>

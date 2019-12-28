@@ -22,16 +22,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -59,51 +63,26 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 				// Send json/schemaAssociations notification to register JSON Schema on JSON
 				// Language server side.
 				JSonLanguageServerInterface server = (JSonLanguageServerInterface) languageServer;
-				Map<String, List<String>> schemaAssociations = getSchemaAssociations();
-				server.sendJSonchemaAssociations(schemaAssociations);
+				server.sendJSonchemaAssociations(getSchemaAssociations());
 			}
 		}
 	}
 
+	/**
+	 * Returns JSON Schema associations, which are defined in the JSON preference
+	 * page
+	 * 
+	 * @return associations
+	 */
 	private Map<String, List<String>> getSchemaAssociations() {
-		// TODO: provide eclipse extension point to defines JSON Schema associations.
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String schemaString = preferenceStore.getString(JSONPreferenceInitializer.JSON_SCHEMA_PREFERENCE);
+
+		Map<String, String> conversion = new Gson().fromJson(schemaString, new TypeToken<HashMap<String, String>>(){}.getType());
+
 		Map<String, List<String>> associations = new HashMap<>();
-		fillSchemaAssociationsForJavascript(associations);
-		fillSchemaAssociationsForTypeScript(associations);
-		fillSchemaAssociationsForOmnisharp(associations);
+		conversion.forEach((key, value) -> associations.put(key, Arrays.asList(value)));
+
 		return associations;
-	}
-
-	/**
-	 * JSON Schema contributions for JavaScript
-	 * 
-	 * @param associations
-	 */
-	private void fillSchemaAssociationsForJavascript(Map<String, List<String>> associations) {
-		associations.put("package.json", Arrays.asList("http://json.schemastore.org/package"));
-		associations.put("/bower.json", Arrays.asList("http://json.schemastore.org/bower"));
-		associations.put("/.bower.json", Arrays.asList("http://json.schemastore.org/bower"));
-		associations.put("/.bowerrc", Arrays.asList("http://json.schemastore.org/bowerrc"));
-		associations.put("/jsconfig.json", Arrays.asList("http://json.schemastore.org/jsconfig"));
-	}
-
-	/**
-	 * JSON Schema contributions for TypeScript
-	 * 
-	 * @param associations
-	 */
-	private void fillSchemaAssociationsForTypeScript(Map<String, List<String>> associations) {
-		associations.put("/tsconfig.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
-		associations.put("/tsconfig.*.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
-		associations.put("/typing.json", Arrays.asList("http://json.schemastore.org/typing"));
-	}
-
-	/**
-	 * JSON Schema contributions for TypeScript
-	 * 
-	 * @param associations
-	 */
-	private void fillSchemaAssociationsForOmnisharp(Map<String, List<String>> associations) {
-		associations.put("/omnisharp.json", Arrays.asList("http://json.schemastore.org/omnisharp"));
 	}
 }
