@@ -11,7 +11,7 @@
  *   Xi Yan (Red Hat Inc.) - initial implementation
  *   Andrew Obuchowicz (Red Hat Inc.) - Add support for XML LS extension jars
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.xml;
+package org.eclipse.wildwebdeveloper.xml.internal;
 
 import java.io.File;
 import java.io.IOException;

@@ -10,7 +10,7 @@
  * Contributors:
  *   Andrew Obuchowicz (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.xml;
+package org.eclipse.wildwebdeveloper.xml.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wildwebdeveloper.xml.XMLLSClasspathExtensionProvider;
 
 public class XMLExtensionRegistry {
 
