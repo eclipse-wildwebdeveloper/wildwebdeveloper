@@ -119,30 +119,38 @@ public class InitializeLaunchConfigurations {
 	}
 
 	private static void warnNodeJSMissing() {
-		Display.getDefault().asyncExec(() -> 
-			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Missing node.js",
-					"Could not find node.js. This will result in editors missing key features.\n"
-							+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable.")
-		);
+		if (!alreadyWarned) {
+			Display.getDefault().asyncExec(() -> 
+				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Missing node.js",
+						"Could not find node.js. This will result in editors missing key features.\n"
+								+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable.")
+			);
+		}
+		alreadyWarned = true;
 	}
 
 	private static void warnNodeJSVersionUnsupported(String version) {
-		Display.getDefault().asyncExec(() ->
-			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js " + version + " is not supported",
-					"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
-							+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
-							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-									.map(String::valueOf).collect(Collectors.joining(", ")))
-		);
+		if (!alreadyWarned) {
+			Display.getDefault().asyncExec(() ->
+				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js " + version + " is not supported",
+						"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
+								+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
+								+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
+										.map(String::valueOf).collect(Collectors.joining(", ")))
+		}
+		alreadyWarned = true;
 	}
 
 	private static void warnNodeJSVersionCouldNotBeDetermined() {
-		Display.getDefault().asyncExec(() ->
-			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js version could not be determined",
-					"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
-							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-									.map(String::valueOf).collect(Collectors.joining(", ")))
-		);
+		if (!alreadyWarned) {
+			Display.getDefault().asyncExec(() ->
+				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js version could not be determined",
+						"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
+								+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
+										.map(String::valueOf).collect(Collectors.joining(", ")))
+			);
+		}
+		alreadyWarned = true;
 	}
 
 }
