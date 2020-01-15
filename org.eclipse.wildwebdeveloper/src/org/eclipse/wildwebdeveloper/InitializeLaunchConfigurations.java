@@ -137,6 +137,7 @@ public class InitializeLaunchConfigurations {
 								+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
 								+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
 										.map(String::valueOf).collect(Collectors.joining(", ")))
+			);
 		}
 		alreadyWarned = true;
 	}
