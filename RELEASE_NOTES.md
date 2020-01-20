@@ -4,9 +4,13 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.8.2
+
+📅 Release Date: Mid-March, 2020
+
 ## 0.8.1
 
-📅 Release Date: Mid-January, 2020
+📅 Release Date: January 20th, 2020
 
 #### Proxy honored for XML resolution
 
@@ -21,6 +25,10 @@ To enable ESLint for a project, a `.eslintrc`, `tsconfig.json` as well as the re
 An example `.eslintrc` can be found [here](org.eclipse.wildwebdeveloper.tests/testProjects/eslint/.eslintrc) and a example `tsconfig.json` can be found [here](org.eclipse.wildwebdeveloper.tests/testProjects/eslint/tsconfig.json)  
 
 For more information on configuring ESLint, visit https://eslint.org/docs/user-guide/configuring.
+
+#### Improved XML language server extensibility
+
+Extension point to add jars to XML Language Server has been augmented to allow passing a dynamic resolution of multiple jars.
 
 ## 0.8.0
 
