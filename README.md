@@ -56,6 +56,8 @@ In an Eclipse target platform definition:
 
 ♨️ See [Release Notes](RELEASE_NOTES.md) for details about recent major improvement in the project.
 
+▶️ [January 2020] Demo of ESLint in Wild Web Developer https://youtu.be/o-wI_niEz3E
+
 ▶️ [October 2019] Demo debugging JavaScript in HTML with Chrome https://youtu.be/6L071ZtnUOk
 
 ▶️ [October 2019] Demo Angular template edition assistance https://www.screencast.com/t/6GTi4jf6svR
