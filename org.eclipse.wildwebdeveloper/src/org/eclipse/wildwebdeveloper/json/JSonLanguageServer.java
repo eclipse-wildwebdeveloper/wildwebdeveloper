@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -32,6 +30,8 @@ import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -85,6 +85,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 		associations.put("/.bower.json", Arrays.asList("http://json.schemastore.org/bower"));
 		associations.put("/.bowerrc", Arrays.asList("http://json.schemastore.org/bowerrc"));
 		associations.put("/jsconfig.json", Arrays.asList("http://json.schemastore.org/jsconfig"));
+		associations.put("/.eslintrc", Arrays.asList("http://json.schemastore.org/eslintrc"));
 	}
 
 	/**
