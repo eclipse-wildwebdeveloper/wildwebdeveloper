@@ -26,6 +26,8 @@ An example `.eslintrc` can be found [here](org.eclipse.wildwebdeveloper.tests/te
 
 For more information on configuring ESLint, visit https://eslint.org/docs/user-guide/configuring.
 
+▶️ Demo of ESLint in Wild Web Developer https://youtu.be/o-wI_niEz3E
+
 #### Improved XML language server extensibility
 
 Extension point to add jars to XML Language Server has been augmented to allow passing a dynamic resolution of multiple jars.
