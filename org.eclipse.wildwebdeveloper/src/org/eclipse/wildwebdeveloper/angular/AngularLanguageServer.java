@@ -51,6 +51,7 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 	@Override protected ProcessBuilder createProcessBuilder() {
 		ProcessBuilder builder = super.createProcessBuilder();
 		builder.environment().put("NG_DEBUG", Boolean.toString(true));
+		builder.environment().put("TSC_NONPOLLING_WATCHER", Boolean.toString(true));
 		return builder;
 	}
 
