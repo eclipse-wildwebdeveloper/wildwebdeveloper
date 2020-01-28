@@ -19,13 +19,26 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 
+	private static final String LOG_TO_FILE_ANGULAR_LS_PREFERENCE = "org.eclipse.wildwebdeveloper.angular.file.logging.enabled";
+	private static final String LOG_TO_CONSOLE_ANGULAR_LS_PREFERENCE = "org.eclipse.wildwebdeveloper.angular.stderr.logging.enabled";
+
+	private boolean isLoggingToFileEnabled;
+	private boolean isLoggingToConsoleEnabled;
+	
 	public AngularLanguageServer() {
+		
+		ScopedPreferenceStore scopedPreferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
+		this.isLoggingToFileEnabled = scopedPreferenceStore.getBoolean(LOG_TO_FILE_ANGULAR_LS_PREFERENCE);
+		this.isLoggingToConsoleEnabled = scopedPreferenceStore.getBoolean(LOG_TO_CONSOLE_ANGULAR_LS_PREFERENCE);
+		
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
@@ -37,8 +50,12 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 			commands.add("--tsProbeLocations");
 			commands.add(new File(nodeModules, "typescript").getAbsolutePath());
 			commands.add("--stdio");
-			commands.add("--logFile");
-			commands.add(Platform.getLogFileLocation().removeLastSegments(1).append("angular-language-server-" + System.currentTimeMillis() + ".log").toFile().getAbsolutePath());
+			if (isLoggingToFileEnabled) {
+				commands.add("--logFile");
+				commands.add(Platform.getLogFileLocation().removeLastSegments(1)
+					.append("angular-language-server.log").toFile()
+					.getAbsolutePath());
+			}
 			commands.add("--logVerbosity");
 			commands.add("terse");
 			setCommands(commands);
@@ -50,11 +67,13 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 
 	@Override protected ProcessBuilder createProcessBuilder() {
 		ProcessBuilder builder = super.createProcessBuilder();
-		builder.environment().put("NG_DEBUG", Boolean.toString(true));
+		if (this.isLoggingToFileEnabled || this.isLoggingToConsoleEnabled) {
+			builder.environment().put("NG_DEBUG", Boolean.toString(true));
+		}
 		builder.environment().put("TSC_NONPOLLING_WATCHER", Boolean.toString(true));
 		return builder;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Angular Language Server: " + super.toString();
