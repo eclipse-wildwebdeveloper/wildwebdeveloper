@@ -2,7 +2,7 @@
 
 ### As a user, how can I...
 
-#### Automatically compile JavaScript to TypeScript?
+#### Automatically compile TypeScript to JavaScript ?
 
 (From https://github.com/eclipse/wildwebdeveloper/issues/331#issuecomment-577240880 )
 
@@ -15,7 +15,7 @@
   c. select the interesting typescript source folder in "Select working set of relevant resources" to include the source folder.
 5. in Refresh, select what needs to be refreshed upon build.
 
-#### Get instant HTML preview on save?
+#### Get instant HTML preview on save ?
 
 1. Open the HTML file with the Generic Editor for edition.
 2. From the Edition context menu, the Project Explorer or other explorer, open this same HTML file with the Internal Web Browser.
