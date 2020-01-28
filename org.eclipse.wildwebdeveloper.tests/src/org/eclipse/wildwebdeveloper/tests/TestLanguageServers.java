@@ -60,6 +60,7 @@ public class TestLanguageServers {
 	public void deleteProjectAndCloseEditors() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		this.project.delete(true, null);
+		DisplayHelper.sleep(300);
 	}
 
 	@Test
