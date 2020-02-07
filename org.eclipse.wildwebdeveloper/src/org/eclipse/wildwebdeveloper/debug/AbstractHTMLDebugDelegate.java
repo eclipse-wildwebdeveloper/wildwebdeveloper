@@ -32,13 +32,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
-public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate{
+public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 	public static final String PROGRAM = "program"; //$NON-NLS-1$
 	public static final String ARGUMENTS = "runtimeArgs"; //$NON-NLS-1$
-	public static final String CWD = DebugPlugin.ATTR_WORKING_DIRECTORY; //$NON-NLS-1$
+	public static final String CWD = DebugPlugin.ATTR_WORKING_DIRECTORY;
 	public static final String ENV = ILaunchManager.ATTR_ENVIRONMENT_VARIABLES;
 	public static final String PORT = "port"; //$NON-NLS-1$
-
 
 	public void launchWithParameters(ILaunchConfiguration configuration, String mode, ILaunch launch,
 			IProgressMonitor monitor, Map<String, Object> param, File debugAdapter) throws CoreException {

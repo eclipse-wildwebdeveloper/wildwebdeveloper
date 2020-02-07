@@ -38,6 +38,14 @@
             name="JSON"
             priority="normal">
       </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="package.json"
+            file-patterns="package"
+            id="org.eclipse.wildwebdeveloper.json.npmpackage"
+            name="NPM package.json"
+            priority="normal">
+      </content-type>
    </extension>
    
    <extension
@@ -523,6 +531,15 @@
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.wildwebdeveloper.launch.npm.NpmLaunchDelegate"
+            id="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"
+            modes="run"
+            name="Launch NPM"
+            public="true"
+            sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
+            sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
@@ -607,12 +624,48 @@
             </enablement>
          </contextualLaunch>
       </shortcut>
+      <shortcut
+            class="org.eclipse.wildwebdeveloper.launch.npm.NpmLaunchShortcut"
+            icon="icons/npmiconSmall.png"
+            id="org.eclipse.wildwebdeveloper.npmLaunchShortcut"
+            label="Launch NPM"
+            modes="run">
+         <configurationType
+               id="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch">
+         </configurationType>
+         <contextualLaunch>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.wildwebdeveloper.isPackageJSON">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
    </extension>
     <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
             adaptableType="org.eclipse.core.resources.IResource"
             class="org.eclipse.wildwebdeveloper.debug.HTMLLaunchableAdapterFactory">
+         <adapter
+               type="org.eclipse.debug.ui.actions.ILaunchable">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.core.resources.IResource"
+            class="org.eclipse.wildwebdeveloper.launch.npm.PackageJSONAdapterFactory">
          <adapter
                type="org.eclipse.debug.ui.actions.ILaunchable">
          </adapter>
@@ -632,6 +685,13 @@
             id="org.eclipse.wildwebdeveloper.propertyTester.isHTMLLaunchable"
             namespace="org.eclipse.wildwebdeveloper"
             properties="isHTMLLaunchable"
+            type="java.lang.Object">
+      </propertyTester>
+      <propertyTester
+            class="org.eclipse.wildwebdeveloper.launch.npm.IsPackageJSONTester"
+            id="org.eclipse.wildwebdeveloper.propertyTester.isPackageJSON"
+            namespace="org.eclipse.wildwebdeveloper"
+            properties="isPackageJSON"
             type="java.lang.Object">
       </propertyTester>
    </extension>
@@ -667,6 +727,11 @@
             icon="icons/ChromeIcon.png"
             id="org.eclipse.wildwebdeveloper.chromeImage">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"
+            icon="icons/npmiconSmall.png"
+            id="org.eclipse.wildwebdeveloper.npmImage">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -699,6 +764,11 @@
             class="org.eclipse.wildwebdeveloper.debug.chrome.ChromeAttachDebugTabGroup"
             id="org.eclipse.wildwebdeveloper.ChromeAttachDebugTabGroup"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.wildwebdeveloper.launch.npm.NpmLaunchTabGroup"
+            id="org.eclipse.wildwebdeveloper.NPMLaunchTabGroub"
+            type="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch">
       </launchConfigurationTabGroup>
    </extension>
    <extension

@@ -1,16 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2020 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *   Mickael Istria (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.debug;
+package org.eclipse.wildwebdeveloper.launch.npm;
 
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
@@ -30,32 +27,52 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugLaunchShortcut;
+import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
+import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.Messages;
 
-public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfigurationTab {
+public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 
 	private Text programPathText;
-	private Text argumentsText;
-	private Text workingDirectoryText;
 	protected Composite resComposite;
-	protected AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut(); // contains many
-																									// utilities
+	protected AbstractDebugAdapterLaunchShortcut shortcut = new NpmLaunchShortcut(); // contains many utilities
+	private Combo argumentsCombo;
 
-	public AbstractRunHTMLDebugTab() {
+	private File packageJSONFile;
+	private File defaultSelectedFile;
+
+	public NpmLaunchTab() {
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 		resComposite = new Composite(parent, SWT.NONE);
-		resComposite.setLayout(new GridLayout(3, false));
-		new Label(resComposite, SWT.NONE).setText(Messages.FirefoxDebugTab_File);
-		this.programPathText = new Text(resComposite, SWT.BORDER);
+		resComposite.setLayout(new GridLayout(2, false));
+
+		new Label(resComposite, SWT.NONE).setText(Messages.NPMLaunchTab_argumentLabel);
+		argumentsCombo = new Combo(resComposite, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER);
+		this.argumentsCombo.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		addComboItems(argumentsCombo, "install", "update", "ci", "pack", "run", "run-script", "start", "restart", "test");
+		argumentsCombo.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		}));
+		argumentsCombo.addModifyListener(e -> {
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		});
+
+		new Label(resComposite, SWT.NONE).setText(Messages.NPMLaunchTab_programPathLabel);
+		Composite filePathComposite = new Composite(resComposite, SWT.NONE);
+		filePathComposite.setLayout(new GridLayout(2, false));
+		filePathComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		this.programPathText = new Text(filePathComposite, SWT.BORDER);
 		this.programPathText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		ControlDecoration decoration = new ControlDecoration(programPathText, SWT.TOP | SWT.LEFT);
 		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault()
@@ -70,7 +87,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
 			} else if (!shortcut.canLaunch(file)) {
-				String errorMessage = "Not a html file"; //$NON-NLS-1$
+				String errorMessage = Messages.NPMLaunchTab_notPackageJSONFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
@@ -85,51 +102,30 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			}
 			updateLaunchConfigurationDialog();
 		});
-		Button filePath = new Button(resComposite, SWT.PUSH);
+
+		Button filePath = new Button(filePathComposite, SWT.PUSH);
+		filePath.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
 		filePath.setText(Messages.AbstractRunHTMLDebugTab_browse);
-		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
+		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			FileDialog filePathDialog = new FileDialog(resComposite.getShell());
-			filePathDialog.setFilterPath(workingDirectoryText.getText());
-			filePathDialog.setText("Select a .html file to debug"); //$NON-NLS-1$
+			filePathDialog.setFilterPath(getSelectedProject() == null ? null : getSelectedProject().getAbsolutePath());
+			filePathDialog.setText(Messages.NPMLaunchTab_selectPackageJSON);
 			String path = filePathDialog.open();
 			if (path != null) {
-				programPathText.setText(path);
-				setDirty(true);
-				updateLaunchConfigurationDialog();
-			}
-		}));
-
-		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_argument);
-		this.argumentsText = new Text(resComposite, SWT.BORDER);
-		GridData argsGD = new GridData(SWT.FILL, SWT.DEFAULT, true, false);
-		argsGD.horizontalSpan = 2;
-		this.argumentsText.setLayoutData(argsGD);
-		this.argumentsText.addModifyListener(e -> {
-			setDirty(true);
-			updateLaunchConfigurationDialog();
-		});
-		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_workingDirectory);
-		this.workingDirectoryText = new Text(resComposite, SWT.BORDER);
-		this.workingDirectoryText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		this.workingDirectoryText.addModifyListener(e -> {
-			setDirty(true);
-			updateLaunchConfigurationDialog();
-		});
-		Button workingDirectoryButton = new Button(resComposite, SWT.PUSH);
-		workingDirectoryButton.setText(Messages.AbstractRunHTMLDebugTab_browse);
-		workingDirectoryButton.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
-			DirectoryDialog workingDirectoryDialog = new DirectoryDialog(resComposite.getShell());
-			workingDirectoryDialog.setFilterPath(workingDirectoryText.getText());
-			workingDirectoryDialog.setText("Select folder to watch for changes"); //$NON-NLS-1$
-			String path = workingDirectoryDialog.open();
-			if (path != null) {
-				workingDirectoryText.setText(path);
+				packageJSONFile = new File(path);
+				programPathText.setText(packageJSONFile.getAbsolutePath());
 				setDirty(true);
 				updateLaunchConfigurationDialog();
 			}
 		}));
 
 		setControl(resComposite);
+	}
+
+	public static void addComboItems(Combo combo, String... commands) {
+		for (String command : commands) {
+			combo.add(command);
+		}
 	}
 
 	@Override
@@ -140,12 +136,11 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			String defaultSelectedFile = pathOrEmpty(getSelectedFile(shortcut::canLaunch));
+			defaultSelectedFile = getSelectedFile(shortcut::canLaunch);
+			String defaultSelectedFilePath = pathOrEmpty(defaultSelectedFile);
 			this.programPathText
-					.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, defaultSelectedFile));
-			this.argumentsText.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
-			this.workingDirectoryText.setText(
-					configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, pathOrEmpty(getSelectedProject())));
+					.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, defaultSelectedFilePath));
+			this.argumentsCombo.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "install")); //$NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -153,10 +148,17 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+		String workingDirectory = pathOrEmpty(getSelectedProject());
+		if (this.packageJSONFile != null) {
+			workingDirectory = pathOrEmpty(this.packageJSONFile.getParentFile());
+		} else if (defaultSelectedFile != null) {
+			workingDirectory = pathOrEmpty(defaultSelectedFile.getParentFile());
+		}
+
 		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, this.programPathText.getText());
-		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
-		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, this.workingDirectoryText.getText());
-	
+		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsCombo.getText());
+		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, workingDirectory);
+
 	}
 
 	@Override
