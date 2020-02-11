@@ -37,7 +37,7 @@ import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeAttach"; //$NON-NLS-1$
+	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach"; //$NON-NLS-1$
 
 	// see https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/nodeDebug.ts LaunchRequestArguments
 	static final String ADDRESS = "address"; //$NON-NLS-1$

@@ -25,7 +25,7 @@ import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
 public class FirefoxAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 	
-	static final String ID = "org.eclipse.wildwebdeveloper.runFirefoxDebug"; //$NON-NLS-1$
+	static final String ID = "org.eclipse.wildwebdeveloper.firefoxDebug"; //$NON-NLS-1$
 	
 	private static final String REQUEST = "request"; //$NON-NLS-1$
 
