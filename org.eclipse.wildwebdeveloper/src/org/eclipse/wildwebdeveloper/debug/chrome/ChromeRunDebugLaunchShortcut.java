@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2020 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
+import java.io.File;
+
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugAdapterLaunchShortcut;
 
 public class ChromeRunDebugLaunchShortcut extends AbstractHTMLDebugAdapterLaunchShortcut {
@@ -19,4 +22,11 @@ public class ChromeRunDebugLaunchShortcut extends AbstractHTMLDebugAdapterLaunch
 	public ChromeRunDebugLaunchShortcut() {
 		super(ChromeRunDAPDebugDelegate.ID);
 	}
+
+	@Override
+	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
+		super.configureLaunchConfiguration(file, wc);
+		wc.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, ChromeRunDAPDebugDelegate.CHROMIUM);
+	}
+	
 }

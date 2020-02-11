@@ -30,10 +30,16 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 
 	private Text addressText;
 	private Spinner portSpinner;
+	private int defaultPort;
+	protected Composite resComposite;
+	
+	public AttachTab(int defaultPort) {
+		this.defaultPort = defaultPort;
+	}
 
 	@Override
 	public void createControl(Composite parent) {
-		Composite resComposite = new Composite(parent, SWT.NONE);
+		resComposite = new Composite(parent, SWT.NONE);
 		resComposite.setLayout(new GridLayout(2, false));
 		resComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		new Label(resComposite, SWT.NONE).setText(Messages.AttachTab_address);
@@ -57,7 +63,7 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(NodeAttachDebugDelegate.ADDRESS, "localhost");
-		configuration.setAttribute(NodeAttachDebugDelegate.PORT, 9229);
+		configuration.setAttribute(NodeAttachDebugDelegate.PORT, defaultPort);
 	}
 
 	@Override
