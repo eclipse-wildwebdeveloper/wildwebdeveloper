@@ -26,6 +26,10 @@ import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
 class FirefoxAttachTab extends AttachTab {
 	
+	public FirefoxAttachTab() {
+		super(6000);
+	}
+
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);

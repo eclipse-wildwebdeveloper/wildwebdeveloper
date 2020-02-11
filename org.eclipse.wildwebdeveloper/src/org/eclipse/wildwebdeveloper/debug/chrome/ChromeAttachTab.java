@@ -1,14 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2020 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *   Andrew Obuchowicz (Red Hat Inc.) 
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
@@ -17,25 +14,24 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.debug.AbstractRunHTMLDebugTab;
+import org.eclipse.wildwebdeveloper.debug.node.AttachTab;
 
-public class RunChromeDebugTab extends AbstractRunHTMLDebugTab {
-	private Button verboseConsoleOutput;
+public class ChromeAttachTab extends AttachTab {
+
 	private Combo browserToUse;
-	
-	public RunChromeDebugTab() {
-		super.shortcut = new ChromeRunDebugLaunchShortcut();
+
+	public ChromeAttachTab() {
+		super(9222);
 	}
-	
+
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
-		new Label(resComposite, SWT.NONE).setText("Run with: ");
+		new Label(resComposite, SWT.NONE).setText(Messages.ChromeAttachTab_runWith);
 		browserToUse = new Combo(resComposite, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
 		browserToUse.add(ChromeRunDAPDebugDelegate.CHROMIUM);
 		browserToUse.add(ChromeRunDAPDebugDelegate.CHROME);
@@ -43,15 +39,13 @@ public class RunChromeDebugTab extends AbstractRunHTMLDebugTab {
 			setDirty(true);
 			updateLaunchConfigurationDialog();
 		}));
-		Composite emptySpace = new Composite(resComposite, SWT.NONE);
-		verboseConsoleOutput = new Button(resComposite, SWT.CHECK);
-		verboseConsoleOutput.setText("Verbose console output");
-		verboseConsoleOutput.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
-			setDirty(true);
-			updateLaunchConfigurationDialog();
-		}));
 	}
-	
+
+	@Override
+	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+		super.setDefaults(configuration);
+	}
+
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		super.initializeFrom(configuration);
@@ -61,12 +55,10 @@ public class RunChromeDebugTab extends AbstractRunHTMLDebugTab {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
 	}
-	
+
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		super.performApply(configuration);
-		configuration.setAttribute(ChromeRunDAPDebugDelegate.VERBOSE, verboseConsoleOutput.getSelection());
 		configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, browserToUse.getText());
 	}
-
 }

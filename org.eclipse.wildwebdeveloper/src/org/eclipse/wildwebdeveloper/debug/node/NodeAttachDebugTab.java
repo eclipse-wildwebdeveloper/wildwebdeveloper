@@ -37,6 +37,10 @@ import org.eclipse.wildwebdeveloper.debug.Messages;
 import com.google.gson.Gson;
 
 public class NodeAttachDebugTab extends AttachTab {
+	public NodeAttachDebugTab() {
+		super(9229);
+	}
+
 	private Text localRootText;
 	private Text remoteRootText;
 

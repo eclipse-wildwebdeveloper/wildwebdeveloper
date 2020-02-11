@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Red Hat Inc. and others.
+ * Copyright (c) 2020 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -43,8 +43,10 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 
 	static final String VERBOSE = "verbose";
 	private static final String TRACE = "trace";
-	private static final String RUNTIME_EXECUTABLE = "runtimeExecutable";
+	public static final String RUNTIME_EXECUTABLE = "runtimeExecutable";
 	private static final String SOURCE_MAPS = "sourceMaps";
+	public static final String CHROMIUM = "Chromium";
+	public static final String CHROME = "Chrome";
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -83,7 +85,7 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		param.put(SOURCE_MAPS, true);
 		
 		// TODO: Let user point to the location of their Chrome executable
-		param.put(RUNTIME_EXECUTABLE, findChromeLocation());
+		param.put(RUNTIME_EXECUTABLE, findChromeLocation(configuration));
 		
 		if (configuration.getAttribute(VERBOSE, false)) {
 			param.put(TRACE, VERBOSE);
@@ -104,11 +106,24 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus)); //$NON-NLS-1$
 		}
 		return null;
-		
 	}
 
-	private String findChromeLocation() {
-		String res = InitializeLaunchConfigurations.which("chromium-browser");
+	static String findChromeLocation(ILaunchConfiguration configuration) {
+		String res = null;
+		try {
+			if (configuration.getAttribute(RUNTIME_EXECUTABLE, "no runtime executable set").equals(CHROMIUM)) {
+				res = InitializeLaunchConfigurations.which("chromium-browser");
+			} else {
+				res = InitializeLaunchConfigurations.which("google-chrome-stable");
+			}
+		} catch (CoreException e) {
+			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
+			Activator.getDefault().getLog().log(errorStatus);
+		}
+		// Failsafe, in case user doesn't have their preferred browser
+		if (res == null) {
+			res = InitializeLaunchConfigurations.which("chromium-browser");
+		}
 		if (res == null) {
 			res = InitializeLaunchConfigurations.which("google-chrome-stable");
 		}
