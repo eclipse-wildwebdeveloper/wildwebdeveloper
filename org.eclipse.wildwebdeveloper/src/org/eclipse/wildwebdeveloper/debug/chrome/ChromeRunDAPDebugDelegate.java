@@ -114,6 +114,9 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		if (res == null) {
 			res = InitializeLaunchConfigurations.which("google-chrome-stable");
 		}
+		if (res == null) {
+			res = "path/to/chrome";
+		}
 		return res;
 	}
 

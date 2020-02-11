@@ -37,7 +37,9 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 
 	static final String ID = "org.eclipse.wildwebdeveloper.runFirefoxDebug"; //$NON-NLS-1$
 
-	// see https://github.com/firefox-devtools/vscode-firefox-debug/blob/master/src/adapter/configuration.ts for launch/attach configuration parameters
+	// see
+	// https://github.com/firefox-devtools/vscode-firefox-debug/blob/master/src/adapter/configuration.ts
+	// for launch/attach configuration parameters
 	static final String PORT = "port"; //$NON-NLS-1$
 	static final String REQUEST = "request"; //$NON-NLS-1$
 	static final String PREFERENCES = "preferences"; //$NON-NLS-1$
@@ -52,16 +54,16 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
 		// user settings
-		Map<String, Object> param = new HashMap<>(); 
+		Map<String, Object> param = new HashMap<>();
 		param.put(REQUEST, "launch"); //$NON-NLS-1$
-		// TODO: Let user set location of firefox executable 
+		// TODO: Let user set location of firefox executable
 		param.put(FIREFOX_EXECUTABLE, findFirefoxLocation());
-		param.put(FILE, configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$); //$NON-NLS-1$
+		param.put(FILE, configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$
 		param.put(PREFERENCES, "{}"); //$NON-NLS-1$
 		param.put(TMP_DIRS, System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		param.put(TYPE, "firefox"); //$NON-NLS-1$
 		if (configuration.getAttribute(RELOAD_ON_CHANGE, false)) {
-			String workspaceDir = configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, ""); 
+			String workspaceDir = configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, "");
 			param.put(RELOAD_ON_CHANGE, workspaceDir);
 		}
 
@@ -72,24 +74,25 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 	static File findDebugAdapter() {
 		URL fileURL;
 		try {
-			fileURL = FileLocator.toFileURL(
-					FirefoxRunDABDebugDelegate.class.getResource("/language-servers/node_modules/firefox-debugadapter/adapter.bundle.js"));
+			fileURL = FileLocator.toFileURL(FirefoxRunDABDebugDelegate.class
+					.getResource("/language-servers/node_modules/firefox-debugadapter/adapter.bundle.js"));
 			return new File(fileURL.toURI());
 		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
-			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus)); //$NON-NLS-1$
+			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
+					"Debug error", e.getMessage(), errorStatus)); //$NON-NLS-1$
 		}
 		return null;
-		
+
 	}
 
-	private static String findFirefoxLocation() {
+	static String findFirefoxLocation() {
 		String res = InitializeLaunchConfigurations.which("firefox");
-		if (res != null) {
-			return null;
+		if (res == null) {
+			res = "/path/to/firefox";
 		}
-		return "/path/to/firefox";
+		return res;
 	}
 
 }

@@ -25,7 +25,7 @@ import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
 public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 	
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"; //$NON-NLS-1$
+	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug"; //$NON-NLS-1$
 
 	static final String ADDRESS = "address"; //$NON-NLS-1$
 
@@ -36,7 +36,6 @@ public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 		Map<String, Object> param = new HashMap<>();
 		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
 		param.put(AbstractHTMLDebugDelegate.PORT, configuration.getAttribute(NodeAttachDebugDelegate.PORT, 9229));
-		param.put("webRoot", "/home/aobuchow/Documents/Firefox Debugger Testing");
 		param.put("url", "https://www.google.ca/");
 		param.put("runtimeExecutable", "/usr/bin/chromium-browser");
 		
