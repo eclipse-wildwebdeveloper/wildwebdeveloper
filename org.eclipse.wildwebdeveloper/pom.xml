@@ -123,7 +123,7 @@
 								<arg>./vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>vscode-json-languageserver@1.2.2</arg>
 								<arg>yaml-language-server@0.6.1</arg>
-								<arg>firefox-debugadapter@2.5.3</arg>
+								<arg>firefox-debugadapter@2.6.1</arg>
 								<arg>debugger-for-chrome-4.11.7.tgz</arg>
 								<arg>typescript-eslint-language-service@1.4.0</arg>
 								<arg>eslint@6.0.0</arg>
