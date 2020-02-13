@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
 			URL url = FileLocator.toFileURL(getClass()
-					.getResource("/language-servers/node_modules/vscode-json-languageserver/out/jsonServerMain.js"));
+					.getResource("/language-servers/node_modules/vscode-json-languageserver/dist/jsonServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
@@ -106,5 +107,10 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	 */
 	private void fillSchemaAssociationsForOmnisharp(Map<String, List<String>> associations) {
 		associations.put("/omnisharp.json", Arrays.asList("http://json.schemastore.org/omnisharp"));
+	}
+
+	@Override
+	public Object getInitializationOptions(URI rootUri) {
+		return Collections.singletonMap("provideFormatter", true);
 	}
 }
