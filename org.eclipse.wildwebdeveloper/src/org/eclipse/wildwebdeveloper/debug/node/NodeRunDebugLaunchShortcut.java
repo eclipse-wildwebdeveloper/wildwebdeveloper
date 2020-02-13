@@ -13,9 +13,13 @@
 package org.eclipse.wildwebdeveloper.debug.node;
 
 import java.io.File;
+import java.util.Arrays;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wildwebdeveloper.Activator;
@@ -24,12 +28,11 @@ import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
 	public NodeRunDebugLaunchShortcut() {
-		super(NodeRunDAPDebugDelegate.ID, "org.eclipse.wildwebdeveloper.js");
+		super(NodeRunDAPDebugDelegate.ID, "org.eclipse.wildwebdeveloper.js", true);
 	}
 
 	@Override public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
 		wc.setAttribute(NodeRunDAPDebugDelegate.PROGRAM, file.getAbsolutePath());
-		wc.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, file.getParentFile().getAbsolutePath());
 	}
 
 	@Override public boolean match(ILaunchConfiguration launchConfig, File selectedFile) {
@@ -39,5 +42,22 @@ public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortc
 			Activator.getDefault().getLog().log(e.getStatus());
 			return false;
 		}
+	}
+
+	@Override
+	protected IResource getLaunchableResource(IContainer container) {
+		if (container == null) {
+			return null;
+		}
+		try {
+			IResource[] jsFiles = Arrays.stream(container.members()).filter(member -> member.getType() == IResource.FILE && member.getName().endsWith(".js")).toArray(IResource[]::new);
+			if (jsFiles.length == 1) {
+				return jsFiles[0];
+			}
+		} catch (CoreException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+		}
+		return null;
+		
 	}
 }

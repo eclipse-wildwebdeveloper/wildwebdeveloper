@@ -12,34 +12,11 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
-import java.io.File;
+import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugAdapterLaunchShortcut;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
-import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
-
-public class ChromeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
+public class ChromeRunDebugLaunchShortcut extends AbstractHTMLDebugAdapterLaunchShortcut {
 	
 	public ChromeRunDebugLaunchShortcut() {
-		super(ChromeRunDAPDebugDelegate.ID, "org.eclipse.wildwebdeveloper.html");
-	}
-
-	@Override
-	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
-		wc.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, file.getAbsolutePath());
-		wc.setAttribute(AbstractHTMLDebugDelegate.CWD, file.getParentFile().getAbsolutePath());
-	}
-
-	@Override
-	public boolean match(ILaunchConfiguration launchConfig, File selectedFile) {
-		try {
-			return launchConfig.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "").equals(selectedFile.getAbsolutePath()); //$NON-NLS-1$
-		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(e.getStatus());
-			return false;
-		}
+		super(ChromeRunDAPDebugDelegate.ID);
 	}
 }

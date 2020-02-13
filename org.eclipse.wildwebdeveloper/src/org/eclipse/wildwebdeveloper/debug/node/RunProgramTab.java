@@ -18,6 +18,7 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 
 import java.io.File;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -113,9 +114,11 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(NodeRunDAPDebugDelegate.PROGRAM, this.programPathText.getText());
+		String programPath = this.programPathText.getText();
+		configuration.setAttribute(NodeRunDAPDebugDelegate.PROGRAM, programPath);
 		configuration.setAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, this.workingDirectoryText.getText());
+		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
 	}
 
 	@Override

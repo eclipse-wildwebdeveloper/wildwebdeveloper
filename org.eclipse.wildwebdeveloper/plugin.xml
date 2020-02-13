@@ -532,7 +532,7 @@
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.wildwebdeveloper.launch.npm.NpmLaunchDelegate"
+            delegate="org.eclipse.wildwebdeveloper.debug.npm.NpmLaunchDelegate"
             id="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"
             modes="run"
             name="Launch NPM"
@@ -625,10 +625,10 @@
          </contextualLaunch>
       </shortcut>
       <shortcut
-            class="org.eclipse.wildwebdeveloper.launch.npm.NpmLaunchShortcut"
+            class="org.eclipse.wildwebdeveloper.debug.npm.NpmLaunchShortcut"
             icon="icons/npmiconSmall.png"
             id="org.eclipse.wildwebdeveloper.npmLaunchShortcut"
-            label="Launch NPM"
+            label="NPM..."
             modes="run">
          <configurationType
                id="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch">
@@ -665,7 +665,7 @@
       </factory>
       <factory
             adaptableType="org.eclipse.core.resources.IResource"
-            class="org.eclipse.wildwebdeveloper.launch.npm.PackageJSONAdapterFactory">
+            class="org.eclipse.wildwebdeveloper.debug.npm.PackageJSONAdapterFactory">
          <adapter
                type="org.eclipse.debug.ui.actions.ILaunchable">
          </adapter>
@@ -688,7 +688,7 @@
             type="java.lang.Object">
       </propertyTester>
       <propertyTester
-            class="org.eclipse.wildwebdeveloper.launch.npm.IsPackageJSONTester"
+            class="org.eclipse.wildwebdeveloper.debug.npm.IsPackageJSONTester"
             id="org.eclipse.wildwebdeveloper.propertyTester.isPackageJSON"
             namespace="org.eclipse.wildwebdeveloper"
             properties="isPackageJSON"
@@ -766,7 +766,7 @@
             type="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="org.eclipse.wildwebdeveloper.launch.npm.NpmLaunchTabGroup"
+            class="org.eclipse.wildwebdeveloper.debug.npm.NpmLaunchTabGroup"
             id="org.eclipse.wildwebdeveloper.NPMLaunchTabGroub"
             type="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch">
       </launchConfigurationTabGroup>

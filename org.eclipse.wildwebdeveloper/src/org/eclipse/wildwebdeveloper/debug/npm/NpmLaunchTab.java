@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.launch.npm;
+package org.eclipse.wildwebdeveloper.debug.npm;
 
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
@@ -15,7 +15,9 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 
 import java.io.File;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -35,7 +37,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
-import org.eclipse.wildwebdeveloper.debug.Messages;
 
 public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 
@@ -82,7 +83,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 			setDirty(true);
 			File file = new File(programPathText.getText());
 			if (!file.isFile()) {
-				String errorMessage = Messages.RunProgramTab_error_unknownFile;
+				String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_unknownFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
@@ -92,7 +93,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
 			} else if (!file.canRead()) {
-				String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
+				String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_nonReadableFile;
 				setErrorMessage(errorMessage);
 				decoration.setDescriptionText(errorMessage);
 				decoration.show();
@@ -105,7 +106,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 
 		Button filePath = new Button(filePathComposite, SWT.PUSH);
 		filePath.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
-		filePath.setText(Messages.AbstractRunHTMLDebugTab_browse);
+		filePath.setText(org.eclipse.wildwebdeveloper.debug.Messages.AbstractRunHTMLDebugTab_browse);
 		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			FileDialog filePathDialog = new FileDialog(resComposite.getShell());
 			filePathDialog.setFilterPath(getSelectedProject() == null ? null : getSelectedProject().getAbsolutePath());
@@ -155,15 +156,17 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 			workingDirectory = pathOrEmpty(defaultSelectedFile.getParentFile());
 		}
 
-		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, this.programPathText.getText());
+		String programPath = this.programPathText.getText();
+		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, programPath);
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsCombo.getText());
 		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, workingDirectory);
-
+		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
+		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
 	}
 
 	@Override
 	public String getName() {
-		return Messages.RunProgramTab_title;
+		return org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_title;
 	}
 
 }

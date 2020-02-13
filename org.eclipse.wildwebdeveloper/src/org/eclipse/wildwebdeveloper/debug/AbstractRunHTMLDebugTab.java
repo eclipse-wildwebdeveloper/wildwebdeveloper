@@ -18,7 +18,9 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 
 import java.io.File;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -153,9 +155,13 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, this.programPathText.getText());
+		String programPath = this.programPathText.getText();
+		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, programPath);
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
-		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, this.workingDirectoryText.getText());
+		String workingDirectory = this.workingDirectoryText.getText();
+		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, workingDirectory);
+		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
+		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
 	
 	}
 

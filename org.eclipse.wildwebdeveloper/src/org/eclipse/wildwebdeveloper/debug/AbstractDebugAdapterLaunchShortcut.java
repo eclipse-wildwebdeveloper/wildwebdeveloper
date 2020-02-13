@@ -18,14 +18,17 @@ import java.util.Arrays;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationSelectionDialog;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.ILaunchShortcut2;
@@ -41,12 +44,15 @@ import org.eclipse.wildwebdeveloper.Activator;
 
 public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShortcut2 {
 
-	protected final String launchConfigTypeId;
-	protected final String contentTypeId;
+	private final String contentTypeId;
+	private final ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+	private final ILaunchConfigurationType configType;
+	private final boolean autoStartNewlyCreatedConfiguration;
 
-	public AbstractDebugAdapterLaunchShortcut(String launchConfigTypeId, String contentTypeId) {
-		this.launchConfigTypeId = launchConfigTypeId;
+	public AbstractDebugAdapterLaunchShortcut(String launchConfigTypeId, String contentTypeId, boolean autoStartNewlyCreatedConfiguration) {
+		this.autoStartNewlyCreatedConfiguration = autoStartNewlyCreatedConfiguration;
 		this.contentTypeId = contentTypeId;
+		this.configType = launchManager.getLaunchConfigurationType(launchConfigTypeId);
 	}
 
 	public boolean canLaunch(File file) {
@@ -59,10 +65,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 		if (resourceType == IResource.FILE) {
 			File file = resource.getLocation().toFile();
 			return canLaunch(file);
-		} else if (resourceType == IResource.PROJECT || resourceType == IResource.FOLDER) {
-			return getLaunchableHTML(Adapters.adapt(resource, IContainer.class)) != null;
 		}
-
 		return false;
 	}
 
@@ -99,33 +102,8 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 					return resource;
 				}
 			} else if (resourceType == IResource.PROJECT || resourceType == IResource.FOLDER) {
-				return getLaunchableHTML(Adapters.adapt(resource, IContainer.class));
+				return getLaunchableResource(Adapters.adapt(resource, IContainer.class));
 			}
-
-		}
-		return null;
-	}
-
-	/**
-	 * Finds "index.html" resource in a container (project or folder), null if it
-	 * can't be found. If the container has a single .html file, it is returned
-	 * regardless of it being called "index.html"
-	 * 
-	 * @param container to search for index.html
-	 * @return IResource index.html file contained in the project or null if none
-	 *         exist
-	 */
-	public IResource getLaunchableHTML(IContainer container) {
-		try {
-			if (container.members().length == 1 && container.members()[0].getName().matches(".*\\.html$")) {
-				return container.members()[0];
-			}
-			for (IResource projItem : container.members()) {
-				if (projItem.getName().equals("index.html")) { //$NON-NLS-1$
-					return projItem;
-				}
-			}
-		} catch (CoreException e) {
 		}
 		return null;
 	}
@@ -142,53 +120,85 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 		return null;
 	}
 
+	/**
+	 * Returns a resource we can launch from the container shortcut
+	 * @param container
+	 * @return a resource that can be run from this container. Can be <code>null</code>.
+	 */
+	protected abstract IResource getLaunchableResource(IContainer container);
+
 	@Override
 	public void launch(ISelection selection, String mode) {
-		ILaunchConfiguration[] configurations = getLaunchConfigurations(selection);
-		launch(mode, configurations);
+		launch(mode, getLaunchConfigurations(selection), SelectionUtils.getFile(selection, this::canLaunch));
 	}
 
 	@Override
 	public void launch(IEditorPart editor, String mode) {
-		ILaunchConfiguration[] configurations = getLaunchConfigurations(editor);
-		launch(mode, configurations);
+		launch(mode, getLaunchConfigurations(editor), SelectionUtils.getFile(editor.getEditorInput(), this::canLaunch));
 	}
 
-	private void launch(String mode, ILaunchConfiguration[] configurations) {
-		if (configurations.length == 1) {
+	private void launch(String mode, ILaunchConfiguration[] configurations, File launchableFile) {
+		if (configurations == null) {
+			// TODO honor contract of ILaunchShortcut2.getLaunchConfigurations
+			return;
+		} else if (configurations.length == 0 && launchableFile != null && launchableFile.exists()) {
+			ILaunchConfiguration configuration;
+			try {
+				configuration = createNewLaunchConfiguration(launchableFile);
+				Display.getDefault().asyncExec(() -> {
+					if (autoStartNewlyCreatedConfiguration) {
+						DebugUITools.launch(configuration, mode);
+					} else {
+						if (DebugUIPlugin.openLaunchConfigurationEditDialog(Display.getCurrent().getActiveShell(), configuration, DebugUITools.getLaunchGroup(configuration, mode).getIdentifier(), null, true) == IDialogConstants.OK_ID) {
+							DebugUITools.launch(configuration, mode);	
+						}
+					}
+				});
+			} catch (CoreException e) {
+				Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+			}
+		} else if (configurations.length == 1) {
 			Display.getDefault().asyncExec(() -> DebugUITools.launch(configurations[0], mode));
 		} else if (configurations.length > 1) {
 			LaunchConfigurationSelectionDialog dialog = new LaunchConfigurationSelectionDialog(
 					Display.getDefault().getActiveShell(), configurations);
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				launch(mode,
-						Arrays.asList(dialog.getResult()).toArray(new ILaunchConfiguration[dialog.getResult().length]));
+						Arrays.asList(dialog.getResult()).toArray(new ILaunchConfiguration[dialog.getResult().length]), launchableFile);
 			}
 		}
 	}
 
+	/**
+	 * See {@link ILaunchShortcut2#getLaunchConfigurations(ISelection)} for contract.
+	 * @param file
+	 * @return
+	 */
 	private ILaunchConfiguration[] getLaunchConfigurations(File file) {
 		if (file == null || !canLaunch(file)) {
-			return new ILaunchConfiguration[0];
+			return null;
 		}
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunchConfigurationType configType = launchManager.getLaunchConfigurationType(launchConfigTypeId);
 		try {
 			ILaunchConfiguration[] existing = Arrays.stream(launchManager.getLaunchConfigurations(configType))
 					.filter(launchConfig -> match(launchConfig, file)).toArray(ILaunchConfiguration[]::new);
 			if (existing.length != 0) {
 				return existing;
 			}
-
-			String configName = launchManager.generateLaunchConfigurationName(file.getAbsolutePath());
-			ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, configName);
-			configureLaunchConfiguration(file, wc);
-			return new ILaunchConfiguration[] { wc };
+			return new ILaunchConfiguration[0];
 		} catch (CoreException e) {
 			ErrorDialog.openError(Display.getDefault().getActiveShell(), "error", e.getMessage(), e.getStatus()); //$NON-NLS-1$
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
 		return new ILaunchConfiguration[0];
+	}
+
+	private ILaunchConfigurationWorkingCopy createNewLaunchConfiguration(File file) throws CoreException {
+		String configName = launchManager.generateLaunchConfigurationName(file.getAbsolutePath());
+		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, configName);
+		wc.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, file.getParentFile().getAbsolutePath());
+		wc.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(file.toURI()));
+		configureLaunchConfiguration(file, wc);
+		return wc;
 	}
 
 	/**

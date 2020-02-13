@@ -29,10 +29,6 @@ public class Messages extends NLS {
 	public static String RunProgramTab_title;
 	public static String RunProgramTab_workingDirectory;
 	public static String firefoxAttachNote;
-	public static String NPMLaunchTab_argumentLabel;
-	public static String NPMLaunchTab_notPackageJSONFile;
-	public static String NPMLaunchTab_programPathLabel;
-	public static String NPMLaunchTab_selectPackageJSON;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
