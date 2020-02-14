@@ -8,6 +8,18 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 📅 Release Date: Mid-March, 2020
 
+#### NPM Launch shortcut
+
+Easily invoke NPM with the new NPM Launch shortcut under "Run As" context-menu for `package.json` file and editor, or by defining your Run Configuration.
+
+▶️ https://www.screencast.com/t/iFg4QUTo28Rb
+
+#### Easily define root mapping for remote node.js debugger
+
+When debugging a remote process on a different filesystem, the related Debug Configuration now allows to easily define the root and local path to map together, so breakpoint and file references are correctly used by both client and server
+
+▶️ https://www.screencast.com/t/oECdEsORLr6X
+
 ## 0.8.1
 
 📅 Release Date: January 20th, 2020
