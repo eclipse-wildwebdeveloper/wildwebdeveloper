@@ -42,6 +42,8 @@ public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 	// see https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/nodeDebug.ts LaunchRequestArguments
 	static final String ADDRESS = "address"; //$NON-NLS-1$
 	public static final String PORT = "port"; //$NON-NLS-1$
+	static final String LOCAL_ROOT = "localRoot"; //$NON-NLS-1$
+	static final String REMOTE_ROOT = "remoteRoot"; //$NON-NLS-1$
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -50,6 +52,12 @@ public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 		Map<String, Object> param = new HashMap<>();
 		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
 		param.put(PORT, configuration.getAttribute(PORT, -1));
+		if (configuration.hasAttribute(LOCAL_ROOT)) {
+			param.put(LOCAL_ROOT, configuration.getAttribute(LOCAL_ROOT, ""));
+		}
+		if (configuration.hasAttribute(REMOTE_ROOT)) {
+			param.put(REMOTE_ROOT, configuration.getAttribute(REMOTE_ROOT, ""));
+		}
 		try {
 			URL fileURL = FileLocator.toFileURL(
 					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));

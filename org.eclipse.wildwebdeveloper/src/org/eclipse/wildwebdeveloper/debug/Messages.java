@@ -29,6 +29,10 @@ public class Messages extends NLS {
 	public static String RunProgramTab_title;
 	public static String RunProgramTab_workingDirectory;
 	public static String firefoxAttachNote;
+	public static String NodeAttach_rootMapDescription;
+	public static String NodeAttach_localRoot;
+	public static String NodeAttach_remoteRoot;
+	public static String NodeAttach_invalidLocalRootDirectory;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
