@@ -91,7 +91,6 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
 			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
 			builder.setDspParameters(param);
-
 			super.launch(builder);
 		} catch (IOException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);

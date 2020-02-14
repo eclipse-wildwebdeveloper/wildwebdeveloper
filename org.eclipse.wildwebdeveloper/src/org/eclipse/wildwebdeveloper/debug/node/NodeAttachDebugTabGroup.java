@@ -23,7 +23,7 @@ public class NodeAttachDebugTabGroup extends AbstractLaunchConfigurationTabGroup
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		setTabs(new ILaunchConfigurationTab[] {
-			new AttachTab(),
+			new NodeAttachDebugTab(),
 			new DSPOverrideSettingsTab(),
 			new CommonTab()
 		});
