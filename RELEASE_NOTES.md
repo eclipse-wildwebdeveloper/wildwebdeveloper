@@ -6,7 +6,8 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 0.8.2
 
-📅 Release Date: Mid-March, 2020
+* 📅 Release Date: Mid-March, 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.1...0.8.2
 
 #### NPM Launch shortcut
 
