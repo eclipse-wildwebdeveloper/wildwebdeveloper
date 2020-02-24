@@ -115,7 +115,7 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>./node-debug2-1.42.1.tgz</arg>
-								<arg>typescript@3.7.2</arg>
+								<arg>typescript@3.8.2</arg>
 								<arg>typescript-language-server@0.4.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@2.1.0</arg>
