@@ -79,10 +79,8 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		if (!cwd.isEmpty()) {
 			param.put(AbstractHTMLDebugDelegate.CWD, cwd);
 		}
-		// workaround until
-		// https://github.com/microsoft/vscode-node-debug2/commit/f2dfa4ca4026fb3e4f143a391270a03df8187b42#diff-d03a74f75ec189cbc7dd3d2e105fc9c9R625
-		// is released in VSCode
-		param.put(SOURCE_MAPS, false);
+
+		param.put(SOURCE_MAPS, true);
 		
 		// TODO: Let user point to the location of their Chrome executable
 		param.put(RUNTIME_EXECUTABLE, findChromeLocation());
