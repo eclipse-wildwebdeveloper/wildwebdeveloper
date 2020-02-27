@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: XML support using Language Server
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.xml;singleton:=true
-Bundle-Version: 0.6.0.qualifier
+Bundle-Version: 0.6.1.qualifier
 Bundle-Vendor: Eclipse Wild Web Developer project
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

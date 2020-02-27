@@ -115,7 +115,10 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	private String computeJavaPath() {
 		String javaPath = "java";
-		boolean existsInPath = Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator))).map(Paths::get)
+		boolean existsInPath = Stream.of(System.getenv("PATH")
+				.split(Pattern.quote(File.pathSeparator)))
+				.map(path -> path.startsWith("\"") && path.endsWith("\"") ? path.substring(1, path.length() - 1) : path)
+				.map(Paths::get)
 				.anyMatch(path -> Files.exists(path.resolve("java")));
 		if (!existsInPath) {
 			File f = new File(System.getProperty("java.home"),
