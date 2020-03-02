@@ -87,6 +87,4 @@
    <category-def name="Wild Web Developer" label="Eclipse Wild Web Developer - Web Dev in Eclipse IDE"/>
    <category-def name="Dependencies" label="Transtive Dependencies (no need to install directly)"/>
    <category-def name="Sources" label="Sources and Tests (for integrators)"/>
-   <repository-reference location="http://download.eclipse.org/lsp4e/snapshots" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/tm4e/snapshots" enabled="true" />
 </site>
