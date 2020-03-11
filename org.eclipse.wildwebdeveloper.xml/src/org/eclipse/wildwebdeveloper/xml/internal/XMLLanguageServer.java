@@ -45,6 +45,10 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> jarPaths = new ArrayList<>();
 		commands.add(computeJavaPath());
 		commands.addAll(getProxySettings());
+		String debugPortString = System.getProperty(getClass().getName() + ".debugPort");
+		if (debugPortString != null) {
+			commands.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=" + debugPortString);
+		}
 		commands.add("-classpath");
 		try {
 			URL url = FileLocator
