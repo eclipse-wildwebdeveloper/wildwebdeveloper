@@ -20,6 +20,9 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4j.Hover;
+import org.eclipse.lsp4j.HoverParams;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -68,7 +71,8 @@ public class TestTypeScript {
 		AbstractTextEditor editor = (AbstractTextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = LSPEclipseUtils.getDocument(editor);
 		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a didChange
-		Hover hover = LanguageServiceAccessor.getLanguageServers(document, null).get().get(0).getTextDocumentService().hover(LSPEclipseUtils.toTextDocumentPosistionParams(18, document)).get();
+		HoverParams params = new HoverParams(new TextDocumentIdentifier(LSPEclipseUtils.toUri(document).toString()), new Position(0, 18));
+		Hover hover = LanguageServiceAccessor.getLanguageServers(document, null).get().get(0).getTextDocumentService().hover(params).get();
 		Assert.assertTrue(hover.getContents().toString().contains("button"));
 	}
 
