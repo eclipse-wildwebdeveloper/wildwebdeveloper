@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugLaunchShortcut;
 
 public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfigurationTab {
@@ -46,8 +47,13 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	private Text argumentsText;
 	private Text workingDirectoryText;
 	protected Composite resComposite;
+	private Text urlText;
 	protected AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut(); // contains many
+	private Button filePath;
 																									// utilities
+	private ControlDecoration decoration;
+	private Button fileRadio;
+	private Button urlRadio;
 
 	public AbstractRunHTMLDebugTab() {
 	}
@@ -56,38 +62,29 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	public void createControl(Composite parent) {
 		resComposite = new Composite(parent, SWT.NONE);
 		resComposite.setLayout(new GridLayout(3, false));
-		new Label(resComposite, SWT.NONE).setText(Messages.FirefoxDebugTab_File);
+		
+		fileRadio = createRadioButton(resComposite, Messages.FirefoxDebugTab_File); 
+		fileRadio.setToolTipText(Messages.AbstractRunHTMLDebugTab_fileRadioToolTip);
+		fileRadio.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
+		fileRadio.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			urlText.setEnabled(false);
+			programPathText.setEnabled(true);
+			filePath.setEnabled(true);
+			validateProgramPath();
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		}));
+		
 		this.programPathText = new Text(resComposite, SWT.BORDER);
 		this.programPathText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		ControlDecoration decoration = new ControlDecoration(programPathText, SWT.TOP | SWT.LEFT);
+		decoration = new ControlDecoration(programPathText, SWT.TOP | SWT.LEFT);
 		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault()
 				.getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		decoration.setImage(fieldDecoration.getImage());
 		this.programPathText.addModifyListener(event -> {
-			setDirty(true);
-			File file = new File(programPathText.getText());
-			if (!file.isFile()) {
-				String errorMessage = Messages.RunProgramTab_error_unknownFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else if (!shortcut.canLaunch(file)) {
-				String errorMessage = "Not a html file"; //$NON-NLS-1$
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else if (!file.canRead()) {
-				String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else {
-				setErrorMessage(null);
-				decoration.hide();
-			}
-			updateLaunchConfigurationDialog();
+			validateProgramPath();
 		});
-		Button filePath = new Button(resComposite, SWT.PUSH);
+		filePath = new Button(resComposite, SWT.PUSH);
 		filePath.setText(Messages.AbstractRunHTMLDebugTab_browse);
 		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
 			FileDialog filePathDialog = new FileDialog(resComposite.getShell());
@@ -100,7 +97,27 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				updateLaunchConfigurationDialog();
 			}
 		}));
-
+		
+		urlRadio = createRadioButton(resComposite, "URL: ");
+		urlRadio.setToolTipText(Messages.RunFirefoxDebugTab_URL_Note);
+		urlRadio.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
+		urlRadio.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			programPathText.setEnabled(false);
+			filePath.setEnabled(false);
+			urlText.setEnabled(true);
+			decoration.hide();
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		}));
+		urlText = new Text(resComposite, SWT.BORDER);
+		GridData urlTextGD = new GridData(SWT.FILL, SWT.DEFAULT, true, false);
+		urlTextGD.horizontalSpan = 2;
+		urlText.setLayoutData(urlTextGD);
+		urlText.addModifyListener(e -> {
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		});
+		
 		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_argument);
 		this.argumentsText = new Text(resComposite, SWT.BORDER);
 		GridData argsGD = new GridData(SWT.FILL, SWT.DEFAULT, true, false);
@@ -130,8 +147,33 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				updateLaunchConfigurationDialog();
 			}
 		}));
-
 		setControl(resComposite);
+	}
+
+	private void validateProgramPath() {
+		setDirty(true);
+
+		File file = new File(programPathText.getText());
+		if (!file.isFile()) {
+			String errorMessage = Messages.RunProgramTab_error_unknownFile;
+			setErrorMessage(errorMessage);
+			decoration.setDescriptionText(errorMessage);
+			decoration.show();
+		} else if (!shortcut.canLaunch(file)) {
+			String errorMessage = "Not a html file"; //$NON-NLS-1$
+			setErrorMessage(errorMessage);
+			decoration.setDescriptionText(errorMessage);
+			decoration.show();
+		} else if (!file.canRead()) {
+			String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
+			setErrorMessage(errorMessage);
+			decoration.setDescriptionText(errorMessage);
+			decoration.show();
+		} else {
+			setErrorMessage(null);
+			decoration.hide();
+		}
+		updateLaunchConfigurationDialog();
 	}
 
 	@Override
@@ -148,6 +190,17 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			this.argumentsText.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
 			this.workingDirectoryText.setText(
 					configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, pathOrEmpty(getSelectedProject())));
+			this.urlText.setText(configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "")); //$NON-NLS-1$
+			if (urlText.getText().isEmpty()) {
+				fileRadio.setSelection(true);
+				urlText.setEnabled(false);
+			} else {
+				programPathText.setEnabled(false);
+				filePath.setEnabled(false);
+				urlText.setEnabled(true);
+				urlRadio.setSelection(true);
+				decoration.hide();
+			}
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -156,13 +209,19 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		String programPath = this.programPathText.getText();
-		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, programPath);
+		if (programPathText.isEnabled()) {
+			configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, programPath);
+			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, "");
+		} else if (urlText.isEnabled()) {
+			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, urlText.getText());
+			configuration.setAttribute(ChromeRunDAPDebugDelegate.PROGRAM, "");
+		}
+
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		String workingDirectory = this.workingDirectoryText.getText();
 		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, workingDirectory);
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
 		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
-	
 	}
 
 	@Override

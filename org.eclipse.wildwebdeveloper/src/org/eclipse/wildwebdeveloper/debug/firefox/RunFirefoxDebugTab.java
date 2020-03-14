@@ -18,6 +18,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wildwebdeveloper.debug.AbstractRunHTMLDebugTab;
+import org.eclipse.wildwebdeveloper.debug.Messages;
 
 public class RunFirefoxDebugTab extends AbstractRunHTMLDebugTab {	
 	private Button reloadOnChange;
@@ -30,12 +31,11 @@ public class RunFirefoxDebugTab extends AbstractRunHTMLDebugTab {
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		reloadOnChange = new Button(resComposite, SWT.CHECK);
-		reloadOnChange.setText("Reload on change");
+		reloadOnChange.setText(Messages.RunFirefoxDebugTab_ReloadOnChange); 
 		reloadOnChange.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
 			setDirty(true);
 			updateLaunchConfigurationDialog();
 		}));
-		
 	}
 	
 	@Override

@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate;
 
 public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 
@@ -58,7 +59,16 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		param.put(REQUEST, "launch"); //$NON-NLS-1$
 		// TODO: Let user set location of firefox executable
 		param.put(FIREFOX_EXECUTABLE, findFirefoxLocation());
-		param.put(FILE, configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$
+
+		// File or URL to debug 
+		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "");
+		if (!url.isEmpty()) {
+			param.put(ChromeRunDAPDebugDelegate.URL, url);
+			File projectDirectory = new File(configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, ""));
+			param.put("webRoot", projectDirectory.getAbsolutePath());
+		} else {
+			param.put(FILE, configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$
+		}
 		param.put(PREFERENCES, "{}"); //$NON-NLS-1$
 		param.put(TMP_DIRS, System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		param.put(TYPE, "firefox"); //$NON-NLS-1$

@@ -36,7 +36,8 @@ public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 		Map<String, Object> param = new HashMap<>();
 		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
 		param.put(AbstractHTMLDebugDelegate.PORT, configuration.getAttribute(NodeAttachDebugDelegate.PORT, 9229));
-		param.put("url", "https://www.google.ca/");
+		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "https://www.google.ca/");
+		param.put(ChromeRunDAPDebugDelegate.URL, url);			
 		param.put("runtimeExecutable", ChromeRunDAPDebugDelegate.findChromeLocation(configuration));
 		
 		super.launchWithParameters(configuration, mode, launch, monitor, param, ChromeRunDAPDebugDelegate.findDebugAdapter());

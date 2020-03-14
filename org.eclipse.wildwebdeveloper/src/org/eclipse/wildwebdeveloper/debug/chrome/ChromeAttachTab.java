@@ -14,16 +14,20 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.debug.node.AttachTab;
 
 public class ChromeAttachTab extends AttachTab {
 
 	private Combo browserToUse;
-
+	private Text urlText;
+	
 	public ChromeAttachTab() {
 		super(9222);
 	}
@@ -31,6 +35,15 @@ public class ChromeAttachTab extends AttachTab {
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
+		
+		new Label(resComposite, SWT.NONE).setText("URL: ");
+		this.urlText = new Text(resComposite, SWT.BORDER);
+		this.urlText.setToolTipText(Messages.RunFirefoxDebugTab_URL_Note);
+		this.urlText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		urlText.addModifyListener(e -> {
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		});
 		new Label(resComposite, SWT.NONE).setText(Messages.ChromeAttachTab_runWith);
 		browserToUse = new Combo(resComposite, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
 		browserToUse.add(ChromeRunDAPDebugDelegate.CHROMIUM);
@@ -42,15 +55,11 @@ public class ChromeAttachTab extends AttachTab {
 	}
 
 	@Override
-	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		super.setDefaults(configuration);
-	}
-
-	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		super.initializeFrom(configuration);
 		try {
 			browserToUse.setText(configuration.getAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, ChromeRunDAPDebugDelegate.CHROMIUM));
+			urlText.setText(configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, ""));
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -60,5 +69,6 @@ public class ChromeAttachTab extends AttachTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		super.performApply(configuration);
 		configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, browserToUse.getText());
+		configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, urlText.getText());
 	}
 }
