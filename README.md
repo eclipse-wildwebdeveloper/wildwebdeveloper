@@ -1,6 +1,6 @@
 # Eclipse Wild Web Developer : 🌐 Web dev in Eclipse IDE 🌘
 
-🖊️ **Edit** of HTML, CSS, JavaScript, TypeScript, JSON+schema, XML+schema, YAML+schema+Kubernetes and 🦟🔫 **debug** Node.js and HTML+JS web-apps simply and efficiently in the 🌘 Eclipse IDE.
+🖊️ **Edit** HTML, CSS, JavaScript, TypeScript, JSON+schema, XML+schema, YAML+schema+Kubernetes and 🦟🔫 **debug** Node.js and HTML+JS web-apps simply and efficiently in the 🌘 Eclipse IDE.
 
 To see it in action, open the desired file with the Generic Editor that's included by default in the Eclipse IDE.
 
@@ -85,6 +85,25 @@ In an Eclipse target platform definition:
 
 Wild Web Developer is based on the Eclipse Generic Editor framework from [Eclipse Platform](https://projects.eclipse.org/projects/eclipse.platform), [Eclipse LSP4E](https://projects.eclipse.org/projects/technology.lsp4e) and [Eclipse TM4E](https://github.com/eclipse/tm4e) in order to provide editors based on TextMate grammars, Visual Studio Code HTML CSS & JSON Language Servers, Theia's [TypeScript and JavaScript language servers](https://github.com/theia-ide/typescript-language-server), Red Hat's [xml-languageserver](https://github.com/angelozerr/lsp4xml) and [yaml-language-server](https://github.com/redhat-developer/yaml-language-server/)...; and on Eclipse Debug stack, LSP4E Debug Adapter Protocol support and Visual Studio Code Node Debug Adapter... to provide debugging.
 
+## Importing Existing Projects
+
+First, open the New Project Wizard:
+
+![screenshot](documentation-files/new-project-wizard.png "New Project Wizard")
+
+Select General -> Project:
+
+![screenshot](documentation-files/general-project.png "General Project")
+
+Uncheck 'Use default location', find your project location, click Finish:
+
+![screenshot](documentation-files/use-existing-sources.png "Use Existing Sources")
+
+Remember to Open desired files in the Generic Text Editor:
+
+![screenshot](documentation-files/generic-text-editor.png "Generic Text Editor")
+
+You can set this as the default by clicking Open With -> Other -> Use as Default.
 ## ⌨️ Get involved
 
 Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues).
