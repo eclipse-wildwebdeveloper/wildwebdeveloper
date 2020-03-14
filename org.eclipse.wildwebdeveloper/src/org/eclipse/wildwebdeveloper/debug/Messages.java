@@ -17,10 +17,13 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.wildwebdeveloper.debug.messages"; //$NON-NLS-1$
 	public static String AbstractRunHTMLDebugTab_browse;
+	public static String AbstractRunHTMLDebugTab_fileRadioToolTip;
 	public static String AttachTab_address;
 	public static String AttachTab_port;
 	public static String AttachTab_title;
 	public static String FirefoxDebugTab_File;
+	public static String RunFirefoxDebugTab_ReloadOnChange;
+	public static String RunFirefoxDebugTab_URL_Note;
 	public static String RunProgramTab_argument;
 	public static String RunProgramTab_error_nonReadableFile;
 	public static String RunProgramTab_error_notJSFile;
@@ -33,6 +36,7 @@ public class Messages extends NLS {
 	public static String NodeAttach_localRoot;
 	public static String NodeAttach_remoteRoot;
 	public static String NodeAttach_invalidLocalRootDirectory;
+	public static String ChromeAttachTab_runWith;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

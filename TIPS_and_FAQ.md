@@ -33,6 +33,16 @@ Example `tsconfig.json`:
 3. Right click on the entry point of your website (eg. `index.html`) => Debug as => Chrome Debug
 4. If a breakpoint is set in your `.ts` source file, it will be hit when the equivalent JavaScript code is run.
 
+#### Debug a client-side code of a web app?
+
+1. Start your web app's Node.JS web server (usually done through a NPM script in your package.json, eg. `npm start` ). This can be done through the commandline or by right-clicking on a package.json in the Project Explorer => Run as => NPM...
+2. Once your web app is running, take note of the local URL it's running on. For React project's, it's by default `http://localhost:3000/`
+3. Right click on your project's root directory in the Project Explorer => Debug as => Debug configurations...
+4. Create a launch or attach debug configuration for Chrome or Firefox, depending on your preference.
+5. For launch debug configurations, select the URL radio button and enter the URL from step 2. For attach debug configurations, simply enter the URL from step 2.
+6. Ensure the working directory is correctly set to your project's root folder.
+7. Click `apply` followed by `debug` in the bottom right corner of the debug configuration
+
 #### Get instant HTML preview on save ?
 
 1. Open the HTML file with the Generic Editor for edition.

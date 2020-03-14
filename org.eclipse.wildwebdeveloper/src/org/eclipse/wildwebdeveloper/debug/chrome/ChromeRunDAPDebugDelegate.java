@@ -44,6 +44,7 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 	static final String VERBOSE = "verbose";
 	private static final String TRACE = "trace";
 	public static final String RUNTIME_EXECUTABLE = "runtimeExecutable";
+	public static final String URL = "url";
 	private static final String SOURCE_MAPS = "sourceMaps";
 	public static final String CHROMIUM = "Chromium";
 	public static final String CHROME = "Chrome";
@@ -54,9 +55,7 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
 		
-		// File to debug 
-		param.put("file", configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "no program path defined")); //$NON-NLS-1$
-		
+
 		// Chrome executable arguments
 		String argsString = configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "").trim(); //$NON-NLS-1$
 		if (!argsString.isEmpty()) {
@@ -74,6 +73,14 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 			JsonObject envJson = new JsonObject();
 			env.forEach((key, value) -> envJson.addProperty(key, value));
 			param.put(AbstractHTMLDebugDelegate.ENV, envJson);
+		}
+		
+		// File or URL to debug 
+		String url = configuration.getAttribute(URL, "");
+		if (!url.equals("")) {
+			param.put(URL, url);
+		} else {
+			param.put("file", configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "no program path defined")); //$NON-NLS-1$
 		}
 		
 		// Chrome working directory

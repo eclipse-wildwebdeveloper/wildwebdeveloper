@@ -17,6 +17,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -35,6 +36,7 @@ public class RunChromeDebugTab extends AbstractRunHTMLDebugTab {
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
+		
 		new Label(resComposite, SWT.NONE).setText("Run with: ");
 		browserToUse = new Combo(resComposite, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
 		browserToUse.add(ChromeRunDAPDebugDelegate.CHROMIUM);
@@ -43,9 +45,13 @@ public class RunChromeDebugTab extends AbstractRunHTMLDebugTab {
 			setDirty(true);
 			updateLaunchConfigurationDialog();
 		}));
-		Composite emptySpace = new Composite(resComposite, SWT.NONE);
+		
+		GridData browserToUseGD = new GridData(SWT.DEFAULT, SWT.DEFAULT, true, false);
+		browserToUseGD.horizontalSpan = 2;
+		browserToUse.setLayoutData(browserToUseGD);
+		
 		verboseConsoleOutput = new Button(resComposite, SWT.CHECK);
-		verboseConsoleOutput.setText("Verbose console output");
+		verboseConsoleOutput.setText("Verbose output");
 		verboseConsoleOutput.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
 			setDirty(true);
 			updateLaunchConfigurationDialog();

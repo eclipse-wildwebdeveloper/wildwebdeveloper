@@ -70,7 +70,7 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
 			this.addressText.setText(configuration.getAttribute(NodeAttachDebugDelegate.ADDRESS, "")); //$NON-NLS-1$
-			this.portSpinner.setSelection(configuration.getAttribute(NodeAttachDebugDelegate.PORT, -1));
+			this.portSpinner.setSelection(defaultPort);
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
