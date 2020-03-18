@@ -6,7 +6,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 0.8.3
 
-* 📅 Release Date: Match 19th, 2020
+* 📅 Release Date: March 19th, 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.2...0.8.3
 
 #### TypeScript 3.8 support
