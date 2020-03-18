@@ -4,9 +4,21 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.8.3
+
+* 📅 Release Date: Match 19th, 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.2...0.8.3
+
+#### TypeScript 3.8 support
+
+Wild Web Developer supports the latest release of TypeScript, 3.8
+
+![TypeScript 3.8 demo](documentation-files/typescript38.png)
+
+
 ## 0.8.2
 
-* 📅 Release Date: Mid-March, 2020
+* 📅 Release Date: February 20th, 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.1...0.8.2
 
 #### NPM Launch shortcut
