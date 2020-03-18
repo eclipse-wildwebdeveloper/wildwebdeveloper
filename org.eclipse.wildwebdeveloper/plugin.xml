@@ -389,6 +389,61 @@
      <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
    </extension>
 
+   <!-- Java Server Pages (JSP) -->   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="jsp,jspf,tag"
+            id="org.eclipse.wildwebdeveloper.jsp"
+            name="JavaServerPages"
+            priority="normal">
+      </content-type>
+   </extension>
+
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.html.HTMLLanguageServer"
+            id="org.eclipse.wildwebdeveloper.jsp-ls"
+            label="JavaServer Pages Language Server"
+            singleton="true">
+      </server>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.jsp"
+            id="org.eclipse.wildwebdeveloper.jsp-ls">
+      </contentTypeMapping>
+   </extension>
+   
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/jsp/jsp.tmLanguage.json"
+            scopeName="text.html.jsp"/>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.jsp"
+            scopeName="text.html.jsp"/>
+       <grammar
+            path="grammars/java/java.tmLanguage.json"
+            scopeName="source.java"/>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.jsp"
+            scopeName="source.java"/>
+             
+   </extension>   
+ 
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.jsp"
+            path="language-configurations/jsp/jsp-configuration.json">
+      </languageConfiguration>
+   </extension>
+   
+   <extension point="org.eclipse.ui.genericeditor.icons">
+     <icon contentType="org.eclipse.wildwebdeveloper.jsp" icon="icons/jsEditorIcon.png"/>
+   </extension>
+   
    <!-- Angular -->
    <extension point="org.eclipse.lsp4e.languageServer">
      <server id="org.eclipse.wildwebdeveloper.angular" class="org.eclipse.wildwebdeveloper.angular.AngularLanguageServer" label="Angular Language Server"/>
