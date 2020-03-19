@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * @since 0.6.0
+ * @since 0.7.0
  *
  */
-public interface XMLLSClasspathExtensionProvider extends Supplier<List<File>> {
+public interface LemminxClasspathExtensionProvider extends Supplier<List<File>> {
 
 }

@@ -30,11 +30,11 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.wildwebdeveloper.xml.XMLLSClasspathExtensionProvider;
+import org.eclipse.wildwebdeveloper.xml.LemminxClasspathExtensionProvider;
 
 public class XMLExtensionRegistry {
 
-	private static final String EXTENSION_POINT_ID = Activator.PLUGIN_ID + ".xmllsExtension"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_ID = Activator.PLUGIN_ID + ".lemminxExtension"; //$NON-NLS-1$
 	private Map<IConfigurationElement, String> extensions = new HashMap<>();
 	private boolean outOfSync = true;
 
@@ -71,26 +71,26 @@ public class XMLExtensionRegistry {
 	}
 
 	public List<String> getXMLLSClassPathExtensions() {
-		Map<IConfigurationElement, XMLLSClasspathExtensionProvider> extensionProviders = getRegisteredClassPathProviders();
+		Map<IConfigurationElement, LemminxClasspathExtensionProvider> extensionProviders = getRegisteredClassPathProviders();
 
 		List<String> classpathExtensions = new ArrayList<>();
 		extensionProviders.entrySet().stream()
-				.map(Entry<IConfigurationElement, XMLLSClasspathExtensionProvider>::getValue)
-				.map(XMLLSClasspathExtensionProvider::get)
+				.map(Entry<IConfigurationElement, LemminxClasspathExtensionProvider>::getValue)
+				.map(LemminxClasspathExtensionProvider::get)
 				.forEach(list -> list.forEach(jar -> classpathExtensions.add(jar.getAbsolutePath())));
 
 		return classpathExtensions;
 	}
 
-	private Map<IConfigurationElement, XMLLSClasspathExtensionProvider> getRegisteredClassPathProviders() {
-		Map<IConfigurationElement, XMLLSClasspathExtensionProvider> extensionProviders = new HashMap<>();
+	private Map<IConfigurationElement, LemminxClasspathExtensionProvider> getRegisteredClassPathProviders() {
+		Map<IConfigurationElement, LemminxClasspathExtensionProvider> extensionProviders = new HashMap<>();
 		for (IConfigurationElement extension : Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(EXTENSION_POINT_ID)) {
 			try {
 				if (extension.getAttribute("provider") != null) {
 					final Object executableExtension = extension.createExecutableExtension("provider");
-					if (executableExtension instanceof XMLLSClasspathExtensionProvider) {
-						extensionProviders.put(extension, (XMLLSClasspathExtensionProvider) executableExtension);
+					if (executableExtension instanceof LemminxClasspathExtensionProvider) {
+						extensionProviders.put(extension, (LemminxClasspathExtensionProvider) executableExtension);
 					}
 				}
 			} catch (Exception ex) {

@@ -4,9 +4,20 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.9.0
+
+* 📅 Release Date (tentative): May 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.3...0.9.0
+
+#### Breaking changes
+
+* Extension point `org.eclipse.wildwebdeveloper.lemminxExtension` now replaces `org.eclipse.wildwebdeveloper.xmllsExtension`
+* Interface `LemminxClasspathExtensionProvider` now replaces `XMLLSClasspathExtensionProvider`
+* XML Language server is now Eclipse Lemminx 0.11.0. Extensions must be built targetting this language server (package name have changed)
+
 ## 0.8.3
 
-* 📅 Release Date: Match 19th, 2020
+* 📅 Release Date: March 19th, 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.2...0.8.3
 
 #### TypeScript 3.8 support

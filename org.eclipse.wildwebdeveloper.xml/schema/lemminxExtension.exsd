@@ -3,12 +3,12 @@
 <schema targetNamespace="org.eclipse.wildwebdeveloper.xml" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.wildwebdeveloper.xml" id="xmllsExtension" name="%ExtPoint.xmllsExtension"/>
+         <meta.schema plugin="org.eclipse.wildwebdeveloper.xml" id="lemminx" name="%ExtPoint.lemminxExtension"/>
       </appinfo>
       <documentation>
-         This extension point is used to contribute LSP4XML extension jars to extend the functionality of the XML language server.
+         This extension point is used to contribute Lemminx extension jars to extend the functionality of the XML language server.
 
-Jars can be contributed as an extension resource (by pointing to the path of the jar) or programmatically, by providing an implementation of the &lt;b&gt;XMLLSClasspathExtensionProvider&lt;/b&gt; interface.
+Jars can be contributed as an extension resource (by pointing to the path of the jar) or programmatically, by providing an implementation of the &lt;b&gt;LemminxClasspathExtensionProvider&lt;/b&gt; interface.
       </documentation>
    </annotation>
 
@@ -73,7 +73,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.wildwebdeveloper.xml.XMLLSClasspathExtensionProvider"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.wildwebdeveloper.xml.LemminxClasspathExtensionProvider"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -85,7 +85,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         0.5.0
+         0.7.0
       </documentation>
    </annotation>
 
@@ -97,7 +97,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
          &lt;br&gt;&lt;b&gt;&lt;u&gt;Providing a jar as a resource&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
 
 &lt;br&gt; &amp;lt;extension &lt;br&gt;
-        &lt;span style=&quot;margin-left:2em&quot;&gt;point=&amp;quot;org.eclipse.wildwebdeveloper.xml.xmllsExtension&amp;quot;&amp;gt;&lt;br&gt;
+        &lt;span style=&quot;margin-left:2em&quot;&gt;point=&amp;quot;org.eclipse.wildwebdeveloper.xml.lemminxExtension&amp;quot;&amp;gt;&lt;br&gt;
      &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;jar&lt;br&gt;
            &lt;span style=&quot;margin-left:3em&quot;&gt; path=&amp;quot;/path/to/extension.jar&amp;quot;&amp;gt;&lt;br&gt;
     &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;/jar&amp;gt;&lt;br&gt;
@@ -108,7 +108,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
 &lt;br&gt; &amp;lt;extension &lt;br&gt;
      &lt;span style=&quot;margin-left:2em&quot;&gt; point=&amp;quot;org.eclipse.wildwebdeveloper.xml.xmllsExtension&amp;quot;&amp;gt;&lt;br&gt;
            &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;classpathExtensionProvider&lt;br&gt;
-                 &lt;span style=&quot;margin-left:3em&quot;&gt;provider=&amp;quot;org.eclipse.wildwebdeveloper.xml.XMLLSClasspathExtensionProvider&amp;quot;&amp;gt;&lt;br&gt;
+                 &lt;span style=&quot;margin-left:3em&quot;&gt;provider=&amp;quot;org.eclipse.m2e.editor.lemminx.MavenLemminxExtensionProvider&amp;quot;&amp;gt;&lt;br&gt;
            &lt;span style=&quot;margin-left:1em&quot;&gt;&amp;lt;/classpathExtensionProvider&amp;gt;&lt;br&gt;
     &amp;lt;/extension&amp;gt;
       </documentation>
@@ -119,14 +119,14 @@ Jars can be contributed as an extension resource (by pointing to the path of the
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         &lt;p&gt;The extension jars must implement the &lt;b&gt;IXMLExtension&lt;/b&gt; interface and must register with Java Service Provider Interface (SPI) mechanism in the &lt;b&gt;/META-INF/services/org.eclipse.lsp4xml.services.extensions.IXMLExtension&lt;/b&gt; file.
+         &lt;p&gt;The extension jars must implement the &lt;b&gt;IXMLExtension&lt;/b&gt; interface and must register with Java Service Provider Interface (SPI) mechanism in the &lt;b&gt;/META-INF/services/org.eclipse.lemminx.services.extensions.IXMLExtension&lt;/b&gt; file.
 &lt;/p&gt;
 &lt;p&gt;
 See https://github.com/redhat-developer/vscode-xml#custom-xml-extensions for more information.
 &lt;/p&gt;
 
 &lt;p&gt;
-In order to provide jars to the XML LS programmatically, contributing extensions must implement the &lt;b&gt;XMLLSClasspathExtensionProvider&lt;/b&gt; interface.
+In order to provide jars to the XML LS programmatically, contributing extensions must implement the &lt;b&gt;LemminxClasspathExtensionProvider&lt;/b&gt; interface.
 &lt;/p&gt;
       </documentation>
    </annotation>

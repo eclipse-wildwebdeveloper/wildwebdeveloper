@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="xmllsExtension" name="%ExtPoint.xmllsExtension" schema="schema/xmllsExtension.exsd"/>
+   <extension-point id="lemminxExtension" name="%ExtPoint.lemminxExtension" schema="schema/lemminxExtension.exsd"/>
    <!-- Wild Web Developer/Core -->
    <!-- Duplicate or org.eclipse.wildwebdeveloper -->
    <extension

@@ -52,13 +52,13 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add("-classpath");
 		try {
 			URL url = FileLocator
-					.toFileURL(getClass().getResource("/language-servers/server/org.eclipse.lsp4xml-0.9.1-uber.jar"));
+					.toFileURL(getClass().getResource("/language-servers/server/org.eclipse.lemminx-uber.jar"));
 			List<String> extensionJarPaths = getExtensionJarPaths();
 			String uberJarPath = new java.io.File(url.getPath()).getAbsolutePath();
 			jarPaths.add(uberJarPath);
 			jarPaths.addAll(extensionJarPaths);
 			commands.add(String.join(System.getProperty("path.separator"), jarPaths));
-			commands.add("org.eclipse.lsp4xml.XMLServerLauncher");
+			commands.add("org.eclipse.lemminx.XMLServerLauncher");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
