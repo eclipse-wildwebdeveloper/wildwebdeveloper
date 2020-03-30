@@ -17,6 +17,7 @@
 package org.eclipse.wildwebdeveloper;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -68,6 +69,14 @@ public class InitializeLaunchConfigurations {
 	}
 
 	public static String which(String program) {
+
+		String[] paths = System.getenv("PATH").split(System.getProperty("path.separator"));
+		for (String path : paths) {
+			File exe = new File(path, program);
+			if (exe.canExecute())
+				return exe.getAbsolutePath();
+		}
+
 		String res = null;
 		String[] command = new String[] { "/bin/bash", "-c", "-l", "which " + program};
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
@@ -82,7 +91,7 @@ public class InitializeLaunchConfigurations {
 		}
 		return res;
 	}
-	
+
 	private static String getDefaultNodePath() {
 		switch (Platform.getOS()) {
 			case Platform.OS_MACOSX:
