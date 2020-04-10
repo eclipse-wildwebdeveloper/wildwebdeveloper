@@ -24,6 +24,7 @@ public class ChromeAttachDebugTabGroup extends AbstractLaunchConfigurationTabGro
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		setTabs(new ILaunchConfigurationTab[] {
 			new ChromeAttachTab(),
+			new ChromeExecutableTab(),
 			new DSPOverrideSettingsTab(),
 			new CommonTab()
 		});

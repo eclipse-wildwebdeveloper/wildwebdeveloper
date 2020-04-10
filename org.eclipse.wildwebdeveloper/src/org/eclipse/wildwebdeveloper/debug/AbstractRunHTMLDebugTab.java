@@ -48,9 +48,8 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	private Text workingDirectoryText;
 	protected Composite resComposite;
 	private Text urlText;
-	protected AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut(); // contains many
+	protected AbstractDebugAdapterLaunchShortcut shortcut = new ChromeRunDebugLaunchShortcut();
 	private Button filePath;
-																									// utilities
 	private ControlDecoration decoration;
 	private Button fileRadio;
 	private Button urlRadio;

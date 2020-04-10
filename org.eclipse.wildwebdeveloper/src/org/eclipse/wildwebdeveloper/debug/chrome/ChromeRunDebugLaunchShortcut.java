@@ -12,21 +12,12 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
-import java.io.File;
-
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugAdapterLaunchShortcut;
 
 public class ChromeRunDebugLaunchShortcut extends AbstractHTMLDebugAdapterLaunchShortcut {
 	
 	public ChromeRunDebugLaunchShortcut() {
 		super(ChromeRunDAPDebugDelegate.ID);
-	}
-
-	@Override
-	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
-		super.configureLaunchConfiguration(file, wc);
-		wc.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, ChromeRunDAPDebugDelegate.CHROMIUM);
 	}
 	
 }

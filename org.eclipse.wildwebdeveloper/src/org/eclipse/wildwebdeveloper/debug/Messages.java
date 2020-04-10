@@ -37,6 +37,8 @@ public class Messages extends NLS {
 	public static String NodeAttach_remoteRoot;
 	public static String NodeAttach_invalidLocalRootDirectory;
 	public static String ChromeAttachTab_runWith;
+	public static String ChromeAttachTab_browserTab;
+	public static String ChromeAttachTab_browserPreferences;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

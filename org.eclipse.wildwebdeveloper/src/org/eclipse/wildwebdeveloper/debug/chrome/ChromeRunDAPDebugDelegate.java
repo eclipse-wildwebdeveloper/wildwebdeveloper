@@ -46,8 +46,6 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 	public static final String RUNTIME_EXECUTABLE = "runtimeExecutable";
 	public static final String URL = "url";
 	private static final String SOURCE_MAPS = "sourceMaps";
-	public static final String CHROMIUM = "Chromium";
-	public static final String CHROME = "Chrome";
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -116,28 +114,33 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 	}
 
 	static String findChromeLocation(ILaunchConfiguration configuration) {
-		String res = null;
+		String res = "chromium-browser"; //$NON-NLS-1$
 		try {
-			if (configuration.getAttribute(RUNTIME_EXECUTABLE, "no runtime executable set").equals(CHROMIUM)) {
-				res = InitializeLaunchConfigurations.which("chromium-browser");
-			} else {
-				res = InitializeLaunchConfigurations.which("google-chrome-stable");
-			}
+			res = configuration.getAttribute(RUNTIME_EXECUTABLE, "chromium-browser"); //$NON-NLS-1$
 		} catch (CoreException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
 		}
+		if (new File(res).isAbsolute()) {
+			return res;
+		}
+		if (res == null || res.isEmpty()) {
+			res = "chromium-browser"; //$NON-NLS-1$
+		}
 		// Failsafe, in case user doesn't have their preferred browser
-		if (res == null) {
-			res = InitializeLaunchConfigurations.which("chromium-browser");
+		res = InitializeLaunchConfigurations.which(res);
+		if (res != null) {
+			return res;
 		}
-		if (res == null) {
-			res = InitializeLaunchConfigurations.which("google-chrome-stable");
+		res = InitializeLaunchConfigurations.which("chromium-browser");
+		if (res != null) {
+			return res;
 		}
-		if (res == null) {
-			res = "path/to/chrome";
+		res = InitializeLaunchConfigurations.which("google-chrome-stable");
+		if (res != null) {
+			return res;
 		}
-		return res;
+		return "path/to/chrome";
 	}
 
 }
