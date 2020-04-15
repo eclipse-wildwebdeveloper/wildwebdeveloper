@@ -4,9 +4,14 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.9.1
+
+* 📅 Release Date (tentative): Early June 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.9.0...0.9.1
+
 ## 0.9.0
 
-* 📅 Release Date (tentative): May 2020
+* 📅 Release Date: April 15th, 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.8.3...0.9.0
 
 #### Breaking changes
@@ -14,6 +19,10 @@ This page describes the noteworthy improvements provided by each release of Ecli
 * Extension point `org.eclipse.wildwebdeveloper.lemminxExtension` now replaces `org.eclipse.wildwebdeveloper.xmllsExtension`
 * Interface `LemminxClasspathExtensionProvider` now replaces `XMLLSClasspathExtensionProvider`
 * XML Language server is now Eclipse Lemminx 0.11.0. Extensions must be built targetting this language server (package name have changed)
+
+#### Select Chrome/Chromium instance in Debug configurations
+
+When debugging against Chrome/Chromium, the related Debug Configurations now shows an extra tab that allow to select the browser instance to use. This is convenient when user has multiple instances of Chrome/Chromium installed and want to test against multiple ones. The default behavior didn't change and will look for a relevant instance in the PATH.
 
 ## 0.8.3
 
