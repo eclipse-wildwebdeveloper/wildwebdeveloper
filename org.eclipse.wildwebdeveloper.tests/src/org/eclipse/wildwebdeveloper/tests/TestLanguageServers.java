@@ -18,15 +18,14 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -229,12 +228,24 @@ public class TestLanguageServers {
 
 	@Test
 	public void testResourcesPathIsntTooLong() throws Exception {
+		// NOTE: this test does only work with jar file; when testing
+		// from IDE, the too long folder isn't excluded so test fail
+		
 		final int MAX_ALLOWED_RELATIVE_PATH = 140; // that leaves 120 characters for the path to the bundle
 //C:/Users/Jean-Jacques Saint-Romain/developpement/eclipse/plugins/org.eclipse.wildwebdeveloper_1.2.3.20201212_1605/
 		String location = Platform.getBundle("org.eclipse.wildwebdeveloper").getLocation();
-		File file = new File(URI.create(location.substring("reference:".length())));
+		if (location.startsWith("initial@")) {
+			location = location.substring("initial@".length());
+		}
+		if (location.startsWith("reference:")) {
+			location = location.substring("reference:".length());
+		}
+		if (location.startsWith("file:")) {
+			location = location.substring("file:".length());
+		}
+		File file = new File(new File(Platform.getInstallLocation().getURL().toURI()), location);
 		assertTrue(file.isDirectory());
-		Set<String> tooLongPaths = new HashSet<>();
+		Map<String, Integer> tooLongPaths = new TreeMap<>();
 		Path pluginPath = file.toPath();
 		Files.walkFileTree(pluginPath, new SimpleFileVisitor<Path>() {
 			@Override
@@ -242,8 +253,8 @@ public class TestLanguageServers {
 				String relativePathInsideBundle = pluginPath.relativize(dir).toString();
 				if (relativePathInsideBundle.startsWith("target")) {
 					return FileVisitResult.SKIP_SUBTREE;
-				} else if (relativePathInsideBundle.toString().length() > MAX_ALLOWED_RELATIVE_PATH) {
-					tooLongPaths.add(relativePathInsideBundle);
+				} else if (relativePathInsideBundle.length() > MAX_ALLOWED_RELATIVE_PATH) {
+					tooLongPaths.put(relativePathInsideBundle, relativePathInsideBundle.length());
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 				return FileVisitResult.CONTINUE;
@@ -253,11 +264,11 @@ public class TestLanguageServers {
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 				String relativePathInsideBundle = pluginPath.relativize(file).toString();
 				if (relativePathInsideBundle.length() > MAX_ALLOWED_RELATIVE_PATH) {
-					tooLongPaths.add(relativePathInsideBundle);
+					tooLongPaths.put(relativePathInsideBundle, relativePathInsideBundle.length());
 				}
 				return FileVisitResult.CONTINUE;
 			}
 		});
-		assertEquals(Collections.emptySet(), tooLongPaths);
+		assertEquals(Collections.emptyMap(), tooLongPaths);
 	}
 }

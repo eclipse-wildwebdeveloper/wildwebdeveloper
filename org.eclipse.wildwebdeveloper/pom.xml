@@ -7,7 +7,7 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.6-SNAPSHOT</version>
+	<version>0.5.7-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -17,11 +17,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>language-servers/node_modules</directory>
-						</fileset>
-						<fileset>
-							<directory>language-servers/</directory>
-							<includes>*.tgz</includes>
+							<directory>node_modules</directory>
 						</fileset>
 					</filesets>
 				</configuration>
@@ -93,13 +89,13 @@
 								<arg>pack</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
-								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
-								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
-								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
-								<arg>../target/vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
-								<arg>../target/chrome-debug-adapter/extension/</arg>
+								<arg>vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
+								<arg>vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
+								<arg>vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
+								<arg>vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
+								<arg>chrome-debug-adapter/extension/</arg>
 							</arguments>
-							<workingDirectory>language-servers/</workingDirectory>
+							<workingDirectory>${project.build.directory}</workingDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -114,17 +110,19 @@
 								<arg>install</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
-								<arg>./node-debug2-1.42.1.tgz</arg>
+								<arg>--prefix</arg>
+								<arg>${project.basedir}</arg>
+								<arg>${project.build.directory}/node-debug2-1.42.1.tgz</arg>
 								<arg>typescript@3.8.2</arg>
 								<arg>typescript-language-server@0.4.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@2.1.0</arg>
-								<arg>./vscode-css-languageserver-1.0.0.tgz</arg>
-								<arg>./vscode-html-languageserver-1.0.0.tgz</arg>
-								<arg>./vscode-json-languageserver-1.2.2.tgz</arg>
+								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
+								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
+								<arg>${project.build.directory}/vscode-json-languageserver-1.2.2.tgz</arg>
 								<arg>yaml-language-server@0.6.1</arg>
 								<arg>firefox-debugadapter@2.6.1</arg>
-								<arg>debugger-for-chrome-4.11.7.tgz</arg>
+								<arg>${project.build.directory}/debugger-for-chrome-4.11.7.tgz</arg>
 								<arg>typescript-eslint-language-service@1.4.0</arg>
 								<arg>eslint@6.0.0</arg>
 								<arg>@typescript-eslint/eslint-plugin@2.7.0</arg>
@@ -132,7 +130,7 @@
 								<arg>@angular/language-service@9.0.0-rc.4</arg>
 								<arg>@angular/language-server@0.900.0</arg>
 							</arguments>
-							<workingDirectory>language-servers/</workingDirectory>
+							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -151,7 +149,7 @@
 						<configuration>
 							<basedir>${basedir}</basedir>
 							<includes>
-								<include>language-servers/node_modules/vscode-json-languageserver/out/jsonServerMain.js</include>
+								<include>node_modules/vscode-json-languageserver/out/jsonServerMain.js</include>
 							</includes>
 							<replacements>
 								<replacement>
@@ -170,7 +168,7 @@
 						<configuration>
 							<basedir>${basedir}</basedir>
 							<includes>
-								<include>language-servers/node_modules/vscode-chrome-debug-core/out/src/chrome/chromeDebugAdapter.js</include>
+								<include>node_modules/vscode-chrome-debug-core/out/src/chrome/chromeDebugAdapter.js</include>
 							</includes>
 							<replacements>
 								<replacement>
@@ -194,7 +192,8 @@
 				<configuration>
 					<jgit.ignore>
 						pom.xml
-						language-servers/node_modules
+						node_modules
+						package-lock.json
 					</jgit.ignore>
 				</configuration>
 			</plugin>

@@ -1,3 +1,5 @@
 target/
 bin/
 language-servers/
+node_modules/
+package-lock.json

@@ -26,7 +26,7 @@ public class TypeScriptPlugin {
 	
 	public TypeScriptPlugin(String name) throws IOException {
 		pluginName = name;
-		URL fileURL = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/" + name));
+		URL fileURL = FileLocator.toFileURL(getClass().getResource("/node_modules/" + name));
 		pluginProbeLocation = new File(fileURL.getPath()).getAbsolutePath();
 	}
 	
