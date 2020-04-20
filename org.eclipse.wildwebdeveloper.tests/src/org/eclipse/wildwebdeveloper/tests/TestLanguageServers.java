@@ -12,15 +12,28 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -214,5 +227,37 @@ public class TestLanguageServers {
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
 	}
 
+	@Test
+	public void testResourcesPathIsntTooLong() throws Exception {
+		final int MAX_ALLOWED_RELATIVE_PATH = 140; // that leaves 120 characters for the path to the bundle
+//C:/Users/Jean-Jacques Saint-Romain/developpement/eclipse/plugins/org.eclipse.wildwebdeveloper_1.2.3.20201212_1605/
+		String location = Platform.getBundle("org.eclipse.wildwebdeveloper").getLocation();
+		File file = new File(URI.create(location.substring("reference:".length())));
+		assertTrue(file.isDirectory());
+		Set<String> tooLongPaths = new HashSet<>();
+		Path pluginPath = file.toPath();
+		Files.walkFileTree(pluginPath, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+				String relativePathInsideBundle = pluginPath.relativize(dir).toString();
+				if (relativePathInsideBundle.startsWith("target")) {
+					return FileVisitResult.SKIP_SUBTREE;
+				} else if (relativePathInsideBundle.toString().length() > MAX_ALLOWED_RELATIVE_PATH) {
+					tooLongPaths.add(relativePathInsideBundle);
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+				return FileVisitResult.CONTINUE;
+			}
 
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				String relativePathInsideBundle = pluginPath.relativize(file).toString();
+				if (relativePathInsideBundle.length() > MAX_ALLOWED_RELATIVE_PATH) {
+					tooLongPaths.add(relativePathInsideBundle);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+		});
+		assertEquals(Collections.emptySet(), tooLongPaths);
+	}
 }
