@@ -85,7 +85,7 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		URL fileURL;
 		try {
 			fileURL = FileLocator.toFileURL(FirefoxRunDABDebugDelegate.class
-					.getResource("/language-servers/node_modules/firefox-debugadapter/adapter.bundle.js"));
+					.getResource("/node_modules/firefox-debugadapter/adapter.bundle.js"));
 			return new File(fileURL.toURI());
 		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);

@@ -40,7 +40,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
 			URL url = FileLocator.toFileURL(getClass()
-					.getResource("/language-servers/node_modules/yaml-language-server/out/server/src/server.js"));
+					.getResource("/node_modules/yaml-language-server/out/server/src/server.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);

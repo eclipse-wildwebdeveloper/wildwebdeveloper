@@ -60,7 +60,7 @@ public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 		}
 		try {
 			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/language-servers/node_modules/node-debug2/out/src/nodeDebug.js"));
+					getClass().getResource("/node_modules/node-debug2/out/src/nodeDebug.js"));
 			File file = new File(fileURL.getPath());
 			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
 

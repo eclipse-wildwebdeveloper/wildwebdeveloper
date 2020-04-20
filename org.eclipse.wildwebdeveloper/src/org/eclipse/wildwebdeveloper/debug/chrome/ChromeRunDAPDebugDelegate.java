@@ -103,7 +103,7 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		URL fileURL;
 		try {
 			fileURL = FileLocator.toFileURL(
-					ChromeRunDAPDebugDelegate.class.getResource("/language-servers/node_modules/debugger-for-chrome/out/src/chromeDebug.js"));
+					ChromeRunDAPDebugDelegate.class.getResource("/node_modules/debugger-for-chrome/out/src/chromeDebug.js"));
 			return new File(fileURL.toURI());
 		} catch (IOException | URISyntaxException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);

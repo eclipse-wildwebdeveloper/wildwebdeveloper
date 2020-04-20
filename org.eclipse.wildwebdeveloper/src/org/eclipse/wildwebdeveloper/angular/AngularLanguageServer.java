@@ -42,7 +42,7 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/@angular/language-server/index.js"));
+			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/@angular/language-server/index.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			File nodeModules = new File(url.getPath()).getParentFile().getParentFile().getParentFile();
 			commands.add("--ngProbeLocations");

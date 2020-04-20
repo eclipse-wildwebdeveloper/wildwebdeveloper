@@ -35,13 +35,13 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/typescript-language-server/lib/cli.js"));
-			URL tsServer = FileLocator.toFileURL(getClass().getResource("/language-servers/node_modules/typescript/lib/tsserver.js"));
+			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript-language-server/lib/cli.js"));
+			URL tsServer = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript/lib/tsserver.js"));
 			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			commands.add("--tsserver-path");
 			commands.add(new File(tsServer.getPath()).getAbsolutePath());
-			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/language-servers/"));
+			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/"));
 			setCommands(commands);
 			setWorkingDirectory(nodeDependencies.getPath()); //Required for typescript-eslint-language-service to find it's dependencies
 
