@@ -213,7 +213,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, "");
 		} else if (urlText.isEnabled()) {
 			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, urlText.getText());
-			configuration.setAttribute(ChromeRunDAPDebugDelegate.PROGRAM, "");
+			configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, "");
 		}
 
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
