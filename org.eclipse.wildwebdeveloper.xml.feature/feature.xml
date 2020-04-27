@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.wildwebdeveloper.feature"
+      id="org.eclipse.wildwebdeveloper.xml.feature"
       label="%name"
       version="0.9.1.qualifier"
       provider-name="Eclipse Wild Web Developer project"
@@ -19,14 +19,11 @@
       %license
    </license>
 
-   <includes
-         id="org.eclipse.wildwebdeveloper.xml.feature"
-         version="0.0.0"/>
-
    <plugin
-         id="org.eclipse.wildwebdeveloper"
+         id="org.eclipse.wildwebdeveloper.xml"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
