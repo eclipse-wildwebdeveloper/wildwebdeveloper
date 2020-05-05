@@ -15,6 +15,7 @@ package org.eclipse.wildwebdeveloper.xml.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,6 +40,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 public class XMLLanguageServer extends ProcessStreamConnectionProvider {
+
+	private final XMLExtensionRegistry extensionJarRegistry =new XMLExtensionRegistry();
 
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
@@ -111,7 +114,6 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	 *         XMLLSClasspathExtensionProvider)
 	 */
 	private List<String> getExtensionJarPaths() {
-		XMLExtensionRegistry extensionJarRegistry = new XMLExtensionRegistry();
 		List<String> extensionJarPaths = extensionJarRegistry.getXMLExtensionJars();
 		extensionJarPaths.addAll(extensionJarRegistry.getXMLLSClassPathExtensions());
 		return extensionJarPaths;
@@ -135,6 +137,11 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	@Override
 	public String toString() {
 		return "XML Language Server: " + super.toString();
+	}
+
+	@Override
+	public Object getInitializationOptions(URI rootUri) {
+		return extensionJarRegistry.getInitiatizationOptions();
 	}
 
 }

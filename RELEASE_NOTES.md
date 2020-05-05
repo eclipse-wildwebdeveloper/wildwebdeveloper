@@ -9,6 +9,10 @@ This page describes the noteworthy improvements provided by each release of Ecli
 * 📅 Release Date (tentative): Early June 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.9.1...0.9.2
 
+#### Extension point to define initializationOptions to LemMinX XML Language Server
+
+The extension point `org.eclipse.wildwebdeveloper.xml` now allows a new `initializationOptionsProvider` child element type, which can be used to specify some initialize options. This is typically useful for language server who should be configured according some some user preferences already configured somewhere else in the IDE, so such preferences can be propageted to the language server.
+
 ## 0.9.1
 
 * 📅 Release Date: May 4th 2020
