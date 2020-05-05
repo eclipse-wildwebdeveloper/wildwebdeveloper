@@ -22,6 +22,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
          <sequence>
             <element ref="jar" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="classpathExtensionProvider" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="initializationOptionsProvider" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -52,7 +53,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
 
    <element name="jar">
       <complexType>
-         <attribute name="path" type="string">
+         <attribute name="path" type="string" use="required">
             <annotation>
                <documentation>
                   
@@ -67,13 +68,33 @@ Jars can be contributed as an extension resource (by pointing to the path of the
 
    <element name="classpathExtensionProvider">
       <complexType>
-         <attribute name="provider" type="string">
+         <attribute name="provider" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.wildwebdeveloper.xml.LemminxClasspathExtensionProvider"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="initializationOptionsProvider">
+      <annotation>
+         <documentation>
+            @since 0.8
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="provider" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.wildwebdeveloper.xml.InitializationOptionsProvider"/>
                </appinfo>
             </annotation>
          </attribute>

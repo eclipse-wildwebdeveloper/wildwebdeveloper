@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wildwebdeveloper.xml.InitializationOptionsProvider;
 import org.eclipse.wildwebdeveloper.xml.LemminxClasspathExtensionProvider;
 
 public class XMLExtensionRegistry {
@@ -87,7 +88,7 @@ public class XMLExtensionRegistry {
 		for (IConfigurationElement extension : Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(EXTENSION_POINT_ID)) {
 			try {
-				if (extension.getAttribute("provider") != null) {
+				if (extension.getName().equals("classpathExtensionProvider") && extension.getAttribute("provider") != null) {
 					final Object executableExtension = extension.createExecutableExtension("provider");
 					if (executableExtension instanceof LemminxClasspathExtensionProvider) {
 						extensionProviders.put(extension, (LemminxClasspathExtensionProvider) executableExtension);
@@ -122,5 +123,27 @@ public class XMLExtensionRegistry {
 			this.extensions.remove(toRemove);
 		}
 		this.outOfSync = false;
+	}
+
+	public Map<String, Object> getInitiatizationOptions() {
+		Map<String, Object> res = new HashMap<>();
+		for (IConfigurationElement extension : Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_ID)) {
+			try {
+				if (extension.getName().equals("initializationOptionsProvider") && extension.getAttribute("provider") != null) {
+					final Object executableExtension = extension.createExecutableExtension("provider");
+					if (executableExtension instanceof InitializationOptionsProvider) {
+						Map<String, Object> options = ((InitializationOptionsProvider)executableExtension).get();
+						if (options != null) {
+							res.putAll(options);
+						}
+					}
+				}
+			} catch (Exception ex) {
+				Activator.getDefault().getLog()
+						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex));
+
+			}
+		}
+		return res;
 	}
 }
