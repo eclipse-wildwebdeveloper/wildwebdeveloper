@@ -36,6 +36,8 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Version;
 
 public class InitializeLaunchConfigurations {
+  
+  private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
 
 	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Collections
 			.unmodifiableSet(new HashSet<>(Arrays.asList(10, 11, 12, 13, 14)));
@@ -81,6 +83,8 @@ public class InitializeLaunchConfigurations {
 		String[] command = new String[] { "/bin/bash", "-c", "-l", "which " + program};
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 			command = new String[] { "cmd", "/c", "where " + program };
+		} else if (Platform.getOS().equals(Platform.OS_MACOSX)) {
+			command = new String[] { getDefaultShellMacOS(), "-c", "-li", "which " + program};
 		}
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
@@ -91,6 +95,26 @@ public class InitializeLaunchConfigurations {
 		}
 		return res;
 	}
+
+  private static String getDefaultShellMacOS() {
+    String res = null;
+    String[] command = new String[] {"/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell"};
+    try (BufferedReader reader = new BufferedReader(
+      new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+      res = reader.readLine();
+      if ( ! res.startsWith(MACOS_DSCL_SHELL_PREFIX)) {
+        Activator.getDefault().getLog().log(
+          new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(),
+            "Cannot find default shell. Use '/bin/zsh' instead."));
+        return "/bin/zsh"; // Default shell since macOS 10.15
+      }
+      res = res.substring(MACOS_DSCL_SHELL_PREFIX.length());
+    } catch (IOException e) {
+      Activator.getDefault().getLog().log(
+        new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+    }
+    return res;
+  }
 
 	private static String getDefaultNodePath() {
 		switch (Platform.getOS()) {
