@@ -10,6 +10,7 @@
  * Contributors:
  *  Michal� Niewrzal� (Rogue Wave Software Inc.) - initial implementation
  *  Angelo Zerr <angelo.zerr@gmail.com> - JSON Schema support
+ *  Dawid Pakuła <zulus@w3des.net> - JSON Schema extension point
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.json;
 
@@ -24,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.InitializeResult;
@@ -36,6 +39,9 @@ import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
+	private final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
+	private final static String NAME_ATTR = "name"; //$NON-NLS-1$
+	private final static String SCHEMA_ELEMENT = "schema"; //$NON-NLS-1$
 	public JSonLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
@@ -72,6 +78,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 		fillSchemaAssociationsForJavascript(associations);
 		fillSchemaAssociationsForTypeScript(associations);
 		fillSchemaAssociationsForOmnisharp(associations);
+		fillSchemaAssociationsFromExtensionPoint(associations);
 		return associations;
 	}
 
@@ -99,7 +106,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 		associations.put("/tsconfig.*.json", Arrays.asList("http://json.schemastore.org/tsconfig"));
 		associations.put("/typing.json", Arrays.asList("http://json.schemastore.org/typing"));
 	}
-
+	
 	/**
 	 * JSON Schema contributions for TypeScript
 	 * 
@@ -107,6 +114,21 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	 */
 	private void fillSchemaAssociationsForOmnisharp(Map<String, List<String>> associations) {
 		associations.put("/omnisharp.json", Arrays.asList("http://json.schemastore.org/omnisharp"));
+	}
+	
+	private void fillSchemaAssociationsFromExtensionPoint(Map<String, List<String>> associations) {
+		IConfigurationElement[] conf = Platform.getExtensionRegistry().getConfigurationElementsFor(SCHEMA_EXT);
+		for (IConfigurationElement el : conf) {
+			associations.put(el.getAttribute(NAME_ATTR), collectSchemaURL(el.getChildren(SCHEMA_ELEMENT)));
+		}
+	}
+
+	private List<String> collectSchemaURL(IConfigurationElement[] schema) {
+		List<String> list = new ArrayList<>(schema.length);
+		for (IConfigurationElement el : schema) {
+			list.add(el.getValue());
+		}
+		return list;
 	}
 
 	@Override
