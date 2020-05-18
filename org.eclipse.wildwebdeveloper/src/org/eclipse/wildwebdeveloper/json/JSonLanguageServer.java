@@ -41,6 +41,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
 	private final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
 	private final static String PATTERN_ATTR = "pattern"; //$NON-NLS-1$
+	private final static String URL_ATTR = "url"; //$NON-NLS-1$
 	public JSonLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
@@ -122,7 +123,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 			if (!associations.containsKey(pattern)) {
 				associations.put(pattern, new ArrayList<>());
 			}
-			associations.get(pattern).add(el.getValue());
+			associations.get(pattern).add(el.getAttribute(URL_ATTR));
 		}
 	}
 

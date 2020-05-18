@@ -50,14 +50,25 @@
    <element name="schema">
       <annotation>
          <documentation>
-            URL as value
+            Schema entry
          </documentation>
       </annotation>
       <complexType>
          <attribute name="pattern" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  &lt;ul&gt;
+&lt;li&gt;tsconfig.json - directory doesn&apos;t matter&lt;/li&gt;
+&lt;li&gt;/tsconfig.json - only in root directory&lt;/li&gt;
+&lt;li&gt;tsconfig.*.json - wildcard name&lt;/li&gt;
+&lt;/ul&gt;
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="url" type="string" use="required">
+            <annotation>
+               <documentation>
+                  URL to schema, for example: http://json.schemastore.org/tsconfig
                </documentation>
             </annotation>
          </attribute>
@@ -80,12 +91,12 @@
       <documentation>
          &lt;p&gt;Root project file&lt;/p&gt;
 &lt;pre&gt;
-&amp;lt;schema pattern=&amp;quot;/.eslintrc&amp;quot;http://json.schemastore.org/eslintrc&amp;lt;/schema&amp;gt;
+&amp;lt;schema pattern=&amp;quot;/.eslintrc&amp;quot; url=&amp;quot;http://json.schemastore.org/eslintrc&amp;quot; /&amp;gt;
 &lt;/pre&gt;
 
 &lt;p&gt;Wildcard name&lt;/p&gt;
 &lt;pre&gt;
-&amp;lt;schema pattern=&amp;quot;tsconfig.*.json&amp;quot;http://json.schemastore.org/tsconfig&amp;lt;/schema&amp;gt;
+&amp;lt;schema pattern=&amp;quot;tsconfig.*.json&amp;quot; url=&amp;quot;http://json.schemastore.org/tsconfig&amp;quot; /&amp;gt;
 &lt;/pre&gt;
       </documentation>
    </annotation>
