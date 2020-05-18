@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="file"/>
+            <element ref="schema"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,21 +47,6 @@
       </complexType>
    </element>
 
-   <element name="file">
-      <complexType>
-         <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="schema"/>
-         </sequence>
-         <attribute name="name" type="string" use="required">
-            <annotation>
-               <documentation>
-                  File name pattern
-               </documentation>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
    <element name="schema">
       <annotation>
          <documentation>
@@ -69,6 +54,13 @@
          </documentation>
       </annotation>
       <complexType>
+         <attribute name="pattern" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -77,7 +69,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5.8
       </documentation>
    </annotation>
 
@@ -86,27 +78,30 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;p&gt;Root project file&lt;/p&gt;
+&lt;pre&gt;
+&amp;lt;schema pattern=&amp;quot;/.eslintrc&amp;quot;http://json.schemastore.org/eslintrc&amp;lt;/schema&amp;gt;
+&lt;/pre&gt;
+
+&lt;p&gt;Wildcard name&lt;/p&gt;
+&lt;pre&gt;
+&amp;lt;schema pattern=&amp;quot;tsconfig.*.json&amp;quot;http://json.schemastore.org/tsconfig&amp;lt;/schema&amp;gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
+
+
 
    <annotation>
       <appinfo>
-         <meta.section type="apiinfo"/>
+         <meta.section type="copyright"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         Copyright (c) 2020 Dawid Pakuła and others.&lt;br&gt;
+This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at &lt;a href=&quot;https://www.eclipse.org/legal/epl-2.0/&quot;&gt;https://www.eclipse.org/legal/epl-2.0/&lt;/a&gt;
+
+SPDX-License-Identifier: EPL-2.0
       </documentation>
    </annotation>
-
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
-
 
 </schema>

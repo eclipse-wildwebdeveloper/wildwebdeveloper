@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Michal� Niewrzal� (Rogue Wave Software Inc.) - initial implementation
+ *  Michał Niewrzal (Rogue Wave Software Inc.) - initial implementation
  *  Angelo Zerr <angelo.zerr@gmail.com> - JSON Schema support
  *  Dawid Pakuła <zulus@w3des.net> - JSON Schema extension point
  *******************************************************************************/
@@ -40,8 +40,7 @@ import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
 	private final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
-	private final static String NAME_ATTR = "name"; //$NON-NLS-1$
-	private final static String SCHEMA_ELEMENT = "schema"; //$NON-NLS-1$
+	private final static String PATTERN_ATTR = "pattern"; //$NON-NLS-1$
 	public JSonLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
@@ -119,17 +118,15 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	private void fillSchemaAssociationsFromExtensionPoint(Map<String, List<String>> associations) {
 		IConfigurationElement[] conf = Platform.getExtensionRegistry().getConfigurationElementsFor(SCHEMA_EXT);
 		for (IConfigurationElement el : conf) {
-			associations.put(el.getAttribute(NAME_ATTR), collectSchemaURL(el.getChildren(SCHEMA_ELEMENT)));
+			String pattern = el.getAttribute(PATTERN_ATTR);
+			if (!associations.containsKey(pattern)) {
+				associations.put(pattern, new ArrayList<>());
+			}
+			associations.get(pattern).add(el.getValue());
 		}
 	}
 
-	private List<String> collectSchemaURL(IConfigurationElement[] schema) {
-		List<String> list = new ArrayList<>(schema.length);
-		for (IConfigurationElement el : schema) {
-			list.add(el.getValue());
-		}
-		return list;
-	}
+	
 
 	@Override
 	public Object getInitializationOptions(URI rootUri) {
