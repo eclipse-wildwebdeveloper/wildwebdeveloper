@@ -13,6 +13,16 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 The extension point `org.eclipse.wildwebdeveloper.xml` now allows a new `initializationOptionsProvider` child element type, which can be used to specify some initialize options. This is typically useful for language server who should be configured according some some user preferences already configured somewhere else in the IDE, so such preferences can be propageted to the language server.
 
+#### Extension point to define JSON Schema URLs
+
+The extension point `org.eclipse.wildwebdeveloper.json.schema` allows record JSON schema for filename pattern. This records are registered in JSON Language Server during initialization:
+
+```xml
+<extension point="org.eclipse.wildwebdeveloper.json.schema">
+      <schema pattern="composer.json" url="http://json.schemastore.org/composer" />
+</extension>
+```
+
 ## 0.9.1
 
 * 📅 Release Date: May 4th 2020
