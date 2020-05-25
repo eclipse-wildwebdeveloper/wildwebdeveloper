@@ -4,7 +4,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
-## 0.9.2
+## 0.10.0
 
 * 📅 Release Date (tentative): Early June 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.9.1...0.9.2
