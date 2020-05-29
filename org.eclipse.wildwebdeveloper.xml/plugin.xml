@@ -144,5 +144,34 @@
             icon="icons/xmlEditorIcon.png">
       </icon>
    </extension>
-
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+         <page
+            class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
+            id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
+            name="%XMLPreferencesPage.name">
+         </page>
+         <page
+            category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
+            class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage"
+            id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage"
+            name="%XMLCatalogPreferencesPage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlcatalogs"/>
+      </page>
+	</extension>
+	
+	<!-- Keywords for preference and properties pages -->
+	<extension point="org.eclipse.ui.keywords">
+		<keyword
+			label="%XMLCatalogPreferencesPage.preferenceKeywords.xmlcatalog"
+			id="org.eclipse.wildwebdeveloper.xml.ui.xmlcatalogs"/>
+    </extension>
+    
+	<extension
+         point="org.eclipse.core.runtime.preferences">
+         <initializer
+            class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceInitializer">
+        </initializer>
+   </extension>
 </plugin>

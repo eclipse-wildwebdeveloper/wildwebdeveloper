@@ -20,11 +20,15 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,14 +39,27 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.lsp4e.LanguageServersRegistry;
+import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
+import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
+import org.eclipse.lsp4j.DidChangeConfigurationParams;
+import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceInitializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class XMLLanguageServer extends ProcessStreamConnectionProvider {
-
+public class XMLLanguageServer extends ProcessStreamConnectionProvider implements IPropertyChangeListener {
+	private static final String SETTINGS_KEY = "settings";
+	private static final String XML_KEY = "xml";
+	private static final String CATALOGS_KEY = "catalogs";
+	
 	private final XMLExtensionRegistry extensionJarRegistry =new XMLExtensionRegistry();
-
+ 	private static final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+ 	private static final LanguageServerDefinition lemminxDefinition = LanguageServersRegistry.getInstance().getDefinition("org.eclipse.wildwebdeveloper.xml");
+	
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		List<String> jarPaths = new ArrayList<>();
@@ -68,6 +85,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+		store.addPropertyChangeListener(this); 
 	}
 
 	private Collection<? extends String> getProxySettings() {
@@ -141,7 +159,48 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	@Override
 	public Object getInitializationOptions(URI rootUri) {
-		return extensionJarRegistry.getInitiatizationOptions();
+		return mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
 	}
 
+	@SuppressWarnings("rawtypes")
+	private Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
+		Map<String, Object> options = defaults == null ? new HashMap<String, Object>() : defaults;
+		
+		Set<String> catalogs = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+
+		// Default catalogs
+		if (defaults.get(SETTINGS_KEY) instanceof Map) {
+			Map settingsObj = (Map)defaults.get(SETTINGS_KEY);
+			if (settingsObj.get(XML_KEY) instanceof Map) {
+				Map xmlObj = (Map)settingsObj.get(XML_KEY);
+				if (xmlObj.get(CATALOGS_KEY) instanceof String[]) {
+					catalogs.addAll(Arrays.asList((String[])xmlObj.get(CATALOGS_KEY)));
+				}
+			}
+		}
+		// User defined XML Catalog
+		XMLPreferenceInitializer.getCatalogs(store).forEach(f -> catalogs.add(f.getAbsolutePath()));
+		
+		// Build a merged catalog
+		Map<String, Object> xmlObj = new HashMap<>();
+		xmlObj.put(CATALOGS_KEY, catalogs);
+
+		Map<String, Object> settingsObj = new HashMap<>();
+		settingsObj.put(XML_KEY, xmlObj);
+
+		options.put(SETTINGS_KEY, settingsObj);
+		return options;
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		// TODO Auto-generated method stub
+		if (XMLPreferenceInitializer.XML_PREFERENCES_CATAGLOGS.equals(event.getProperty())) {
+			Map<String, Object> config = mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
+			DidChangeConfigurationParams params = new DidChangeConfigurationParams(
+					Collections.singletonMap(XML_KEY, ((Map)config.get(SETTINGS_KEY)).get(XML_KEY)));
+			LanguageServiceAccessor.getActiveLanguageServers(null).stream().filter(server -> lemminxDefinition.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
+				.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
+		}
+	}
 }
