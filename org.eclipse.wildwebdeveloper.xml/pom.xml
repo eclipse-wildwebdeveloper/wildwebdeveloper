@@ -39,6 +39,7 @@
 								<artifactItem>
 									<groupId>org.eclipse.lemminx</groupId>
 									<artifactId>org.eclipse.lemminx</artifactId>
+									<!-- Bumping to version with API breakage needs to bump bundle version at least by +0.1.0 -->
 									<version>0.11.1</version>
 									<!-- classifier:uber includes all dependencies -->
 									<classifier>uber</classifier>
