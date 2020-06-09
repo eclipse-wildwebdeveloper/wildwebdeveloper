@@ -28,7 +28,7 @@ import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
 	public NodeRunDebugLaunchShortcut() {
-		super(NodeRunDAPDebugDelegate.ID, "org.eclipse.wildwebdeveloper.js", true);
+		super(NodeRunDAPDebugDelegate.ID, new String[] {"org.eclipse.wildwebdeveloper.js", "org.eclipse.wildwebdeveloper.ts"}, true);
 	}
 
 	@Override public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {

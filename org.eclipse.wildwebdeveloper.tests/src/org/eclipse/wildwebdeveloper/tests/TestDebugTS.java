@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2020 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Mickael Istria (Red Hat Inc.) - Initial implementation
+ *  Victor Rubezhny (Red Hat Inc.) - Initial implementation
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
@@ -21,10 +21,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
@@ -32,56 +29,23 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
-import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugLaunchShortcut;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 @SuppressWarnings("restriction")
-public class TestDebug {
-
-	@Rule public AllCleanRule allClean = new AllCleanRule();
-	protected ILaunchManager launchManager;
-
-	@Before
-	public void setUpLaunch() throws DebugException {
-		this.launchManager = DebugPlugin.getDefault().getLaunchManager();
-		removeAllLaunches();
-		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.debug.ui");
-		prefs.setValue("org.eclipse.debug.ui.switch_perspective_on_suspend", MessageDialogWithToggle.ALWAYS);
-	}
-
-	private void removeAllLaunches() throws DebugException {
-		for (ILaunch launch : this.launchManager.getLaunches()) {
-			launch.terminate();
-			for (IDebugTarget debugTarget : launch.getDebugTargets()) {
-				debugTarget.terminate();
-				launch.removeDebugTarget(debugTarget);
-			}
-			launchManager.removeLaunch(launch);
-		}
-	}
-
-	@After
-	public void trearDownLaunch() throws DebugException {
-		removeAllLaunches();
-	}
-
+public class TestDebugTS extends TestDebug {
 	@Test
 	public void testFindThreadsAndHitsBreakpoint() throws Exception {
-		IProject project = Utils.provisionTestProject("helloWorldJS");
-		IFile jsFile = project.getFile("hello.js");
-		ITextEditor editor = (ITextEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), jsFile);
+		IProject project = Utils.provisionTestProject("HelloWorldTS");
+		IFile tsFile = project.getFile("index.ts");
+		ITextEditor editor = (ITextEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), tsFile);
 		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		TextSelection selection = new TextSelection(doc, doc.getLineOffset(1) + 1, 0);
 		IToggleBreakpointsTarget toggleBreakpointsTarget = DebugUITools.getToggleBreakpointsTargetManager().getToggleBreakpointsTarget(editor, selection);
@@ -136,11 +100,11 @@ public class TestDebug {
 		assertEquals("Local", localVariable.getName());
 		IVariable nVariable = Arrays.stream(localVariable.getValue().getVariables()).filter(var -> {
 			try {
-				return "n".equals(var.getName());
+				return "user".equals(var.getName());
 			} catch (DebugException e) {
 				return false;
 			}
 		}).findAny().get();
-		assertEquals("1605", nVariable.getValue().getValueString());
+		assertEquals("\"Eclipse User\"", nVariable.getValue().getValueString());
 	}
 }

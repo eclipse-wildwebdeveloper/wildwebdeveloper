@@ -45,20 +45,25 @@ import org.eclipse.wildwebdeveloper.Activator;
 
 public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShortcut2 {
 
-	private final String contentTypeId;
+	private final String[] contentTypeIds;
 	private final ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 	private final ILaunchConfigurationType configType;
 	private final boolean autoStartNewlyCreatedConfiguration;
 
 	public AbstractDebugAdapterLaunchShortcut(String launchConfigTypeId, String contentTypeId, boolean autoStartNewlyCreatedConfiguration) {
+		this(launchConfigTypeId, new String[] {contentTypeId}, autoStartNewlyCreatedConfiguration);
+	}
+
+	public AbstractDebugAdapterLaunchShortcut(String launchConfigTypeId, String[] contentTypeIds, boolean autoStartNewlyCreatedConfiguration) {
 		this.autoStartNewlyCreatedConfiguration = autoStartNewlyCreatedConfiguration;
-		this.contentTypeId = contentTypeId;
+		this.contentTypeIds = contentTypeIds;
 		this.configType = launchManager.getLaunchConfigurationType(launchConfigTypeId);
 	}
 
 	public boolean canLaunch(File file) {
-		return file.exists()
-				&& Platform.getContentTypeManager().getContentType(contentTypeId).isAssociatedWith(file.getName());
+		return file.exists() &&
+			Arrays.stream(contentTypeIds).map(Platform.getContentTypeManager()::getContentType)
+				.anyMatch(type -> type.isAssociatedWith(file.getName()));
 	}
 
 	public boolean canLaunchResource(IResource resource) {

@@ -39,6 +39,16 @@ public class Messages extends NLS {
 	public static String ChromeAttachTab_runWith;
 	public static String ChromeAttachTab_browserTab;
 	public static String ChromeAttachTab_browserPreferences;
+	
+	public static String NodeDebug_TSConfirError_Title;
+	public static String NodeDebug_TSConfirError_NoTsConfig;
+	public static String NodeDebug_TSConfirError_SourceMapIsNotEnabled;
+	public static String NodeDebug_TSConfigError_OutDirIsNotSet;
+	public static String NodeDebug_TSConfigError_OutDirNotSupportedModule;
+	public static String NodeDebug_TSConfirError_OpenTSConfigInEditor;
+	public static String NodeDebug_TSConfirError_StartDebuggingAsIs;
+	public static String NodeDebug_TSConfirError_Cancel;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

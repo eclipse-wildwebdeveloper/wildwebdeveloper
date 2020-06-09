@@ -14,6 +14,7 @@ package org.eclipse.wildwebdeveloper;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
@@ -36,10 +37,12 @@ public class IsNodeProjectPropertyTester extends PropertyTester {
 			if (resource instanceof IFile) {
 				IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 				IContentType jsContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.js");
+				IContentType tsContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.ts");
 				try (
 					InputStream content = ((IFile) resource).getContents();
 				) {
-					return Arrays.asList(contentTypeManager.findContentTypesFor(content, resource.getName())).contains(jsContentType);
+					List<IContentType> contentTypes = Arrays.asList(contentTypeManager.findContentTypesFor(content, resource.getName()));
+					return contentTypes.contains(jsContentType) || contentTypes.contains(tsContentType);
 				} catch (Exception e) {
 					return false;
 				}
