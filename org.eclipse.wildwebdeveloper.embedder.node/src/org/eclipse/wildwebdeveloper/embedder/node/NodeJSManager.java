@@ -127,8 +127,14 @@ public class NodeJSManager {
 					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
 					if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
 						File exe = new File(nodePath.getParent(), program);
-						if (exe.canExecute())
+						if (exe.canExecute()) {
 							return exe;
+						} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
+							exe = new File(nodePath.getParent(), program + ".exe");
+							if (exe.canExecute()) {
+								return exe;
+							}
+						}
 					}
 				}
 		}
