@@ -113,8 +113,6 @@
 								<arg>install</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
-								<arg>--prefix</arg>
-								<arg>${project.basedir}</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.2.tgz</arg>
 								<arg>typescript@3.9.7</arg>
 								<arg>typescript-language-server@0.4.0</arg>

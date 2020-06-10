@@ -44,7 +44,7 @@ public class CompressUtils {
 				InputStream xz = new XZCompressorInputStream(input);
 				archive = new TarArchiveInputStream(xz);
 			} else if (archiveURL.getFile().endsWith(".zip")) { //$NON-NLS-1$
-				archive = new ZipArchiveInputStream(archive);
+				archive = new ZipArchiveInputStream(input);
 			} else {
 				throw new UnsupportedCompressionAlgorithmException("Unsupported archive file extension: " + archive); //$NON-NLS-1$
 			}

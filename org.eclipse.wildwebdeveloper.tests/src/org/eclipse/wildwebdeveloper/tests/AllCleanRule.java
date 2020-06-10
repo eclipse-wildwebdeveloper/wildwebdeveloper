@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -24,10 +25,18 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class AllCleanRule implements BeforeEachCallback, AfterEachCallback{
+public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 
 	private void clearProjects() {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
+		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			try {
+				project.close(null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		LanguageServiceAccessor.clearStartedServers();
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			try {
 				project.delete(true, null);
