@@ -15,6 +15,24 @@
   c. select the interesting typescript source folder in "Select working set of relevant resources" to include the source folder.
 5. in Refresh, select what needs to be refreshed upon build.
 
+#### Debug a TypeScript program?
+
+1. Ensure the `sourceMap` property of your `tsconfig.json` is set to `true`.
+Example `tsconfig.json`:
+```JSON
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "out",
+    "sourceMap": true
+  }
+}
+```
+2. Run `tsc` to transpile your TypeScript source code to JavaScript.
+3. Right click on TypeScript you want to debug (eg. `index.ts`) => Debug as => Node program
+4. If a breakpoint is set in your `.ts` source file, it will be hit when the equivalent JavaScript code is run.
+
 #### Debug a website developed in TypeScript?
 
 1. Ensure the `sourceMap` property of your `tsconfig.json` is set to `true`.
