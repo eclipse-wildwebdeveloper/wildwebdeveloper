@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2020 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -14,6 +14,7 @@
 package org.eclipse.wildwebdeveloper.debug.node;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,10 +26,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
@@ -44,6 +54,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.Messages;
@@ -52,6 +63,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+@SuppressWarnings("restriction")
 public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 	public static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"; //$NON-NLS-1$
@@ -124,9 +136,10 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			// TypeScript Source Mappings Configuration
 			String tsConfigPath = cwd + "/tsconfig.json";
 			String errorMessage = null;
-			Map<String, Object> tsConfig = readTsConfig(tsConfigPath);
-			Map<String, Object> co = (Map<String, Object>)tsConfig.get("compilerOptions");
-			if (tsConfig.isEmpty() || co == null) {
+			File tsConfigFile = new File(tsConfigPath);
+			Map<String, Object> tsConfig = readTsConfig(tsConfigFile);
+			Map<String, Object> co = tsConfig == null ? null : (Map<String, Object>)tsConfig.get("compilerOptions");
+			if (co == null) {
 				errorMessage = Messages.NodeDebug_TSConfirError_NoTsConfig;
 				co = new HashMap<>();
 			}
@@ -173,13 +186,16 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 				// Display error message
 				final int[] result = new int[1];
 				final String dialogMessage = errorMessage;
+				final String editTSConfig = tsConfigFile.exists() && tsConfigFile.isFile() ?
+						Messages.NodeDebug_TSConfirError_OpenTSConfigInEditor :
+							Messages.NodeDebug_TSConfirError_CreateAndOpenTSConfigInEditor;
 				
 				Display.getDefault().syncExec(new Runnable() {
 						@Override
 						public void run() {
 							MessageDialog dialog = new MessageDialog(DebugUIPlugin.getShell(),
 									Messages.NodeDebug_TSConfirError_Title, null, dialogMessage, MessageDialog.QUESTION_WITH_CANCEL,
-									2, Messages.NodeDebug_TSConfirError_OpenTSConfigInEditor,
+									2, editTSConfig,
 									Messages.NodeDebug_TSConfirError_StartDebuggingAsIs, Messages.NodeDebug_TSConfirError_Cancel);
 							result[0] = dialog.open();
 						}
@@ -190,14 +206,57 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							try {
-								IDE.openEditor(
-									PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), 
-									new File(tsConfigPath).toURI(), 
-									"org.eclipse.ui.genericeditor.GenericEditor",
-									true);
-							} catch (PartInitException e1) {
-								Activator.getDefault().getLog().error(e1.getMessage(), e1);
+							IFile file = createNewEmptyFile(tsConfigPath);
+							if (file != null) {
+								try {
+									IDE.openEditor(
+										PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), 
+										new FileEditorInput(file), 
+										"org.eclipse.ui.genericeditor.GenericEditor",
+										true);
+								} catch (PartInitException e1) {
+									Activator.getDefault().getLog().error(e1.getMessage(), e1);
+								}
+							}
+						}
+
+						private IFile createNewEmptyFile(String tsConfigPath) {
+							IWorkspace ws = ResourcesPlugin.getWorkspace();
+							IWorkspaceRoot wr = ws.getRoot();
+							IFile file = wr.getFileForLocation(new Path(tsConfigPath));
+							if (!(file.exists() && file.isAccessible())) {
+								IFile[] result = new IFile[1];
+								try {
+									ws.run(new IWorkspaceRunnable() {
+										@Override
+										public void run(IProgressMonitor monitor) {
+								    		result[0] = null;
+											try (ByteArrayInputStream is = new ByteArrayInputStream(new byte[0])) {
+												createContainers(file);
+												file.create(is, true, null);
+												file.refreshLocal(IResource.DEPTH_ZERO, null);
+												result[0] = file;
+											} catch (CoreException | IOException e) {
+												Activator.getDefault().getLog().error(e.getMessage(), e);
+											}
+									      }
+									   }, null);								
+								} catch (CoreException e) {
+									Activator.getDefault().getLog().error(e.getMessage(), e);
+								}
+								return result[0];
+							}
+							return file;
+						}
+
+						void createContainers(IResource resource) throws CoreException {
+							IContainer container= resource.getParent();
+							if (container instanceof IFolder) {
+								IFolder parent= (IFolder) container;
+								if (parent != null && !parent.exists()) {
+									createContainers(parent);
+									parent.create(false, true, null);
+								}
 							}
 						}
 					});
@@ -223,8 +282,8 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		return false;
 	}
 	
-	public Map<String, Object> readTsConfig(String path) {
-		try (BufferedReader in = new BufferedReader(new FileReader(path))) {
+	public Map<String, Object> readTsConfig(File tsConfgFile) {
+		try (BufferedReader in = new BufferedReader(new FileReader(tsConfgFile))) {
 			String inputLine;
 			StringBuffer response = new StringBuffer();
 			while ((inputLine = in.readLine()) != null) {
@@ -233,7 +292,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			Type type = new TypeToken<Map<String, Object>>() {}.getType();
 			return new Gson().fromJson(response.toString(), type);
 		} catch (IOException e) {
-			return new HashMap<>(0);
+			return null;
 		}
 	}
 }

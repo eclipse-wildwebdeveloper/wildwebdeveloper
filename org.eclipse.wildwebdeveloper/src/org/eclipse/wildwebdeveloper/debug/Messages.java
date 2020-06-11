@@ -46,6 +46,7 @@ public class Messages extends NLS {
 	public static String NodeDebug_TSConfigError_OutDirIsNotSet;
 	public static String NodeDebug_TSConfigError_OutDirNotSupportedModule;
 	public static String NodeDebug_TSConfirError_OpenTSConfigInEditor;
+	public static String NodeDebug_TSConfirError_CreateAndOpenTSConfigInEditor;
 	public static String NodeDebug_TSConfirError_StartDebuggingAsIs;
 	public static String NodeDebug_TSConfirError_Cancel;
 	
