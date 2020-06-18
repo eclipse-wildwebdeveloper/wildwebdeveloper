@@ -477,14 +477,6 @@
    </extension>
 
    <extension
-      point="org.eclipse.ui.ide.editorAssociationOverride">
-         <editorAssociationOverride
-            id="org.eclipse.wildwebdeveloper.JSEditorAssociationOverride"
-            class="org.eclipse.wildwebdeveloper.JSEditorAssociationOverride">
-         </editorAssociationOverride>
-   </extension>
-
-   <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate"
