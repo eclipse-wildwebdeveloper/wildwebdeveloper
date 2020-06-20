@@ -27,7 +27,7 @@ import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 	public static final String PROGRAM = "program"; //$NON-NLS-1$
@@ -51,7 +51,7 @@ public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
 					monitor);
-			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
+			builder.setLaunchDebugAdapter(NodeJSManager.getNodeJsLocation().getAbsolutePath(), debugCmdArgs);
 			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
 			builder.setDspParameters(param);
 

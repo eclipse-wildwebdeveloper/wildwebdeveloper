@@ -34,8 +34,8 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 
@@ -97,7 +97,7 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 	}
 
 	private static String findNPMLocation() {
-		return InitializeLaunchConfigurations.which("npm"); //$NON-NLS-1$
+		return NodeJSManager.which("npm").getAbsolutePath(); //$NON-NLS-1$
 	}
 
 }

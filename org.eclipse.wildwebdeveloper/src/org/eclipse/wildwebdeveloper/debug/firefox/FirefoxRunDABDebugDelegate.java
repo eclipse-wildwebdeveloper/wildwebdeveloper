@@ -30,9 +30,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 
@@ -98,7 +98,7 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 	}
 
 	static String findFirefoxLocation() {
-		String res = InitializeLaunchConfigurations.which("firefox");
+		String res = NodeJSManager.which("firefox").getAbsolutePath();
 		if (res == null) {
 			res = "/path/to/firefox";
 		}

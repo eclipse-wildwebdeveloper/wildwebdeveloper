@@ -14,28 +14,34 @@
  *   Pierre-Yves B. - Issue #238 Why does wildweb do "/bin/bash -c which node" ?
  *   Pierre-Yves B. - Issue #268 Incorrect default Node.js location for macOS
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper;
+package org.eclipse.wildwebdeveloper.embedder.node;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.internal.runtime.InternalPlatform;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Version;
 
-public class InitializeLaunchConfigurations {
+@SuppressWarnings("restriction")
+public class NodeJSManager {
   
   private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
 
@@ -43,25 +49,49 @@ public class InitializeLaunchConfigurations {
 			.unmodifiableSet(new HashSet<>(Arrays.asList(10, 11, 12, 13, 14)));
 
 	private static boolean alreadyWarned;
-	public static String getNodeJsLocation() {
+	private static Properties cachedNodeJsInfoProperties; 
+	
+	public static File getNodeJsLocation() {
 		{
 			String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
-			if (nodeJsLocation != null && Files.exists(Paths.get(nodeJsLocation))) {
-				validateNodeVersion(nodeJsLocation);
-				return nodeJsLocation;
+			if (nodeJsLocation != null) {
+				File nodejs = new File(nodeJsLocation);
+				if (nodejs.exists()) {
+					validateNodeVersion(nodejs);
+					return new File(nodeJsLocation);
+				}
 			}
 		}
 
-		String res = which("node");
-		if (res == null) {
-			if (Files.exists(Paths.get(getDefaultNodePath()))) {
-				res = getDefaultNodePath();
+		Properties properties = getNodeJsInfoProperties();
+		if (properties != null) {
+			try {
+				IPath stateLocationPath = InternalPlatform.getDefault().getStateLocation(Platform
+						.getBundle(Activator.PLUGIN_ID));
+				if (stateLocationPath != null) {
+					File installationPath = stateLocationPath.toFile();
+					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
+					if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
+						return nodePath;
+					}
+					
+					CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(), 
+							new Path(properties.getProperty("archiveFile"))),
+							installationPath);
+					return nodePath;
+				}
+			} catch (IOException e) {
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 			}
+		}
+
+		File res = which("node");
+		if (res == null && getDefaultNodePath().exists()) {
+			res = getDefaultNodePath();
 		}
 
 		if (res != null) {
 			validateNodeVersion(res);
-
 			return res;
 		} else if (!alreadyWarned) {
 			warnNodeJSMissing();
@@ -69,14 +99,28 @@ public class InitializeLaunchConfigurations {
 		}
 		return null;
 	}
-
-	public static String which(String program) {
-
+	
+	public static File which(String program) {
+		Properties properties = getNodeJsInfoProperties();
+		if (properties != null) {
+				IPath stateLocationPath = InternalPlatform.getDefault().getStateLocation(Platform
+						.getBundle(Activator.PLUGIN_ID));
+				if (stateLocationPath != null) {
+					File installationPath = stateLocationPath.toFile();
+					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
+					if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
+						File exe = new File(nodePath.getParent(), program);
+						if (exe.canExecute())
+							return exe;
+					}
+				}
+		}
+		
 		String[] paths = System.getenv("PATH").split(System.getProperty("path.separator"));
 		for (String path : paths) {
 			File exe = new File(path, program);
 			if (exe.canExecute())
-				return exe.getAbsolutePath();
+				return exe;
 		}
 
 		String res = null;
@@ -93,44 +137,59 @@ public class InitializeLaunchConfigurations {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+		return new File(res);
+	}
+
+	private static Properties getNodeJsInfoProperties() {
+		if (cachedNodeJsInfoProperties == null) {
+			URL nodeJsInfo = FileLocator.find(Activator.getDefault().getBundle(), new Path("nodejs-info.properties"));
+			if (nodeJsInfo != null) {
+				try (InputStream infoStream = nodeJsInfo.openStream()) {
+					Properties properties = new Properties();
+					properties.load(infoStream);
+					cachedNodeJsInfoProperties = properties;
+				} catch (IOException e) {
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+				}
+			}
+		}
+		return cachedNodeJsInfoProperties;
+	}
+				
+	private static String getDefaultShellMacOS() {
+		String res = null;
+		String[] command = new String[] { "/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell" };
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+			res = reader.readLine();
+			if (!res.startsWith(MACOS_DSCL_SHELL_PREFIX)) {
+				Activator.getDefault().getLog()
+						.log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(),
+								"Cannot find default shell. Use '/bin/zsh' instead."));
+				return "/bin/zsh"; // Default shell since macOS 10.15
+			}
+			res = res.substring(MACOS_DSCL_SHELL_PREFIX.length());
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+		}
 		return res;
 	}
 
-  private static String getDefaultShellMacOS() {
-    String res = null;
-    String[] command = new String[] {"/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell"};
-    try (BufferedReader reader = new BufferedReader(
-      new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
-      res = reader.readLine();
-      if ( ! res.startsWith(MACOS_DSCL_SHELL_PREFIX)) {
-        Activator.getDefault().getLog().log(
-          new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(),
-            "Cannot find default shell. Use '/bin/zsh' instead."));
-        return "/bin/zsh"; // Default shell since macOS 10.15
-      }
-      res = res.substring(MACOS_DSCL_SHELL_PREFIX.length());
-    } catch (IOException e) {
-      Activator.getDefault().getLog().log(
-        new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
-    }
-    return res;
-  }
-
-	private static String getDefaultNodePath() {
+	private static File getDefaultNodePath() {
 		switch (Platform.getOS()) {
 			case Platform.OS_MACOSX:
-				return "/usr/local/bin/node";
+				return new File("/usr/local/bin/node");
 			case Platform.OS_WIN32:
-				return "C:\\Program Files\\nodejs\\node.exe";
+				return new File("C:\\Program Files\\nodejs\\node.exe");
 			default:
-				return "/usr/bin/node";
+				return new File("/usr/bin/node");
 		}
 	}
 
-	private static void validateNodeVersion(String nodeJsLocation) {
-
+	private static void validateNodeVersion(File nodeJsLocation) {
 		String nodeVersion = null;
-		String[] nodeVersionCommand = new String[] { nodeJsLocation, "-v" };
+		String[] nodeVersionCommand = new String[] { nodeJsLocation.getAbsolutePath(), "-v" };
 
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(nodeVersionCommand).getInputStream()));) {

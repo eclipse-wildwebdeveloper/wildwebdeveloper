@@ -27,13 +27,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 
 	public JSTSLanguageServer() {
 		List<String> commands = new ArrayList<>();
-		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
+		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript-language-server/lib/cli.js"));
 			URL tsServer = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript/lib/tsserver.js"));

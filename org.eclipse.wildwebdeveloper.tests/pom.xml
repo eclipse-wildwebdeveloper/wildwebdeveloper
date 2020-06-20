@@ -22,6 +22,11 @@
 								<id>javax.annotation</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.wildwebdeveloper.embedder.node.feature</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
 				</configuration>

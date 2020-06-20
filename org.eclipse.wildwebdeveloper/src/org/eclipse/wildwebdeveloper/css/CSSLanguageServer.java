@@ -31,13 +31,13 @@ import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 
 	public CSSLanguageServer() {
 		List<String> commands = new ArrayList<>();
-		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
+		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/vscode-css-languageserver/dist/cssServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
