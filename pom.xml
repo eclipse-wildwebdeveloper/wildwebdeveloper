@@ -20,13 +20,19 @@
 
 	<modules>
 		<module>target-platform</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node.linux.x86_64</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node.win32.x86_64</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node</module>
 		<module>org.eclipse.wildwebdeveloper</module>
 		<module>org.eclipse.wildwebdeveloper.xml</module>
 		<module>org.eclipse.wildwebdeveloper.tests</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node.feature</module>
 		<module>org.eclipse.wildwebdeveloper.xml.feature</module>
 		<module>org.eclipse.wildwebdeveloper.feature</module>
 		<module>repository</module>
 	</modules>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -156,6 +162,31 @@
 					<groupId>com.googlecode.maven-download-plugin</groupId>
 					<artifactId>download-maven-plugin</artifactId>
 					<version>1.5.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>target-platform-configuration</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+					    <resolver>p2</resolver>
+						<environments>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

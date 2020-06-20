@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.tm4e.languageconfiguration,
  org.eclipse.compare;resolution:=optional,
  org.eclipse.ui.console;bundle-version="3.9.0",
- org.eclipse.ui.browser;bundle-version="3.6.0"
+ org.eclipse.ui.browser;bundle-version="3.6.0",
+ org.eclipse.wildwebdeveloper.embedder.node;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir

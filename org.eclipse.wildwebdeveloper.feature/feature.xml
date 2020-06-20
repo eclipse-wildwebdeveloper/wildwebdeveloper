@@ -22,6 +22,9 @@
    <includes
          id="org.eclipse.wildwebdeveloper.xml.feature"
          version="0.0.0"/>
+   <require
+         id="org.eclipse.wildwebdeveloper.embedder.node.feature"
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.wildwebdeveloper"

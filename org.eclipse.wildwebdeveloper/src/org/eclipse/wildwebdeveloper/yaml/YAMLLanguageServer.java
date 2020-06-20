@@ -26,7 +26,7 @@ import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,7 +37,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 	
 	public YAMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
-		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
+		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator.toFileURL(getClass()
 					.getResource("/node_modules/yaml-language-server/out/server/src/server.js"));

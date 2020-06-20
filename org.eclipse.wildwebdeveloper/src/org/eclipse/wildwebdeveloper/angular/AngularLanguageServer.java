@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 
@@ -40,7 +40,7 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 		this.isLoggingToConsoleEnabled = scopedPreferenceStore.getBoolean(LOG_TO_CONSOLE_ANGULAR_LS_PREFERENCE);
 		
 		List<String> commands = new ArrayList<>();
-		commands.add(InitializeLaunchConfigurations.getNodeJsLocation());
+		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/@angular/language-server/index.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());

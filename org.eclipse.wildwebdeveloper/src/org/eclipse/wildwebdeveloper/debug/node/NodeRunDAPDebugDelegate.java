@@ -56,8 +56,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.Messages;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -73,6 +73,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 	public static final String ARGUMENTS = "args"; //$NON-NLS-1$
 	private static final String CWD = "cwd"; //$NON-NLS-1$
 	private static final String ENV = "env"; //$NON-NLS-1$
+	private static final String RUNTIME_EXECUTABLE = "runtimeExecutable"; //$NON-NLS-1$
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -99,6 +100,10 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		if (!cwd.isEmpty()) {
 			param.put(CWD, cwd);
 		}
+		File runtimeExecutable = NodeJSManager.which("node");
+		if (runtimeExecutable != null) {
+			param.put(RUNTIME_EXECUTABLE, runtimeExecutable.getAbsolutePath());
+		}
 		
 		if (!configureAdditionalParameters(param)) {
 			return;
@@ -112,7 +117,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
 					monitor);
-			builder.setLaunchDebugAdapter(InitializeLaunchConfigurations.getNodeJsLocation(), debugCmdArgs);
+			builder.setLaunchDebugAdapter(NodeJSManager.getNodeJsLocation().getAbsolutePath(), debugCmdArgs);
 			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
 			builder.setDspParameters(param);
 			super.launch(builder);

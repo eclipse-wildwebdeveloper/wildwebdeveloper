@@ -32,8 +32,8 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.InitializeLaunchConfigurations;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 import com.google.gson.JsonObject;
 
@@ -128,15 +128,15 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 			res = "chromium-browser"; //$NON-NLS-1$
 		}
 		// Failsafe, in case user doesn't have their preferred browser
-		res = InitializeLaunchConfigurations.which(res);
+		res = NodeJSManager.which(res).getAbsolutePath();
 		if (res != null) {
 			return res;
 		}
-		res = InitializeLaunchConfigurations.which("chromium-browser");
+		res = NodeJSManager.which("chromium-browser").getAbsolutePath();
 		if (res != null) {
 			return res;
 		}
-		res = InitializeLaunchConfigurations.which("google-chrome-stable");
+		res = NodeJSManager.which("google-chrome-stable").getAbsolutePath();
 		if (res != null) {
 			return res;
 		}
