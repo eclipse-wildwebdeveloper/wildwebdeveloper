@@ -4,16 +4,24 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
-## 0.10.1
+## 0.11.0
 
-* 📅 Release Date (tentative): Early September 2020
-* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.10.0...0.10.1
+* 📅 Release Date (tentative): End of July 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.10.0...0.11.0
 
 #### TypeScript program debug support
 
 TypeScript programs can now be directly debugged using `Node program` Debug Configuration.
 
 ![TypeScript 3.8 demo](documentation-files/typescript-debug.gif)
+
+### XML Catalogs preference page
+
+You can now define XML catalogs via preference page.
+
+### ⚠️ Breaking extensions ⚠️ Move to LemMinX 0.12.0
+
+LemMinX XML language server was upgraded to 0.12.0, with a lot of improvements. However, please note that the extension API has changed in a non-backward compatible way; so to work with newer Wild Web Developer, ensure the extensions to `org.eclipse.wildwebdeveloper.xml.lemminx` are compatible with LemMinX 0.12.0.
 
 ## 0.10.0
 
