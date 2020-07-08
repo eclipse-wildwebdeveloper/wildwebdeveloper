@@ -2,6 +2,10 @@
 
 ### As a user, how can I...
 
+#### Use Embedded Node.js?
+
+When a developer's system suits the supported OSs (Linux, MacOS and Win32) and architectures (x86_64) the embedded Node.js from Wild Web Developer will be used by WildWebDeveloper to run language Servers as well as for Node Debugger unless the `"org.eclipse.wildwebdeveloper.nodeJSLocation"` system property is set.
+
 #### Automatically compile TypeScript to JavaScript ?
 
 (From https://github.com/eclipse/wildwebdeveloper/issues/331#issuecomment-577240880 )
@@ -67,3 +71,9 @@ Example `tsconfig.json`:
 2. From the Edition context menu, the Project Explorer or other explorer, open this same HTML file with the Internal Web Browser.
 3. Drag the editor/browser to get them side by side or stacked one on top of the other in the IDE.
 4. In the Web Browser, click the arrow besides the refresh button, and select "Auto-refersh local changes"
+
+### As an Eclipse plugin developer, how can I...
+
+#### Reuse Embedded Node.js?
+
+Developers may [reuse the Node.js Embedder](https://github.com/eclipse/wildwebdeveloper/blob/master/org.eclipse.wildwebdeveloper.embedder.node/README.md) in their products.
