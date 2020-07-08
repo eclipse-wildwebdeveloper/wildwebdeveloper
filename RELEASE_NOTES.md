@@ -9,6 +9,12 @@ This page describes the noteworthy improvements provided by each release of Ecli
 * 📅 Release Date (tentative): End of July 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.10.0...0.11.0
 
+#### Embedded Node.js
+
+Node.js is now embedded into Wild Web Developer. Unless the `"org.eclipse.wildwebdeveloper.nodeJSLocation"` system property is set and developer's system suits the supported OSs (Linux, MacOS and Win32) and architectures (x86_64), the embedded version of Node.js will be used by Language Servers and Node Debugger. 
+
+By adding the `org.eclipse.wildwebdeveloper.embedder.node.feature` into the dependencies, developers might use the Node.js Embedder's `NodeJSManager` class in order to automatic install/use of the embedded version of Node.js in their products.
+
 #### TypeScript program debug support
 
 TypeScript programs can now be directly debugged using `Node program` Debug Configuration.
