@@ -3,8 +3,17 @@
    <feature id="org.eclipse.wildwebdeveloper.feature" version="0.0.0">
       <category name="Wild Web Developer"/>
    </feature>
+   <feature id="org.eclipse.wildwebdeveloper.xml.feature" version="0.0.0">
+      <category name="Wild Web Developer"/>
+   </feature>
    <feature id="org.eclipse.wildwebdeveloper.feature.source" version="0.0.0">
       <category name="Sources"/>
+   </feature>
+   <feature id="org.eclipse.wildwebdeveloper.xml.feature.source" version="0.0.0">
+      <category name="Sources"/>
+   </feature>
+   <feature id="org.eclipse.wildwebdeveloper.embedder.node.feature" version="0.0.0">
+      <category name="Dependencies"/>
    </feature>
    <feature id="org.eclipse.tm4e.feature" version="0.0.0">
       <category name="Dependencies"/>
