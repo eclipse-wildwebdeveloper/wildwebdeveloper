@@ -16,6 +16,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -89,8 +90,11 @@ public class YAMLSchemaPreferencePage extends PreferencePage implements IWorkben
 		
 		Button removeButton = new Button(buttonsBar, SWT.PUSH);
 		removeButton.setText("Remove");
+		removeButton.setEnabled(false);
 		removeButton.addListener(SWT.Selection, event -> schemaTable.remove(schemaTable.getSelectionIndex()));
-		
+		schemaTable.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> 
+			removeButton.setEnabled(schemaTable.getSelectionIndex() != -1)));		
+
 		schemaCol.pack();
 		globPatternCol.pack();
 		parent.layout();
