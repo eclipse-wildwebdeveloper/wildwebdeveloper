@@ -137,7 +137,7 @@ public class NodeJSManager {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
-		return new File(res);
+		return res != null ? new File(res) : null;
 	}
 
 	private static Properties getNodeJsInfoProperties() {
