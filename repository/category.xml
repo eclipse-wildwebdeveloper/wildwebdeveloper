@@ -12,6 +12,9 @@
    <feature id="org.eclipse.wildwebdeveloper.xml.feature.source" version="0.0.0">
       <category name="Sources"/>
    </feature>
+   <feature id="org.eclipse.wildwebdeveloper.embedder.node.feature.source" version="0.0.0">
+      <category name="Sources"/>
+   </feature>
    <feature id="org.eclipse.wildwebdeveloper.embedder.node.feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
