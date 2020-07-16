@@ -7,7 +7,7 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.9-SNAPSHOT</version>
+	<version>0.5.10-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -28,6 +28,7 @@
 			<plugin>
 				<groupId>com.googlecode.maven-download-plugin</groupId>
 				<artifactId>download-maven-plugin</artifactId>
+				<version>1.6.0</version>
 				<executions>
 					<execution>
 						<id>fetch-vscode</id>
@@ -48,7 +49,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://marketplace.visualstudio.com/_apis/public/gallery/publishers/msjsdiag/vsextensions/debugger-for-chrome/4.11.7/vspackage</url>
+							<url>https://redhat.gallery.vsassets.io/_apis/public/gallery/publishers/msjsdiag/vsextensions/debugger-for-chrome/4.12.8/vspackage</url>
 							<outputFileName>chromeDebugAdapter.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
@@ -116,22 +117,22 @@
 								<arg>--prefix</arg>
 								<arg>${project.basedir}</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.2.tgz</arg>
-								<arg>typescript@3.8.3</arg>
+								<arg>typescript@3.9.7</arg>
 								<arg>typescript-language-server@0.4.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
-								<arg>typescript-plugin-css-modules@2.3.0</arg>
+								<arg>typescript-plugin-css-modules@2.4.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.2.3.tgz</arg>
 								<arg>yaml-language-server@0.9.0</arg>
-								<arg>firefox-debugadapter@2.8.0</arg>
-								<arg>${project.build.directory}/debugger-for-chrome-4.11.7.tgz</arg>
+								<arg>firefox-debugadapter@2.9.0</arg>
+								<arg>${project.build.directory}/debugger-for-chrome-4.12.8.tgz</arg>
 								<arg>typescript-eslint-language-service@3.0.0</arg>
-								<arg>eslint@7.1.0</arg>
-								<arg>@typescript-eslint/eslint-plugin@3.1.0</arg>
-								<arg>@typescript-eslint/parser@3.1.0</arg>
-								<arg>@angular/language-service@9.1.9</arg>
-								<arg>@angular/language-server@0.901.9</arg>
+								<arg>eslint@7.5.0</arg>
+								<arg>@typescript-eslint/eslint-plugin@3.2.0</arg>
+								<arg>@typescript-eslint/parser@3.2.0</arg>
+								<arg>@angular/language-service@10.0.4</arg>
+								<arg>@angular/language-server@0.1000.4</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
