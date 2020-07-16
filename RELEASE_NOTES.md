@@ -4,9 +4,14 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.11.1
+
+* 📅 Release Date (tentative): End of August 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.0...0.11.1
+
 ## 0.11.0
 
-* 📅 Release Date (tentative): End of July 2020
+* 📅 Release Date: 16th July 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.10.0...0.11.0
 
 #### Embedded Node.js
@@ -24,6 +29,10 @@ TypeScript programs can now be directly debugged using `Node program` Debug Conf
 ### XML Catalogs preference page
 
 You can now define XML catalogs via preference page.
+
+### Language Servers update
+
+Most language servers got updated to their latest version, bringing new features and bugfixes.
 
 ### ⚠️ Breaking extensions ⚠️ Move to LemMinX 0.12.0
 
