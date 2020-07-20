@@ -2,21 +2,10 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="lemminxExtension" name="%ExtPoint.lemminxExtension" schema="schema/lemminxExtension.exsd"/>
-   <!-- Wild Web Developer/Core -->
-   <!-- Duplicate or org.eclipse.wildwebdeveloper -->
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.core.runtime.text"
-            id="org.eclipse.wildwebdeveloper.parent"
-            name="Wild Web Developer supported web dev file"
-            priority="normal"/>
-   </extension>
-
    <extension
          point="org.eclipse.ui.editors">
       <editorContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.parent"
+            contentTypeId="org.eclipse.core.runtime.xml"
             editorId="org.eclipse.ui.genericeditor.GenericEditor">
       </editorContentTypeBinding>
    </extension>
@@ -25,7 +14,7 @@
          point="org.eclipse.ui.genericeditor.presentationReconcilers">
       <presentationReconciler
             class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
-            contentType="org.eclipse.wildwebdeveloper.parent">
+            contentType="org.eclipse.core.runtime.zml">
       </presentationReconciler>
    </extension>
 
@@ -34,28 +23,21 @@
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="xml"
-            id="org.eclipse.wildwebdeveloper.xml"
-            name="XML"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
+            base-type="org.eclipse.core.runtime.xml"
             file-extensions="xsl"
             id="org.eclipse.wildwebdeveloper.xsl"
             name="XSL"
             priority="normal">
       </content-type>
       <content-type
-            base-type="org.eclipse.wildwebdeveloper.xml"
+            base-type="org.eclipse.core.runtime.xml"
             file-extensions="xsd"
             id="org.eclipse.wildwebdeveloper.xsd"
             name="XSD"
             priority="normal">
       </content-type>
       <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
+            base-type="org.eclipse.core.runtime.xml"
             file-extensions="dtd"
             id="org.eclipse.wildwebdeveloper.dtd"
             name="DTD"
@@ -72,7 +54,7 @@
             singleton="true">
       </server>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.xml"
+            contentType="org.eclipse.core.runtime.xml"
             id="org.eclipse.wildwebdeveloper.xml">
       </contentTypeMapping>
       <contentTypeMapping
@@ -96,7 +78,7 @@
             scopeName="source.xml">
       </grammar>
       <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.xml"
+            contentTypeId="org.eclipse.core.runtime.xml"
             scopeName="source.xml">
       </scopeNameContentTypeBinding>
       <grammar
@@ -120,7 +102,7 @@
    <extension
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.xml"
+            contentTypeId="org.eclipse.core.runtime.xml"
             path="language-configurations/xml/xml.language-configuration.json">
       </languageConfiguration>
       <languageConfiguration
