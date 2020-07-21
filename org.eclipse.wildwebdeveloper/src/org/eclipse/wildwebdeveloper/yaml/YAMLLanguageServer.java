@@ -40,7 +40,6 @@ import com.google.gson.reflect.TypeToken;
 
 @SuppressWarnings("restriction")
 public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
-	private static final String SETTINGS_KEY = "settings";
 	private static final String YAML_KEY = "yaml";
 	private static final String VALIDATE_KEY = "validate";
 	private static final String COMPLETION_KEY = "completion";
@@ -53,11 +52,9 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if (YAMLPreferenceInitializer.YAML_SCHEMA_PREFERENCE.equals(event.getProperty())) {
-				Map<String, Object> yaml = getYamlSchemaOptions();
 				Map<String, Object> settings = new HashMap<>();
-				settings.put(YAML_KEY, yaml);
-				Map<String, Object> options = new HashMap<>();
-				options.put(SETTINGS_KEY, settings);
+				settings.put(YAML_KEY, getYamlConfigurationOptions());
+
 				DidChangeConfigurationParams params = new DidChangeConfigurationParams(settings);
 				LanguageServiceAccessor.getActiveLanguageServers(null).stream().filter(server -> yamlLsDefinition.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
 					.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
@@ -65,10 +62,6 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 		}
  	};
  	
-	static {
-		store.addPropertyChangeListener(psListener);
-	}
-	
 	public YAMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
@@ -91,7 +84,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 			ResponseMessage responseMessage = (ResponseMessage) message;
 			if (responseMessage.getResult() instanceof InitializeResult) {
 				Map<String, Object> settings = new HashMap<>();
-				settings.put(YAML_KEY, getYamlSchemaOptions());
+				settings.put(YAML_KEY, getYamlConfigurationOptions());
 				
 				DidChangeConfigurationParams params = new DidChangeConfigurationParams(settings);
 				languageServer.getWorkspaceService().didChangeConfiguration(params);
@@ -99,7 +92,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 		}
 	}
 
-	private static Map<String, Object> getYamlSchemaOptions() {
+	private static Map<String, Object> getYamlConfigurationOptions() {
 		Map<String, Object> yaml = new HashMap<>();
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String schemaStr = preferenceStore.getString(YAMLPreferenceInitializer.YAML_SCHEMA_PREFERENCE);
@@ -114,6 +107,12 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 	@Override
 	public String toString() {
 		return "YAML Language Server: " + super.toString();
+	}
+
+	@Override
+	public void start() throws IOException {
+		super.start();
+		store.addPropertyChangeListener(psListener);
 	}
 
 	@Override
