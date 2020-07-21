@@ -14,7 +14,7 @@
          point="org.eclipse.ui.genericeditor.presentationReconcilers">
       <presentationReconciler
             class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
-            contentType="org.eclipse.core.runtime.zml">
+            contentType="org.eclipse.core.runtime.xml">
       </presentationReconciler>
    </extension>
 
