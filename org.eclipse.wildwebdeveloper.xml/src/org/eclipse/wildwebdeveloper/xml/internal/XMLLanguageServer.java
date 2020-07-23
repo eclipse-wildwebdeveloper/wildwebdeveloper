@@ -51,15 +51,30 @@ import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceIni
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class XMLLanguageServer extends ProcessStreamConnectionProvider implements IPropertyChangeListener {
+@SuppressWarnings("restriction")
+public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final String SETTINGS_KEY = "settings";
 	private static final String XML_KEY = "xml";
 	private static final String CATALOGS_KEY = "catalogs";
 	
-	private final XMLExtensionRegistry extensionJarRegistry =new XMLExtensionRegistry();
+	private static final XMLExtensionRegistry extensionJarRegistry =new XMLExtensionRegistry();
  	private static final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
  	private static final LanguageServerDefinition lemminxDefinition = LanguageServersRegistry.getInstance().getDefinition("org.eclipse.wildwebdeveloper.xml");
-	
+ 	private static final IPropertyChangeListener psListener = new IPropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			if (XMLPreferenceInitializer.XML_PREFERENCES_CATAGLOGS.equals(event.getProperty())) {
+				Map<String, Object> config = mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
+
+				@SuppressWarnings("rawtypes")
+				DidChangeConfigurationParams params = new DidChangeConfigurationParams(
+						Collections.singletonMap(XML_KEY, ((Map)config.get(SETTINGS_KEY)).get(XML_KEY)));
+				LanguageServiceAccessor.getActiveLanguageServers(null).stream().filter(server -> lemminxDefinition.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
+					.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
+			}
+		}
+ 	};
+ 	
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		List<String> jarPaths = new ArrayList<>();
@@ -85,7 +100,6 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider implement
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
-		store.addPropertyChangeListener(this); 
 	}
 
 	private Collection<? extends String> getProxySettings() {
@@ -163,7 +177,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider implement
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
+	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
 		Map<String, Object> options = defaults == null ? new HashMap<String, Object>() : defaults;
 		
 		Set<String> catalogs = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
@@ -193,14 +207,14 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider implement
 	}
 	
 	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		// TODO Auto-generated method stub
-		if (XMLPreferenceInitializer.XML_PREFERENCES_CATAGLOGS.equals(event.getProperty())) {
-			Map<String, Object> config = mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
-			DidChangeConfigurationParams params = new DidChangeConfigurationParams(
-					Collections.singletonMap(XML_KEY, ((Map)config.get(SETTINGS_KEY)).get(XML_KEY)));
-			LanguageServiceAccessor.getActiveLanguageServers(null).stream().filter(server -> lemminxDefinition.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
-				.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
-		}
+	public void start() throws IOException {
+		super.start();
+		store.addPropertyChangeListener(psListener); 
+	}
+	
+	@Override
+	public void stop() {
+		store.removePropertyChangeListener(psListener);
+		super.stop();
 	}
 }
