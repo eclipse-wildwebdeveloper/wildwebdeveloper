@@ -21,6 +21,7 @@
 	<modules>
 		<module>target-platform</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.linux.x86_64</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node.linux.aarch64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.win32.x86_64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node</module>
@@ -179,6 +180,11 @@
 								<os>linux</os>
 								<ws>gtk</ws>
 								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>aarch64</arch>
 							</environment>
 							<environment>
 								<os>macosx</os>

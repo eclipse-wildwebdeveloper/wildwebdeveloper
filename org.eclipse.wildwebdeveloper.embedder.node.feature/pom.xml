@@ -24,6 +24,7 @@
 						<configuration>
 							<excludes>
 								<plugin id="org.eclipse.wildwebdeveloper.embedder.node.linux.x86_64"/>
+								<plugin id="org.eclipse.wildwebdeveloper.embedder.node.linux.aarch64"/>
 								<plugin id="org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64"/>
 								<plugin id="org.eclipse.wildwebdeveloper.embedder.node.win32.x86_64"/>
 							</excludes>

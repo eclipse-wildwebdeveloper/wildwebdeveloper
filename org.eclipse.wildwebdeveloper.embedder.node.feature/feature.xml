@@ -35,6 +35,16 @@
          version="0.0.0"
          fragment="true"/>
 
+      <plugin
+         id="org.eclipse.wildwebdeveloper.embedder.node.linux.aarch64"
+         os="linux"
+         ws="gtk"
+         arch="aarch64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
    <plugin
          id="org.eclipse.wildwebdeveloper.embedder.node.win32.x86_64"
          os="win32"
