@@ -56,7 +56,8 @@ public class TestAngular {
 		IFile appComponentFile = appFolder.getFile("app.component.ts");
 		TextEditor editor = (TextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
-		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
+		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
+									// didChange
 		// make an edit
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.set(document.get() + "\n");
@@ -64,38 +65,48 @@ public class TestAngular {
 			@Override
 			protected boolean condition() {
 				try {
-					return Arrays.stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-							IResource.DEPTH_ZERO)).anyMatch(marker -> marker.getAttribute(IMarker.LINE_NUMBER, -1) == 5 && marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
+					return Arrays
+							.stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+									IResource.DEPTH_ZERO))
+							.anyMatch(marker -> marker.getAttribute(IMarker.LINE_NUMBER, -1) == 5
+									&& marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000), "Diagnostic not published in standalone component file");
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000),
+				"Diagnostic not published in standalone component file");
 		editor.close(false);
 
-		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appFolder.getFile("app.componentWithHtml.ts"));
-		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a didChange
+		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+				appFolder.getFile("app.componentWithHtml.ts"));
+		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
+									// didChange
 		IFile appComponentHTML = appFolder.getFile("app.componentWithHtml.html");
-		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentHTML);
+		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+				appComponentHTML);
 		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		assertTrue(new DisplayHelper() {
-			@Override protected boolean condition() {
+			@Override
+			protected boolean condition() {
 				IMarker[] markers;
 				try {
-					markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-							IResource.DEPTH_ZERO);
-					return Arrays.stream(markers).anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
+					markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+					return Arrays.stream(markers)
+							.anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
 				} catch (CoreException e) {
 					return false;
 				}
 			}
-		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000), "No error found on erroneous HTML component file");
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
+				"No error found on erroneous HTML component file");
 		// test completion
 		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
-		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor), document.get().indexOf("}}"));
+		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
+				document.get().indexOf("}}"));
 		proposals[0].apply(document);
-		assertEquals("Incorrect completion insertion", "<h1>{{title}}</h1>", document.get());
+		assertEquals("<h1>{{title}}</h1>", document.get(), "Incorrect completion insertion");
 	}
 
 	public static String getNpmLocation() {
