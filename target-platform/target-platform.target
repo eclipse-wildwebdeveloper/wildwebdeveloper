@@ -6,7 +6,6 @@
 	<repository location="https://download.eclipse.org/eclipse/updates/latest/"/>
 	<unit id="org.eclipse.ui.tests.harness" version="0.0.0"/>
 	<unit id="org.eclipse.pde.junit.runtime" version="0.0.0" />
-	<unit id="org.eclipse.jdt.junit4.runtime" version="0.0.0" />
 	<unit id="org.eclipse.jdt.junit5.runtime" version="0.0.0" />
 	<unit id="org.mockito" version="0.0.0"/>
 </location>

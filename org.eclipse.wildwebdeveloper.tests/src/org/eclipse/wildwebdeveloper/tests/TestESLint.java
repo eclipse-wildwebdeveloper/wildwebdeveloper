@@ -12,8 +12,8 @@
 *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -29,15 +29,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestESLint {
 
 	private IProject project;
 
-	@Before
+	@BeforeEach
 	public void setUpProject() throws Exception {
 		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
 		prefs.putValue("org.eclipse.wildwebdeveloper.angular.file.logging.enabled", Boolean.toString(true));
@@ -60,7 +60,7 @@ public class TestESLint {
 		packageJson.create(getClass().getResourceAsStream("/testProjects/eslint/package.json"), true, null);
 		Process dependencyInstaller = new ProcessBuilder(TestAngular.getNpmLocation(), "install")
 				.directory(project.getLocation().toFile()).start();
-		assertEquals("npm install didn't complete properly", 0, dependencyInstaller.waitFor());
+		assertEquals(0, dependencyInstaller.waitFor(), "npm install didn't complete properly");
 
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		for (IViewReference ref : activePage.getViewReferences()) {
@@ -68,7 +68,7 @@ public class TestESLint {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void deleteProjectAndCloseEditors() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		this.project.delete(true, null);
@@ -82,7 +82,7 @@ public class TestESLint {
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		DisplayHelper.sleep(4000); // Give time for ESLint language service to initialize
 
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -92,9 +92,9 @@ public class TestESLint {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 
-		assertTrue("Diagnostic content is incorrect", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -106,7 +106,7 @@ public class TestESLint {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic content is incorrect");
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class TestESLint {
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		DisplayHelper.sleep(4000); // Give time for ESLint language service to initialize
 
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -127,21 +127,21 @@ public class TestESLint {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 
-		assertTrue("Diagnostic content is incorrect", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
 					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO)[0]
-							.getAttribute(IMarker.MESSAGE, null).contains(
-									"[@typescript-eslint/indent] Expected indentation of 0 spaces but found 9.");
+							.getAttribute(IMarker.MESSAGE, null)
+							.contains("[@typescript-eslint/indent] Expected indentation of 0 spaces but found 9.");
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic content is incorrect");
 	}
 
 }

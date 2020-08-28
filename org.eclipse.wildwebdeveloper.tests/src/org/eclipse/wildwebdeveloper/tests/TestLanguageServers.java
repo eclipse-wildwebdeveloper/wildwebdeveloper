@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -41,15 +41,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestLanguageServers {
 
 	private IProject project;
 
-	@Before
+	@BeforeEach
 	public void setUpProject() throws Exception {
 		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
 		prefs.putValue("org.eclipse.wildwebdeveloper.angular.file.logging.enabled", Boolean.toString(true));
@@ -68,7 +68,7 @@ public class TestLanguageServers {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void deleteProjectAndCloseEditors() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		this.project.delete(true, null);
@@ -82,7 +82,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -91,7 +91,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -110,7 +110,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -120,7 +120,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("hello: '");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -129,7 +129,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("ERROR");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -148,7 +148,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -157,9 +157,10 @@ public class TestLanguageServers {
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a didChange
+		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a
+									// didChange
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -168,7 +169,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -178,7 +179,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -187,16 +188,17 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
 	public void testJSXFile() throws Exception {
 		final IFile file = project.getFile("blah.jsx");
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -205,16 +207,17 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
 	public void testTSXFile() throws Exception {
 		final IFile file = project.getFile("blah.tsx");
 		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -223,14 +226,14 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
 	public void testResourcesPathIsntTooLong() throws Exception {
 		// NOTE: this test does only work with jar file; when testing
 		// from IDE, the too long folder isn't excluded so test fail
-		
+
 		final int MAX_ALLOWED_RELATIVE_PATH = 140; // that leaves 120 characters for the path to the bundle
 //C:/Users/Jean-Jacques Saint-Romain/developpement/eclipse/plugins/org.eclipse.wildwebdeveloper_1.2.3.20201212_1605/
 		String location = Platform.getBundle("org.eclipse.wildwebdeveloper").getLocation();

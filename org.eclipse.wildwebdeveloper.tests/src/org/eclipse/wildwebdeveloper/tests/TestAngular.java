@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,19 +38,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AllCleanRule.class)
 public class TestAngular {
-
-	@Rule public AllCleanRule cleanRule = new AllCleanRule();
 
 	@Test
 	public void testAngular() throws Exception {
 		IProject project = Utils.provisionTestProject("angular-app");
 		Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts")
 				.directory(project.getLocation().toFile()).start();
-		assertEquals("npm install didn't complete property", 0, process.waitFor());
+		assertEquals(0, process.waitFor(), "npm install didn't complete property");
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		IFolder appFolder = project.getFolder("src").getFolder("app");
 
@@ -61,7 +60,7 @@ public class TestAngular {
 		// make an edit
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.set(document.get() + "\n");
-		assertTrue("Diagnostic not published in standalone component file", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -72,7 +71,7 @@ public class TestAngular {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000), "Diagnostic not published in standalone component file");
 		editor.close(false);
 
 		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appFolder.getFile("app.componentWithHtml.ts"));
@@ -80,7 +79,7 @@ public class TestAngular {
 		IFile appComponentHTML = appFolder.getFile("app.componentWithHtml.html");
 		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentHTML);
 		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		assertTrue("No error found on erroneous HTML component file", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override protected boolean condition() {
 				IMarker[] markers;
 				try {
@@ -91,7 +90,7 @@ public class TestAngular {
 					return false;
 				}
 			}
-		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000), "No error found on erroneous HTML component file");
 		// test completion
 		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
 		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor), document.get().indexOf("}}"));

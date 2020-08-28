@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,16 +28,16 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AllCleanRule.class)
 public class TestHTML {
-
-	@Rule public AllCleanRule cleanRule = new AllCleanRule();
 
 	@Test
 	public void testHTMLFile() throws Exception {
-		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("testHTMLFile" + System.currentTimeMillis());
+		final IProject project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject("testHTMLFile" + System.currentTimeMillis());
 		project.create(null);
 		project.open(null);
 		final IFile file = project.getFile("blah.html");
@@ -45,7 +45,7 @@ public class TestHTML {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -54,12 +54,13 @@ public class TestHTML {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
 	public void testFormat() throws Exception {
-		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("testHTMLFile" + System.currentTimeMillis());
+		final IProject project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject("testHTMLFile" + System.currentTimeMillis());
 		project.create(null);
 		project.open(null);
 		final IFile file = project.getFile("blah.html");
@@ -71,7 +72,8 @@ public class TestHTML {
 		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		AtomicReference<Exception> ex = new AtomicReference<>();
 		new DisplayHelper() {
-			@Override protected boolean condition() {
+			@Override
+			protected boolean condition() {
 				try {
 					handlerService.executeCommand("org.eclipse.lsp4e.format", null);
 					return true;
@@ -84,7 +86,8 @@ public class TestHTML {
 			throw ex.get();
 		}
 		new DisplayHelper() {
-			@Override protected boolean condition() {
+			@Override
+			protected boolean condition() {
 				return editor.getDocumentProvider().getDocument(editor.getEditorInput()).getNumberOfLines() > 1;
 			}
 		}.waitForCondition(editor.getSite().getShell().getDisplay(), 3000);

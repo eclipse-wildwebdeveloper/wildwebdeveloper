@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +26,11 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.ide.IDE;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AllCleanRule.class)
 public class TestJSON {
-
-	@Rule public AllCleanRule rule = new AllCleanRule();
 
 	@Test
 	public void testFormatEnabled() throws IOException, PartInitException, CoreException {
@@ -40,10 +39,10 @@ public class TestJSON {
 		IDE.openEditorOnFileStore(activePage, EFS.getStore(file.toURI()));
 		ICommandService service = activePage.getWorkbenchWindow().getService(ICommandService.class);
 		Command formatCommand = service.getCommand("org.eclipse.lsp4e.format");
-		assertNotNull("Format command not found", formatCommand);
-		assertTrue("Format command not defined", formatCommand.isDefined());
-		assertTrue("Format command not enabled", formatCommand.isEnabled());
-		assertTrue("Format command not handled", formatCommand.isHandled());
+		assertNotNull(formatCommand, "Format command not found");
+		assertTrue(formatCommand.isDefined(), "Format command not defined");
+		assertTrue(formatCommand.isEnabled(), "Format command not enabled");
+		assertTrue(formatCommand.isHandled(), "Format command not handled");
 	}
 
 }
