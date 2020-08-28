@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 
@@ -29,17 +29,17 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AllCleanRule.class)
 public class TestXML {
 
-	@Rule public AllCleanRule rule = new AllCleanRule();
 	private IProject project;
 	private ICompletionProposal[] proposals;
 
-	@Before
+	@BeforeEach
 	public void setUpProject() throws CoreException {
 		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.nanoTime());
 		project.create(null);
@@ -53,7 +53,7 @@ public class TestXML {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<plugin></");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -62,7 +62,7 @@ public class TestXML {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class TestXML {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -81,7 +81,7 @@ public class TestXML {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class TestXML {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -100,7 +100,7 @@ public class TestXML {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
@@ -110,7 +110,7 @@ public class TestXML {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!--<!-- -->");
-		assertTrue("Diagnostic not published", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
@@ -119,23 +119,21 @@ public class TestXML {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000));
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
 	}
 
 	@Test
 	public void testComplexXML() throws Exception {
 		final IFile file = project.getFile("blah.xml");
-		String content = "<layout:BlockLayoutCell\n" +
-				"	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"	\n" +
-				"    xsi:schemaLocation=\"sap.ui.layout https://openui5.hana.ondemand.com/downloads/schemas/sap.ui.layout.xsd\"\n" +
-				"	xmlns:layout=\"sap.ui.layout\">\n" +
-				"    |\n" +
-				"</layout:BlockLayoutCell>";
+		String content = "<layout:BlockLayoutCell\n" + "	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"	\n"
+				+ "    xsi:schemaLocation=\"sap.ui.layout https://openui5.hana.ondemand.com/downloads/schemas/sap.ui.layout.xsd\"\n"
+				+ "	xmlns:layout=\"sap.ui.layout\">\n" + "    |\n" + "</layout:BlockLayoutCell>";
 		int offset = content.indexOf('|');
 		content = content.replace("|", "");
 		file.create(new ByteArrayInputStream(content.getBytes()), true, null);
-		AbstractTextEditor editor = (AbstractTextEditor) IDE
-				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
+		AbstractTextEditor editor = (AbstractTextEditor) IDE.openEditor(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
+				"org.eclipse.ui.genericeditor.GenericEditor");
 		editor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
 		LSContentAssistProcessor processor = new LSContentAssistProcessor();
 		proposals = processor.computeCompletionProposals(Utils.getViewer(editor), offset);

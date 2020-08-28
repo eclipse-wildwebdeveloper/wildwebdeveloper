@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -30,16 +32,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestTypeScript {
 
 	private IProject project;
 
-	@Before
+	@BeforeEach
 	public void setUpProject() throws Exception {
 		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
 		prefs.putValue("org.eclipse.wildwebdeveloper.angular.file.logging.enabled", Boolean.toString(true));
@@ -58,7 +59,7 @@ public class TestTypeScript {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void deleteProjectAndCloseEditors() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		this.project.delete(true, null);
@@ -73,7 +74,7 @@ public class TestTypeScript {
 		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a didChange
 		HoverParams params = new HoverParams(new TextDocumentIdentifier(LSPEclipseUtils.toUri(document).toString()), new Position(0, 18));
 		Hover hover = LanguageServiceAccessor.getLanguageServers(document, null).get().get(0).getTextDocumentService().hover(params).get();
-		Assert.assertTrue(hover.getContents().toString().contains("button"));
+		assertTrue(hover.getContents().toString().contains("button"));
 	}
 
 }

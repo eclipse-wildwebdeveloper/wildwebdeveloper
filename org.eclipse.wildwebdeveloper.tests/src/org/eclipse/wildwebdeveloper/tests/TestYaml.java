@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
@@ -30,12 +30,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AllCleanRule.class)
 public class TestYaml {
-
-	@Rule public AllCleanRule allCleanRule = new AllCleanRule();
 
 	@Test
 	public void testFalseDetectionAsKubernetes() throws Exception {
@@ -45,11 +44,12 @@ public class TestYaml {
 		IFile file = p.getFile("blah.yaml");
 		file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		ITextEditor editor = (ITextEditor)IDE.openEditor(activePage, file, true);
+		ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.set("name: a\ndescrition: b");
 		boolean markerFound = new DisplayHelper() {
-			@Override protected boolean condition() {
+			@Override
+			protected boolean condition() {
 				try {
 					return file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
 				} catch (CoreException e) {
@@ -57,6 +57,7 @@ public class TestYaml {
 				}
 			}
 		}.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(), 3000);
-		assertFalse(Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO)).map(Object::toString).collect(Collectors.joining("\n")), markerFound);
+		assertFalse(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
+				.map(Object::toString).collect(Collectors.joining("\n")));
 	}
 }

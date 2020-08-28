@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.InputStream;
@@ -28,86 +28,89 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wildwebdeveloper.embedder.node.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @SuppressWarnings("restriction")
+@ExtendWith(AllCleanRule.class)
 public class TestNodeJsEmbedder {
-	@Rule public AllCleanRule allClean = new AllCleanRule();
-	
+
 	@Test
 	public void testNodeJsEmbedder() throws Exception {
 		URL nodeJsInfo = FileLocator.find(Activator.getDefault().getBundle(), new Path("nodejs-info.properties"));
-		assertNotNull("NodeJs descriptor \"nodejs-info.properties\" not found!", nodeJsInfo);
+		assertNotNull(nodeJsInfo, "NodeJs descriptor \"nodejs-info.properties\" not found!");
 
 		Properties properties = new Properties();
 		try (InputStream infoStream = nodeJsInfo.openStream()) {
 			properties.load(infoStream);
 		}
-		
-		assertTrue("Property \"archiveURL\" is not defined", properties.getProperty("archiveURL") != null &&
-				!properties.getProperty("archiveURL").isEmpty());
-		assertTrue("Property \"archiveFile\" is not defined", properties.getProperty("archiveFile") != null &&
-				!properties.getProperty("archiveFile").isEmpty());
-		assertTrue("Property \"nodePath\" is not defined", properties.getProperty("nodePath") != null &&
-				!properties.getProperty("nodePath").isEmpty());
-		
-		File nodePath = NodeJSManager.getNodeJsLocation();
-		assertNotNull("Node.Js location cannot be found", nodePath);
 
-		IPath stateLocationPath = InternalPlatform.getDefault().getStateLocation(Platform
-				.getBundle(Activator.PLUGIN_ID));
-		assertNotNull("State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"",
-				stateLocationPath);
+		assertTrue(properties.getProperty("archiveURL") != null && !properties.getProperty("archiveURL").isEmpty(),
+				"Property \"archiveURL\" is not defined");
+		assertTrue(properties.getProperty("archiveFile") != null && !properties.getProperty("archiveFile").isEmpty(),
+				"Property \"archiveFile\" is not defined");
+		assertTrue(properties.getProperty("nodePath") != null && !properties.getProperty("nodePath").isEmpty(),
+				"Property \"nodePath\" is not defined");
+
+		File nodePath = NodeJSManager.getNodeJsLocation();
+		assertNotNull(nodePath, "Node.Js location cannot be found");
+
+		IPath stateLocationPath = InternalPlatform.getDefault()
+				.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
+		assertNotNull(stateLocationPath, "State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"");
 
 		File installationPath = stateLocationPath.toFile();
 		File embeddedNodePath = new File(installationPath, properties.getProperty("nodePath"));
-		assertTrue("Embedded NodeJs is not extracted", nodePath.exists() && nodePath.canRead() && nodePath.canExecute());
-		assertEquals("Embedded NodeJs installation is not used", nodePath, embeddedNodePath);
+		assertTrue(nodePath.exists() && nodePath.canRead() && nodePath.canExecute(),
+				"Embedded NodeJs is not extracted");
+		assertEquals(nodePath, embeddedNodePath, "Embedded NodeJs installation is not used");
 	}
-	
+
 	@Test
 	public void testNodeJsEmbedderWhich() throws Exception {
 		URL nodeJsInfo = FileLocator.find(Activator.getDefault().getBundle(), new Path("nodejs-info.properties"));
-		assertNotNull("NodeJs descriptor \"nodejs-info.properties\" not found!", nodeJsInfo);
+		assertNotNull(nodeJsInfo, "NodeJs descriptor \"nodejs-info.properties\" not found!");
 
 		Properties properties = new Properties();
 		try (InputStream infoStream = nodeJsInfo.openStream()) {
 			properties.load(infoStream);
 		}
-		
-		assertTrue("Property \"archiveURL\" is not defined", properties.getProperty("archiveURL") != null &&
-				!properties.getProperty("archiveURL").isEmpty());
-		assertTrue("Property \"archiveFile\" is not defined", properties.getProperty("archiveFile") != null &&
-				!properties.getProperty("archiveFile").isEmpty());
-		assertTrue("Property \"nodePath\" is not defined", properties.getProperty("nodePath") != null &&
-				!properties.getProperty("nodePath").isEmpty());
-		
-		File nodePath = NodeJSManager.getNodeJsLocation();
-		assertNotNull("Node.Js location cannot be found", nodePath);
 
-		IPath stateLocationPath = InternalPlatform.getDefault().getStateLocation(Platform
-				.getBundle(Activator.PLUGIN_ID));
-		assertNotNull("State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"",
-				stateLocationPath);
+		assertTrue(properties.getProperty("archiveURL") != null && !properties.getProperty("archiveURL").isEmpty(),
+				"Property \"archiveURL\" is not defined");
+		assertTrue(properties.getProperty("archiveFile") != null && !properties.getProperty("archiveFile").isEmpty(),
+				"Property \"archiveFile\" is not defined");
+		assertTrue(properties.getProperty("nodePath") != null && !properties.getProperty("nodePath").isEmpty(),
+				"Property \"nodePath\" is not defined");
+
+		File nodePath = NodeJSManager.getNodeJsLocation();
+		assertNotNull(nodePath, "Node.Js location cannot be found");
+
+		IPath stateLocationPath = InternalPlatform.getDefault()
+				.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
+		assertNotNull(stateLocationPath, "State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"");
 
 		File installationPath = stateLocationPath.toFile();
 		File embeddedNodePath = new File(installationPath, properties.getProperty("nodePath"));
-		assertTrue("Embedded NodeJs is not extracted", nodePath.exists() && nodePath.canRead() && nodePath.canExecute());
+		assertTrue(nodePath.exists() && nodePath.canRead() && nodePath.canExecute(),
+				"Embedded NodeJs is not extracted");
 
 		File whichNode = NodeJSManager.which("node");
-		assertTrue("NodeJSManager.which(\"node\") didn't return an embedded NodeJs", 
-				whichNode.exists() && whichNode.canRead() && whichNode.canExecute() &&
-				embeddedNodePath.getParent().equals(whichNode.getParent()));
-			
+		assertTrue(
+				whichNode.exists() && whichNode.canRead() && whichNode.canExecute()
+						&& embeddedNodePath.getParent().equals(whichNode.getParent()),
+				"NodeJSManager.which(\"node\") didn't return an embedded NodeJs");
+
 		File whichNpm = NodeJSManager.which("npm");
-		assertTrue("NodeJSManager.which(\"npm\") didn't return an embedded NodeJs\'s NPM", 
-				whichNpm.exists() && whichNpm.canRead() && whichNpm.canExecute() &&
-				embeddedNodePath.getParent().equals(whichNpm.getParent()));
-		
+		assertTrue(
+				whichNpm.exists() && whichNpm.canRead() && whichNpm.canExecute()
+						&& embeddedNodePath.getParent().equals(whichNpm.getParent()),
+				"NodeJSManager.which(\"npm\") didn't return an embedded NodeJs\'s NPM");
+
 		File whichNpx = NodeJSManager.which("npx");
-		assertTrue("NodeJSManager.which(\"npx\") didn't return an embedded NodeJs\\'s NPX", 
-				whichNpx.exists() && whichNpx.canRead() && whichNpx.canExecute() &&
-				embeddedNodePath.getParent().equals(whichNpx.getParent()));
-	}	
+		assertTrue(
+				whichNpx.exists() && whichNpx.canRead() && whichNpx.canExecute()
+						&& embeddedNodePath.getParent().equals(whichNpx.getParent()),
+				"NodeJSManager.which(\"npx\") didn't return an embedded NodeJs\\'s NPX");
+	}
 }

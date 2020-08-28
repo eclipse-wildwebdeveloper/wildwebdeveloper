@@ -20,14 +20,25 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.intro.IIntroPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class AllCleanRule extends TestWatcher {
+public class AllCleanRule implements BeforeEachCallback, AfterEachCallback{
+
+	private void clearProjects() {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
+		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			try {
+				project.delete(true, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Override
-	protected void starting(Description description) {
-		super.starting(description);
+	public void beforeEach(ExtensionContext context) throws Exception {
 		IIntroPart intro = PlatformUI.getWorkbench().getIntroManager().getIntro();
 		if (intro != null) {
 			PlatformUI.getWorkbench().getIntroManager().closeIntro(intro);
@@ -48,19 +59,7 @@ public class AllCleanRule extends TestWatcher {
 	}
 
 	@Override
-	protected void finished(Description description) {
+	public void afterEach(ExtensionContext context) throws Exception {
 		clearProjects();
-		super.finished(description);
-	}
-
-	private void clearProjects() {
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
-		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			try {
-				project.delete(true, null);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

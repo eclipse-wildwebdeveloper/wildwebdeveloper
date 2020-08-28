@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
@@ -28,17 +28,16 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AllCleanRule.class)
 public class TestSyntaxHighlighting {
-
-	@Rule public AllCleanRule cleanRule = new AllCleanRule();
 
 	private IProject project;
 
-	@Before
+	@BeforeEach
 	public void initializeHostProject() throws CoreException {
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject("blah");
 		project.create(null);
@@ -49,14 +48,17 @@ public class TestSyntaxHighlighting {
 	public void testJSXHighlighting() throws CoreException {
 		IFile file = project.getFile("test.jsx");
 		file.create(new ByteArrayInputStream("var n = 4;\n".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		StyledText widget = (StyledText) editor.getAdapter(Control.class);
 		Color defaultTextColor = widget.getForeground();
-		assertTrue("Missing syntax highlighting", new DisplayHelper() {
-			@Override protected boolean condition() {
-				return Arrays.stream(widget.getStyleRanges()).anyMatch(range -> range.foreground != null && !defaultTextColor.equals(range.foreground));
+		assertTrue(new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				return Arrays.stream(widget.getStyleRanges())
+						.anyMatch(range -> range.foreground != null && !defaultTextColor.equals(range.foreground));
 			}
-		}.waitForCondition(widget.getDisplay(), 2000));
+		}.waitForCondition(widget.getDisplay(), 2000), "Missing syntax highlighting");
 	}
 
 }
