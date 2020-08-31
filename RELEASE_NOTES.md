@@ -4,10 +4,22 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.11.2
+
+* 📅 Release Date (tentative): Mid-October 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.1...0.11.2
+
 ## 0.11.1
 
-* 📅 Release Date (tentative): End of August 2020
+* 📅 Release Date: 3rd, August 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.0...0.11.1
+
+#### Add Node.js embedder for aarch64
+
+Wild Web Developer now ships a node embedded for aarch64.
+
+#### Upgrade language servers and debug adapters
+
 
 ## 0.11.0
 
