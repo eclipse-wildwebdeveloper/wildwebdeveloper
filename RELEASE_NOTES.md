@@ -20,6 +20,12 @@ Wild Web Developer now ships a node embedded for aarch64.
 
 #### Upgrade language servers and debug adapters
 
+which includes...
+
+#### Support for TypeScript 3.9
+
+Upgrade of typescript and tsserver bring 3.9 support out of the box
+
 
 ## 0.11.0
 
