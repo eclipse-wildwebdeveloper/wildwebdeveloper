@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.eclipse.core.internal.runtime.InternalPlatform;
@@ -112,5 +113,13 @@ public class TestNodeJsEmbedder {
 				whichNpx.exists() && whichNpx.canRead() && whichNpx.canExecute()
 						&& embeddedNodePath.getParent().equals(whichNpx.getParent()),
 				"NodeJSManager.which(\"npx\") didn't return an embedded NodeJs\\'s NPX");
+	}
+
+	@Test
+	public void testNPMSeemsCorrect() {
+		File npm = NodeJSManager.getNpmLocation();
+		assertTrue(npm.isFile());
+		assertTrue(npm.length() > 0);
+		assertTrue(Platform.OS_WIN32.equals(Platform.getOS()) || Files.isSymbolicLink(npm.toPath()));
 	}
 }

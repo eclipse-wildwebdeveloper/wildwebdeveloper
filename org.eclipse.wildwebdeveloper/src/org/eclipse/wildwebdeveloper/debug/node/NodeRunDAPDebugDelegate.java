@@ -100,7 +100,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		if (!cwd.isEmpty()) {
 			param.put(CWD, cwd);
 		}
-		File runtimeExecutable = NodeJSManager.which("node");
+		File runtimeExecutable = NodeJSManager.getNodeJsLocation();
 		if (runtimeExecutable != null) {
 			param.put(RUNTIME_EXECUTABLE, runtimeExecutable.getAbsolutePath());
 		}

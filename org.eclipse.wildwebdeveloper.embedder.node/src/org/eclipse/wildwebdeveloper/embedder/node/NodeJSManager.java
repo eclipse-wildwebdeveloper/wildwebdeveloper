@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -71,13 +72,12 @@ public class NodeJSManager {
 				if (stateLocationPath != null) {
 					File installationPath = stateLocationPath.toFile();
 					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
-					if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
-						return nodePath;
+					boolean previousInstallationNeedsFix = !(Platform.OS_WIN32.equals(Platform.getOS()) || Files.isSymbolicLink(new File(nodePath, "bin/npm").toPath()));
+					if (!nodePath.exists() || !nodePath.canRead() || !nodePath.canExecute() || previousInstallationNeedsFix) {
+						CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(), 
+								new Path(properties.getProperty("archiveFile"))),
+								installationPath);
 					}
-					
-					CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(), 
-							new Path(properties.getProperty("archiveFile"))),
-							installationPath);
 					return nodePath;
 				}
 			} catch (IOException e) {
@@ -99,7 +99,24 @@ public class NodeJSManager {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 * @since 0.2
+	 */
+	public static File getNpmLocation() {
+		String npmFileName = Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
+		File nodeJsLocation = getNodeJsLocation();
+		if (nodeJsLocation != null) {
+			File res = new File(nodeJsLocation.getParentFile(), npmFileName);
+			if (res.canExecute()) {
+				return res;
+			}
+		}
+		return which(npmFileName);
+	}
+
 	public static File which(String program) {
 		Properties properties = getNodeJsInfoProperties();
 		if (properties != null) {

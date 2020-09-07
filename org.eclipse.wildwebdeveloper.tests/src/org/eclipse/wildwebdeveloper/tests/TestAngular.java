@@ -16,11 +16,6 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
@@ -30,7 +25,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
@@ -38,6 +32,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -47,8 +42,8 @@ public class TestAngular {
 	@Test
 	public void testAngular() throws Exception {
 		IProject project = Utils.provisionTestProject("angular-app");
-		Process process = new ProcessBuilder(getNpmLocation(), "install", "--no-bin-links", "--ignore-scripts")
-				.directory(project.getLocation().toFile()).start();
+		Process process = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
+				"--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
 		assertEquals(0, process.waitFor(), "npm install didn't complete property");
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		IFolder appFolder = project.getFolder("src").getFolder("app");
@@ -107,34 +102,6 @@ public class TestAngular {
 				document.get().indexOf("}}"));
 		proposals[0].apply(document);
 		assertEquals("<h1>{{title}}</h1>", document.get(), "Incorrect completion insertion");
-	}
-
-	public static String getNpmLocation() {
-		String res = "/path/to/npm";
-		String[] command = new String[] { "/bin/bash", "-c", "-l", "which npm" };
-		if (Platform.getOS().equals(Platform.OS_WIN32)) {
-			command = new String[] { "cmd", "/c", "where npm" };
-		}
-		BufferedReader reader = null;
-		try {
-			Process p = Runtime.getRuntime().exec(command);
-			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			res = reader.readLine();
-		} catch (IOException e) {
-			return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
-		}
-
-		// Try default install path as last resort
-		if (res == null && Platform.getOS().equals(Platform.OS_MACOSX)) {
-			res = "/usr/local/bin/npm";
-		} else if (res == null && Platform.getOS().equals(Platform.OS_LINUX)) {
-			res = "/usr/bin/npm";
-		}
-
-		if (res != null && Files.exists(Paths.get(res))) {
-			return res;
-		}
-		return Platform.getOS().equals(Platform.OS_WIN32) ? "npm.cmd" : "npm";
 	}
 
 }

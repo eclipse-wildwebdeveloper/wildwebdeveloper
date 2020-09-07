@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.wildwebdeveloper.embedder.node.feature"
       label="%name"
-      version="0.1.1.qualifier"
+      version="0.2.0.qualifier"
       provider-name="Eclipse Wild Web Developer project"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
