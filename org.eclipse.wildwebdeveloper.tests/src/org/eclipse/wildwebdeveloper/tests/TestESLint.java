@@ -29,6 +29,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ public class TestESLint {
 		tsConfig.create(getClass().getResourceAsStream("/testProjects/eslint/tsconfig.json"), true, null);
 		IFile packageJson = project.getFile("package.json");
 		packageJson.create(getClass().getResourceAsStream("/testProjects/eslint/package.json"), true, null);
-		Process dependencyInstaller = new ProcessBuilder(TestAngular.getNpmLocation(), "install")
+		Process dependencyInstaller = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install")
 				.directory(project.getLocation().toFile()).start();
 		assertEquals(0, dependencyInstaller.waitFor(), "npm install didn't complete properly");
 

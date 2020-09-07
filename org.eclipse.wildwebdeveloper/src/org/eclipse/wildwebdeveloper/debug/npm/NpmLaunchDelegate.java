@@ -58,7 +58,7 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 		final String argumentString = configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "No NPM argument set") //$NON-NLS-1$
 				.trim();
 		List<String> arguments = new ArrayList<>();
-		arguments.add(findNPMLocation());
+		arguments.add(NodeJSManager.getNpmLocation().getAbsolutePath());
 		arguments.addAll(Arrays.asList(argumentString.split(" "))); //$NON-NLS-1$
 		monitor.beginTask(argumentString + ' ' + packageJSON.getAbsolutePath(), 2);
 		monitor.worked(1);
@@ -94,10 +94,6 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
 					Messages.NpmLaunchDelegate_npmError, e.getMessage(), errorStatus)); // $NON-NLS-1$
 		}
-	}
-
-	private static String findNPMLocation() {
-		return NodeJSManager.which("npm").getAbsolutePath(); //$NON-NLS-1$
 	}
 
 }
