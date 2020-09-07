@@ -139,57 +139,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>replacer</artifactId>
-				<version>1.5.3</version>
-				<executions>
-					<execution>
-						<id>enable-formatting</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-						<configuration>
-							<basedir>${basedir}</basedir>
-							<includes>
-								<include>node_modules/vscode-json-languageserver/out/jsonServerMain.js</include>
-							</includes>
-							<replacements>
-								<replacement>
-									<token>documentRangeFormattingProvider: false</token>
-									<value>documentRangeFormattingProvider: true</value>
-								</replacement>
-							</replacements>
-						</configuration>
-					</execution>
-					<execution>
-						<id>workaround-vscode-chrome-debug-core-issue-516</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-						<configuration>
-							<basedir>${basedir}</basedir>
-							<includes>
-								<include>node_modules/vscode-chrome-debug-core/out/src/chrome/chromeDebugAdapter.js</include>
-							</includes>
-							<replacements>
-								<replacement>
-									<!--token>reportBpTelemetry(args) {</token-->
-									<token>reportBpTelemetry\(args\) \{</token>
-									<value>// Added by Wild Web Developer at build time
-    setVariable(args) {
-        return this._variablesManager.setVariable(args);
-    }
-    // end of "Added by Wild Web Developer at build time"
-    reportBpTelemetry(args) {</value>
-								</replacement>
-							</replacements>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
