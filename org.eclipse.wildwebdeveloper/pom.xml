@@ -129,7 +129,7 @@
 								<arg>@typescript-eslint/eslint-plugin@3.2.0</arg>
 								<arg>@typescript-eslint/parser@3.2.0</arg>
 								<arg>@angular/language-service@10.0.4</arg>
-								<arg>@angular/language-server@0.1000.4</arg>
+								<arg>@angular/language-server@0.1001.0</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
