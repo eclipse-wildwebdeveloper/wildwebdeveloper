@@ -39,7 +39,7 @@ public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/vscode-css-languageserver/dist/cssServerMain.js"));
+			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/vscode-css-languageserver/dist/node/cssServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);

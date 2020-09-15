@@ -82,6 +82,8 @@ public class TestAngular {
 		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				appComponentHTML);
 		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		// workaround https://github.com/angular/vscode-ng-language-service/issues/922
+		document.set(document.get().replace("{{t}}", "{{ti}}"));
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {

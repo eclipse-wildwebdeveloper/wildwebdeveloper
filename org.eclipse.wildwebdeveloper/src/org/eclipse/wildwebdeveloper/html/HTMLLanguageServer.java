@@ -40,7 +40,7 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator.toFileURL(getClass()
-					.getResource("/node_modules/vscode-html-languageserver/dist/htmlServerMain.js"));
+					.getResource("/node_modules/vscode-html-languageserver/dist/node/htmlServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);

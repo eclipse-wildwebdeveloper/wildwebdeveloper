@@ -36,7 +36,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/stable/5763d909d5f12fe19f215cbfdd29a91c0fa9208a/code-stable-1589445616.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/stable/e790b931385d72cf5669fcefc51cdf65990efa5d/code-stable-1599744987.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
@@ -113,22 +113,22 @@
 								<arg>install</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
-								<arg>${project.build.directory}/node-debug2-1.42.2.tgz</arg>
-								<arg>typescript@3.9.7</arg>
+								<arg>${project.build.directory}/node-debug2-1.42.5.tgz</arg>
+								<arg>typescript@4.0.2</arg>
 								<arg>typescript-language-server@0.4.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
-								<arg>typescript-plugin-css-modules@2.4.0</arg>
+								<arg>typescript-plugin-css-modules@2.5.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.2.3.tgz</arg>
 								<arg>yaml-language-server@0.11.0</arg>
 								<arg>firefox-debugadapter@2.9.0</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.8.tgz</arg>
-								<arg>typescript-eslint-language-service@3.0.0</arg>
-								<arg>eslint@7.5.0</arg>
-								<arg>@typescript-eslint/eslint-plugin@3.2.0</arg>
-								<arg>@typescript-eslint/parser@3.2.0</arg>
-								<arg>@angular/language-service@10.0.4</arg>
+								<arg>typescript-eslint-language-service@4.0.1</arg>
+								<arg>eslint@7.9.0</arg>
+								<arg>@typescript-eslint/eslint-plugin@4.1.1</arg>
+								<arg>@typescript-eslint/parser@4.1.1</arg>
+								<arg>@angular/language-service@10.1.2</arg>
 								<arg>@angular/language-server@0.1001.0</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
