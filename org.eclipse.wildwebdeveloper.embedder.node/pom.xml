@@ -8,4 +8,20 @@
 	</parent>
 	<packaging>eclipse-plugin</packaging>
 	<version>0.2.0-SNAPSHOT</version>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<jgit.ignore>
+						pom.xml
+						README.md
+					</jgit.ignore>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
