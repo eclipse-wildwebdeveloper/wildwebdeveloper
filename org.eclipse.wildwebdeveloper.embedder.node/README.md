@@ -26,17 +26,17 @@ After the first call to `getNodeJsLocation()` the subsequent calls to `which(Str
   
   ...
   // Another way to get the NodeJS executable on Linux (after embedded Node.js is installed.
-  File nodeJsRuntime = NodeJSManager.wich("node");
+  File nodeJsRuntime = NodeJSManager.which("node");
   
   // Obtaining `npm` executable on Linux
-  File npmExecutable = NodeJSManager.wich("npm");
+  File npmExecutable = NodeJSManager.which("npm");
   
   // Obtaining `npx` executable on Linux
-  File npxExecutable = NodeJSManager.wich("npx");
+  File npxExecutable = NodeJSManager.which("npx");
   
   // Obtaining some other executable on Linux 
   // System path will be used to find the specified application executable
-  File firefoxExecutable = NodeJSManager.wich("firefox");
+  File firefoxExecutable = NodeJSManager.which("firefox");
 }
 ```
 
