@@ -121,7 +121,7 @@
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.2.3.tgz</arg>
-								<arg>yaml-language-server@0.10.1</arg>
+								<arg>yaml-language-server@0.11.0</arg>
 								<arg>firefox-debugadapter@2.9.0</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.8.tgz</arg>
 								<arg>typescript-eslint-language-service@3.0.0</arg>
