@@ -59,7 +59,7 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 
 		Map<String, Object> options = new HashMap<>();
 		options.put("embeddedLanguages", map);
-		options.put("format.enable", true);
+		options.put("provideFormatter", true);
 		return options;
 	}
 
