@@ -24,6 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
@@ -70,6 +71,8 @@ public class TestHTML {
 		editor.setFocus();
 		editor.getSelectionProvider().setSelection(new TextSelection(0, 0));
 		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+		assertTrue(
+				PlatformUI.getWorkbench().getService(ICommandService.class).getCommand("org.eclipse.lsp4e.format").isEnabled());
 		AtomicReference<Exception> ex = new AtomicReference<>();
 		new DisplayHelper() {
 			@Override
