@@ -4,10 +4,40 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
-## 0.11.2
+## 0.11.4
+
 
 * 📅 Release Date (tentative): Mid-October 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.3...0.11.4
+
+
+## 0.11.3
+
+* 📅 Release Date: 23rd September 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.2...0.11.3
+
+#### Upgraded YAML language server
+
+Adds support for some new yaml features.
+
+## 0.11.2
+
+* 📅 Release Date: 15th September 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.1...0.11.2
+
+#### Upgraded Angular and YAML language servers
+
+This fixes a few bugs, and improves support for some new yaml features.
+
+## 0.11.2
+
+* 📅 Release Date (tentative): 15th September 2020
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.1...0.11.2
+
+#### Upgraded Angular and YAML language servers
+
+This fixes a few bugs, and improves support for some new yaml features.
+
 
 ## 0.11.1
 
