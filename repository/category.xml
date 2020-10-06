@@ -97,6 +97,6 @@
       <category name="Dependencies"/>
    </bundle>
    <category-def name="Wild Web Developer" label="Eclipse Wild Web Developer - Web Dev in Eclipse IDE"/>
-   <category-def name="Dependencies" label="Transtive Dependencies (no need to install directly)"/>
+   <category-def name="Dependencies" label="Transitive Dependencies (no need to install directly)"/>
    <category-def name="Sources" label="Sources and Tests (for integrators)"/>
 </site>
