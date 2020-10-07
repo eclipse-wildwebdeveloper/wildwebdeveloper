@@ -49,6 +49,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.xml.internal.XMLLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.xml.internal.XmlLanguageClientImpl"
             id="org.eclipse.wildwebdeveloper.xml"
             label="XML Language Server"
             singleton="true">
