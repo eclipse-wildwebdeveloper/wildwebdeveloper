@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.eclipse.wildwebdeveloper.json.schema" name="Bind JSON Schema to filename pattern" schema="schema/json.schema.exsd"/>
 
    <!-- Wild Web Developer/Core -->
    <extension
@@ -31,20 +30,88 @@
 
    <!-- JSON Language -->
    <extension
+         id="org.eclipse.wildwebdeveloper.json.contentTypes"
+         name="JSON ContentTypes"
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="json, jsonc, eslintrc"
+            file-extensions="json, jsonc, eslintrc, bowerrc"
             id="org.eclipse.wildwebdeveloper.json"
             name="JSON"
             priority="normal">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
+            file-names=".bower.json,bower.json"
+            id="org.eclipse.wildwebdeveloper.json.bower"
+            name="Bower"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names=".bowerrc"
+            id="org.eclipse.wildwebdeveloper.json.bowerrc"
+            name="Bower Configuration"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-extensions="*.eslintrc.json"
+            file-names=".eslintrc,*.eslintrc.json"
+            id="org.eclipse.wildwebdeveloper.json.eslintrc"
+            name="ESLint Configuration"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="jsconfig.json"
+            id="org.eclipse.wildwebdeveloper.json.jsconfig"
+            name="JavaScript Configuration"
+            priority="normal">
+      </content-type>
+       <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="lerna.json"
+            id="org.eclipse.wildwebdeveloper.json.lerna"
+            name="Lerna Configuration"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
             file-names="package.json"
-            file-patterns="package"
             id="org.eclipse.wildwebdeveloper.json.npmpackage"
             name="NPM package.json"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="omnisharp.json"
+            id="org.eclipse.wildwebdeveloper.json.omnisharp"
+            name="OmniSharp Configuration"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="tsconfig.json"
+            file-patterns="tsconfig.*.json"
+            file-extensions="*.tsconfig.json"
+            id="org.eclipse.wildwebdeveloper.json.tsconfig"
+            name="TypeScript Configuration"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="tslint.json"
+            file-extensions="*.tslint.json"
+            id="org.eclipse.wildwebdeveloper.json.tslint"
+            name="TSLint Configuration"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.json"
+            file-names="typings.json"
+            id="org.eclipse.wildwebdeveloper.json.typings"
+            name="TypeScript Typings"
             priority="normal">
       </content-type>
    </extension>
@@ -92,7 +159,7 @@
             scopeName="source.json">
       </snippet>
    </extension>
-         
+   
    <!-- CSS Language -->
       
    <extension
@@ -463,10 +530,21 @@
             name="YAML">
       </page>
       <page
-			category="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
+            category="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
             class="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
             id="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
             name="YAML Schemas">
+      </page>
+      <page
+            class="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
+            id="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
+            name="JSON">
+      </page>
+      <page
+            category="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
+            class="org.eclipse.wildwebdeveloper.json.JSONSchemaPreferencePage"
+            id="org.eclipse.wildwebdeveloper.json.JSONSchemaPreferencePage"
+            name="JSON Schemas">
       </page>
    </extension>
    <extension
@@ -474,6 +552,14 @@
          <initializer
             class="org.eclipse.wildwebdeveloper.yaml.YAMLPreferenceInitializer">
 		</initializer>
+   </extension>
+   <extension
+         id="JSONPreferenceInitializer"
+         name="JSONPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.json.JSONPreferenceInitializer">
+      </initializer>
    </extension>
 
    <extension
