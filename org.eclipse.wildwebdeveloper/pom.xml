@@ -144,17 +144,17 @@
 								<arg>typescript@3.9.7</arg>
 								<arg>typescript-language-server@0.4.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
-								<arg>typescript-plugin-css-modules@2.4.0</arg>
+								<arg>typescript-plugin-css-modules@2.8.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.2.3.tgz</arg>
-								<arg>yaml-language-server@0.11.0</arg>
+								<arg>yaml-language-server@0.12.0</arg>
 								<arg>vscode-json-languageservice@3.9.1</arg> <!--  Workaround https://github.com/redhat-developer/yaml-language-server/issues/345, to remove when adopting fixed version of yaml-language-server -->-
-								<arg>firefox-debugadapter@2.9.0</arg>
+								<arg>firefox-debugadapter@2.9.1</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.8.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.10.tgz</arg>
-								<arg>@angular/language-service@10.0.4</arg>
-								<arg>@angular/language-server@0.1001.0</arg>
+								<arg>@angular/language-service@10.2.2</arg>
+								<arg>@angular/language-server@0.1001.1</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>

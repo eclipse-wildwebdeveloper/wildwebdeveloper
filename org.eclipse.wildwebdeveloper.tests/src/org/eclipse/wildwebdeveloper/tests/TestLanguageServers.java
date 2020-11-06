@@ -221,6 +221,7 @@ public class TestLanguageServers {
 		final int MAX_ALLOWED_RELATIVE_PATH = 140; // that leaves 120 characters for the path to the bundle
 //C:/Users/Jean-Jacques Saint-Romain/developpement/eclipse/plugins/org.eclipse.wildwebdeveloper_1.2.3.20201212_1605/
 		String location = Platform.getBundle("org.eclipse.wildwebdeveloper").getLocation();
+
 		if (location.startsWith("initial@")) {
 			location = location.substring("initial@".length());
 		}
@@ -230,6 +231,8 @@ public class TestLanguageServers {
 		if (location.startsWith("file:")) {
 			location = location.substring("file:".length());
 		}
+		System.out.println("Location (" + location.length() + "): " + location);
+		StringBuilder maxLocation = new StringBuilder();
 		File file = new File(new File(Platform.getInstallLocation().getURL().toURI()), location);
 		assertTrue(file.isDirectory());
 		Map<String, Integer> tooLongPaths = new TreeMap<>();
@@ -240,7 +243,12 @@ public class TestLanguageServers {
 				String relativePathInsideBundle = pluginPath.relativize(dir).toString();
 				if (relativePathInsideBundle.startsWith("target")) {
 					return FileVisitResult.SKIP_SUBTREE;
-				} else if (relativePathInsideBundle.length() > MAX_ALLOWED_RELATIVE_PATH) {
+				}
+				if (maxLocation.length() < relativePathInsideBundle.length()) {
+					maxLocation.setLength(0);
+					maxLocation.append(relativePathInsideBundle);
+				}
+				if (relativePathInsideBundle.length() > MAX_ALLOWED_RELATIVE_PATH) {
 					tooLongPaths.put(relativePathInsideBundle, relativePathInsideBundle.length());
 					return FileVisitResult.SKIP_SUBTREE;
 				}
@@ -256,6 +264,7 @@ public class TestLanguageServers {
 				return FileVisitResult.CONTINUE;
 			}
 		});
+		System.out.println("Max Location found (" + maxLocation.length() + "): " + maxLocation.toString());
 		assertEquals(Collections.emptyMap(), tooLongPaths);
 	}
 }
