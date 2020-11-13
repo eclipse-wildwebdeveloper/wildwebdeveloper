@@ -111,6 +111,7 @@
 							<executable>npm</executable>
 							<arguments>
 								<arg>install</arg>
+								<arg>--only=prod</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.2.tgz</arg>
@@ -128,6 +129,7 @@
 								<arg>eslint@7.5.0</arg>
 								<arg>@typescript-eslint/eslint-plugin@3.10.1</arg>
 								<arg>@typescript-eslint/parser@3.10.1</arg>
+								<arg>vscode-json-languageservice@3.9.1</arg> <!--  Workaround https://github.com/redhat-developer/yaml-language-server/issues/345, to remove when adopting fixed version of yaml-language-server -->
 								<arg>@angular/language-service@10.2.2</arg>
 								<arg>@angular/language-server@0.1001.1</arg>
 							</arguments>
