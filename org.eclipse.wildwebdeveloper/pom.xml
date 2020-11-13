@@ -111,6 +111,7 @@
 							<executable>npm</executable>
 							<arguments>
 								<arg>install</arg>
+								<arg>--only=prod</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.2.tgz</arg>
@@ -122,6 +123,7 @@
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.2.3.tgz</arg>
 								<arg>yaml-language-server@0.11.0</arg>
+								<arg>vscode-json-languageservice@3.9.1</arg> <!--  Workaround https://github.com/redhat-developer/yaml-language-server/issues/345, to remove when adopting fixed version of yaml-language-server -->-
 								<arg>firefox-debugadapter@2.9.0</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.8.tgz</arg>
 								<arg>typescript-eslint-language-service@3.0.0</arg>
