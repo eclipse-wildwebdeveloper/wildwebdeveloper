@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -28,6 +27,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
@@ -73,7 +73,7 @@ public class TestESLint {
 	}
 
 	@Test
-	public void testESLintDiagnosticsTS() throws Exception {
+	public void testESLintDiagnostics() throws Exception {
 		IFile file = project.getFile("ESLintProj.js");
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		assertESLintIndentMarkerExists(file);
@@ -83,7 +83,8 @@ public class TestESLint {
 		assertESLintIndentMarkerExists(file);
 	}
 
-	private void assertESLintIndentMarkerExists(IFile file) {
+	private void assertESLintIndentMarkerExists(IFile file) throws PartInitException {
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -94,15 +95,14 @@ public class TestESLint {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 20000), "Diagnostic not published");
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 10000), "Diagnostic not published");
 
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
-					IMarker[] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
-					return Arrays.stream(markers).map(marker -> marker.getAttribute(IMarker.MESSAGE, ""))
-							.anyMatch(message -> message.contains("indentation"));
+					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO)[0]
+							.getAttribute(IMarker.MESSAGE, null).toLowerCase().contains("indentation");
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;
@@ -110,5 +110,4 @@ public class TestESLint {
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic content is incorrect");
 	}
-
 }
