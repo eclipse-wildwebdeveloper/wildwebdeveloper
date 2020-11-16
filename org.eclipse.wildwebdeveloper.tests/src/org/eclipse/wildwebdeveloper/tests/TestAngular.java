@@ -53,9 +53,6 @@ public class TestAngular {
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
 		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
 									// didChange
-		// make an edit
-		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		document.set(document.get() + "\n");
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -84,7 +81,7 @@ public class TestAngular {
 		// Give some time for LS to load
 		DisplayHelper.sleep(2000);
 		// then make an edit
-		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.set(document.get() + "\n");
 		assertTrue(new DisplayHelper() {
 			@Override

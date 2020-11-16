@@ -78,7 +78,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator.toFileURL(
-					getClass().getResource("/node_modules/vscode-json-languageserver/dist/jsonServerMain.js"));
+				getClass().getResource("/node_modules/vscode-json-languageserver/dist/node/jsonServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
