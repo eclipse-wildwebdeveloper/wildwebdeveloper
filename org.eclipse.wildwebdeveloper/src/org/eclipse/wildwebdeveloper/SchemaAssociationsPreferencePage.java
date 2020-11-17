@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.json;
+package org.eclipse.wildwebdeveloper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,13 +34,12 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
-import org.eclipse.wildwebdeveloper.Activator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-public class JSONSchemaPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public class SchemaAssociationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	private IPreferenceStore store;
 	private Table schemaTable;
@@ -57,7 +56,7 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 
 		Link pageTitle = new Link(parent, SWT.NONE);
 		pageTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		pageTitle.setText(JSONMessages.JSON_Schema_PreferencePage_title);
+		pageTitle.setText(SchemaAssociationsMessages.SchemaAssociations_PreferencePage_title);
 		pageTitle.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getContainer() instanceof IWorkbenchPreferenceContainer) {
 				((IWorkbenchPreferenceContainer) getContainer()).openPage("org.eclipse.ui.preferencePages.ContentTypes",
@@ -71,13 +70,13 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 		schemaTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		TableColumn contentTypeCol = new TableColumn(schemaTable, SWT.LEFT);
-		contentTypeCol.setText(JSONMessages.ContentType);
+		contentTypeCol.setText(SchemaAssociationsMessages.ContentType);
 		TableColumn contentTypeIdCol = new TableColumn(schemaTable, SWT.LEFT);
-		contentTypeIdCol.setText(JSONMessages.ContentTypeId);
+		contentTypeIdCol.setText(SchemaAssociationsMessages.ContentTypeId);
 		TableColumn schemaLocationCol = new TableColumn(schemaTable, SWT.LEFT);
-		schemaLocationCol.setText(JSONMessages.SchemaLocation);
+		schemaLocationCol.setText(SchemaAssociationsMessages.SchemaLocation);
 
-		String schemaString = store.getString(JSONPreferenceInitializer.JSON_SCHEMA_PREFERENCE);
+		String schemaString = store.getString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
 		insertTableItems(schemaString);
 
 		Composite buttonsBar = new Composite(parent, SWT.NONE);
@@ -85,10 +84,10 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 		buttonsBar.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
 
 		Button addButton = new Button(buttonsBar, SWT.PUSH);
-		addButton.setText(JSONMessages.Add);
+		addButton.setText(SchemaAssociationsMessages.Add);
 		addButton.addListener(SWT.Selection, event -> {
-			JSONSchemaAssociationDialog dialog = new JSONSchemaAssociationDialog(parent.getShell(),
-					getJSONSchemaAssociations());
+			SchemaAssociationDialog dialog = new SchemaAssociationDialog(parent.getShell(),
+					getSchemaAssociations());
 			dialog.create();
 			if (dialog.open() == Window.OK) {
 				TableItem newItem = new TableItem(schemaTable, SWT.NONE);
@@ -99,7 +98,7 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 		});
 
 		Button editButton = new Button(buttonsBar, SWT.PUSH);
-		editButton.setText(JSONMessages.Edit);
+		editButton.setText(SchemaAssociationsMessages.Edit);
 		editButton.addListener(SWT.Selection, event -> {
 			TableItem[] selection = schemaTable.getSelection();
 			if (selection.length == 0) {
@@ -107,10 +106,10 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 			}
 			TableItem selectedItem = selection[0];
 
-			JSONSchemaAssociation selectedAssociation = new JSONSchemaAssociation(selectedItem.getText(0),
+			SchemaAssociation selectedAssociation = new SchemaAssociation(selectedItem.getText(0),
 					selectedItem.getText(1), selectedItem.getText(2));
-			JSONSchemaAssociationDialog dialog = new JSONSchemaAssociationDialog(parent.getShell(),
-					getJSONSchemaAssociations(), selectedAssociation);
+			SchemaAssociationDialog dialog = new SchemaAssociationDialog(parent.getShell(),
+					getSchemaAssociations(), selectedAssociation);
 			dialog.create();
 			if (dialog.open() == Window.OK) {
 				selectedItem.setText(0, dialog.getContentType());
@@ -120,7 +119,7 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 		});
 
 		Button removeButton = new Button(buttonsBar, SWT.PUSH);
-		removeButton.setText(JSONMessages.Remove);
+		removeButton.setText(SchemaAssociationsMessages.Remove);
 		removeButton.addListener(SWT.Selection, event -> {
 			if (schemaTable.getSelectionCount() > 0) {
 				schemaTable.remove(schemaTable.getSelectionIndex());
@@ -136,25 +135,25 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 
 	@Override
 	public boolean performOk() {
-		JsonObject schemaJson = new JsonObject();
+		JsonObject schemaAssociation = new JsonObject();
 		for (TableItem item : schemaTable.getItems()) {
-			schemaJson.addProperty(item.getText(1), item.getText(2));
+			schemaAssociation.addProperty(item.getText(1), item.getText(2));
 		}
-		store.setValue(JSONPreferenceInitializer.JSON_SCHEMA_PREFERENCE, schemaJson.toString());
+		store.setValue(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE, schemaAssociation.toString());
 		refreshTable();
 		return true;
 	}
 
 	protected void refreshTable() {
 		schemaTable.removeAll();
-		String schemaString = store.getString(JSONPreferenceInitializer.JSON_SCHEMA_PREFERENCE);
+		String schemaString = store.getString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
 		insertTableItems(schemaString);
 	}
 
 	@Override
 	protected void performDefaults() {
 		schemaTable.removeAll();
-		String defaultSchemaAssociations = store.getDefaultString(JSONPreferenceInitializer.JSON_SCHEMA_PREFERENCE);
+		String defaultSchemaAssociations = store.getDefaultString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
 		insertTableItems(defaultSchemaAssociations);
 		super.performDefaults();
 	}
@@ -178,10 +177,10 @@ public class JSONSchemaPreferencePage extends PreferencePage implements IWorkben
 		return Activator.getDefault().getPreferenceStore();
 	}
 
-	private Set<JSONSchemaAssociation> getJSONSchemaAssociations() {
-		Set<JSONSchemaAssociation> associations = new HashSet<>();
+	private Set<SchemaAssociation> getSchemaAssociations() {
+		Set<SchemaAssociation> associations = new HashSet<>();
 		for (TableItem item : schemaTable.getItems()) {
-			associations.add(new JSONSchemaAssociation(item.getText(0), item.getText(1), item.getText(2)));
+			associations.add(new SchemaAssociation(item.getText(0), item.getText(1), item.getText(2)));
 		}
 		return associations;
 	}

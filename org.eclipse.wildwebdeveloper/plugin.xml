@@ -525,40 +525,18 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
-            id="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
-            name="YAML">
+            category="org.eclipse.ui.preferencePages.Workbench"
+            class="org.eclipse.wildwebdeveloper.SchemaAssociationsPreferencePage"
+            id="org.eclipse.wildwebdeveloper.SchemaAssociationsPreferencePage"
+            name="Schema Associations">
       </page>
-      <page
-            category="org.eclipse.wildwebdeveloper.yaml.YAMLPreferencePage"
-            class="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
-            id="org.eclipse.wildwebdeveloper.yaml.YAMLSchemaPreferencePage"
-            name="YAML Schemas">
-      </page>
-      <page
-            class="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
-            id="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
-            name="JSON">
-      </page>
-      <page
-            category="org.eclipse.wildwebdeveloper.json.JSONPreferencePage"
-            class="org.eclipse.wildwebdeveloper.json.JSONSchemaPreferencePage"
-            id="org.eclipse.wildwebdeveloper.json.JSONSchemaPreferencePage"
-            name="JSON Schemas">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-         <initializer
-            class="org.eclipse.wildwebdeveloper.yaml.YAMLPreferenceInitializer">
-		</initializer>
    </extension>
    <extension
          id="JSONPreferenceInitializer"
          name="JSONPreferenceInitializer"
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.eclipse.wildwebdeveloper.json.JSONPreferenceInitializer">
+            class="org.eclipse.wildwebdeveloper.SchemaAssociationsPreferenceInitializer">
       </initializer>
    </extension>
 

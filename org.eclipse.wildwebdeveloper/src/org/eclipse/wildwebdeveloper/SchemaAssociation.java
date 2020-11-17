@@ -7,17 +7,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.json;
+package org.eclipse.wildwebdeveloper;
 
 import java.util.Objects;
 
-public class JSONSchemaAssociation {
+public class SchemaAssociation {
 
 	private String contentType;
 	private String contentTypeId;
 	private String schemaLocation;
 
-	public JSONSchemaAssociation(String contentType, String contentTypeId, String schemaLocation) {
+	public SchemaAssociation(String contentType, String contentTypeId, String schemaLocation) {
 		this.setContentType(contentType);
 		this.setContentTypeId(contentTypeId);
 		this.setSchemaLocation(schemaLocation);
@@ -55,7 +55,7 @@ public class JSONSchemaAssociation {
 		if (getClass() != o.getClass()) {
 			return false;
 		}
-		JSONSchemaAssociation association = (JSONSchemaAssociation) o;
+		SchemaAssociation association = (SchemaAssociation) o;
 		return Objects.equals(contentType, association.contentType)
 				&& Objects.equals(contentTypeId, association.contentTypeId)
 				&& Objects.equals(schemaLocation, association.schemaLocation);

@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.json;
+package org.eclipse.wildwebdeveloper;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -37,26 +37,27 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class JSONSchemaAssociationDialog extends TitleAreaDialog {
+public class SchemaAssociationDialog extends TitleAreaDialog {
 
 	private final static String JSON_BASE_TYPE = "org.eclipse.wildwebdeveloper.json"; //$NON-NLS-1$
+	private final static String YAML_BASE_TYPE = "org.eclipse.wildwebdeveloper.yaml"; //$NON-NLS-1$
 
 	private Combo contentTypeData;
 	private Text schemaLocationData;
 	private Button okButton;
 
-	private JSONSchemaAssociation preSelectedAssociation;
-	private Set<JSONSchemaAssociation> existingAssociations;
+	private SchemaAssociation preSelectedAssociation;
+	private Set<SchemaAssociation> existingAssociations;
 
-	private JSONSchemaAssociation currentAssociation;
+	private SchemaAssociation currentAssociation;
 
-	public JSONSchemaAssociationDialog(Shell parentShell, Set<JSONSchemaAssociation> existingAssociations) {
+	public SchemaAssociationDialog(Shell parentShell, Set<SchemaAssociation> existingAssociations) {
 		super(parentShell);
 		this.existingAssociations = existingAssociations;
 	}
 
-	public JSONSchemaAssociationDialog(Shell parentShell, Set<JSONSchemaAssociation> existingAssociations,
-			JSONSchemaAssociation preSelectedAssociation) {
+	public SchemaAssociationDialog(Shell parentShell, Set<SchemaAssociation> existingAssociations,
+			SchemaAssociation preSelectedAssociation) {
 		this(parentShell, existingAssociations);
 		this.preSelectedAssociation = preSelectedAssociation;
 	}
@@ -65,11 +66,11 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 	public void create() {
 		super.create();
 		if (preSelectedAssociation == null) {
-			setTitle(JSONMessages.SchemaAssociationDialog_Add_title);
-			setMessage(JSONMessages.SchemaAssociationDialog_Add_subtitle);
+			setTitle(SchemaAssociationsMessages.SchemaAssociationDialog_Add_title);
+			setMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Add_subtitle);
 		} else {
-			setTitle(JSONMessages.SchemaAssociationDialog_Edit_title);
-			setMessage(JSONMessages.SchemaAssociationDialog_Edit_subtitle);
+			setTitle(SchemaAssociationsMessages.SchemaAssociationDialog_Edit_title);
+			setMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Edit_subtitle);
 		}
 		validateDialog();
 	}
@@ -92,8 +93,8 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 
 	private void createContentTypeEditor(Composite container) {
 		Label contentTypeLabel = new Label(container, SWT.NONE);
-		contentTypeLabel.setText(JSONMessages.ContentType + ":");
-		contentTypeLabel.setToolTipText(JSONMessages.ContentTypeId_Tooltip);
+		contentTypeLabel.setText(SchemaAssociationsMessages.ContentType + ":");
+		contentTypeLabel.setToolTipText(SchemaAssociationsMessages.ContentTypeId_Tooltip);
 
 		contentTypeData = new Combo(container, SWT.SINGLE | SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -114,10 +115,11 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 	}
 
 	private void fillContentTypeCombo(Combo combo) {
-		// Retrieve existing contentTypes with base type JSON
+		// Retrieve existing contentTypes with either base type JSON or YAML
 		IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 		for (IContentType contentType : contentTypeManager.getAllContentTypes()) {
-			if (contentType.getBaseType() != null && contentType.getBaseType().getId().equals(JSON_BASE_TYPE)) {
+			if (contentType.getBaseType() != null && (contentType.getBaseType().getId().equals(JSON_BASE_TYPE)
+					|| contentType.getBaseType().getId().equals(YAML_BASE_TYPE))) {
 				combo.add(getTextFromContentType(contentType));
 			}
 		}
@@ -129,8 +131,8 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 
 	private void createSchemaLocationEditor(Composite container) {
 		Label schemaLocationLabel = new Label(container, SWT.NONE);
-		schemaLocationLabel.setText(JSONMessages.SchemaLocation + ":");
-		schemaLocationLabel.setToolTipText(JSONMessages.SchemaLocation_Tooltip);
+		schemaLocationLabel.setText(SchemaAssociationsMessages.SchemaLocation + ":");
+		schemaLocationLabel.setToolTipText(SchemaAssociationsMessages.SchemaLocation_Tooltip);
 
 		schemaLocationData = new Text(container, SWT.SINGLE | SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -146,13 +148,12 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 		});
 
 		Button browseButton = new Button(container, SWT.PUSH);
-		browseButton.setText(JSONMessages.Browse);
+		browseButton.setText(SchemaAssociationsMessages.Browse);
 		browseButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				FileDialog dialog = new FileDialog(getShell(), SWT.SINGLE);
 				dialog.setFilterPath(System.getProperty("user.home"));
-				dialog.setFilterExtensions(new String[] { "*.json" });
 
 				String result = dialog.open();
 				if (result == null || result.trim().length() == 0) {
@@ -181,20 +182,20 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 		currentAssociation = null;
 
 		if (contentTypeData.getText().trim().length() <= 0) {
-			setErrorMessage(JSONMessages.SchemaAssociationDialog_Error_ContentType_required);
+			setErrorMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Error_ContentType_required);
 			return updateOkButton(false);
 		}
 
-		Set<JSONSchemaAssociation> list = existingAssociations;
-		for (JSONSchemaAssociation e : list) {
+		Set<SchemaAssociation> list = existingAssociations;
+		for (SchemaAssociation e : list) {
 			if (!e.equals(preSelectedAssociation) && getContentTypeIdFromText().equals(e.getContentTypeId())) {
-				setErrorMessage(JSONMessages.SchemaAssociationDialog_Error_ContentType_already_exists);
+				setErrorMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Error_ContentType_already_exists);
 				return updateOkButton(false);
 			}
 		}
 
 		if (schemaLocationData.getText().trim().length() <= 0) {
-			setErrorMessage(JSONMessages.SchemaAssociationDialog_Error_SchemaLocation_required);
+			setErrorMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Error_SchemaLocation_required);
 			return updateOkButton(false);
 		}
 
@@ -206,18 +207,18 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 				if (file.exists()) {
 					schemaLocation = "file://" + file.getAbsolutePath();
 				} else {
-					setErrorMessage(JSONMessages.SchemaAssociationDialog_Error_SchemaLocation_invalid);
+					setErrorMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Error_SchemaLocation_invalid);
 					return updateOkButton(false);
 				}
 			} else {
 				schemaLocation = locationURL.toURI().toString();
 			}
 		} catch (MalformedURLException | URISyntaxException | NullPointerException e) {
-			setErrorMessage(JSONMessages.SchemaAssociationDialog_Error_SchemaLocation_invalid);
+			setErrorMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Error_SchemaLocation_invalid);
 			return updateOkButton(false);
 		}
 
-		currentAssociation = new JSONSchemaAssociation(getContentTypeFromText(), getContentTypeIdFromText(),
+		currentAssociation = new SchemaAssociation(getContentTypeFromText(), getContentTypeIdFromText(),
 				schemaLocation);
 		setErrorMessage(null);
 		return updateOkButton(true);
@@ -231,7 +232,7 @@ public class JSONSchemaAssociationDialog extends TitleAreaDialog {
 		return false;
 	}
 
-	private String getTextFromSchemaAssociation(JSONSchemaAssociation schemaAssociation) {
+	private String getTextFromSchemaAssociation(SchemaAssociation schemaAssociation) {
 		return schemaAssociation.getContentTypeId() + " (" + schemaAssociation.getContentType() + ")";
 	}
 

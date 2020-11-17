@@ -7,24 +7,23 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.json;
+package org.eclipse.wildwebdeveloper;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.wildwebdeveloper.Activator;
 
 import com.google.gson.JsonObject;
 
-public class JSONPreferenceInitializer extends AbstractPreferenceInitializer {
+public class SchemaAssociationsPreferenceInitializer extends AbstractPreferenceInitializer {
 	private static final IPreferenceStore STORE = Activator.getDefault().getPreferenceStore();
-	public static final String JSON_SCHEMA_PREFERENCE = "wildwebdeveloper.json.schema";
+	public static final String SCHEMA_ASSOCIATIONS_PREFERENCE = "wildwebdeveloper.schema.associations";
 
 	@Override
 	public void initializeDefaultPreferences() {
-		STORE.setDefault(JSON_SCHEMA_PREFERENCE, getDefaultJSONSchemas());
+		STORE.setDefault(SCHEMA_ASSOCIATIONS_PREFERENCE, getDefaultSchemas());
 	}
 
-	private static String getDefaultJSONSchemas() {
+	private static String getDefaultSchemas() {
 		JsonObject jsonSchemas = new JsonObject();
 		jsonSchemas.addProperty("org.eclipse.wildwebdeveloper.json.bower", "http://json.schemastore.org/bower");
 		jsonSchemas.addProperty("org.eclipse.wildwebdeveloper.json.bowerrc", "http://json.schemastore.org/bowerrc");

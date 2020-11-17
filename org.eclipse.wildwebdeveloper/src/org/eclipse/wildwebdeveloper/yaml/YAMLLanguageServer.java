@@ -19,7 +19,10 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -33,6 +36,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.SchemaAssociationsPreferenceInitializer;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 import com.google.gson.Gson;
@@ -45,29 +49,32 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final String COMPLETION_KEY = "completion";
 	private static final String HOVER_KEY = "hover";
 	private static final String SCHEMAS_KEY = "schemas";
-	
- 	private static final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
- 	private static final LanguageServerDefinition yamlLsDefinition = LanguageServersRegistry.getInstance().getDefinition("org.eclipse.wildwebdeveloper.yaml");
- 	private static final IPropertyChangeListener psListener = new IPropertyChangeListener() {
+
+	private static final IPreferenceStore PREFERENCE_STORE = Activator.getDefault().getPreferenceStore();
+	private static final LanguageServerDefinition YAML_LS_DEFINITION = LanguageServersRegistry.getInstance()
+			.getDefinition("org.eclipse.wildwebdeveloper.yaml");
+	private static final IPropertyChangeListener PROPERTY_CHANGE_LISTENER = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (YAMLPreferenceInitializer.YAML_SCHEMA_PREFERENCE.equals(event.getProperty())) {
+			if (SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE.equals(event.getProperty())) {
 				Map<String, Object> settings = new HashMap<>();
 				settings.put(YAML_KEY, getYamlConfigurationOptions());
 
 				DidChangeConfigurationParams params = new DidChangeConfigurationParams(settings);
-				LanguageServiceAccessor.getActiveLanguageServers(null).stream().filter(server -> yamlLsDefinition.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
-					.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
+				LanguageServiceAccessor.getActiveLanguageServers(null).stream()
+						.filter(server -> YAML_LS_DEFINITION
+								.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
+						.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
 			}
 		}
- 	};
- 	
+	};
+
 	public YAMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
-			URL url = FileLocator.toFileURL(getClass()
-					.getResource("/node_modules/yaml-language-server/out/server/src/server.js"));
+			URL url = FileLocator
+					.toFileURL(getClass().getResource("/node_modules/yaml-language-server/out/server/src/server.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
@@ -77,7 +84,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
 	}
-	
+
 	@Override
 	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
 		if (message instanceof ResponseMessage) {
@@ -85,7 +92,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 			if (responseMessage.getResult() instanceof InitializeResult) {
 				Map<String, Object> settings = new HashMap<>();
 				settings.put(YAML_KEY, getYamlConfigurationOptions());
-				
+
 				DidChangeConfigurationParams params = new DidChangeConfigurationParams(settings);
 				languageServer.getWorkspaceService().didChangeConfiguration(params);
 			}
@@ -94,14 +101,48 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	private static Map<String, Object> getYamlConfigurationOptions() {
 		Map<String, Object> yaml = new HashMap<>();
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String schemaStr = preferenceStore.getString(YAMLPreferenceInitializer.YAML_SCHEMA_PREFERENCE);
-		Map<String, Object> schemas = new Gson().fromJson(schemaStr, new TypeToken<HashMap<String, Object>>() {}.getType());
-		yaml.put(SCHEMAS_KEY, schemas);
-		yaml.put(VALIDATE_KEY,true);
+		yaml.put(SCHEMAS_KEY, getSchemaAssociations());
+		yaml.put(VALIDATE_KEY, true);
 		yaml.put(COMPLETION_KEY, true);
 		yaml.put(HOVER_KEY, true);
 		return yaml;
+	}
+
+	private static Map<String, Object> getSchemaAssociations() {
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String schemaString = preferenceStore
+				.getString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
+
+		Map<String, Object> contentTypeAssociations = new Gson().fromJson(schemaString,
+				new TypeToken<HashMap<String, String>>() {
+				}.getType());
+
+		IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
+		IContentType yamlBaseContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.yaml");
+
+		Map<String, Object> associations = new HashMap<>();
+
+		contentTypeAssociations.forEach((key, value) -> {
+			IContentType contentType = contentTypeManager.getContentType(key);
+			if (contentType != null && contentType.getBaseType().equals(yamlBaseContentType)) {
+				String[] fileNames = contentType.getFileSpecs(IContentType.FILE_NAME_SPEC);
+				for (String fileName : fileNames) {
+					associations.put(value.toString(), fileName);
+				}
+
+				String[] filePatterns = contentType.getFileSpecs(IContentType.FILE_PATTERN_SPEC);
+				for (String pattern : filePatterns) {
+					associations.put(value.toString(), pattern);
+				}
+
+				String[] fileExtensions = contentType.getFileSpecs(IContentType.FILE_EXTENSION_SPEC);
+				for (String extension : fileExtensions) {
+					associations.put(value.toString(), "*." + extension);
+				}
+			}
+		});
+
+		return associations;
 	}
 
 	@Override
@@ -112,12 +153,12 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 	@Override
 	public void start() throws IOException {
 		super.start();
-		store.addPropertyChangeListener(psListener);
+		PREFERENCE_STORE.addPropertyChangeListener(PROPERTY_CHANGE_LISTENER);
 	}
 
 	@Override
 	public void stop() {
-		store.removePropertyChangeListener(psListener);
+		PREFERENCE_STORE.removePropertyChangeListener(PROPERTY_CHANGE_LISTENER);
 		super.stop();
 	}
 }

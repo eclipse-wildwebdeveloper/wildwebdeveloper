@@ -7,14 +7,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.json;
+package org.eclipse.wildwebdeveloper;
 
 import org.eclipse.osgi.util.NLS;
 
-public class JSONMessages extends NLS {
+public class SchemaAssociationsMessages extends NLS {
 
-	public static String JSON_PreferencePage_title;
-	public static String JSON_Schema_PreferencePage_title;
+	public static String SchemaAssociations_PreferencePage_title;
 	public static String Add;
 	public static String Edit;
 	public static String Remove;
@@ -34,9 +33,9 @@ public class JSONMessages extends NLS {
 	public static String SchemaAssociationDialog_Error_SchemaLocation_invalid;
 
 	static {
-		NLS.initializeMessages(JSONMessages.class.getName(), JSONMessages.class);
+		NLS.initializeMessages(SchemaAssociationsMessages.class.getName(), SchemaAssociationsMessages.class);
 	}
 
-	private JSONMessages() {
+	private SchemaAssociationsMessages() {
 	}
 }
