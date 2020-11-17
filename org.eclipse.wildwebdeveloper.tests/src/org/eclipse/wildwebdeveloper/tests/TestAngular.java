@@ -105,7 +105,7 @@ public class TestAngular {
 		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
 				document.get().indexOf("}}"));
 		proposals[0].apply(document);
-		assertEquals("<h1>{{title}}</h1>", document.get(), "Incorrect completion insertion");
+		assertEquals("<h1>{{title}}</h1>\n", document.get(), "Incorrect completion insertion");
 	}
 
 }

@@ -58,7 +58,6 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 			plugins.add(new TypeScriptPlugin("@angular/language-service"));
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
-			plugins.add(new TypeScriptPlugin("typescript-eslint-language-service"));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));

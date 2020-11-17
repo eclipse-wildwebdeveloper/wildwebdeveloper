@@ -15,18 +15,22 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.Arrays;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,70 +43,47 @@ public class TestESLint {
 
 	@BeforeEach
 	public void setUpProject() throws Exception {
-		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.nanoTime());
-		project.create(null);
-		project.open(null);
-
-		// Setup ESLint configuration and dependencies
-		IFile eslintConfig = project.getFile(".eslintrc");
-		eslintConfig.create(getClass().getResourceAsStream("/testProjects/eslint/.eslintrc"), true, null);
-		IFile tsConfig = project.getFile("tsconfig.json");
-		tsConfig.create(getClass().getResourceAsStream("/testProjects/eslint/tsconfig.json"), true, null);
-		IFile packageJson = project.getFile("package.json");
-		packageJson.create(getClass().getResourceAsStream("/testProjects/eslint/package.json"), true, null);
-		Process dependencyInstaller = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install")
-				.directory(project.getLocation().toFile()).start();
-		assertEquals(0, dependencyInstaller.waitFor(), "npm install didn't complete properly");
-
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		for (IViewReference ref : activePage.getViewReferences()) {
-			activePage.hideView(ref);
+		String projectName = getClass().getName() + System.nanoTime();
+		IProjectDescription desc = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
+		IPath projectLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation().append(projectName);
+		desc.setLocation(projectLocation);
+		File projectDirectory = projectLocation.toFile();
+		projectDirectory.mkdir();
+		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/.eslintrc")) {
+			Files.copy(eslintRc, new File(projectDirectory, ".eslintrc").toPath());
 		}
+		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/tsconfig.json")) {
+			Files.copy(eslintRc, new File(projectDirectory, "tsconfig.json").toPath());
+		}
+		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/package.json")) {
+			Files.copy(eslintRc, new File(projectDirectory, "package.json").toPath());
+		}
+		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
+			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.js").toPath());
+		}
+		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
+			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.ts").toPath());
+		}
+		Process dependencyInstaller = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install")
+				.directory(projectDirectory).start();
+		assertEquals(0, dependencyInstaller.waitFor(), "npm install didn't complete properly");
+		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		this.project.create(desc, null);
+		project.open(null);
 	}
 
 	@Test
 	public void testESLintDiagnosticsTS() throws Exception {
-		IFile file = project.getFile("blah.ts");
-		file.create(getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.ts"), true, null);
-		ITextEditor editor = (ITextEditor) IDE
-				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		DisplayHelper.sleep(4000); // Give time for ESLint language service to initialize
+		IFile file = project.getFile("ESLintProj.js");
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		assertESLintIndentMarkerExists(file);
 
-		assertTrue(new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-				} catch (CoreException e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
-
-		assertTrue(new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO)[0]
-							.getAttribute(IMarker.MESSAGE, null).contains(
-									"[@typescript-eslint/explicit-function-return-type] Missing return type on function.");
-				} catch (CoreException e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic content is incorrect");
+		file = project.getFile("ESLintProj.ts");
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		assertESLintIndentMarkerExists(file);
 	}
 
-	@Test
-	public void testESLintDiagnosticsJS() throws Exception {
-		IFile file = project.getFile("blah.js");
-		file.create(getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.js"), true, null);
-		ITextEditor editor = (ITextEditor) IDE
-				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		DisplayHelper.sleep(4000); // Give time for ESLint language service to initialize
-
+	private void assertESLintIndentMarkerExists(IFile file) {
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -113,15 +94,15 @@ public class TestESLint {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 20000), "Diagnostic not published");
 
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
-					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO)[0]
-							.getAttribute(IMarker.MESSAGE, null)
-							.contains("[@typescript-eslint/indent] Expected indentation of 0 spaces but found 9.");
+					IMarker[] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+					return Arrays.stream(markers).map(marker -> marker.getAttribute(IMarker.MESSAGE, ""))
+							.anyMatch(message -> message.contains("indentation"));
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;

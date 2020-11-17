@@ -378,10 +378,21 @@
             contentType="org.eclipse.wildwebdeveloper.jsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
-            <contentTypeMapping
+      <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
+      <server
+            class="org.eclipse.wildwebdeveloper.eslint.ESLintLanguageServer"
+            id="org.eclipse.wildwebdeveloper.eslint"
+            label="ESLint"
+            clientImpl="org.eclipse.wildwebdeveloper.eslint.ESLintClientImpl"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.js"
+            id="org.eclipse.wildwebdeveloper.eslint"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.ts"
+            id="org.eclipse.wildwebdeveloper.eslint"/>
    </extension>
    
    <extension
