@@ -81,7 +81,11 @@ public class TestAngular {
 		IFile appComponentHTML = appFolder.getFile("app.componentWithHtml.html");
 		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				appComponentHTML);
-		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		// Give some time for LS to load
+		DisplayHelper.sleep(2000);
+		// then make an edit
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		document.set(document.get() + "\n");
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
