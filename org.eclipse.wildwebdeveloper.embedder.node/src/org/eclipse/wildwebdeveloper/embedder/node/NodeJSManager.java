@@ -43,14 +43,15 @@ import org.osgi.framework.Version;
 
 @SuppressWarnings("restriction")
 public class NodeJSManager {
-  
-  private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
+
+	private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
 
 	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Collections
 			.unmodifiableSet(new HashSet<>(Arrays.asList(10, 11, 12, 13, 14)));
 
 	private static boolean alreadyWarned;
-	private static Properties cachedNodeJsInfoProperties; 
+	private static Properties cachedNodeJsInfoProperties;
+	private static final Object EXPAND_LOCK = new Object();
 	
 	public static File getNodeJsLocation() {
 		{
@@ -72,11 +73,12 @@ public class NodeJSManager {
 				if (stateLocationPath != null) {
 					File installationPath = stateLocationPath.toFile();
 					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
-					boolean previousInstallationNeedsFix = !(Platform.OS_WIN32.equals(Platform.getOS()) || Files.isSymbolicLink(new File(nodePath, "bin/npm").toPath()));
-					if (!nodePath.exists() || !nodePath.canRead() || !nodePath.canExecute() || previousInstallationNeedsFix) {
-						CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(), 
-								new Path(properties.getProperty("archiveFile"))),
-								installationPath);
+					synchronized (EXPAND_LOCK) {
+						if (!nodePath.exists() || !nodePath.canRead() || !nodePath.canExecute()) {
+							CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(), 
+									new Path(properties.getProperty("archiveFile"))),
+									installationPath);
+						}
 					}
 					return nodePath;
 				}
