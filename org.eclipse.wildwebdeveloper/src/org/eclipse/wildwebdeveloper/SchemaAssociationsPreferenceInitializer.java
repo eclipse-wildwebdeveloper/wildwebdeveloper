@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 
 public class SchemaAssociationsPreferenceInitializer extends AbstractPreferenceInitializer {
 	private static final IPreferenceStore STORE = Activator.getDefault().getPreferenceStore();
-	public static final String SCHEMA_ASSOCIATIONS_PREFERENCE = "wildwebdeveloper.schema.associations";
+	public static final String SCHEMA_ASSOCIATIONS_PREFERENCE = "wildwebdeveloper.yaml.schema";
 
 	@Override
 	public void initializeDefaultPreferences() {
