@@ -84,7 +84,7 @@ public class TestAngular {
 		// Give some time for LS to load
 		DisplayHelper.sleep(2000);
 		// then make an edit
-		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.set(document.get() + "\n");
 		assertTrue(new DisplayHelper() {
 			@Override
