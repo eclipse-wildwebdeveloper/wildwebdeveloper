@@ -33,12 +33,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+@SuppressWarnings("restriction")
 public class SchemaAssociationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	private IPreferenceStore store;
@@ -55,7 +57,7 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 		parent.setLayout(layout);
 
 		Link pageTitle = new Link(parent, SWT.NONE);
-		pageTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		pageTitle.setLayoutData(new GridData(SWT.FILL));
 		pageTitle.setText(SchemaAssociationsMessages.SchemaAssociations_PreferencePage_title);
 		pageTitle.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getContainer() instanceof IWorkbenchPreferenceContainer) {
@@ -67,7 +69,7 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 		schemaTable = new Table(parent, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 		schemaTable.setHeaderVisible(true);
 		schemaTable.setLinesVisible(true);
-		schemaTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+		schemaTable.setLayoutData(new GridData(SWT.FILL));
 
 		TableColumn contentTypeCol = new TableColumn(schemaTable, SWT.LEFT);
 		contentTypeCol.setText(SchemaAssociationsMessages.ContentType);
@@ -86,8 +88,7 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 		Button addButton = new Button(buttonsBar, SWT.PUSH);
 		addButton.setText(SchemaAssociationsMessages.Add);
 		addButton.addListener(SWT.Selection, event -> {
-			SchemaAssociationDialog dialog = new SchemaAssociationDialog(parent.getShell(),
-					getSchemaAssociations());
+			SchemaAssociationDialog dialog = new SchemaAssociationDialog(parent.getShell(), getSchemaAssociations());
 			dialog.create();
 			if (dialog.open() == Window.OK) {
 				TableItem newItem = new TableItem(schemaTable, SWT.NONE);
@@ -108,8 +109,8 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 
 			SchemaAssociation selectedAssociation = new SchemaAssociation(selectedItem.getText(0),
 					selectedItem.getText(1), selectedItem.getText(2));
-			SchemaAssociationDialog dialog = new SchemaAssociationDialog(parent.getShell(),
-					getSchemaAssociations(), selectedAssociation);
+			SchemaAssociationDialog dialog = new SchemaAssociationDialog(parent.getShell(), getSchemaAssociations(),
+					selectedAssociation);
 			dialog.create();
 			if (dialog.open() == Window.OK) {
 				selectedItem.setText(0, dialog.getContentType());
@@ -129,6 +130,11 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 		contentTypeCol.pack();
 		contentTypeIdCol.pack();
 		schemaLocationCol.pack();
+
+		Composite extensionPointNote = createNoteComposite(parent.getFont(), parent, WorkbenchMessages.Preference_note,
+				SchemaAssociationsMessages.SchemaAssociations_PreferencePage_note);
+		extensionPointNote.setLayoutData(new GridData(SWT.FILL));
+
 		parent.layout();
 		return new Composite(parent, SWT.NONE);
 	}
@@ -139,7 +145,8 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 		for (TableItem item : schemaTable.getItems()) {
 			schemaAssociation.addProperty(item.getText(1), item.getText(2));
 		}
-		store.setValue(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE, schemaAssociation.toString());
+		store.setValue(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE,
+				schemaAssociation.toString());
 		refreshTable();
 		return true;
 	}
@@ -153,14 +160,16 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 	@Override
 	protected void performDefaults() {
 		schemaTable.removeAll();
-		String defaultSchemaAssociations = store.getDefaultString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
+		String defaultSchemaAssociations = store
+				.getDefaultString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
 		insertTableItems(defaultSchemaAssociations);
 		super.performDefaults();
 	}
 
 	private void insertTableItems(String schemaAssociationsString) {
 		TreeMap<String, String> associations = new Gson().fromJson(schemaAssociationsString,
-				new TypeToken<TreeMap<String, String>>() { }.getType());
+				new TypeToken<TreeMap<String, String>>() {
+				}.getType());
 		IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 
 		for (String contentTypeId : associations.keySet()) {

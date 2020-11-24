@@ -14,6 +14,7 @@ import org.eclipse.osgi.util.NLS;
 public class SchemaAssociationsMessages extends NLS {
 
 	public static String SchemaAssociations_PreferencePage_title;
+	public static String SchemaAssociations_PreferencePage_note;
 	public static String Add;
 	public static String Edit;
 	public static String Remove;

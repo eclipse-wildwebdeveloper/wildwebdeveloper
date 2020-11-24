@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -50,6 +51,10 @@ import com.google.gson.reflect.TypeToken;
 
 @SuppressWarnings("restriction")
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
+	
+	private final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
+	private final static String PATTERN_ATTR = "pattern"; //$NON-NLS-1$
+	private final static String URL_ATTR = "url"; //$NON-NLS-1$
 
 	private static final IPreferenceStore PREFERENCE_STORE = Activator.getDefault().getPreferenceStore();
 	private static final LanguageServerDefinition JSON_LS_DEFINITION = LanguageServersRegistry.getInstance()
@@ -96,8 +101,15 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 			}
 		}
 	}
-
+	
 	private static Map<String, List<String>> getSchemaAssociations() {
+		Map<String, List<String>> associations = new HashMap<>();
+		fillSchemaAssociationsFromPreferenceStore(associations);
+		fillSchemaAssociationsFromExtensionPoint(associations);
+		return associations;
+	}
+
+	private static void fillSchemaAssociationsFromPreferenceStore(Map<String, List<String>> associations) {
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String schemaString = preferenceStore
 				.getString(SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE);
@@ -108,8 +120,6 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
 		IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 		IContentType jsonBaseContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.json");
-
-		Map<String, List<String>> associations = new HashMap<>();
 
 		contentTypeAssociations.forEach((key, value) -> {
 			IContentType contentType = contentTypeManager.getContentType(key);
@@ -130,8 +140,17 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 				}
 			}
 		});
-
-		return associations;
+	}
+	
+	private static void fillSchemaAssociationsFromExtensionPoint(Map<String, List<String>> associations) {
+		IConfigurationElement[] conf = Platform.getExtensionRegistry().getConfigurationElementsFor(SCHEMA_EXT);
+		for (IConfigurationElement el : conf) {
+			String pattern = el.getAttribute(PATTERN_ATTR);
+			if (!associations.containsKey(pattern)) {
+				associations.put(pattern, new ArrayList<>());
+			}
+			associations.get(pattern).add(el.getAttribute(URL_ATTR));
+		}
 	}
 
 	@Override
