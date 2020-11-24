@@ -10,6 +10,10 @@ This page describes the noteworthy improvements provided by each release of Ecli
 * 📅 Release Date (tentative): Mid-October 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.3...0.11.4
 
+#### Added 'Schema Associations' preference page for JSON and YAML
+- A new preference page 'Schema Associations' in the category 'General' was introduced. In favour of that, the existing YAML preference page was removed.
+- This enables the user to associate content types to a JSON or YAML schema, defined by url or local file location.
+- Default content types and schema associations are defined for the most common web editor related JSON files (e.g. package.json, .eslintrc).
 
 ## 0.11.3
 
