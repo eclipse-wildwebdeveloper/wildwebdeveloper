@@ -39,8 +39,8 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		// to be set as the workspaceFolder below
 		// then when the workingDirectory is set in mode:auto the eslint server code will look up
 		// until the workspaceFolder which folder is best suited for its workingDirectoy (where the config files are in)
-		// also this workspaceDirectory is also used to find the node models (eslint module)
-		// because we set the nodePath below to "" 
+		// also this workspaceFolder is also used to find the node models (eslint module)
+		// because we set the nodePath below to this same directory.
 		File highestPackageJsonDir = null;
 		try {
 			highestPackageJsonDir = new File(new URI(configurationItem.getScopeUri())).getParentFile();;
@@ -54,12 +54,12 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		}
 		config.put("workspaceFolder", Collections.singletonMap("uri", highestPackageJsonDir.toURI().toString())); 
 
-		// if you set a workspaceFolder and then the working dir in auto mode it will try to go to the right node_modules folder
+		// if you set a workspaceFolder and then the working dir in auto mode eslint will try to get to the right config location.
 		config.put("workingDirectory", Collections.singletonMap("mode", "auto")); 
 
 
 		// this should not point to a nodejs executable but nodePath is the path to the "node_modules" 
-		// (or a parent having node modules, we just push in the highest dir that has the package.json)
+		// (or a parent having node modules, we just push in the highest dir (workspaceFolder) that has the package.json)
 		config.put("nodePath", highestPackageJsonDir.getAbsolutePath());
 		
 		config.put("validate", "on");
