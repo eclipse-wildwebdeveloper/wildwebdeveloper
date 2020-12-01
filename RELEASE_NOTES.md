@@ -15,6 +15,22 @@ This page describes the noteworthy improvements provided by each release of Ecli
 - This enables the user to associate content types to a JSON or YAML schema, defined by url or local file location.
 - Default content types and schema associations are defined for the most common web editor related JSON files (e.g. package.json, .eslintrc).
 
+#### Upgraded all language servers
+
+Edition assistance should be improved on many aspects, and several bugs now fixed.
+
+#### Refactored ESLint support
+
+ESLint support is now a standalone language server, which doesn't require TypeScript, tsconfig nor anything else tan plain ESLint configuration files to work. The support now use the same language server has the VSCode ESLint extension, which delegates to the ESLint command available in customer's `node_modules` folder.
+
+#### Trimmed embedded node_modules
+
+Less `node_modules` are embedded, this should result in a reduced disk footprint.
+
+#### Enable upgrade of "web" components without upgrading XML support
+
+This allows to more easily installed Wild Web Developer beside potentially conflicting/restratining 3rd party features and plugins.
+
 ## 0.11.3
 
 * 📅 Release Date: 23rd September 2020
