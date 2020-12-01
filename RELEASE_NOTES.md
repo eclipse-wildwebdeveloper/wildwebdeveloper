@@ -4,10 +4,15 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.11.5
+
+
+* 📅 Release Date (tentative): Mid-February, 2021
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.4...0.11.5
+
 ## 0.11.4
 
-
-* 📅 Release Date (tentative): Mid-October 2020
+* 📅 Release Date: December 1st, 2020
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.3...0.11.4
 
 #### Added 'Schema Associations' preference page for JSON and YAML
