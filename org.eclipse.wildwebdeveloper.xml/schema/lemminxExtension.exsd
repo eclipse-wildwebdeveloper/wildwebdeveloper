@@ -3,7 +3,7 @@
 <schema targetNamespace="org.eclipse.wildwebdeveloper.xml" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.wildwebdeveloper.xml" id="lemminx" name="%ExtPoint.lemminxExtension"/>
+         <meta.schema plugin="org.eclipse.wildwebdeveloper.xml" id="lemminx" name="Lemminx Extensions"/>
       </appinfo>
       <documentation>
          This extension point is used to contribute Lemminx extension jars to extend the functionality of the XML language server.

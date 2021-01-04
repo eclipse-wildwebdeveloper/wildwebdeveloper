@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="lemminxExtension" name="%ExtPoint.lemminxExtension" schema="schema/lemminxExtension.exsd"/>
+   <extension-point id="lemminxExtension" name="Lemminx Extension" schema="schema/lemminxExtension.exsd"/>
    <extension
          point="org.eclipse.ui.editors">
       <editorContentTypeBinding
