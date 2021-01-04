@@ -13,12 +13,9 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,15 +26,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -78,7 +72,8 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		List<String> jarPaths = new ArrayList<>();
-		commands.add(computeJavaPath());
+		// Use the same JVM as used to launch Eclipse
+		commands.add(ProcessHandle.current().info().command().orElseThrow(() -> new IllegalStateException("Cannot determine JVM used to launch Eclipse")));
 		commands.addAll(getProxySettings());
 		String debugPortString = System.getProperty(getClass().getName() + ".debugPort");
 		if (debugPortString != null) {
@@ -149,21 +144,6 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> extensionJarPaths = extensionJarRegistry.getXMLExtensionJars();
 		extensionJarPaths.addAll(extensionJarRegistry.getXMLLSClassPathExtensions());
 		return extensionJarPaths;
-	}
-
-	private String computeJavaPath() {
-		String javaPath = "java";
-		boolean existsInPath = Stream.of(System.getenv("PATH")
-				.split(Pattern.quote(File.pathSeparator)))
-				.map(path -> path.startsWith("\"") && path.endsWith("\"") ? path.substring(1, path.length() - 1) : path)
-				.map(Paths::get)
-				.anyMatch(path -> Files.exists(path.resolve("java")));
-		if (!existsInPath) {
-			File f = new File(System.getProperty("java.home"),
-					"bin/java" + (Platform.getOS().equals(Platform.OS_WIN32) ? ".exe" : ""));
-			javaPath = f.getAbsolutePath();
-		}
-		return javaPath;
 	}
 
 	@Override
