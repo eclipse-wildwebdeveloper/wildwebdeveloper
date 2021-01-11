@@ -50,6 +50,15 @@ public class Messages extends NLS {
 	public static String NodeDebug_TSConfirError_StartDebuggingAsIs;
 	public static String NodeDebug_TSConfirError_Cancel;
 	
+	public static String RuntimeExecutable_NotDefinedError_Title;
+	public static String RuntimeExecutable_NotDefinedError_Message;
+	public static String RuntimeExecutable_NotDefinedError_Message_1;
+	public static String RuntimeExecutable_NotDefinedError_Message_2;
+	public static String RuntimeExecutable_NotDefinedError_OpenWebBrowserPreferencePage;
+	public static String RuntimeExecutable_NotDefinedError_OpenLaunchConfigurationBrowserTab;
+	public static String RuntimeExecutable_Chrome;
+	public static String RuntimeExecutable_Firefox;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
