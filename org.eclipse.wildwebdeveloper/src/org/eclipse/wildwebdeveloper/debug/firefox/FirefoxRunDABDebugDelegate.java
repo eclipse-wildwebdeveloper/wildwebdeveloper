@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -29,10 +31,13 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.internal.browser.BrowserManager;
+import org.eclipse.ui.internal.browser.IBrowserDescriptor;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.MessageUtils;
+import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate;
-import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 
@@ -57,8 +62,15 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
 		param.put(REQUEST, "launch"); //$NON-NLS-1$
-		// TODO: Let user set location of firefox executable
-		param.put(FIREFOX_EXECUTABLE, findFirefoxLocation());
+		
+		// Let user set location of firefox executable
+		String firefoxLocation = findFirefoxLocation(configuration);
+		File executable = firefoxLocation != null && !firefoxLocation.isBlank() ? new File(firefoxLocation) : null;
+		if (executable == null || !executable.isAbsolute() || !executable.canExecute()) {
+			MessageUtils.showBrowserLocationsConfigurationError(Activator.getShell(), configuration, mode, Messages.RuntimeExecutable_Firefox, false);
+			return;
+		}
+		param.put(FIREFOX_EXECUTABLE, firefoxLocation);
 
 		// File or URL to debug 
 		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "");
@@ -97,12 +109,24 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 
 	}
 
-	static String findFirefoxLocation() {
-		String res = NodeJSManager.which("firefox").getAbsolutePath();
-		if (res == null) {
-			res = "/path/to/firefox";
-		}
-		return res;
+	@SuppressWarnings("restriction")
+	public static boolean isFirefox(IBrowserDescriptor desc) {
+		return desc != null && (desc.getName().toLowerCase().contains("firefox") ||  //$NON-NLS-1$
+				(desc.getLocation() != null && desc.getLocation().toLowerCase().contains("firefox"))); //$NON-NLS-1$
 	}
-
+	
+	@SuppressWarnings("restriction")
+	static String findFirefoxLocation(ILaunchConfiguration configuration) {
+		List<IBrowserDescriptor> runtimes = BrowserManager.getInstance().getWebBrowsers().stream().filter(FirefoxRunDABDebugDelegate::isFirefox).collect(Collectors.toList());
+		for (IBrowserDescriptor browser : runtimes) {
+			if (browser.getLocation() != null) {
+				String location = browser.getLocation();
+				File executable = new File(location);
+				if (executable.isAbsolute() && executable.canExecute()) {
+					return location;
+				}
+			}
+		}
+		return null;
+	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2021 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -33,7 +33,8 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
-import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.eclipse.wildwebdeveloper.debug.MessageUtils;
+import org.eclipse.wildwebdeveloper.debug.Messages;
 
 import com.google.gson.JsonObject;
 
@@ -89,8 +90,14 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 
 		param.put(SOURCE_MAPS, true);
 		
-		// TODO: Let user point to the location of their Chrome executable
-		param.put(RUNTIME_EXECUTABLE, findChromeLocation(configuration));
+		// Let user point to the location of their Chrome executable
+		String chromeLocation = findChromeLocation(configuration);
+		File executable = chromeLocation != null && !chromeLocation.isBlank() ? new File(chromeLocation) : null;
+		if (executable == null || !executable.isAbsolute() || !executable.canExecute()) {
+			MessageUtils.showBrowserLocationsConfigurationError(Activator.getShell(), configuration, mode, Messages.RuntimeExecutable_Chrome, true);
+			return;
+		}
+		param.put(RUNTIME_EXECUTABLE, chromeLocation);
 		
 		if (configuration.getAttribute(VERBOSE, false)) {
 			param.put(TRACE, VERBOSE);
@@ -114,33 +121,17 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 	}
 
 	static String findChromeLocation(ILaunchConfiguration configuration) {
-		String res = "chromium-browser"; //$NON-NLS-1$
+		String res = ""; //$NON-NLS-1$
 		try {
-			res = configuration.getAttribute(RUNTIME_EXECUTABLE, "chromium-browser"); //$NON-NLS-1$
+			res = configuration.getAttribute(RUNTIME_EXECUTABLE, res);
 		} catch (CoreException e) {
 			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
 			Activator.getDefault().getLog().log(errorStatus);
 		}
-		if (new File(res).isAbsolute()) {
+		File executable = new File(res);
+		if (executable.isAbsolute() && executable.canExecute()) {
 			return res;
 		}
-		if (res == null || res.isEmpty()) {
-			res = "chromium-browser"; //$NON-NLS-1$
-		}
-		// Failsafe, in case user doesn't have their preferred browser
-		res = NodeJSManager.which(res).getAbsolutePath();
-		if (res != null) {
-			return res;
-		}
-		res = NodeJSManager.which("chromium-browser").getAbsolutePath();
-		if (res != null) {
-			return res;
-		}
-		res = NodeJSManager.which("google-chrome-stable").getAbsolutePath();
-		if (res != null) {
-			return res;
-		}
-		return "path/to/chrome";
+		return null;
 	}
-
 }
