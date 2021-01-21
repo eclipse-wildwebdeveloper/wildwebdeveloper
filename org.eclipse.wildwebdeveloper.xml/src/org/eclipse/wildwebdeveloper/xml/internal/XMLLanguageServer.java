@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2021 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -32,6 +33,7 @@ import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -72,8 +74,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		List<String> jarPaths = new ArrayList<>();
-		// Use the same JVM as used to launch Eclipse
-		commands.add(ProcessHandle.current().info().command().orElseThrow(() -> new IllegalStateException("Cannot determine JVM used to launch Eclipse")));
+		commands.add(computeJavaPath());
 		commands.addAll(getProxySettings());
 		String debugPortString = System.getProperty(getClass().getName() + ".debugPort");
 		if (debugPortString != null) {
@@ -144,6 +145,11 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		List<String> extensionJarPaths = extensionJarRegistry.getXMLExtensionJars();
 		extensionJarPaths.addAll(extensionJarRegistry.getXMLLSClassPathExtensions());
 		return extensionJarPaths;
+	}
+
+	private String computeJavaPath() {
+		return new File(System.getProperty("java.home"),
+				"bin/java" + (Platform.getOS().equals(Platform.OS_WIN32) ? ".exe" : "")).getAbsolutePath();
 	}
 
 	@Override
