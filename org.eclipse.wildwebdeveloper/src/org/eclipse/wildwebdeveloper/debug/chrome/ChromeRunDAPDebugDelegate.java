@@ -31,6 +31,8 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.internal.browser.BrowserManager;
+import org.eclipse.ui.internal.browser.IBrowserDescriptor;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.MessageUtils;
@@ -70,7 +72,7 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 				Collections.emptyMap());
 		if (!env.isEmpty()) {
 			JsonObject envJson = new JsonObject();
-			env.forEach((key, value) -> envJson.addProperty(key, value));
+			env.forEach(envJson::addProperty);
 			param.put(AbstractHTMLDebugDelegate.ENV, envJson);
 		}
 		
@@ -132,6 +134,6 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		if (executable.isAbsolute() && executable.canExecute()) {
 			return res;
 		}
-		return null;
+		return BrowserManager.getInstance().getWebBrowsers().stream().filter(ChromeExecutableTab::isChrome).findAny().map(IBrowserDescriptor::getLocation).orElse(null);
 	}
 }
