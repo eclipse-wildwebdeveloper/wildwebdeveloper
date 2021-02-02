@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2021 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -52,7 +51,7 @@ public class NodeJSManager {
 	private static boolean alreadyWarned;
 	private static Properties cachedNodeJsInfoProperties;
 	private static final Object EXPAND_LOCK = new Object();
-	
+
 	public static File getNodeJsLocation() {
 		{
 			String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
@@ -68,16 +67,15 @@ public class NodeJSManager {
 		Properties properties = getNodeJsInfoProperties();
 		if (properties != null) {
 			try {
-				IPath stateLocationPath = InternalPlatform.getDefault().getStateLocation(Platform
-						.getBundle(Activator.PLUGIN_ID));
+				IPath stateLocationPath = InternalPlatform.getDefault()
+						.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
 				if (stateLocationPath != null) {
 					File installationPath = stateLocationPath.toFile();
 					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
 					synchronized (EXPAND_LOCK) {
 						if (!nodePath.exists() || !nodePath.canRead() || !nodePath.canExecute()) {
-							CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(), 
-									new Path(properties.getProperty("archiveFile"))),
-									installationPath);
+							CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(),
+									new Path(properties.getProperty("archiveFile"))), installationPath);
 						}
 					}
 					return nodePath;
@@ -103,7 +101,7 @@ public class NodeJSManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 * @since 0.2
 	 */
@@ -122,25 +120,25 @@ public class NodeJSManager {
 	public static File which(String program) {
 		Properties properties = getNodeJsInfoProperties();
 		if (properties != null) {
-				IPath stateLocationPath = InternalPlatform.getDefault().getStateLocation(Platform
-						.getBundle(Activator.PLUGIN_ID));
-				if (stateLocationPath != null) {
-					File installationPath = stateLocationPath.toFile();
-					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
-					if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
-						File exe = new File(nodePath.getParent(), program);
+			IPath stateLocationPath = InternalPlatform.getDefault()
+					.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
+			if (stateLocationPath != null) {
+				File installationPath = stateLocationPath.toFile();
+				File nodePath = new File(installationPath, properties.getProperty("nodePath"));
+				if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
+					File exe = new File(nodePath.getParent(), program);
+					if (exe.canExecute()) {
+						return exe;
+					} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
+						exe = new File(nodePath.getParent(), program + ".exe");
 						if (exe.canExecute()) {
 							return exe;
-						} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
-							exe = new File(nodePath.getParent(), program + ".exe");
-							if (exe.canExecute()) {
-								return exe;
-							}
 						}
 					}
 				}
+			}
 		}
-		
+
 		String[] paths = System.getenv("PATH").split(System.getProperty("path.separator"));
 		for (String path : paths) {
 			File exe = new File(path, program);
@@ -149,11 +147,11 @@ public class NodeJSManager {
 		}
 
 		String res = null;
-		String[] command = new String[] { "/bin/bash", "-c", "-l", "which " + program};
+		String[] command = new String[] { "/bin/bash", "-c", "-l", "which " + program };
 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 			command = new String[] { "cmd", "/c", "where " + program };
 		} else if (Platform.getOS().equals(Platform.OS_MACOSX)) {
-			command = new String[] { getDefaultShellMacOS(), "-c", "-li", "which " + program};
+			command = new String[] { getDefaultShellMacOS(), "-c", "-li", "which " + program };
 		}
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
@@ -174,13 +172,14 @@ public class NodeJSManager {
 					properties.load(infoStream);
 					cachedNodeJsInfoProperties = properties;
 				} catch (IOException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+					Activator.getDefault().getLog()
+							.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 				}
 			}
 		}
 		return cachedNodeJsInfoProperties;
 	}
-				
+
 	private static String getDefaultShellMacOS() {
 		String res = null;
 		String[] command = new String[] { "/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell" };
@@ -203,12 +202,12 @@ public class NodeJSManager {
 
 	private static File getDefaultNodePath() {
 		switch (Platform.getOS()) {
-			case Platform.OS_MACOSX:
-				return new File("/usr/local/bin/node");
-			case Platform.OS_WIN32:
-				return new File("C:\\Program Files\\nodejs\\node.exe");
-			default:
-				return new File("/usr/bin/node");
+		case Platform.OS_MACOSX:
+			return new File("/usr/local/bin/node");
+		case Platform.OS_WIN32:
+			return new File("C:\\Program Files\\nodejs\\node.exe");
+		default:
+			return new File("/usr/bin/node");
 		}
 	}
 
@@ -237,36 +236,32 @@ public class NodeJSManager {
 
 	private static void warnNodeJSMissing() {
 		if (!alreadyWarned) {
-			Display.getDefault().asyncExec(() -> 
-				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Missing node.js",
-						"Could not find node.js. This will result in editors missing key features.\n"
-								+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable.")
-			);
+			Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
+					"Missing node.js", "Could not find node.js. This will result in editors missing key features.\n"
+							+ "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable."));
 		}
 		alreadyWarned = true;
 	}
 
 	private static void warnNodeJSVersionUnsupported(String version) {
 		if (!alreadyWarned) {
-			Display.getDefault().asyncExec(() ->
-				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js " + version + " is not supported",
-						"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
-								+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
-								+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-										.map(String::valueOf).collect(Collectors.joining(", ")))
-			);
+			Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
+					"Node.js " + version + " is not supported",
+					"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
+							+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
+							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
+									.map(String::valueOf).collect(Collectors.joining(", "))));
 		}
 		alreadyWarned = true;
 	}
 
 	private static void warnNodeJSVersionCouldNotBeDetermined() {
 		if (!alreadyWarned) {
-			Display.getDefault().asyncExec(() ->
-				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Node.js version could not be determined",
-						"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
-								+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-										.map(String::valueOf).collect(Collectors.joining(", ")))
-			);
+			Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
+					"Node.js version could not be determined",
+					"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
+							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
+									.map(String::valueOf).collect(Collectors.joining(", "))));
 		}
 		alreadyWarned = true;
 	}
