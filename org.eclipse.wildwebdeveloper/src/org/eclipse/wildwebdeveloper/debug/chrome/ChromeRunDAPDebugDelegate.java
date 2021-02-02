@@ -27,8 +27,10 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.internal.browser.BrowserManager;
@@ -68,12 +70,12 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		}
 
 		// Debug environment variables
-		Map<String, String> env = configuration.getAttribute(AbstractHTMLDebugDelegate.ENV,
+		Map<String, String> env = configuration.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES,
 				Collections.emptyMap());
 		if (!env.isEmpty()) {
 			JsonObject envJson = new JsonObject();
 			env.forEach(envJson::addProperty);
-			param.put(AbstractHTMLDebugDelegate.ENV, envJson);
+			param.put(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, envJson);
 		}
 		
 		// File or URL to debug 
@@ -85,9 +87,9 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		}
 		
 		// Chrome working directory
-		String cwd = configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, "").trim(); //$NON-NLS-1$
+		String cwd = configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "").trim(); //$NON-NLS-1$
 		if (!cwd.isEmpty()) {
-			param.put(AbstractHTMLDebugDelegate.CWD, cwd);
+			param.put(DebugPlugin.ATTR_WORKING_DIRECTORY, cwd);
 		}
 
 		param.put(SOURCE_MAPS, true);
