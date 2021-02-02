@@ -43,7 +43,7 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		// because we set the nodePath below to this same directory.
 		File highestPackageJsonDir = null;
 		try {
-			highestPackageJsonDir = new File(new URI(configurationItem.getScopeUri())).getParentFile();;
+			highestPackageJsonDir = new File(new URI(configurationItem.getScopeUri())).getParentFile();
 			File parentFile = highestPackageJsonDir;
 			while (parentFile != null) {
 				if (new File(parentFile, "package.json").exists()) highestPackageJsonDir = parentFile;
