@@ -188,7 +188,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 					.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, defaultSelectedFile));
 			this.argumentsText.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
 			this.workingDirectoryText.setText(
-					configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, pathOrEmpty(getSelectedProject())));
+					configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject())));
 			this.urlText.setText(configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "")); //$NON-NLS-1$
 			if (urlText.getText().isEmpty()) {
 				fileRadio.setSelection(true);
@@ -218,7 +218,6 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		String workingDirectory = this.workingDirectoryText.getText();
-		configuration.setAttribute(AbstractHTMLDebugDelegate.CWD, workingDirectory);
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
 		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
 	}

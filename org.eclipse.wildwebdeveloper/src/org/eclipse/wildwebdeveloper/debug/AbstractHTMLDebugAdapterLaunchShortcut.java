@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wildwebdeveloper.Activator;
@@ -36,7 +37,7 @@ public abstract class AbstractHTMLDebugAdapterLaunchShortcut extends AbstractDeb
 	@Override
 	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
 		wc.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, file.getAbsolutePath());
-		wc.setAttribute(AbstractHTMLDebugDelegate.CWD, file.getParentFile().getAbsolutePath());
+		wc.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, file.getParentFile().getAbsolutePath());
 	}
 
 	@Override

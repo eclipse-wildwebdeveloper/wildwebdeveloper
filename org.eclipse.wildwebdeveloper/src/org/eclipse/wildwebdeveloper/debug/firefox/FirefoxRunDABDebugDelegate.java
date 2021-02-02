@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -76,7 +77,7 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "");
 		if (!url.isEmpty()) {
 			param.put(ChromeRunDAPDebugDelegate.URL, url);
-			File projectDirectory = new File(configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, ""));
+			File projectDirectory = new File(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, ""));
 			param.put("webRoot", projectDirectory.getAbsolutePath());
 		} else {
 			param.put(FILE, configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$
@@ -85,7 +86,7 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		param.put(TMP_DIRS, System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		param.put(TYPE, "firefox"); //$NON-NLS-1$
 		if (configuration.getAttribute(RELOAD_ON_CHANGE, false)) {
-			String workspaceDir = configuration.getAttribute(AbstractHTMLDebugDelegate.CWD, "");
+			String workspaceDir = configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "");
 			param.put(RELOAD_ON_CHANGE, workspaceDir);
 		}
 
