@@ -78,7 +78,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.addAll(getProxySettings());
 		String debugPortString = System.getProperty(getClass().getName() + ".debugPort");
 		if (debugPortString != null) {
-			commands.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=" + debugPortString);
+			commands.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" + debugPortString);
 		}
 		commands.add("-classpath");
 		try {
@@ -162,34 +162,10 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		return mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
 	}
 
-	@SuppressWarnings("rawtypes")
 	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
-		Map<String, Object> options = defaults == null ? new HashMap<String, Object>() : defaults;
-		
-		Set<String> catalogs = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-
-		// Default catalogs
-		if (defaults.get(SETTINGS_KEY) instanceof Map) {
-			Map settingsObj = (Map)defaults.get(SETTINGS_KEY);
-			if (settingsObj.get(XML_KEY) instanceof Map) {
-				Map xmlObj = (Map)settingsObj.get(XML_KEY);
-				if (xmlObj.get(CATALOGS_KEY) instanceof String[]) {
-					catalogs.addAll(Arrays.asList((String[])xmlObj.get(CATALOGS_KEY)));
-				}
-			}
-		}
-		// User defined XML Catalog
-		XMLPreferenceInitializer.getCatalogs(store).forEach(f -> catalogs.add(f.getAbsolutePath()));
-		
-		// Build a merged catalog
-		Map<String, Object> xmlObj = new HashMap<>();
-		xmlObj.put(CATALOGS_KEY, catalogs);
-
-		Map<String, Object> settingsObj = new HashMap<>();
-		settingsObj.put(XML_KEY, xmlObj);
-
-		options.put(SETTINGS_KEY, settingsObj);
-		return options;
+		Map<String, Object> xmlOpts = new HashMap<>(defaults);
+		xmlOpts.put(CATALOGS_KEY, XMLPreferenceInitializer.getCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new));
+		return Map.of(SETTINGS_KEY, Map.of(XML_KEY, xmlOpts));
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
+ * Options are included as children of the <code>settings/xml</code> element
  * @since 0.8.0
  */
 public interface InitializationOptionsProvider extends Supplier<Map<String, Object>> {
