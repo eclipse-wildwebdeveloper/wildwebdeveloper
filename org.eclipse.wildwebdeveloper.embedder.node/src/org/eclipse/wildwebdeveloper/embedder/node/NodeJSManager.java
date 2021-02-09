@@ -22,9 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,8 +42,7 @@ public class NodeJSManager {
 
 	private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
 
-	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Collections
-			.unmodifiableSet(new HashSet<>(Arrays.asList(10, 11, 12, 13, 14)));
+	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Set.of(10, 11, 12, 13, 14);
 
 	private static boolean alreadyWarned;
 	private static Properties cachedNodeJsInfoProperties;
