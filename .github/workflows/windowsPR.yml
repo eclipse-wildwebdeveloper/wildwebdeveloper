@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v1
@@ -16,6 +16,6 @@ jobs:
         java-version: 11
     - uses: actions/setup-node@v1
       with:
-        node-version: '12'
+        node-version: '14'
     - name: Build with Maven
       run: mvn -B clean verify
