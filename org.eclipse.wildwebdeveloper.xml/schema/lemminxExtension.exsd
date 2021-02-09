@@ -91,7 +91,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
          <attribute name="provider" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Options are included as children of the &lt;code&gt;settings/xml&lt;/code&gt; element
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.wildwebdeveloper.xml.InitializationOptionsProvider"/>
