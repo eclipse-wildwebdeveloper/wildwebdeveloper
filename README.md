@@ -43,14 +43,19 @@ Supported 🦟🔫 debugging targets
 
 ## 📥 Get it Now!
 
-Install into Eclipse IDE (pick one way or another):
+### As full IDE package
+
+Get an Eclipse IDE for JavaScript and Web developers: download from [https://download.eclipse.org/wildwebdeveloper/releases/latest/IDEs](https://download.eclipse.org/wildwebdeveloper/releases/latest/IDEs) , unpack and run.
+
+### As extension into an existing Eclipse IDE installation
+
 * With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-web-development-eclipse-ide-experimental, choose one of:
   * *Help > Eclipse Marketplace*, search `Wild Web Developer` then click `Install` or
-  * drag <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3394048" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a> into Eclipse IDE, or
-* With [Help > Install New Software...](http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Ftasks%2Ftasks-124.htm) with p2 repo http://download.eclipse.org/wildwebdeveloper/snapshots
+  * drag <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3394048" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a> into Eclipse IDE
 
-In an Eclipse target platform definition:
-* Use http://download.eclipse.org/wildwebdeveloper/snapshots p2 repo
+or
+
+* With [Help > Install New Software...](http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Ftasks%2Ftasks-124.htm) with p2 repo http://download.eclipse.org/wildwebdeveloper/snapshots
 
 ## 🎬 Media Library
 

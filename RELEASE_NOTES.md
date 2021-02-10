@@ -6,9 +6,12 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 0.11.5
 
-
 * 📅 Release Date (tentative): Mid-February, 2021
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.4...0.11.5
+
+#### Added IDE packages
+
+IDE packages tailored for usage of Wild Web Developer are now built and published with Wild Web Developer.
 
 ## 0.11.4
 
