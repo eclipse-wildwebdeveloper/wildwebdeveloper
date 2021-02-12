@@ -12,6 +12,7 @@
 package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
@@ -58,6 +59,31 @@ public class TestYaml {
 			}
 		}.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(), 3000);
 		assertFalse(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
+				.map(Object::toString).collect(Collectors.joining("\n")));
+	}
+
+	@Test
+	public void testSchemaExtensionPoint() throws Exception {
+		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject("p");
+		p.create(new NullProgressMonitor());
+		p.open(new NullProgressMonitor());
+		IFile file = p.getFile("dep.yml");
+		file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		document.set("{version: 1}");
+		boolean markerFound = new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					return file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
+				} catch (CoreException e) {
+					return false;
+				}
+			}
+		}.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(), 6000);
+		assertTrue(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
 				.map(Object::toString).collect(Collectors.joining("\n")));
 	}
 }

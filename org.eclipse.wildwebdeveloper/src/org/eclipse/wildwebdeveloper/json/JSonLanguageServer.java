@@ -52,9 +52,9 @@ import com.google.gson.reflect.TypeToken;
 @SuppressWarnings("restriction")
 public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	
-	private final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
-	private final static String PATTERN_ATTR = "pattern"; //$NON-NLS-1$
-	private final static String URL_ATTR = "url"; //$NON-NLS-1$
+	public final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
+	public final static String PATTERN_ATTR = "pattern"; //$NON-NLS-1$
+	public final static String URL_ATTR = "url"; //$NON-NLS-1$
 
 	private static final IPreferenceStore PREFERENCE_STORE = Activator.getDefault().getPreferenceStore();
 	private static final LanguageServerDefinition JSON_LS_DEFINITION = LanguageServersRegistry.getInstance()
