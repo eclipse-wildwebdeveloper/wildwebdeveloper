@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -38,6 +39,7 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.SchemaAssociationsPreferenceInitializer;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.eclipse.wildwebdeveloper.json.JSonLanguageServer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -141,6 +143,15 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 				}
 			}
 		});
+		
+		IConfigurationElement[] conf = Platform.getExtensionRegistry().getConfigurationElementsFor(JSonLanguageServer.SCHEMA_EXT);
+		for (IConfigurationElement el : conf) {
+			String url = el.getAttribute(JSonLanguageServer.URL_ATTR);
+			String pattern = el.getAttribute(JSonLanguageServer.PATTERN_ATTR);
+			if (!url.isBlank() && !pattern.isBlank()) {
+				associations.put(url, pattern);
+			}
+		}
 
 		return associations;
 	}
