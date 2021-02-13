@@ -69,6 +69,8 @@
             <annotation>
                <documentation>
                   URL to schema, for example: http://json.schemastore.org/tsconfig
+
+Special schemes (platform:, ) are supported but must be used with caution as JSON or YAML language server may not support it. We recommand to use Eclipse-BundleShape:dir as it will translate to file: scheme
                </documentation>
             </annotation>
          </attribute>

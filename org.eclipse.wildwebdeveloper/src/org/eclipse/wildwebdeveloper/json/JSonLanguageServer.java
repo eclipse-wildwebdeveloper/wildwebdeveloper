@@ -43,6 +43,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.SchemaAssociationRegistry;
 import org.eclipse.wildwebdeveloper.SchemaAssociationsPreferenceInitializer;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
@@ -149,7 +150,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 			if (!associations.containsKey(pattern)) {
 				associations.put(pattern, new ArrayList<>());
 			}
-			associations.get(pattern).add(el.getAttribute(URL_ATTR));
+			associations.get(pattern).add(SchemaAssociationRegistry.translate(el.getAttribute(URL_ATTR)));
 		}
 	}
 

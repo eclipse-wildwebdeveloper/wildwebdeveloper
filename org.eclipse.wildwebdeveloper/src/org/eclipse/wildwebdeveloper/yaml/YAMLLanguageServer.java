@@ -37,6 +37,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.SchemaAssociationRegistry;
 import org.eclipse.wildwebdeveloper.SchemaAssociationsPreferenceInitializer;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 import org.eclipse.wildwebdeveloper.json.JSonLanguageServer;
@@ -149,7 +150,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 			String url = el.getAttribute(JSonLanguageServer.URL_ATTR);
 			String pattern = el.getAttribute(JSonLanguageServer.PATTERN_ATTR);
 			if (!url.isBlank() && !pattern.isBlank()) {
-				associations.put(url, pattern);
+				associations.put(SchemaAssociationRegistry.translate(url), pattern);
 			}
 		}
 
