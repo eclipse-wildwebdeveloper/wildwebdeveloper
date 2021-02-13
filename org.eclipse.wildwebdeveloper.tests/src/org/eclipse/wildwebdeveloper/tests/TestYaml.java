@@ -62,12 +62,11 @@ public class TestYaml {
 				.map(Object::toString).collect(Collectors.joining("\n")));
 	}
 
-	@Test
-	public void testSchemaExtensionPoint() throws Exception {
+	private void testErrorFile(String name) throws Exception {
 		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject("p");
 		p.create(new NullProgressMonitor());
 		p.open(new NullProgressMonitor());
-		IFile file = p.getFile("dep.yml");
+		IFile file = p.getFile(name);
 		file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
@@ -85,5 +84,15 @@ public class TestYaml {
 		}.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(), 6000);
 		assertTrue(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
 				.map(Object::toString).collect(Collectors.joining("\n")));
+	}
+
+	@Test
+	public void testSchemaExtensionPoint() throws Exception {
+		testErrorFile("dep.yml");
+	}
+
+	@Test
+	public void testSchemaExtensionPointUsingPlatformURL() throws Exception {
+		testErrorFile("depp.yml");
 	}
 }
