@@ -12,15 +12,22 @@ package org.eclipse.wildwebdeveloper.eslint;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.LanguageClientImpl;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.wildwebdeveloper.Activator;
 
 public class ESLintClientImpl extends LanguageClientImpl implements ESLintLanguageServerExtension {
 
@@ -73,6 +80,22 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 	@Override
 	public CompletableFuture<Void> eslintStatus(Object o) {
 		// ignore for now
+		return CompletableFuture.completedFuture(null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public CompletableFuture<Void> openDoc(Object o) {
+		if (o instanceof Map && ((Map<?, ?>) o).containsKey("url")) {
+			Display.getDefault().asyncExec(() -> {
+				IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
+				try {
+					browserSupport.createBrowser("openDoc").openURL(new URL(((Map<String, String>) o).get("url")));
+				} catch (Exception e) {
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+				}
+			});
+		}
 		return CompletableFuture.completedFuture(null);
 	}
 }
