@@ -20,4 +20,7 @@ public interface ESLintLanguageServerExtension {
 	
 	@JsonRequest(value = "eslint/status")
 	public CompletableFuture<Void> eslintStatus(Object o);
+	
+	@JsonRequest(value = "eslint/openDoc")
+	public CompletableFuture<Void> openDoc(Object o);
 }
