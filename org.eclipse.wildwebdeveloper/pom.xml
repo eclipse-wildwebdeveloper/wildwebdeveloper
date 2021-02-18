@@ -18,6 +18,9 @@
 					<filesets>
 						<fileset>
 							<directory>node_modules</directory>
+						</fileset>
+						<fileset>
+							<directory>.</directory>
 							<includes>
 								<include>package-lock.json</include>
 							</includes>
