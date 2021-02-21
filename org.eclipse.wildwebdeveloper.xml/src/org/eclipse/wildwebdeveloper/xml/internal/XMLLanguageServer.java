@@ -169,6 +169,25 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		return Map.of(SETTINGS_KEY, Map.of(XML_KEY, xmlOpts));
 	}
 
+	private static void register(String name, Object value, Map<String, Object> root) {
+		name = name.substring(Activator.PLUGIN_ID.length() + 1);
+		Map<String, Object> result = root;
+		String[] paths = name.split("[.]");
+		String path = null;
+		for (int i = 0; i < paths.length - 1; i++) {
+			path = paths[i];
+			if (result.containsKey(path)) {
+				result = (Map<String, Object>) result.get(path);
+			} else {
+				Map<String, Object> item = new HashMap<>();
+				result.put(path, item);
+				result = item;
+			}
+		}
+		path = paths[paths.length - 1];
+		result.put(path, value);
+	}
+
 	@Override
 	public void start() throws IOException {
 		super.start();

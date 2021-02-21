@@ -43,12 +43,12 @@ public class XMLValidationPreferencePage extends FieldEditorPreferencePage imple
 				Messages.XMLValidationPreferencePage_validation_enabled, getFieldEditorParent()));
 		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_namespaces_enabled, 1,
-				new String[][] { { "always", "always" }, { "never", "never" },
-						{ "on namespace encountered", "onNamespaceEncountered" } },
+				new String[][] { { "Always", "always" }, { "Never", "never" },
+						{ "On namespace encountered", "onNamespaceEncountered" } },
 				getFieldEditorParent()));
 		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_schema_enabled, 1,
-				new String[][] { { "always", "always" }, { "never", "never" }, { "on valid schema", "onValidSchema" } },
+				new String[][] { { "Always", "always" }, { "Never", "never" }, { "In valid schema", "onValidSchema" } },
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_disallowDocTypeDecl, getFieldEditorParent()));

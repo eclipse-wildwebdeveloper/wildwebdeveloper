@@ -54,7 +54,8 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	}
 
 	public static Set<File> getCatalogs(IPreferenceStore store) {
-		Set<File> catalogs = new TreeSet<>(FILE_CASE_INSENSITIVE_ORDER);
+		Set<File> catalogs = new TreeSet<File>(FILE_CASE_INSENSITIVE_ORDER);
+
 		for (String filepath : store.getString(XML_PREFERENCES_CATAGLOGS.preferenceId).split(",")) {
 			if (!filepath.isEmpty()) {
 				catalogs.add(new File(filepath));
