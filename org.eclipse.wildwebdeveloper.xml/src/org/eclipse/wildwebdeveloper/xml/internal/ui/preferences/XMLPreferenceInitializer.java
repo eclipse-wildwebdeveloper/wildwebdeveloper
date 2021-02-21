@@ -11,6 +11,14 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_ENABLED;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_NO_GRAMMAR;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED;
+
 import java.io.File;
 import java.util.Comparator;
 import java.util.Set;
@@ -22,35 +30,49 @@ import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
 public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	private static final IPreferenceStore STORE = Activator.getDefault().getPreferenceStore();
-	public static final String XML_PREFERENCES_CATAGLOGS = "wildwebdeveloper.xml.catalogs";
-	public static final Comparator<File> FILE_CASE_INSENSITIVE_ORDER = new FileComparator();
-			
+
+	private static final Comparator<File> FILE_CASE_INSENSITIVE_ORDER = new FileComparator();
+
 	private static class FileComparator implements Comparator<File> {
 
-	    @Override
-	    public int compare(File n1, File n2){
-	    	return String.CASE_INSENSITIVE_ORDER.compare(n1.getAbsolutePath(), n2.getAbsolutePath());
-	    }    
+		@Override
+		public int compare(File n1, File n2) {
+			return String.CASE_INSENSITIVE_ORDER.compare(n1.getAbsolutePath(), n2.getAbsolutePath());
+		}
 
 	}
-	
+
 	@Override
 	public void initializeDefaultPreferences() {
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS, "");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_ENABLED, true);
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED, "onNamespaceEncountered");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, "onValidSchema");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, false);
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, false);
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR, "hint");
 	}
-	
+
 	public static Set<File> getCatalogs(IPreferenceStore store) {
 		Set<File> catalogs = new TreeSet<File>(FILE_CASE_INSENSITIVE_ORDER);
 
-		for (String filepath : store.getString(XMLPreferenceInitializer.XML_PREFERENCES_CATAGLOGS).split(",")) {
+		for (String filepath : store.getString(XML_PREFERENCES_CATAGLOGS).split(",")) {
 			if (!filepath.isEmpty()) {
 				catalogs.add(new File(filepath));
 			}
 		}
-		
+
 		return catalogs;
 	}
-	
+
+	public static boolean isValidationEnabled(IPreferenceStore store) {
+		return store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED);
+	}
+
+	public static String getValidationNamespacesEnabled(IPreferenceStore store) {
+		return store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED);
+	}
+
 	public static void storeCatalogs(IPreferenceStore store, Set<File> catalogs) {
 		String catalogsStr = "";
 		if (!catalogs.isEmpty()) {
@@ -58,6 +80,6 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 				catalogsStr += f.getAbsolutePath() + ",";
 			}
 		}
-		store.setValue(XMLPreferenceInitializer.XML_PREFERENCES_CATAGLOGS, catalogsStr);
+		store.setValue(XML_PREFERENCES_CATAGLOGS, catalogsStr);
 	}
 }

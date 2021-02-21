@@ -15,17 +15,30 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
-	public static String XMLPreferencesPage_XMLCatalogsLink;
-	
-	public static String XMLCatalogPreferencesPage_Entries;
-	public static String XMLCatalogPreferencesPage_Edit;
-	public static String XMLCatalogPreferencesPage_OpenInEditorTitle;
-	public static String XMLCatalogPreferencesPage_OpenInEditorMessage;
-	public static String XMLCatalogPreferencesPage_OpenInEditorApplyAndEdit;
-	public static String XMLCatalogPreferencesPage_OpenInEditorNo;
+	// --------- XML Catalog preference page
 
-	public static String PreferencesPage_Add;
-	public static String PreferencesPage_Remove;
+	public static String XMLPreferencePage_XMLCatalogsLink;
+
+	public static String XMLCatalogPreferencePage_Entries;
+	public static String XMLCatalogPreferencePage_Edit;
+	public static String XMLCatalogPreferencePage_OpenInEditorTitle;
+	public static String XMLCatalogPreferencePage_OpenInEditorMessage;
+	public static String XMLCatalogPreferencePage_OpenInEditorApplyAndEdit;
+	public static String XMLCatalogPreferencePage_OpenInEditorNo;
+
+	// --------- XML Validation preference page
+
+	public static String XMLValidationPreferencePage_validation_enabled;
+	public static String XMLValidationPreferencePage_validation_namespaces_enabled;
+	public static String XMLValidationPreferencePage_validation_schema_enabled;
+	public static String XMLValidationPreferencePage_validation_disallowDocTypeDecl;
+	public static String XMLValidationPreferencePage_validation_resolveExternalEntities;
+	public static String XMLValidationPreferencePage_validation_noGrammar;
+
+	// --------- Buttons
+	
+	public static String PreferencePage_Add;
+	public static String PreferencePage_Remove;
 
 	static {
 		NLS.initializeMessages("org.eclipse.wildwebdeveloper.xml.internal.ui.messages", Messages.class); //$NON-NLS-1$

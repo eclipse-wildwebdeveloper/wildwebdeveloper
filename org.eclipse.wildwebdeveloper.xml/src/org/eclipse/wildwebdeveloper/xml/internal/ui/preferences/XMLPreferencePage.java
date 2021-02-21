@@ -41,7 +41,7 @@ public class XMLPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		composite.setLayout(layout);
 
 		Link catalogsLink = new Link(composite, SWT.NONE);
-		catalogsLink.setText(Messages.XMLPreferencesPage_XMLCatalogsLink);
+		catalogsLink.setText(Messages.XMLPreferencePage_XMLCatalogsLink);
 		catalogsLink.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

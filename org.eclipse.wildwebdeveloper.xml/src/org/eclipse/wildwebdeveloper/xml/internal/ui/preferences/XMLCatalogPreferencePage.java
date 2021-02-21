@@ -75,7 +75,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		composite.setLayout(layout);
 
 		Group entriesGroup = new Group(composite, SWT.NONE);
-		entriesGroup.setText(Messages.XMLCatalogPreferencesPage_Entries);
+		entriesGroup.setText(Messages.XMLCatalogPreferencePage_Entries);
 		GridLayout gl = new GridLayout(2, false);
 		entriesGroup.setLayout(gl);
 		entriesGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -96,7 +96,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 
 		Button addButton = new Button(buttonComposite, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addButton.setText(Messages.PreferencesPage_Add);
+		addButton.setText(Messages.PreferencePage_Add);
 		addButton.addSelectionListener(widgetSelectedAdapter(e -> {
 			File result = openSelectFileDialog();
 			if (result == null) {
@@ -110,7 +110,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		
 		final Button removeButton = new Button(buttonComposite, SWT.PUSH);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeButton.setText(Messages.PreferencesPage_Remove);
+		removeButton.setText(Messages.PreferencePage_Remove);
 		removeButton.setEnabled(false);
 		removeButton.addSelectionListener(widgetSelectedAdapter(e -> {
 			if (selectedEntry != null) {
@@ -123,18 +123,18 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		final Button editButton = new Button(buttonComposite, SWT.PUSH);
 		editButton.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, 
 				true, false, 1, 18));
-		editButton.setText(Messages.XMLCatalogPreferencesPage_Edit);
+		editButton.setText(Messages.XMLCatalogPreferencePage_Edit);
 		editButton.setEnabled(false);
 		editButton.addSelectionListener(widgetSelectedAdapter(e -> {
 			if (selectedEntry != null) {
 				MessageDialog dialog = new MessageDialog(getShell(), 
-						Messages.XMLCatalogPreferencesPage_OpenInEditorTitle, 
+						Messages.XMLCatalogPreferencePage_OpenInEditorTitle, 
 						null, 
-						Messages.XMLCatalogPreferencesPage_OpenInEditorMessage, 
+						Messages.XMLCatalogPreferencePage_OpenInEditorMessage, 
 						MessageDialog.QUESTION,
 						1,
-						Messages.XMLCatalogPreferencesPage_OpenInEditorApplyAndEdit,
-						Messages.XMLCatalogPreferencesPage_OpenInEditorNo
+						Messages.XMLCatalogPreferencePage_OpenInEditorApplyAndEdit,
+						Messages.XMLCatalogPreferencePage_OpenInEditorNo
 						);
 
 				int result = (isDirty ? dialog.open() : MessageDialog.OK);
