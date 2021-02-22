@@ -44,42 +44,40 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		STORE.setDefault(XML_PREFERENCES_CATAGLOGS, "");
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_ENABLED, true);
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED, "onNamespaceEncountered");
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, "onValidSchema");
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, false);
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, false);
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR, "hint");
+		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId, true);
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId, "onNamespaceEncountered");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId, "onValidSchema");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId, "hint");
 	}
 
 	public static Set<File> getCatalogs(IPreferenceStore store) {
-		Set<File> catalogs = new TreeSet<File>(FILE_CASE_INSENSITIVE_ORDER);
-
-		for (String filepath : store.getString(XML_PREFERENCES_CATAGLOGS).split(",")) {
+		Set<File> catalogs = new TreeSet<>(FILE_CASE_INSENSITIVE_ORDER);
+		for (String filepath : store.getString(XML_PREFERENCES_CATAGLOGS.preferenceId).split(",")) {
 			if (!filepath.isEmpty()) {
 				catalogs.add(new File(filepath));
 			}
 		}
-
 		return catalogs;
 	}
 
 	public static boolean isValidationEnabled(IPreferenceStore store) {
-		return store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED);
+		return store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId);
 	}
 
 	public static String getValidationNamespacesEnabled(IPreferenceStore store) {
-		return store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED);
+		return store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId);
 	}
 
 	public static void storeCatalogs(IPreferenceStore store, Set<File> catalogs) {
-		String catalogsStr = "";
+		StringBuilder catalogsStr = new StringBuilder();
 		if (!catalogs.isEmpty()) {
 			for (File f : catalogs) {
-				catalogsStr += f.getAbsolutePath() + ",";
+				catalogsStr.append(f.getAbsolutePath()).append(',');
 			}
 		}
-		store.setValue(XML_PREFERENCES_CATAGLOGS, catalogsStr);
+		store.setValue(XML_PREFERENCES_CATAGLOGS.preferenceId, catalogsStr.toString());
 	}
 }

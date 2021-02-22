@@ -39,22 +39,22 @@ public class XMLValidationPreferencePage extends FieldEditorPreferencePage imple
 
 	@Override
 	public void createFieldEditors() {
-		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_ENABLED,
+		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_enabled, getFieldEditorParent()));
-		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED,
+		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_namespaces_enabled, 1,
 				new String[][] { { "always", "always" }, { "never", "never" },
 						{ "on namespace encountered", "onNamespaceEncountered" } },
 				getFieldEditorParent()));
-		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED,
+		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_schema_enabled, 1,
 				new String[][] { { "always", "always" }, { "never", "never" }, { "on valid schema", "onValidSchema" } },
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL,
+		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_disallowDocTypeDecl, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES,
+		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_resolveExternalEntities, getFieldEditorParent()));
-		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_NO_GRAMMAR,
+		addField(new RadioGroupFieldEditor(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_noGrammar, 1,
 				new String[][] { { "ignore", "ignore" }, { "hint", "hint" }, { "info", "info" },
 						{ "warning", "warning" }, { "error", "error" } },

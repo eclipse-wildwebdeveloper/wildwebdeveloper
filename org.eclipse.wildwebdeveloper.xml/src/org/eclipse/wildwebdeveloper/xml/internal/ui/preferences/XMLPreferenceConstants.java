@@ -12,44 +12,90 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
-/**
- * XML preference constants. Name of preferences matches the following pattern:
- *
- * <p>
- * org.eclipse.wildwebdeveloper.xml (plugin id) concat with LemMinX settings
- * name (without the xml prefix).
- * </p>
- * 
- * @see https://github.com/redhat-developer/vscode-xml#supported-vs-code-settings
- */
 public class XMLPreferenceConstants {
 
-	public static final String XML_PREFERENCES_CATAGLOGS = Activator.PLUGIN_ID + ".catalogs";
-	public static final String XML_PREFERENCES_VALIDATION_ENABLED = Activator.PLUGIN_ID + ".validation.enabled";
-	public static final String XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED = Activator.PLUGIN_ID
-			+ ".validation.namespaces.enabled";
-	public static final String XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED = Activator.PLUGIN_ID
-			+ ".validation.schema.enabled";
-	public static final String XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL = Activator.PLUGIN_ID
-			+ ".validation.disallowDocTypeDecl";
-	public static final String XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES = Activator.PLUGIN_ID
-			+ ".validation.resolveExternalEntities";
-	public static final String XML_PREFERENCES_VALIDATION_NO_GRAMMAR = Activator.PLUGIN_ID + ".validation.noGrammar";
+	public static class LemminxPreference {
+		public final String preferenceId;
+		/**
+		 * without the "xml" prefix
+		 * @see https://github.com/redhat-developer/vscode-xml#supported-vs-code-settings
+		 */
+		public final String lemminxOptionPath;
 
-	public static boolean isXMLProperty(PropertyChangeEvent event) {
-		String property = event.getProperty();
-		return XML_PREFERENCES_CATAGLOGS.equals(property) || XML_PREFERENCES_VALIDATION_ENABLED.equals(property)
-				|| XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.equals(property)
-				|| XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.equals(property)
-				|| XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.equals(property)
-				|| XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.equals(property)
-				|| XML_PREFERENCES_VALIDATION_NO_GRAMMAR.equals(property);
+		public LemminxPreference(String preferenceId, String lemminxOptionPath) {
+			this.preferenceId = preferenceId;
+			this.lemminxOptionPath = lemminxOptionPath;
+		}
+
+		public void storeToLemminxOptions(Object value, Map<String, Object> options) {
+			Map<String, Object> result = options;
+			String[] paths = this.lemminxOptionPath.split("/");
+			String path = null;
+			for (int i = 0; i < paths.length - 1; i++) {
+				path = paths[i];
+				if (result.containsKey(path)) {
+					result = (Map<String, Object>) result.get(path);
+				} else {
+					Map<String, Object> item = new HashMap<>();
+					result.put(path, item);
+					result = item;
+				}
+			}
+			path = paths[paths.length - 1];
+			result.put(path, value);
+		}
+	}
+
+	public static final LemminxPreference XML_PREFERENCES_CATAGLOGS = new LemminxPreference(Activator.PLUGIN_ID + ".catalogs", "catalogs");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".validation.enabled", "validation/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".validation.namespaces.enabled", "validation/namespaces/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".validation.schema.enabled", "validation/schema/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL = new LemminxPreference(Activator.PLUGIN_ID + ".validation.disallowDocTypeDecl", "validation/disallowDocTypeDecl");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES = new LemminxPreference(Activator.PLUGIN_ID + ".validation.resolveExternalEntities", "validation/resolveExternalEntities");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NO_GRAMMAR = new LemminxPreference(Activator.PLUGIN_ID + ".validation.noGrammar", "validation/noGrammar");
+
+	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = {
+			XML_PREFERENCES_CATAGLOGS, 
+			XML_PREFERENCES_VALIDATION_ENABLED,
+			XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED,
+			XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED,
+			XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL,
+			XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES,
+			XML_PREFERENCES_VALIDATION_NO_GRAMMAR
+	};
+			
+	public static Optional<LemminxPreference> getLemminxPreference(PropertyChangeEvent event) {
+		return Arrays.stream(ALL_LEMMINX_PREFERENCES).filter(pref -> Objects.equals(pref.preferenceId, event.getProperty())).findAny();
 	}
 
 	private XMLPreferenceConstants() {
 
+	}
+
+	public static void storePreferencesToLemminxOptions(IPreferenceStore store, Map<String, Object> xmlOpts) {
+		XML_PREFERENCES_CATAGLOGS.storeToLemminxOptions(
+				XMLPreferenceInitializer.getCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
+				xmlOpts);
+		XML_PREFERENCES_VALIDATION_ENABLED.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId), xmlOpts);
+		XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId), xmlOpts);
+		XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId),
+				xmlOpts);
+		XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.storeToLemminxOptions(
+				store.getBoolean(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId), xmlOpts);
+		XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.storeToLemminxOptions(
+				store.getBoolean(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId), xmlOpts);
+		XML_PREFERENCES_VALIDATION_NO_GRAMMAR.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId),
+				xmlOpts);
 	}
 }

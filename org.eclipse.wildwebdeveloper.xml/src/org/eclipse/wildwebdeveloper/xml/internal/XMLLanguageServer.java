@@ -13,15 +13,6 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal;
 
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_ENABLED;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_NO_GRAMMAR;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED;
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.isXMLProperty;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -49,7 +40,7 @@ import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceInitializer;
+import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -65,7 +56,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final IPropertyChangeListener psListener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (isXMLProperty(event)) {
+			XMLPreferenceConstants.getLemminxPreference(event).ifPresent(pref -> {
 				Map<String, Object> config = mergeCustomInitializationOptions(
 						extensionJarRegistry.getInitiatizationOptions());
 
@@ -76,7 +67,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 						.filter(server -> lemminxDefinition
 								.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
 						.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
-			}
+			});
 		}
 
 	};
@@ -174,40 +165,8 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
 		Map<String, Object> xmlOpts = new HashMap<>(defaults);
-		register(XML_PREFERENCES_CATAGLOGS,
-				XMLPreferenceInitializer.getCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
-				xmlOpts);
-		register(XML_PREFERENCES_VALIDATION_ENABLED, store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED), xmlOpts);
-		register(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED,
-				store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED), xmlOpts);
-		register(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, store.getString(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED),
-				xmlOpts);
-		register(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL,
-				store.getBoolean(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL), xmlOpts);
-		register(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES,
-				store.getBoolean(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES), xmlOpts);
-		register(XML_PREFERENCES_VALIDATION_NO_GRAMMAR, store.getString(XML_PREFERENCES_VALIDATION_NO_GRAMMAR),
-				xmlOpts);
+		XMLPreferenceConstants.storePreferencesToLemminxOptions(store, xmlOpts);
 		return Map.of(SETTINGS_KEY, Map.of(XML_KEY, xmlOpts));
-	}
-
-	private static void register(String name, Object value, Map<String, Object> root) {
-		name = name.substring(Activator.PLUGIN_ID.length() + 1);
-		Map<String, Object> result = root;
-		String[] paths = name.split("[.]");
-		String path = null;
-		for (int i = 0; i < paths.length - 1; i++) {
-			path = paths[i];
-			if (result.containsKey(path)) {
-				result = (Map<String, Object>) result.get(path);
-			} else {
-				Map<String, Object> item = new HashMap<>();
-				result.put(path, item);
-				result = item;
-			}
-		}
-		path = paths[paths.length - 1];
-		result.put(path, value);
 	}
 
 	@Override
