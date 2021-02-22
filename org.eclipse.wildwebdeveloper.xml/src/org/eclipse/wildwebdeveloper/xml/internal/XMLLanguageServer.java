@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.lsp4e.LanguageServersRegistry;
 import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
@@ -53,23 +52,19 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 	private static final LanguageServerDefinition lemminxDefinition = LanguageServersRegistry.getInstance()
 			.getDefinition("org.eclipse.wildwebdeveloper.xml");
-	private static final IPropertyChangeListener psListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			XMLPreferenceConstants.getLemminxPreference(event).ifPresent(pref -> {
-				Map<String, Object> config = mergeCustomInitializationOptions(
-						extensionJarRegistry.getInitiatizationOptions());
+	private static final IPropertyChangeListener psListener = event -> {
+		XMLPreferenceConstants.getLemminxPreference(event).ifPresent(pref -> {
+			Map<String, Object> config = mergeCustomInitializationOptions(
+					extensionJarRegistry.getInitiatizationOptions());
 
-				@SuppressWarnings("rawtypes")
-				DidChangeConfigurationParams params = new DidChangeConfigurationParams(
-						Collections.singletonMap(XML_KEY, ((Map) config.get(SETTINGS_KEY)).get(XML_KEY)));
-				LanguageServiceAccessor.getActiveLanguageServers(null).stream()
-						.filter(server -> lemminxDefinition
-								.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
-						.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
-			});
-		}
-
+			@SuppressWarnings("rawtypes")
+			DidChangeConfigurationParams params = new DidChangeConfigurationParams(
+					Collections.singletonMap(XML_KEY, ((Map) config.get(SETTINGS_KEY)).get(XML_KEY)));
+			LanguageServiceAccessor.getActiveLanguageServers(null).stream()
+					.filter(server -> lemminxDefinition
+							.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
+					.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
+		});
 	};
 
 	public XMLLanguageServer() {
@@ -167,25 +162,6 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		Map<String, Object> xmlOpts = new HashMap<>(defaults);
 		XMLPreferenceConstants.storePreferencesToLemminxOptions(store, xmlOpts);
 		return Map.of(SETTINGS_KEY, Map.of(XML_KEY, xmlOpts));
-	}
-
-	private static void register(String name, Object value, Map<String, Object> root) {
-		name = name.substring(Activator.PLUGIN_ID.length() + 1);
-		Map<String, Object> result = root;
-		String[] paths = name.split("[.]");
-		String path = null;
-		for (int i = 0; i < paths.length - 1; i++) {
-			path = paths[i];
-			if (result.containsKey(path)) {
-				result = (Map<String, Object>) result.get(path);
-			} else {
-				Map<String, Object> item = new HashMap<>();
-				result.put(path, item);
-				result = item;
-			}
-		}
-		path = paths[paths.length - 1];
-		result.put(path, value);
 	}
 
 	@Override
