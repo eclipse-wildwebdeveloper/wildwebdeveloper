@@ -12,6 +12,7 @@
 package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CODELENS_ENABLED;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_ENABLED;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED;
@@ -29,6 +30,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
+		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId, "onNamespaceEncountered");
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId, "onValidSchema");
