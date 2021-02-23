@@ -26,6 +26,10 @@ public class Messages extends NLS {
 	public static String XMLCatalogPreferencePage_OpenInEditorApplyAndEdit;
 	public static String XMLCatalogPreferencePage_OpenInEditorNo;
 
+	// --------- XML CodeLens preference page
+
+	public static String XMLCodelensPreferencePage_codelens_enabled;
+
 	// --------- XML Validation preference page
 
 	public static String XMLValidationPreferencePage_validation_enabled;
@@ -36,7 +40,7 @@ public class Messages extends NLS {
 	public static String XMLValidationPreferencePage_validation_noGrammar;
 
 	// --------- Buttons
-	
+
 	public static String PreferencePage_Add;
 	public static String PreferencePage_Remove;
 

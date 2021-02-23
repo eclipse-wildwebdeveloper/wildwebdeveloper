@@ -58,6 +58,7 @@ public class XMLPreferenceConstants {
 	}
 
 	public static final LemminxPreference XML_PREFERENCES_CATAGLOGS = new LemminxPreference(Activator.PLUGIN_ID + ".catalogs", "catalogs");
+	public static final LemminxPreference XML_PREFERENCES_CODELENS_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".codeLens.enabled", "codeLens/enabled");
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".validation.enabled", "validation/enabled");
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".validation.namespaces.enabled", "validation/namespaces/enabled");
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED = new LemminxPreference(Activator.PLUGIN_ID + ".validation.schema.enabled", "validation/schema/enabled");
@@ -66,7 +67,8 @@ public class XMLPreferenceConstants {
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NO_GRAMMAR = new LemminxPreference(Activator.PLUGIN_ID + ".validation.noGrammar", "validation/noGrammar");
 
 	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = {
-			XML_PREFERENCES_CATAGLOGS, 
+			XML_PREFERENCES_CATAGLOGS,
+			XML_PREFERENCES_CODELENS_ENABLED,
 			XML_PREFERENCES_VALIDATION_ENABLED,
 			XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED,
 			XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED,
@@ -87,6 +89,7 @@ public class XMLPreferenceConstants {
 		XML_PREFERENCES_CATAGLOGS.storeToLemminxOptions(
 				XMLPreferenceInitializer.getCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
 				xmlOpts);
+		XML_PREFERENCES_CODELENS_ENABLED.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_CODELENS_ENABLED.preferenceId), xmlOpts);
 		XML_PREFERENCES_VALIDATION_ENABLED.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId), xmlOpts);
 		XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId), xmlOpts);
 		XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId),

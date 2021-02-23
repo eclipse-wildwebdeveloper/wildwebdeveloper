@@ -133,20 +133,27 @@
          <page
             class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
             id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
-            name="%XMLPreferencesPage.name">
+            name="%XMLPreferencePage.name">
          </page>
          <page
             category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
             class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage"
             id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage"
-            name="%XMLCatalogPreferencesPage.name">
+            name="%XMLCatalogPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlcatalogs"/>
          </page>
          <page
             category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
+            class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCodeLensPreferencePage"
+            id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCodeLensPreferencePage"
+            name="%XMLCodeLensPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlcodelens"/>
+         </page>         
+         <page
+            category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
             class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLValidationPreferencePage"
             id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLValidationPreferencePage"
-            name="%XMLValidationPreferencesPage.name">
+            name="%XMLValidationPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlvalidation"/>
          </page>
 	</extension>
@@ -156,6 +163,9 @@
 		<keyword
 			label="%XMLCatalogPreferencesPage.preferenceKeywords.xmlcatalog"
 			id="org.eclipse.wildwebdeveloper.xml.ui.xmlcatalogs"/>
+		<keyword
+			label="%XMLCodeLensPreferencesPage.preferenceKeywords.xmlcodelens"
+			id="org.eclipse.wildwebdeveloper.xml.ui.xmlcodelens"/>			
 		<keyword
 			label="%XMLValidationPreferencesPage.preferenceKeywords.xmlvalidation"
 			id="org.eclipse.wildwebdeveloper.xml.ui.xmlvalidation"/>			
