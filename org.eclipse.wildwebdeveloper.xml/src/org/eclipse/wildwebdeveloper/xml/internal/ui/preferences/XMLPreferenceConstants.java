@@ -85,7 +85,7 @@ public class XMLPreferenceConstants {
 
 	public static void storePreferencesToLemminxOptions(IPreferenceStore store, Map<String, Object> xmlOpts) {
 		XML_PREFERENCES_CATAGLOGS.storeToLemminxOptions(
-				XMLPreferenceInitializer.getCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
+				XMLCatalogs.getAllCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
 				xmlOpts);
 		XML_PREFERENCES_VALIDATION_ENABLED.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId), xmlOpts);
 		XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId), xmlOpts);

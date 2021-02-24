@@ -19,28 +19,12 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED;
 
-import java.io.File;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
 public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	private static final IPreferenceStore STORE = Activator.getDefault().getPreferenceStore();
-
-	private static final Comparator<File> FILE_CASE_INSENSITIVE_ORDER = new FileComparator();
-
-	private static class FileComparator implements Comparator<File> {
-
-		@Override
-		public int compare(File n1, File n2) {
-			return String.CASE_INSENSITIVE_ORDER.compare(n1.getAbsolutePath(), n2.getAbsolutePath());
-		}
-
-	}
 
 	@Override
 	public void initializeDefaultPreferences() {
@@ -53,32 +37,4 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId, "hint");
 	}
 
-	public static Set<File> getCatalogs(IPreferenceStore store) {
-		Set<File> catalogs = new TreeSet<File>(FILE_CASE_INSENSITIVE_ORDER);
-
-		for (String filepath : store.getString(XML_PREFERENCES_CATAGLOGS.preferenceId).split(",")) {
-			if (!filepath.isEmpty()) {
-				catalogs.add(new File(filepath));
-			}
-		}
-		return catalogs;
-	}
-
-	public static boolean isValidationEnabled(IPreferenceStore store) {
-		return store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId);
-	}
-
-	public static String getValidationNamespacesEnabled(IPreferenceStore store) {
-		return store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId);
-	}
-
-	public static void storeCatalogs(IPreferenceStore store, Set<File> catalogs) {
-		StringBuilder catalogsStr = new StringBuilder();
-		if (!catalogs.isEmpty()) {
-			for (File f : catalogs) {
-				catalogsStr.append(f.getAbsolutePath()).append(',');
-			}
-		}
-		store.setValue(XML_PREFERENCES_CATAGLOGS.preferenceId, catalogsStr.toString());
-	}
 }

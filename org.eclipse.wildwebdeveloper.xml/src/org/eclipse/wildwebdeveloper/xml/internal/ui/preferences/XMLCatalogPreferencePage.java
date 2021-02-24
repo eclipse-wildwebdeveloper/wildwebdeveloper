@@ -24,11 +24,9 @@ import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -84,7 +82,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		viewer.setContentProvider(new EntriesContentProvider());
 		viewer.setLabelProvider(new EntriesLabelProvider());
 		
-		entries = XMLPreferenceInitializer.getCatalogs(getPreferenceStore());
+		entries = XMLCatalogs.getAllCatalogs(getPreferenceStore());
 
 		viewer.setInput(entries);
 		viewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -157,18 +155,16 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 			}
 		}));
 		
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event) {
-				removeButton.setEnabled(!event.getSelection().isEmpty());
-				editButton.setEnabled(!event.getSelection().isEmpty());
-				selectedEntry = null;
-				ISelection selection = event.getSelection();
-				if (selection instanceof ITreeSelection) {
-					ITreeSelection treeSelection = (ITreeSelection) selection;
-					Object object = treeSelection.getFirstElement();
-					if (object instanceof File) {
-						selectedEntry = (File) object;
-					}
+		viewer.addSelectionChangedListener(event -> {
+			removeButton.setEnabled(!event.getSelection().isEmpty());
+			editButton.setEnabled(!event.getSelection().isEmpty());
+			selectedEntry = null;
+			ISelection selection = event.getSelection();
+			if (selection instanceof ITreeSelection) {
+				ITreeSelection treeSelection = (ITreeSelection) selection;
+				Object object = treeSelection.getFirstElement();
+				if (object instanceof File) {
+					selectedEntry = (File) object;
 				}
 			}
 		});
@@ -178,7 +174,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 
 	@Override
 	public boolean performOk() {
-		XMLPreferenceInitializer.storeCatalogs(getPreferenceStore(), entries);
+		XMLCatalogs.storeUserCatalogs(getPreferenceStore(), entries);
 		isDirty = false;
 		return super.performOk();
 	}
@@ -192,6 +188,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 	}
 	
 	class EntriesContentProvider implements ITreeContentProvider {
+		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof Set) {
 				return ((Set) parentElement).toArray();
@@ -199,21 +196,26 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 			return new Object[0];
 		}
 
+		@Override
 		public Object getParent(Object element) {
 			return null;
 		}
 
+		@Override
 		public boolean hasChildren(Object element) {
 			return element instanceof Set;
 		}
 
+		@Override
 		public Object[] getElements(Object inputElement) {
 			return getChildren(inputElement);
 		}
 
+		@Override
 		public void dispose() {
 		}
 
+		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 	}
