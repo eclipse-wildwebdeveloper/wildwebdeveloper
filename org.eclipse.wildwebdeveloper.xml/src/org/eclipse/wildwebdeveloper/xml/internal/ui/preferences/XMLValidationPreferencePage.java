@@ -19,11 +19,15 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 import org.eclipse.wildwebdeveloper.xml.internal.ui.Messages;
 
@@ -43,12 +47,12 @@ public class XMLValidationPreferencePage extends FieldEditorPreferencePage imple
 				Messages.XMLValidationPreferencePage_validation_enabled, getFieldEditorParent()));
 		addField(new ComboFieldEditor(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_namespaces_enabled,
-				new String[][] { { "Always", "always" }, { "Never", "never" },
+				new String[][] { { Action.removeMnemonics(IDEWorkbenchMessages.Always), "always" }, { Action.removeMnemonics(IDEWorkbenchMessages.Never), "never" },
 						{ "On namespace encountered", "onNamespaceEncountered" } },
 				getFieldEditorParent()));
 		addField(new ComboFieldEditor(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_schema_enabled,
-				new String[][] { { "Always", "always" }, { "Never", "never" }, { "In valid schema", "onValidSchema" } },
+				new String[][] { { Action.removeMnemonics(IDEWorkbenchMessages.Always), "always" }, { Action.removeMnemonics(IDEWorkbenchMessages.Never), "never" }, { "In valid schema", "onValidSchema" } },
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_disallowDocTypeDecl, getFieldEditorParent()));
@@ -56,8 +60,8 @@ public class XMLValidationPreferencePage extends FieldEditorPreferencePage imple
 				Messages.XMLValidationPreferencePage_validation_resolveExternalEntities, getFieldEditorParent()));
 		addField(new ComboFieldEditor(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_noGrammar,
-				new String[][] { { "Ignore", "ignore" }, { "Hint", "hint" }, { "Info", "info" },
-						{ "Warning", "warning" }, { "Error", "error" } },
+				new String[][] { { Action.removeMnemonics(IDialogConstants.IGNORE_LABEL), "ignore" }, { "Hint", "hint" }, { JFaceResources.getString("info"), "info" },
+						{ JFaceResources.getString("warning"), "warning" }, { JFaceResources.getString("error"), "error" } },
 				getFieldEditorParent()));
 	}
 

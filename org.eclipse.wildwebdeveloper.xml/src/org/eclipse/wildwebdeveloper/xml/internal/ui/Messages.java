@@ -24,7 +24,6 @@ public class Messages extends NLS {
 	public static String XMLCatalogPreferencePage_OpenInEditorTitle;
 	public static String XMLCatalogPreferencePage_OpenInEditorMessage;
 	public static String XMLCatalogPreferencePage_OpenInEditorApplyAndEdit;
-	public static String XMLCatalogPreferencePage_OpenInEditorNo;
 
 	// --------- XML CodeLens preference page
 

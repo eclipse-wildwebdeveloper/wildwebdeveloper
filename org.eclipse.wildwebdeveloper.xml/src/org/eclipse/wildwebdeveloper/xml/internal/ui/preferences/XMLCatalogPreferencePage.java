@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ISelection;
@@ -52,7 +53,6 @@ import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 import org.eclipse.wildwebdeveloper.xml.internal.ui.Messages;
 
 public class XMLCatalogPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
-	private TreeViewer viewer;
 	private Set<File> entries;
 	private File selectedEntry;
 	private boolean isDirty;
@@ -78,7 +78,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		entriesGroup.setLayout(gl);
 		entriesGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		viewer = new TreeViewer(entriesGroup, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		TreeViewer viewer = new TreeViewer(entriesGroup, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		viewer.setContentProvider(new EntriesContentProvider());
 		viewer.setLabelProvider(new EntriesLabelProvider());
 		
@@ -129,14 +129,14 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 						Messages.XMLCatalogPreferencePage_OpenInEditorTitle, 
 						null, 
 						Messages.XMLCatalogPreferencePage_OpenInEditorMessage, 
-						MessageDialog.QUESTION,
+						MessageDialog.CONFIRM,
 						1,
 						Messages.XMLCatalogPreferencePage_OpenInEditorApplyAndEdit,
-						Messages.XMLCatalogPreferencePage_OpenInEditorNo
+						IDialogConstants.NO_LABEL
 						);
 
-				int result = (isDirty ? dialog.open() : MessageDialog.OK);
-				if (result == MessageDialog.OK) {
+				int result = (isDirty ? dialog.open() : IDialogConstants.OK_ID);
+				if (result == IDialogConstants.OK_ID) {
 					XMLCatalogPreferencePage.this.performOk();
 					if (getContainer() instanceof Window) {
 						((Window)getContainer()).close();
