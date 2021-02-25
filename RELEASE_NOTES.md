@@ -6,12 +6,28 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 0.11.5
 
-* 📅 Release Date (tentative): Mid-February, 2021
+* 📅 Release Date (tentative): 25th February, 2021
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.4...0.11.5
 
 #### Added IDE packages
 
 IDE packages tailored for usage of Wild Web Developer are now built and published with Wild Web Developer.
+
+#### Use newer LemMinX 0.15
+
+Wild Web Developer uses LemMinX 0.15 now (so extensions built for LemMinX 0.14 and lower and contributed via Wild Web Developer may not work any more).
+
+#### Added support for opening doc on ESLint warnings
+
+Contextual actions show on ESLint error that consist in opening documentation are now correctly handled.
+
+#### XML Preference pages
+
+New XML Preference page allow to configure CodeLens, Validation/Resolution
+
+#### WTP defined catalog extensions now included
+
+The catalog extensions defined using WTP XML catalogs extension point are now used to populate the sustem catalog.
 
 ## 0.11.4
 
