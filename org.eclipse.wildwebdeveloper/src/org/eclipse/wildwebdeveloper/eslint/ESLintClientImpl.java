@@ -24,6 +24,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.LanguageClientImpl;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
+import org.eclipse.lsp4j.MessageParams;
+import org.eclipse.lsp4j.MessageType;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -85,17 +87,24 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompletableFuture<Void> openDoc(Object o) {
-		if (o instanceof Map && ((Map<?, ?>) o).containsKey("url")) {
+	public CompletableFuture<Void> openDoc(Map<String,String> data) {
+		if (data.containsKey("url")) {
 			Display.getDefault().asyncExec(() -> {
 				IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
 				try {
-					browserSupport.createBrowser("openDoc").openURL(new URL(((Map<String, String>) o).get("url")));
+					browserSupport.createBrowser("openDoc").openURL(new URL(data.get("url")));
 				} catch (Exception e) {
 					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 				}
 			});
 		}
+		return CompletableFuture.completedFuture(null);
+	}
+	
+	@Override
+	public CompletableFuture<Void> noLibrary(Map<String,Map<String,String>> data) {
+		MessageParams params = new MessageParams(MessageType.Info, "No ES Libary found for file: " + data.get("source").get("uri"));
+		logMessage(params);
 		return CompletableFuture.completedFuture(null);
 	}
 }

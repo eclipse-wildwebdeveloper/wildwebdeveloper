@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.eslint;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
@@ -22,5 +23,8 @@ public interface ESLintLanguageServerExtension {
 	public CompletableFuture<Void> eslintStatus(Object o);
 	
 	@JsonRequest(value = "eslint/openDoc")
-	public CompletableFuture<Void> openDoc(Object o);
+	public CompletableFuture<Void> openDoc(Map<String,String> data);
+	
+	@JsonRequest(value = "eslint/noLibrary")
+	public CompletableFuture<Void> noLibrary(Map<String,Map<String,String>> data);
 }
