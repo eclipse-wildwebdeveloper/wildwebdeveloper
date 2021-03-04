@@ -471,7 +471,11 @@
 
    <!-- Angular -->
    <extension point="org.eclipse.lsp4e.languageServer">
-     <server id="org.eclipse.wildwebdeveloper.angular" class="org.eclipse.wildwebdeveloper.angular.AngularLanguageServer" label="Angular Language Server"/>
+     <server
+           class="org.eclipse.wildwebdeveloper.angular.AngularLanguageServer"
+           clientImpl="org.eclipse.wildwebdeveloper.angular.AngularClientImpl"
+           id="org.eclipse.wildwebdeveloper.angular"
+           label="Angular Language Server"/>
      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.ts" id="org.eclipse.wildwebdeveloper.angular"/>
      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.html" id="org.eclipse.wildwebdeveloper.angular"/>
    </extension>
