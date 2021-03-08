@@ -63,8 +63,7 @@ public class NodeJSManager {
 		Properties properties = getNodeJsInfoProperties();
 		if (properties != null) {
 			try {
-				IPath stateLocationPath = InternalPlatform.getDefault()
-						.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
+				IPath stateLocationPath = Platform.getStateLocation(Activator.getDefault().getBundle());
 				if (stateLocationPath != null) {
 					File installationPath = stateLocationPath.toFile();
 					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
