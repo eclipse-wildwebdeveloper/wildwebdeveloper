@@ -4,9 +4,27 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.11.7
+
+* 📅 Release Date: Mid-May, 2021
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.6...0.11.7
+
+## 0.11.6
+
+* 📅 Release Date: March 29th, 2021
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.5...0.11.6
+
+#### Updated Eclipse target platform and Language Servers
+
+Use Eclipse Platform 4.19/2021-03 and Language Servers for VSCode 1.54 and newer Yaml Language Server. See respective release notes to learn more.
+
+#### Log message for specific Angular and ESLint LS operations
+
+Also not all language-server specific operations are supported, most of them are now logged for easier troubleshooting.
+
 ## 0.11.5
 
-* 📅 Release Date (tentative): 25th February, 2021
+* 📅 Release Date: March 3rd, 2021
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.4...0.11.5
 
 #### Added IDE packages
