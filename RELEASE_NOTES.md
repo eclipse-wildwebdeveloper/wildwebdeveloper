@@ -41,11 +41,11 @@ Contextual actions show on ESLint error that consist in opening documentation ar
 
 #### XML Preference pages
 
-New XML Preference page allow to configure CodeLens, Validation/Resolution
+New XML Preference pages allow to configure CodeLens, Validation/Resolution.
 
 #### WTP defined catalog extensions now included
 
-The catalog extensions defined using WTP XML catalogs extension point are now used to populate the sustem catalog.
+The catalog extensions defined using WTP XML catalogs extension point are now used to populate the system catalog.
 
 ## 0.11.4
 
