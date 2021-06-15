@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Eclipse IDE for JavaScript and Web Developers" uid="org.eclipse.wildwebdeveloper.product" id="org.eclipse.wildwebdeveloper.product.branding.product" application="org.eclipse.ui.ide.workbench" version="0.11.7.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Eclipse IDE for JavaScript and Web Developers" uid="org.eclipse.wildwebdeveloper.product" id="org.eclipse.wildwebdeveloper.product.branding.product" application="org.eclipse.ui.ide.workbench" version="0.12.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.wildwebdeveloper.product.branding.product/eclipse_lg.png"/>
@@ -204,8 +204,7 @@ United States, other countries, or both.
       <feature id="org.eclipse.epp.package.common.feature"/>
       <feature id="org.eclipse.platform"/>
       <feature id="org.eclipse.epp.mpc" installMode="root"/>
-      <feature id="org.eclipse.justj.openjdk.hotspot.jre.full" installMode="root"/> 
-      
+      <feature id="org.eclipse.justj.openjdk.hotspot.jre.full" installMode="root"/>
       <feature id="org.eclipse.egit" installMode="root"/>
       <feature id="org.eclipse.egit.gitflow.feature" installMode="root"/>
       <feature id="org.eclipse.epp.package.common.feature" installMode="root"/>
@@ -219,5 +218,6 @@ United States, other countries, or both.
       <feature id="org.eclipse.tm.terminal.feature" installMode="root"/>
       <feature id="org.eclipse.rse" installMode="root"/>
    </features>
+
 
 </product>

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.wildwebdeveloper.xml.feature"
       label="%name"
-      version="0.10.4.qualifier"
+      version="0.12.0.qualifier"
       provider-name="Eclipse Wild Web Developer project"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
