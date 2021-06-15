@@ -7,7 +7,7 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.11.0-SNAPSHOT</version>
+	<version>0.12.0-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -40,7 +40,7 @@
 									<groupId>org.eclipse.lemminx</groupId>
 									<artifactId>org.eclipse.lemminx</artifactId>
 									<!-- Bumping to version with API breakage needs to bump bundle version at least by +0.1.0 -->
-									<version>0.15.0</version>
+									<version>0.16.2</version>
 									<!-- classifier:uber includes all dependencies -->
 									<classifier>uber</classifier>
 								</artifactItem>
