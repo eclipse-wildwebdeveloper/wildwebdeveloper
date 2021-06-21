@@ -58,9 +58,20 @@
    <plugin
          id="org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64"
          os="macosx"
+         arch="x86_64"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
+
+   <plugin
+         id="org.eclipse.wildwebdeveloper.embedder.node.macos.aarch64"
+         os="macosx"
+         arch="aarch64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
 
 </feature>
