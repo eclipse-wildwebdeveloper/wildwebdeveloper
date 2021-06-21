@@ -2,12 +2,19 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+
 ### Next release...
 
-## 0.11.7
+## 0.12.0
 
-* 📅 Release Date: Mid-May, 2021
-* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.6...0.11.7
+* 📅 Release Date: June 21st, 2021
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.11.6...0.12.0
+
+#### Use LemMinX 0.16
+
+XML support was updated to use LemMinX 0.16.2 (was 0.15.0). As a consequence, plugins providing extension for Wild Web Developer XML support should consider moving their requirements to LemMinX 0.16 and `org.eclipse.wildwebdeveloper.xml` 0.12.0.
+
+### Previous releases...
 
 ## 0.11.6
 
