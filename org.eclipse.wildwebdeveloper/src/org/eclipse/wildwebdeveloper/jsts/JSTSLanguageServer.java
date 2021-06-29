@@ -55,7 +55,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 		Map<String, Object> options = new HashMap<>();
 		List<TypeScriptPlugin> plugins = new ArrayList<>();
 		try {
-			plugins.add(new TypeScriptPlugin("@angular/language-service"));
+//			plugins.add(new TypeScriptPlugin("@angular/language-service"));
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
