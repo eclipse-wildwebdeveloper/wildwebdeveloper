@@ -51,7 +51,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://marketplace.visualstudio.com/_apis/public/gallery/publishers/msjsdiag/vsextensions/debugger-for-chrome/4.12.12/vspackage</url>
+                            <url>https://msjsdiag.gallery.vsassets.io/_apis/public/gallery/publisher/msjsdiag/extension/debugger-for-chrome/4.12.12/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
 							<outputFileName>chromeDebugAdapter.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
@@ -64,7 +64,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://marketplace.visualstudio.com/_apis/public/gallery/publishers/dbaeumer/vsextensions/vscode-eslint/2.1.14/vspackage</url>
+                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.1.14/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
 							<outputFileName>vscode-eslint-ls.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls</outputDirectory>
