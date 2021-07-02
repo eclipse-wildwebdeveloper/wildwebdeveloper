@@ -134,13 +134,14 @@ public class TestJsTs {
 				protected boolean condition() {
 					return renameDialogOkPressed.get();
 				}
-			}.waitForCondition(display, 1000), "Rename dialog not shown");
+			}.waitForCondition(display, 2000), "Rename dialog not shown");
+
 			assertTrue(new DisplayHelper() {
 				@Override
 				protected boolean condition() {
 					return newContent.equals(document.get());
 				}
-			}.waitForCondition(display, 1000), "document not modified, rename not applied");
+			}.waitForCondition(display, 5000), "document not modified, rename not applied");
 		} finally {
 			ideShell.getDisplay().removeFilter(SWT.Paint, pressOKonRenameDialogPaint);
 		}
