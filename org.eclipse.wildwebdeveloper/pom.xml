@@ -151,11 +151,24 @@
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.3.4.tgz</arg>
-								<arg>yaml-language-server@0.22.0</arg>
+								<!-- 
+									A try to update yaml-language-server to any version up to v.0.22.0
+									breaks the validation (error markers aren't set on resources): 
+									Failures: 
+										TestYaml.testSchemaExtensionPoint:91->testErrorFile:85 expected: <true> but was: <false>
+										TestYaml.testSchemaExtensionPointUsingPlatformURL:96->testErrorFile:85 expected: <true> but was: <false>
+								-->
+								<arg>yaml-language-server@0.19.2</arg>
 								<arg>firefox-debugadapter@2.9.4</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.12.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.14.tgz</arg>
-								<arg>@angular/language-server@12.2.0</arg>
+								<!-- 
+									A try to update @angular/language-server to any version up to v.12.2.0
+									breaks the receiving of diagnostics: 
+									Failures: 
+  										TestAngular.testAngular:56 Diagnostic not published in standalone component file ==> expected: <true> but was: <false>
+								-->
+								<arg>@angular/language-server@11.2.14</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
