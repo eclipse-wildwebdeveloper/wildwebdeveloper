@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.commands.Command;
@@ -49,6 +51,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(AllCleanRule.class)
 public class TestJsTs {
+	private static final String WIZARD_CLASSNAME_TEMPLATE = "org.eclipse.ltk.internal.ui.refactoring.Refactoring";
+	private static final String WIZARD_RENAME = "Rename";
+	private static final String WIZARD_REFACTORING = "Refactoring";
+	private static final String BUTTON_OK = "OK";
+	private static final String BUTTON_CANCEL = "Cancel";
+	private static final String BUTTON_CONTINUE = "Con&tinue";
+	private static final String BUTTON_BACK = "< &Back";
+
 	private IProject project;
 
 	@BeforeEach
@@ -76,8 +86,9 @@ public class TestJsTs {
 				"org.eclipse.ui.genericeditor.GenericEditor");
 		editor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
 		editor.setFocus();
-		DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a
+		DisplayHelper.sleep(5000); // Give time for LS to initialize enough before making edit and sending a
 									// didChange
+
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 
 		ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
@@ -97,26 +108,27 @@ public class TestJsTs {
 			if (event.widget instanceof Composite) {
 				Composite c = (Composite) event.widget;
 				Shell shell = c.getShell();
-				if (shell != ideShell) {
-					if ("Rename".equals(shell.getText())) {
+				if (shell != ideShell && shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
+					Set<String> buttons = getButtons(c);
+					if (WIZARD_RENAME.equals(shell.getText())) {
 						if (!renameDialogOkPressed.get()) {
-							if (hasButton(c, "OK")) {
+							if (buttons.contains(BUTTON_OK)) {
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								renameDialogOkPressed.set(true);
 							}
 						} else if (!renameDialogContinuePressed.get()) {
-							if (hasButton(c, "Con&tinue")) {
+							if (buttons.contains(BUTTON_CONTINUE)) {
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								renameDialogContinuePressed.set(true);
-							} else if (!renameDialogCancelPressed.get() && hasButton(c, "Cancel")
-									&& hasButton(c, "< &Back")) {
+							} else if (!renameDialogCancelPressed.get() && buttons.contains(BUTTON_CANCEL)
+									&& buttons.contains(BUTTON_BACK)) {
 								event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
 								renameDialogCancelPressed.set(true);
 							}
 						}
-					} else if ("Refactoring".equals(shell.getText())) {
+					} else if (WIZARD_REFACTORING.equals(shell.getText())) {
 						if (!errorDialogOkPressed.get()) {
-							if (hasButton(c, "OK")) {
+							if (buttons.contains(BUTTON_OK)) {
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								errorDialogOkPressed.set(true);
 							}
@@ -125,10 +137,12 @@ public class TestJsTs {
 				}
 			}
 		};
+
 		try {
 			display.addFilter(SWT.Paint, pressOKonRenameDialogPaint);
 			ExecutionEvent executionEvent = handlerService.createExecutionEvent(command, e);
 			command.executeWithChecks(executionEvent);
+
 			assertTrue(new DisplayHelper() {
 				@Override
 				protected boolean condition() {
@@ -147,22 +161,19 @@ public class TestJsTs {
 		}
 	}
 
-	private boolean hasButton(Widget w, String requiredText) {
+	static private Set<String> getButtons(Widget w) {
+		Set<String> result = new HashSet<>();
 		if (w instanceof Button) {
-			Button b = (Button) w;
-			return requiredText.equals(b.getText());
-		}
-		if (w instanceof Composite) {
+			result.add(((Button) w).getText());
+		} else if (w instanceof Composite) {
 			for (Control child : ((Composite) w).getChildren()) {
-				if (hasButton(child, requiredText)) {
-					return true;
-				}
+				result.addAll(getButtons(child));
 			}
 		}
-		return false;
+		return result;
 	}
 
-	private void pressOk(Shell dialogShell) {
+	static private void pressOk(Shell dialogShell) {
 		try {
 			Dialog dialog = (Dialog) dialogShell.getData();
 			Method okPressedMethod = Dialog.class.getDeclaredMethod("okPressed");
@@ -174,7 +185,7 @@ public class TestJsTs {
 		}
 	}
 
-	private void pressCancel(Shell dialogShell) {
+	static private void pressCancel(Shell dialogShell) {
 		try {
 			Dialog dialog = (Dialog) dialogShell.getData();
 			Method cancelPressedMethod = Dialog.class.getDeclaredMethod("cancelPressed");
