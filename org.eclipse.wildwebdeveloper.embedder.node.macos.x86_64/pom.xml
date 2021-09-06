@@ -7,10 +7,21 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.1.4-SNAPSHOT</version>
+	<version>0.1.5-SNAPSHOT</version>
 	
 	 <build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>resources</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
@@ -52,7 +63,7 @@
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
 					<jgit.ignore>
-						resources/*.tar.xz
+						resources/*.tar.gz
 					</jgit.ignore>
 				</configuration>
 			</plugin>
