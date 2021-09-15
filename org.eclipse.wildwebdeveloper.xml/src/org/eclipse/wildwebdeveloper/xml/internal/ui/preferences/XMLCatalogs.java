@@ -14,6 +14,7 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -61,11 +62,18 @@ public class XMLCatalogs {
 			.flatMap(element -> Arrays.stream(element.getChildren("system")))
 			.forEach(element -> {
 				String namespace = element.getAttribute("systemId");
-				String uri = element.getAttribute("uri");
-				if (!URI.create(uri).isAbsolute()) {
+				URI uri = URI.create(element.getAttribute("uri"));
+				if (!uri.isAbsolute()) {
 					try {
-						uri = FileLocator.toFileURL(FileLocator.find(Platform.getBundle(element.getContributor().getName()), Path.fromPortableString(uri.toString()))).toString();
-					} catch (InvalidRegistryObjectException | IOException e) {
+						uri = FileLocator.find(Platform.getBundle(element.getContributor().getName()), Path.fromPortableString(uri.toString())).toURI();
+					} catch (InvalidRegistryObjectException | URISyntaxException e) {
+						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+					}
+				}
+				if (!"file".equals(uri.getScheme())) { // are some other scheme supported directly by LemMinX ?
+					try {
+						uri = FileLocator.toFileURL(uri.toURL()).toURI();
+					} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
 						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 					}
 				}
