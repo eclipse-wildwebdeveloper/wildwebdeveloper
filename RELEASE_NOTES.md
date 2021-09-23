@@ -5,6 +5,35 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
+## 0.13.0
+
+## 0.13.0
+
+* 📅 Release Date: September 23rd, 2021
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.12.0...0.13.0
+
+#### Fix XML catalog in case of schemas provided by plugins
+
+The catalog now properly resolve schemas that were installed in WebTools from plugins. Under the hood, the `platform:/...` URIs are now resolved to `file:/...` URIs that the language server can understand.
+
+This should allow better integration with WebTools catalog, and the multiple schemas provided by plugins like Java/Jakarta EE support.
+
+#### IDE package for macos/aarch64
+
+You can now find in the download area an IDE package dedicated to macos with aarch64 (M1) processors. This should perform more efficiently than the macos/x86_64 package on newer machines.
+
+#### Use LemMinX 0.18.0
+
+XML support was updated to use LemMinX 0.18.0 (was 0.16.2). As a consequence, plugins providing extension for Wild Web Developer XML support should consider moving their requirements to LemMinX 0.18 and `org.eclipse.wildwebdeveloper.xml` 0.13.0.
+
+#### Other updates
+
+* Node is now in version 14.17.1
+* Most npm-based language servers were updated to their latest release
+
+
+### Previous releases...
+
 ## 0.12.0
 
 * 📅 Release Date: June 21st, 2021
@@ -13,8 +42,6 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Use LemMinX 0.16
 
 XML support was updated to use LemMinX 0.16.2 (was 0.15.0). As a consequence, plugins providing extension for Wild Web Developer XML support should consider moving their requirements to LemMinX 0.16 and `org.eclipse.wildwebdeveloper.xml` 0.12.0.
-
-### Previous releases...
 
 ## 0.11.6
 
