@@ -50,7 +50,7 @@ Get an Eclipse IDE for JavaScript and Web developers: download from [https://dow
 ### As extension into an existing Eclipse IDE installation
 
 * With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-web-development-eclipse-ide-experimental, choose one of:
-  * Click [here](https://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3394048) to install
+  * Click [here](https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirectToMarketplace.html?entryId=3394048) to install
   * *Help > Eclipse Marketplace*, search `Wild Web Developer` then click `Install` or
   * drag <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3394048" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a> into Eclipse IDE
 
