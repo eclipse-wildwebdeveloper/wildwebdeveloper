@@ -7,7 +7,7 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.17-SNAPSHOT</version>
+	<version>0.5.18-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -145,7 +145,7 @@
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.5.tgz</arg>
 								<arg>typescript@4.3.5</arg>
-								<arg>typescript-language-server@0.5.4</arg>
+								<arg>typescript-language-server@0.6.4</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@3.4.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
