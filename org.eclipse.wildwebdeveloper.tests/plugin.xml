@@ -9,7 +9,7 @@
       </schema>
       <schema
             pattern="depp.yml"
-            url="platform:/plugin/org.eclipse.wildwebdeveloper.tests/dependabot.json">
+            url="platform:/plugin/org.eclipse.wildwebdeveloper.tests/resources/dependabot.json">
       </schema>
    </extension>
 </plugin>

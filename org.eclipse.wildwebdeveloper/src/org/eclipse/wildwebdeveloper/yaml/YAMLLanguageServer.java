@@ -102,12 +102,13 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProvider {
 		}
 	}
 
-	private static Map<String, Object> getYamlConfigurationOptions() {
+	static Map<String, Object> getYamlConfigurationOptions() {
 		Map<String, Object> yaml = new HashMap<>();
 		yaml.put(SCHEMAS_KEY, getSchemaAssociations());
 		yaml.put(VALIDATE_KEY, true);
 		yaml.put(COMPLETION_KEY, true);
 		yaml.put(HOVER_KEY, true);
+		yaml.put("schemaStore.enable", true);
 		return yaml;
 	}
 
