@@ -485,6 +485,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.yaml.YAMLLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.yaml.YamlLanguageClientImpl"
             id="org.eclipse.wildwebdeveloper.yaml"
             label="YAML Language Server (VSCode)"
             singleton="true">
