@@ -144,7 +144,7 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.42.5.tgz</arg>
-								<arg>typescript@4.3.5</arg>
+								<arg>typescript@4.4.4</arg>
 								<arg>typescript-language-server@0.6.4</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@3.4.0</arg>
@@ -158,7 +158,7 @@
 										TestYaml.testSchemaExtensionPoint:91->testErrorFile:85 expected: <true> but was: <false>
 										TestYaml.testSchemaExtensionPointUsingPlatformURL:96->testErrorFile:85 expected: <true> but was: <false>
 								-->
-								<arg>yaml-language-server@0.19.2</arg>
+								<arg>yaml-language-server@1.1.0</arg>
 								<arg>firefox-debugadapter@2.9.4</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.12.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.14.tgz</arg>
@@ -168,7 +168,7 @@
 									Failures: 
   										TestAngular.testAngular:56 Diagnostic not published in standalone component file ==> expected: <true> but was: <false>
 								-->
-								<arg>@angular/language-server@11.2.14</arg>
+								<arg>@angular/language-server@12.2.2</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
