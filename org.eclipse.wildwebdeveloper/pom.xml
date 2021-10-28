@@ -155,12 +155,6 @@
 								<arg>firefox-debugadapter@2.9.4</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.12.12.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.14.tgz</arg>
-								<!-- 
-									A try to update @angular/language-server to any version up to v.12.2.0
-									breaks the receiving of diagnostics: 
-									Failures: 
-  										TestAngular.testAngular:56 Diagnostic not published in standalone component file ==> expected: <true> but was: <false>
-								-->
 								<arg>@angular/language-server@12.2.2</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>

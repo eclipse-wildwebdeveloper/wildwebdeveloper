@@ -61,7 +61,7 @@ public class TestAngular {
 							.stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
 									IResource.DEPTH_ZERO))
 							.anyMatch(marker -> marker.getAttribute(IMarker.LINE_NUMBER, -1) == 5
-									&& marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
+									&& marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;
@@ -90,7 +90,7 @@ public class TestAngular {
 				try {
 					markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
 					return Arrays.stream(markers)
-							.anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("template"));
+							.anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
 				} catch (CoreException e) {
 					return false;
 				}
