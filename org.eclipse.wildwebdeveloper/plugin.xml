@@ -331,7 +331,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="js"
+            file-extensions="js, cjs, mjs"
             id="org.eclipse.wildwebdeveloper.js"
             name="JavaScript"
             priority="normal">
