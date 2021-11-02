@@ -1,4 +1,4 @@
-FROM eclipsecbi/fedora-gtk3-mutter:33-gtk3.24
+FROM eclipsecbi/fedora-gtk3-mutter:34-gtk3.24
 
 # Back to root for install
 USER 0
@@ -6,8 +6,11 @@ RUN dnf -y update && dnf -y install \
 	java-11-openjdk-devel maven
 RUN dnf -y update && dnf -y install \
 	nodejs npm
-	
-ENV PATH=/usr/lib/jvm/java-11/bin:$PATH
+RUN dnf -y install xz
+
+RUN curl -L https://nodejs.org/dist/v16.13.0/node-v16.13.0-linux-x64.tar.xz | tar -xJ
+
+ENV PATH=/node-v16.13.0-linux-x64/bin:/usr/lib/jvm/java-11/bin:$PATH
 ENV JAVA_HOME=/usr/lib/jvm/java-11
 
 #Back to named user
