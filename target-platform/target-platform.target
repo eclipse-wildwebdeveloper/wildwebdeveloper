@@ -18,7 +18,8 @@
 	<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
 	<unit id="org.objectweb.asm" version="0.0.0"/>
 	<unit id="org.hamcrest.core" version="0.0.0"/>
-	<unit id="org.junit" version="0.0.0"/>
+	<unit id="org.junit.jupiter.api" version="0.0.0"/>
+	<unit id="javax.xml.stream" version="0.0.0"/>
 	<unit id="org.apache.commons.compress" version="0.0.0"/>
 	<!-- Product deps -->
 	<unit id="org.eclipse.epp.package.common.feature.feature.group" version="0.0.0"/>
@@ -33,7 +34,7 @@
 	<unit id="org.eclipse.platform.ide" version="0.0.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-	<repository location="https://download.eclipse.org/mylyn/docs/releases/3.0.38/"/>
+	<repository location="https://download.eclipse.org/mylyn/docs/releases/3.0.40/"/>
 	<unit id="org.eclipse.mylyn.wikitext_feature.feature.group" version="0.0.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
