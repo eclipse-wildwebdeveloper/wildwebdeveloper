@@ -5,7 +5,24 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ### Next release...
 
-## 0.13.0
+## 0.13.1
+
+* 📅 Release Date: November ?, 2021
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.0...0.13.1
+
+#### Update Language Servers
+
+Updated most language servers, including LemMinX-Maven.
+
+#### Support .cjs and .mjs files as JavaScript
+
+Registered those extensions as JavaScript files so they get edition assistance.
+
+#### Update build machinery and other dependencies
+
+
+
+
 
 ## 0.13.0
 
