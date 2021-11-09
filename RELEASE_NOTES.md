@@ -7,7 +7,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 0.13.1
 
-* 📅 Release Date: November ?, 2021
+* 📅 Release Date: November 9th, 2021
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.0...0.13.1
 
 #### Update Language Servers
