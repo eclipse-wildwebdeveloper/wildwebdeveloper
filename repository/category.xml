@@ -54,31 +54,7 @@
    <bundle id="com.google.gson" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.commons.core" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.commons.notifications.core" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.commons.notifications.ui" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.commons.screenshots" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.commons.ui" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.commons.workbench" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
    <bundle id="org.jsoup" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="com.google.guava" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.apache.commons.lang" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="com.google.guava" version="0.0.0">
