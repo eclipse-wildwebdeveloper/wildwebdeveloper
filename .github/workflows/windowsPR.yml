@@ -16,6 +16,6 @@ jobs:
         java-version: 11
     - uses: actions/setup-node@v1
       with:
-        node-version: '14'
+        node-version: '16'
     - name: Build with Maven
       run: mvn -B clean verify
