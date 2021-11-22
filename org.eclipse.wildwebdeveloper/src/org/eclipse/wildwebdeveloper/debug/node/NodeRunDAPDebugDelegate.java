@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -41,6 +42,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -93,7 +95,9 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 				Collections.emptyMap());
 		if (!env.isEmpty()) {
 			JsonObject envJson = new JsonObject();
-			env.forEach((key, value) -> envJson.addProperty(key, value));
+			for (Entry<String, String> entry : env.entrySet()) {
+				envJson.addProperty(entry.getKey(), VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(entry.getValue()));
+			}
 			param.put(ENV, envJson);
 		}
 		String cwd = configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "").trim(); //$NON-NLS-1$

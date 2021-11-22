@@ -13,23 +13,31 @@
 package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -37,10 +45,13 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IOConsole;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugLaunchShortcut;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,8 +84,35 @@ public class TestDebug {
 	}
 
 	@AfterEach
-	public void trearDownLaunch() throws DebugException {
+	public void tearDownLaunch() throws DebugException {
 		removeAllLaunches();
+	}
+
+	@Test
+	public void testRunExpandEnv() throws Exception {
+		File f = File.createTempFile("testEnv", ".js");
+		f.deleteOnExit();
+		Files.write(f.toPath(), "console.log(process.env.ECLIPSE_HOME);".getBytes());
+		ILaunchConfigurationWorkingCopy launchConfig = launchManager
+				.getLaunchConfigurationType(NodeRunDAPDebugDelegate.ID)
+				.newInstance(ResourcesPlugin.getWorkspace().getRoot(), f.getName());
+		launchConfig.setAttribute(NodeRunDAPDebugDelegate.PROGRAM, f.getAbsolutePath());
+		launchConfig.setAttribute(LaunchManager.ATTR_ENVIRONMENT_VARIABLES, Map.of("ECLIPSE_HOME", "${eclipse_home}"));
+		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
+		ILaunch launch = launchConfig.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
+		while (!launch.isTerminated()) {
+			DisplayHelper.sleep(Display.getDefault(), 50);
+		}
+		// ensure last UI events are processed and console is visible and populated.
+		assertFalse(
+				DisplayHelper.waitForCondition(Display.getDefault(), 1000,
+						() -> Arrays.stream(ConsolePlugin.getDefault().getConsoleManager().getConsoles()) //
+								.filter(IOConsole.class::isInstance) //
+								.map(IOConsole.class::cast) //
+								.map(IOConsole::getDocument) //
+								.map(IDocument::get) //
+								.anyMatch(content -> content.contains("${eclipse_home}"))),
+				"env variable is not replaced in subprocess");
 	}
 
 	@Test
