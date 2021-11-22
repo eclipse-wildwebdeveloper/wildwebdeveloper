@@ -73,6 +73,7 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		
 		config.put("validate", "on");
 		config.put("run", "onType");
+		config.put("rulesCustomizations", Collections.EMPTY_LIST);
 
 		config.put("codeAction", Map.of("disableRuleComment", Map.of("enable", "true", "location", "separateLine"), 
 										"showDocumentation", Collections.singletonMap("enable", "true")));
