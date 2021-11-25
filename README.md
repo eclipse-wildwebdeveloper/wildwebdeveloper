@@ -99,6 +99,6 @@ Community support is currently available via [GitHub issues](https://github.com/
 
 Contribution of Code and Documentation are welcome as [GitHub Pull Request](https://github.com/eclipse/wildwebdeveloper/pulls).
 
-Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
+Developer mailing-list can be accessed at https://accounts.eclipse.org/mailing-list/wildwebdeveloper-dev
 
-Quality analysis is available on [SonarCloud](https://sonarcloud.io/dashboard?id=eclipse-wildwebdeveloper).
+Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
