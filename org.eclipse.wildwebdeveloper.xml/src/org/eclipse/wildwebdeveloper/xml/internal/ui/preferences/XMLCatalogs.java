@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -65,14 +66,18 @@ public class XMLCatalogs {
 				URI uri = URI.create(element.getAttribute("uri"));
 				if (!uri.isAbsolute()) {
 					try {
-						uri = FileLocator.find(Platform.getBundle(element.getContributor().getName()), Path.fromPortableString(uri.toString())).toURI();
+						URL url = FileLocator.find(Platform.getBundle(element.getContributor().getName()), Path.fromPortableString(uri.toString()));
+						// this constructor will ensure parts are URI encoded correctly
+						uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
 					} catch (InvalidRegistryObjectException | URISyntaxException e) {
 						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 					}
 				}
 				if (!"file".equals(uri.getScheme())) { // are some other scheme supported directly by LemMinX ?
 					try {
-						uri = FileLocator.toFileURL(uri.toURL()).toURI();
+						URL url = FileLocator.toFileURL(uri.toURL());
+						// as above
+						uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
 					} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
 						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 					}
