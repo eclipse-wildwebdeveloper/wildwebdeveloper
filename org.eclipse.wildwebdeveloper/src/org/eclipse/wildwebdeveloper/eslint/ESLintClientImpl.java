@@ -73,7 +73,7 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		
 		config.put("validate", "on");
 		config.put("run", "onType");
-		config.put("rulesCustomizations", Collections.EMPTY_LIST);
+		config.put("rulesCustomizations", Collections.emptyList());
 
 		config.put("codeAction", Map.of("disableRuleComment", Map.of("enable", "true", "location", "separateLine"), 
 										"showDocumentation", Collections.singletonMap("enable", "true")));
@@ -86,7 +86,6 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		return CompletableFuture.completedFuture(null);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public CompletableFuture<Void> openDoc(Map<String,String> data) {
 		if (data.containsKey("url")) {
