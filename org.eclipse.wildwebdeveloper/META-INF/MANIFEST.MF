@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Wild Web Developer: web development in Eclipse IDE
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper;singleton:=true
 Automatic-Module-Name: org.eclipse.wildwebdeveloper
-Bundle-Version: 0.5.19.qualifier
+Bundle-Version: 0.5.20.qualifier
 Bundle-Activator: org.eclipse.wildwebdeveloper.Activator
 Bundle-Vendor: Eclipse Wild Web Developer project
 Require-Bundle: org.eclipse.ui,

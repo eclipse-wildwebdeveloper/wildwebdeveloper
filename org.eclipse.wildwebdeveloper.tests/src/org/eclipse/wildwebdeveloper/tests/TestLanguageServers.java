@@ -233,7 +233,11 @@ public class TestLanguageServers {
 		}
 		System.out.println("Location (" + location.length() + "): " + location);
 		StringBuilder maxLocation = new StringBuilder();
-		File file = new File(new File(Platform.getInstallLocation().getURL().toURI()), location);
+
+		// This reflects the difference between executing the test from IDE and from a
+		// command line
+		File file = new File(location).isAbsolute() ? new File(location)
+				: new File(new File(Platform.getInstallLocation().getURL().toURI()), location);
 		assertTrue(file.isDirectory());
 		Map<String, Integer> tooLongPaths = new TreeMap<>();
 		Path pluginPath = file.toPath();

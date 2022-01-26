@@ -67,7 +67,9 @@ public class TestAngular {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 50000),
+			// The timeout is increased to 150 seconds due to the slow compilation of an
+			// angular project.
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 150000),
 				"Diagnostic not published in standalone component file");
 		editor.close(false);
 
@@ -95,7 +97,7 @@ public class TestAngular {
 					return false;
 				}
 			}
-		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 150000),
 				"No error found on erroneous HTML component file");
 		// test completion
 		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
