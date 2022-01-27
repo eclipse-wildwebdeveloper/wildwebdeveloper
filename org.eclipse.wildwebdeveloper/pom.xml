@@ -39,9 +39,22 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/stable/f30a9b73e8ffc278e71575118b6bf568f04587c8/code-stable-x64-1614898391.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/stable/899d46d82c4c95423fb7e10e68eba52050e30ba3/code-stable-x64-1639562789.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>fetch-node-debug2</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/node-debug2/1.43.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
+							<outputFileName>node-debug2.zip</outputFileName>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/node-debug2</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -51,7 +64,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-                            <url>https://msjsdiag.gallery.vsassets.io/_apis/public/gallery/publisher/msjsdiag/extension/debugger-for-chrome/4.12.12/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
+                            <url>https://msjsdiag.gallery.vsassets.io/_apis/public/gallery/publisher/msjsdiag/extension/debugger-for-chrome/4.13.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
 							<outputFileName>chromeDebugAdapter.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
@@ -90,6 +103,7 @@
 				<version>3.0.0</version>
 				<executions>
 					<execution>
+						<id>prepare-chrome-debug-adapter</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>run</goal>
@@ -98,6 +112,19 @@
 							<target>
 								<delete
 									file="${project.build.directory}/chrome-debug-adapter/extension/.gitignore" />
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>prepare-node-debug2</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<delete
+									file="${project.build.directory}/node-debug2/extension/.gitignore" />
 							</target>
 						</configuration>
 					</execution>
@@ -123,7 +150,7 @@
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
-								<arg>vscode/VSCode-linux-x64/resources/app/extensions/ms-vscode.node-debug2</arg>
+								<arg>node-debug2/extension/</arg>
 								<arg>chrome-debug-adapter/extension/</arg>
 								<arg>vscode-eslint-ls/extension/server</arg>
 							</arguments>
@@ -143,7 +170,7 @@
 								<arg>--only=prod</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
-								<arg>${project.build.directory}/node-debug2-1.42.5.tgz</arg>
+								<arg>${project.build.directory}/node-debug2-1.43.0.tgz</arg>
 								<arg>typescript@4.5.5</arg>
 								<arg>typescript-language-server@0.6.5</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
@@ -153,7 +180,7 @@
 								<arg>${project.build.directory}/vscode-json-languageserver-1.3.4.tgz</arg>
 								<arg>yaml-language-server@1.3.0</arg>
 								<arg>firefox-debugadapter@2.9.6</arg>
-								<arg>${project.build.directory}/debugger-for-chrome-4.12.12.tgz</arg>
+								<arg>${project.build.directory}/debugger-for-chrome-4.13.0.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.25.tgz</arg>
 								<arg>@angular/language-server@13.2.0</arg>
 							</arguments>
