@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
@@ -58,38 +59,41 @@ public class XMLCatalogs {
 		catalogFile.append("<?xml version=\"1.0\"?>\n"
 				+ "<!DOCTYPE catalog PUBLIC \"-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN\" \"http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd\">\n"
 				+ "<catalog xmlns=\"urn:oasis:names:tc:entity:xmlns:xml:catalog\" prefer=\"public\">\n");
-		Arrays.stream(Platform.getExtensionRegistry().getConfigurationElementsFor("org.eclipse.wst.xml.core.catalogContributions"))
-			.filter(element -> "catalogContribution".equals(element.getName()))
-			.flatMap(element -> Arrays.stream(element.getChildren("system")))
-			.forEach(element -> {
-				String namespace = element.getAttribute("systemId");
-				URI uri = URI.create(element.getAttribute("uri"));
-				if (!uri.isAbsolute()) {
-					try {
-						URL url = FileLocator.find(Platform.getBundle(element.getContributor().getName()), Path.fromPortableString(uri.toString()));
-						// this constructor will ensure parts are URI encoded correctly
-						uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
-					} catch (InvalidRegistryObjectException | URISyntaxException e) {
-						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+		Arrays.stream(Platform.getExtensionRegistry()
+				.getConfigurationElementsFor("org.eclipse.wst.xml.core.catalogContributions"))
+				.filter(element -> "catalogContribution".equals(element.getName()))
+				.flatMap(element -> Arrays.stream(element.getChildren())).forEach(element -> {
+					switch (element.getName()) {
+					case "public": {
+						String publicId = element.getAttribute("publicId");
+						URI uri = createURI(element);
+						if (publicId != null && uri != null) {
+							catalogFile.append("<public publicId=\"").append(publicId).append("\" uri=\"").append(uri)
+									.append("\"/>\n");
+						}
+						break;
 					}
-				}
-				if (!"file".equals(uri.getScheme())) { // are some other scheme supported directly by LemMinX ?
-					try {
-						URL url = FileLocator.toFileURL(uri.toURL());
-						// as above
-						uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
-					} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
-						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+					case "system": {
+						String namespace = element.getAttribute("systemId");
+						URI uri = createURI(element);
+						if (namespace != null && uri != null) {
+							catalogFile.append("<system systemId=\"").append(namespace).append("\" uri=\"").append(uri)
+									.append("\"/>\n");
+						}
+						break;
 					}
-				}
-				if (namespace != null && uri != null) {
-					catalogFile.append("<system systemId=\"")
-						.append(namespace)
-						.append("\" uri=\"")
-						.append(uri)
-						.append("\"/>\n");
-				}
-			});
+					case "uri": {
+						String name = element.getAttribute("name");
+						URI uri = createURI(element);
+						if (name != null && uri != null) {
+							catalogFile.append("<uri name=\"").append(name).append("\" uri=\"").append(uri)
+									.append("\"/>\n");
+						}
+						break;
+					}
+					}
+				});
+		catalogFile.append("</catalog>");
 		/* example
   <extension point="org.eclipse.wst.xml.core.catalogContributions">
     <catalogContribution>
@@ -110,13 +114,36 @@ public class XMLCatalogs {
     </catalogContribution>
   </extension>
 		 */
-		catalogFile.append("</catalog>");
 		try {
 			Files.writeString(SYSTEM_CATALOG.toPath(), catalogFile.toString());
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
 		return SYSTEM_CATALOG;
+	}
+
+	private static URI createURI(IConfigurationElement element) {
+		URI uri = URI.create(element.getAttribute("uri"));
+		if (!uri.isAbsolute()) {
+			try {
+				URL url = FileLocator.find(Platform.getBundle(element.getContributor().getName()),
+						Path.fromPortableString(uri.toString()));
+				// this constructor will ensure parts are URI encoded correctly
+				uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+			} catch (InvalidRegistryObjectException | URISyntaxException e) {
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+			}
+		}
+		if (!"file".equals(uri.getScheme())) { // are some other scheme supported directly by LemMinX ?
+			try {
+				URL url = FileLocator.toFileURL(uri.toURL());
+				// as above
+				uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+			} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+			}
+		}
+		return uri;
 	}
 
 	public static void storeUserCatalogs(IPreferenceStore store, Set<File> catalogs) {
