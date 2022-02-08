@@ -114,6 +114,12 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 						res.put(data.getType().toLowerCase() + ".proxyHost", data.getHost());
 						res.put(data.getType().toLowerCase() + ".proxyPort", Integer.toString(data.getPort()));
 					}
+					if (data.getUserId() != null) {
+						res.put(data.getType().toLowerCase() + ".proxyUser", data.getUserId());
+					}
+					if (data.getPassword() != null) {
+						res.put(data.getType().toLowerCase() + ".proxyPassword", data.getPassword());
+					}
 				}
 				String nonProxiedHosts = String.join("|", service.getNonProxiedHosts());
 				if (!nonProxiedHosts.isEmpty()) {
