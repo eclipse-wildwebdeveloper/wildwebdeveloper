@@ -12,7 +12,7 @@
 		<maven>3.6.3</maven>
 	</prerequisites>
 	<properties>
-		<tycho-version>2.6.0</tycho-version>
+		<tycho-version>3.0.0-SNAPSHOT</tycho-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/wildwebdeveloper.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -269,11 +269,15 @@
 			<snapshots><enabled>true</enabled></snapshots>
 		</pluginRepository>
 		<pluginRepository>
-		  	<id>dash-licenses-snapshots</id>
-		  	<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
-		  	<snapshots>
-		  	  <enabled>true</enabled>
-		  	</snapshots>
-  		</pluginRepository>
+			<id>dash-licenses-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>tycho-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
+		</pluginRepository>
 	</pluginRepositories>
 </project>
