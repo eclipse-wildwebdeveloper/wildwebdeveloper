@@ -466,7 +466,9 @@
 
    <extension point="org.eclipse.ui.genericeditor.icons">
      <icon contentType="org.eclipse.wildwebdeveloper.js" icon="icons/jsEditorIcon.png"/>
+     <icon contentType="org.eclipse.wildwebdeveloper.jsx" icon="icons/jsEditorIcon.png"/>
      <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
+     <icon contentType="org.eclipse.wildwebdeveloper.tsx" icon="icons/tsEditorIcon.png"/>
    </extension>
 
    <!-- Angular -->
