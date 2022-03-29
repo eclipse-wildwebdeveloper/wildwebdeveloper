@@ -51,6 +51,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.node.NodeRunDAPDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugLaunchShortcut;
 import org.junit.jupiter.api.AfterEach;
@@ -96,7 +97,7 @@ public class TestDebug {
 		ILaunchConfigurationWorkingCopy launchConfig = launchManager
 				.getLaunchConfigurationType(NodeRunDAPDebugDelegate.ID)
 				.newInstance(ResourcesPlugin.getWorkspace().getRoot(), f.getName());
-		launchConfig.setAttribute(NodeRunDAPDebugDelegate.PROGRAM, f.getAbsolutePath());
+		launchConfig.setAttribute(LaunchConstants.PROGRAM, f.getAbsolutePath());
 		launchConfig.setAttribute(LaunchManager.ATTR_ENVIRONMENT_VARIABLES, Map.of("ECLIPSE_HOME", "${eclipse_home}"));
 		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
 		ILaunch launch = launchConfig.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
@@ -113,6 +114,30 @@ public class TestDebug {
 								.map(IDocument::get) //
 								.anyMatch(content -> content.contains("${eclipse_home}"))),
 				"env variable is not replaced in subprocess");
+	}
+
+	@Test
+	public void testRunExpandDebugVars() throws Exception {
+		IProject project = Utils.provisionTestProject("helloWorldJS");
+		IFile f = project.getFile("hello.js");
+		ILaunchConfigurationWorkingCopy launchConfig = launchManager
+				.getLaunchConfigurationType(NodeRunDAPDebugDelegate.ID)
+				.newInstance(ResourcesPlugin.getWorkspace().getRoot(), f.getName());
+		launchConfig.setAttribute(LaunchConstants.PROGRAM, "${workspace_loc:" + f.getFullPath() + '}');
+		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
+		ILaunch launch = launchConfig.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
+		while (!launch.isTerminated()) {
+			DisplayHelper.sleep(Display.getDefault(), 50);
+		}
+		// ensure last UI events are processed and console is visible and populated.
+		assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 1000,
+				() -> Arrays.stream(ConsolePlugin.getDefault().getConsoleManager().getConsoles()) //
+						.filter(IOConsole.class::isInstance) //
+						.map(IOConsole.class::cast) //
+						.map(IOConsole::getDocument) //
+						.map(IDocument::get) //
+						.anyMatch(content -> content.contains("Hello"))),
+				"Missing log output");
 	}
 
 	@Test

@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 
 public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 
@@ -140,7 +141,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 			defaultSelectedFile = getSelectedFile(shortcut::canLaunch);
 			String defaultSelectedFilePath = pathOrEmpty(defaultSelectedFile);
 			this.programPathText
-					.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, defaultSelectedFilePath));
+					.setText(configuration.getAttribute(LaunchConstants.PROGRAM, defaultSelectedFilePath));
 			this.argumentsCombo.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "install")); //$NON-NLS-1$
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
@@ -157,7 +158,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 		}
 
 		String programPath = this.programPathText.getText();
-		configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, programPath);
+		configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsCombo.getText());
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
 		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));

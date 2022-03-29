@@ -13,13 +13,9 @@ import java.io.File;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
-import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 
 public class NpmLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
@@ -31,19 +27,8 @@ public class NpmLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
 	@Override
 	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
-		wc.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, file.getAbsolutePath());
-		wc.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "install");
-	}
-
-	@Override
-	public boolean match(ILaunchConfiguration launchConfig, File selectedFile) {
-		try {
-			return launchConfig.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "") //$NON-NLS-1$
-					.equals(selectedFile.getAbsolutePath());
-		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(e.getStatus());
-			return false;
-		}
+		super.configureLaunchConfiguration(file, wc);
+		wc.setAttribute(NpmLaunchDelegate.ARGUMENTS, "install");
 	}
 
 	@Override

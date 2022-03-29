@@ -58,6 +58,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
@@ -71,7 +72,6 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 	public static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"; //$NON-NLS-1$
 
 	// see https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/nodeDebug.ts LaunchRequestArguments
-	public static final String PROGRAM = "program"; //$NON-NLS-1$
 	public static final String ARGUMENTS = "args"; //$NON-NLS-1$
 	private static final String CWD = "cwd"; //$NON-NLS-1$
 	private static final String ENV = "env"; //$NON-NLS-1$
@@ -82,11 +82,21 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			throws CoreException {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
-		param.put(PROGRAM, configuration.getAttribute(PROGRAM, "no program path defined")); //$NON-NLS-1$
+		param.put(LaunchConstants.PROGRAM, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "no program path defined"))); //$NON-NLS-1$
 		String argsString = configuration.getAttribute(ARGUMENTS, "").trim(); //$NON-NLS-1$
 		if (!argsString.isEmpty()) {
 			Object[] args = Arrays.asList(argsString.split(" ")).stream() //$NON-NLS-1$
-					.filter(s -> !s.trim().isEmpty()).toArray();
+					.filter(s -> !s.trim().isEmpty())
+					.map(s -> {
+						try {
+							return VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(s);
+						} catch (CoreException e) {
+							IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
+							Activator.getDefault().getLog().log(errorStatus);
+							return s;
+						}
+					})
+					.toArray();
 			if (args.length > 0) {
 				param.put(ARGUMENTS, args);
 			}
@@ -102,7 +112,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		}
 		String cwd = configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "").trim(); //$NON-NLS-1$
 		if (!cwd.isEmpty()) {
-			param.put(CWD, cwd);
+			param.put(CWD, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(cwd));
 		}
 		File runtimeExecutable = NodeJSManager.getNodeJsLocation();
 		if (runtimeExecutable != null) {
@@ -133,7 +143,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 	}
 
 	private boolean configureAdditionalParameters(Map<String, Object> param) {
-		String program = (String)param.get(PROGRAM);
+		String program = (String)param.get(LaunchConstants.PROGRAM);
 		String cwd = (String)param.get(CWD);
 		
 		if (program == null) {

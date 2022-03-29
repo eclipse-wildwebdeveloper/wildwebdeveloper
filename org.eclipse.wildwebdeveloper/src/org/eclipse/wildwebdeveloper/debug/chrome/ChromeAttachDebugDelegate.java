@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
-import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 
 public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 	
@@ -35,7 +35,7 @@ public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
 		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
-		param.put(AbstractHTMLDebugDelegate.PORT, configuration.getAttribute(NodeAttachDebugDelegate.PORT, 9229));
+		param.put(LaunchConstants.PORT, configuration.getAttribute(LaunchConstants.PORT, 9229));
 		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "https://www.google.ca/");
 		param.put(ChromeRunDAPDebugDelegate.URL, url);			
 		param.put("runtimeExecutable", ChromeRunDAPDebugDelegate.findChromeLocation(configuration));

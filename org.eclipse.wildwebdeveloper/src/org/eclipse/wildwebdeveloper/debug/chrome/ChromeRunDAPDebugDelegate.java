@@ -21,12 +21,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -37,6 +39,7 @@ import org.eclipse.ui.internal.browser.BrowserManager;
 import org.eclipse.ui.internal.browser.IBrowserDescriptor;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.MessageUtils;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 
@@ -57,13 +60,22 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 			throws CoreException {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
-		
 
 		// Chrome executable arguments
 		String argsString = configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "").trim(); //$NON-NLS-1$
 		if (!argsString.isEmpty()) {
 			Object[] args = Arrays.asList(argsString.split(" ")).stream() //$NON-NLS-1$
-					.filter(s -> !s.trim().isEmpty()).toArray();
+					.filter(s -> !s.trim().isEmpty()) //
+					.map(s -> {
+						try {
+							return VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(s);
+						} catch (CoreException e) {
+							IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
+							Activator.getDefault().getLog().log(errorStatus);
+							return s;
+						}
+					}) //
+					.toArray();
 			if (args.length > 0) {
 				param.put(AbstractHTMLDebugDelegate.ARGUMENTS, args);
 			}
@@ -74,7 +86,9 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 				Collections.emptyMap());
 		if (!env.isEmpty()) {
 			JsonObject envJson = new JsonObject();
-			env.forEach(envJson::addProperty);
+			for (Entry<String, String> envVar : env.entrySet()) {
+				envJson.addProperty(envVar.getKey(), VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(envVar.getValue()));
+			}
 			param.put(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, envJson);
 		}
 		
@@ -83,13 +97,13 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 		if (!url.equals("")) {
 			param.put(URL, url);
 		} else {
-			param.put("file", configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "no program path defined")); //$NON-NLS-1$
+			param.put("file", VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "no program path defined"))); //$NON-NLS-1$
 		}
 		
 		// Chrome working directory
 		String cwd = configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "").trim(); //$NON-NLS-1$
 		if (!cwd.isEmpty()) {
-			param.put(DebugPlugin.ATTR_WORKING_DIRECTORY, cwd);
+			param.put(DebugPlugin.ATTR_WORKING_DIRECTORY, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(cwd));
 		}
 
 		param.put(SOURCE_MAPS, true);

@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -34,12 +35,13 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.wildwebdeveloper.Activator;
-import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 
 	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"; //$NON-NLS-1$
+	static final String ARGUMENTS = "runtimeArgs";
 	private MessageConsole console;
 
 	public NpmLaunchDelegate() {
@@ -52,11 +54,11 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 			throws CoreException {
 
 		File packageJSONDirectory = new File(
-				configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "No package.json directory path set").trim()); //$NON-NLS-1$
+				VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "No package.json directory path set").trim())); //$NON-NLS-1$
 		File packageJSON = new File(
-				configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No package.json path set").trim()); //$NON-NLS-1$
-		final String argumentString = configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "No NPM argument set") //$NON-NLS-1$
-				.trim();
+				VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "No package.json path set").trim())); //$NON-NLS-1$
+		final String argumentString = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(ARGUMENTS, "No NPM argument set") //$NON-NLS-1$
+				.trim());
 		List<String> arguments = new ArrayList<>();
 		arguments.add(NodeJSManager.getNpmLocation().getAbsolutePath());
 		arguments.addAll(Arrays.asList(argumentString.split(" "))); //$NON-NLS-1$

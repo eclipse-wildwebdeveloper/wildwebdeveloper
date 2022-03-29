@@ -20,9 +20,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.debug.node.AttachTab;
-import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
 
 class FirefoxAttachTab extends AttachTab {
 	
@@ -54,6 +54,6 @@ class FirefoxAttachTab extends AttachTab {
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
-		configuration.setAttribute(NodeAttachDebugDelegate.PORT, 6000);
+		configuration.setAttribute(LaunchConstants.PORT, 6000);
 	}
 }

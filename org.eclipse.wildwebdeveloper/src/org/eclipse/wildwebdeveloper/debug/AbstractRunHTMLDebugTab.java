@@ -185,7 +185,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 		try {
 			String defaultSelectedFile = pathOrEmpty(getSelectedFile(shortcut::canLaunch));
 			this.programPathText
-					.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, defaultSelectedFile));
+					.setText(configuration.getAttribute(LaunchConstants.PROGRAM, defaultSelectedFile));
 			this.argumentsText.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
 			this.workingDirectoryText.setText(
 					configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject())));
@@ -209,11 +209,11 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		String programPath = this.programPathText.getText();
 		if (programPathText.isEnabled()) {
-			configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, programPath);
+			configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
 			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, "");
 		} else if (urlText.isEnabled()) {
 			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, urlText.getText());
-			configuration.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, "");
+			configuration.setAttribute(LaunchConstants.PROGRAM, "");
 		}
 
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
