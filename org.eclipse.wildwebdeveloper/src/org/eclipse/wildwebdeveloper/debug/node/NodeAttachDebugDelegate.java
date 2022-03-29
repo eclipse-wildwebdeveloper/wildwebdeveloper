@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -33,6 +34,7 @@ import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
@@ -41,7 +43,6 @@ public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 
 	// see https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/nodeDebug.ts LaunchRequestArguments
 	static final String ADDRESS = "address"; //$NON-NLS-1$
-	public static final String PORT = "port"; //$NON-NLS-1$
 	static final String LOCAL_ROOT = "localRoot"; //$NON-NLS-1$
 	static final String REMOTE_ROOT = "remoteRoot"; //$NON-NLS-1$
 
@@ -51,9 +52,9 @@ public class NodeAttachDebugDelegate extends DSPLaunchDelegate {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
 		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
-		param.put(PORT, configuration.getAttribute(PORT, -1));
+		param.put(LaunchConstants.PORT, configuration.getAttribute(LaunchConstants.PORT, -1));
 		if (configuration.hasAttribute(LOCAL_ROOT)) {
-			param.put(LOCAL_ROOT, configuration.getAttribute(LOCAL_ROOT, ""));
+			param.put(LOCAL_ROOT, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LOCAL_ROOT, "")));
 		}
 		if (configuration.hasAttribute(REMOTE_ROOT)) {
 			param.put(REMOTE_ROOT, configuration.getAttribute(REMOTE_ROOT, ""));

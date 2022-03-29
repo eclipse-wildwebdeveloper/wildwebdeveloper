@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
-import org.eclipse.wildwebdeveloper.debug.node.NodeAttachDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 
 public class FirefoxAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 	
@@ -36,8 +36,8 @@ public class FirefoxAttachDebugDelegate extends AbstractHTMLDebugDelegate {
 		// user settings
 		Map<String, Object> param = new HashMap<>(); 
 		param.put(REQUEST, "attach"); //$NON-NLS-1$
-		int port = configuration.getAttribute(NodeAttachDebugDelegate.PORT, 4711);
-		param.put(AbstractHTMLDebugDelegate.PORT, port);
+		int port = configuration.getAttribute(LaunchConstants.PORT, 4711);
+		param.put(LaunchConstants.PORT, port);
 		
 		super.launchWithParameters(configuration, mode, launch, monitor, param, FirefoxRunDABDebugDelegate.findDebugAdapter());
 	}

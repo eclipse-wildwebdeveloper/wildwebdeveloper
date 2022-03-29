@@ -18,10 +18,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
@@ -30,19 +28,7 @@ import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
-	public static final String PROGRAM = "program"; //$NON-NLS-1$
 	public static final String ARGUMENTS = "runtimeArgs"; //$NON-NLS-1$
-	/**
-	 * @deprecated use {@link DebugPlugin#ATTR_WORKING_DIRECTORY}
-	 */
-	@Deprecated
-	public static final String CWD = DebugPlugin.ATTR_WORKING_DIRECTORY;
-	/**
-	 * @deprecated use {@link ILaunchManager.ATTR_ENVIRONMENT_VARIABLES}
-	 */
-	@Deprecated
-	public static final String ENV = ILaunchManager.ATTR_ENVIRONMENT_VARIABLES;
-	public static final String PORT = "port"; //$NON-NLS-1$
 
 	public void launchWithParameters(ILaunchConfiguration configuration, String mode, ILaunch launch,
 			IProgressMonitor monitor, Map<String, Object> param, File debugAdapter) throws CoreException {

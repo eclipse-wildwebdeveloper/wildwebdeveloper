@@ -9,16 +9,10 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.wildwebdeveloper.Activator;
 
 public abstract class AbstractHTMLDebugAdapterLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
@@ -32,22 +26,6 @@ public abstract class AbstractHTMLDebugAdapterLaunchShortcut extends AbstractDeb
 			return getLaunchableResource(Adapters.adapt(resource, IContainer.class)) != null;
 		}
 		return super.canLaunchResource(resource);
-	}
-
-	@Override
-	public void configureLaunchConfiguration(File file, ILaunchConfigurationWorkingCopy wc) {
-		wc.setAttribute(AbstractHTMLDebugDelegate.PROGRAM, file.getAbsolutePath());
-		wc.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, file.getParentFile().getAbsolutePath());
-	}
-
-	@Override
-	public boolean match(ILaunchConfiguration launchConfig, File selectedFile) {
-		try {
-			return launchConfig.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "").equals(selectedFile.getAbsolutePath()); //$NON-NLS-1$
-		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(e.getStatus());
-			return false;
-		}
 	}
 
 	/**

@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -36,6 +37,7 @@ import org.eclipse.ui.internal.browser.BrowserManager;
 import org.eclipse.ui.internal.browser.IBrowserDescriptor;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.MessageUtils;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate;
@@ -77,10 +79,10 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "");
 		if (!url.isEmpty()) {
 			param.put(ChromeRunDAPDebugDelegate.URL, url);
-			File projectDirectory = new File(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, ""));
+			File projectDirectory = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "")));
 			param.put("webRoot", projectDirectory.getAbsolutePath());
 		} else {
-			param.put(FILE, configuration.getAttribute(AbstractHTMLDebugDelegate.PROGRAM, "No program path set").trim()); //$NON-NLS-1$
+			param.put(FILE, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "No program path set").trim())); //$NON-NLS-1$
 		}
 		param.put(PREFERENCES, "{}"); //$NON-NLS-1$
 		param.put(TMP_DIRS, System.getProperty("java.io.tmpdir")); //$NON-NLS-1$

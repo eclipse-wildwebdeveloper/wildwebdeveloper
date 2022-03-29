@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 
 public class RunProgramTab extends AbstractLaunchConfigurationTab {
@@ -104,7 +105,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
 			String defaultSelectedFile = pathOrEmpty(getSelectedFile(shortcut::canLaunch));
-			this.programPathText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.PROGRAM, defaultSelectedFile)); //$NON-NLS-1$
+			this.programPathText.setText(configuration.getAttribute(LaunchConstants.PROGRAM, defaultSelectedFile)); //$NON-NLS-1$
 			this.argumentsText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
 			this.workingDirectoryText.setText(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject()))); //$NON-NLS-1$
 		} catch (CoreException e) {
@@ -115,7 +116,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		String programPath = this.programPathText.getText();
-		configuration.setAttribute(NodeRunDAPDebugDelegate.PROGRAM, programPath);
+		configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
 		configuration.setAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, this.workingDirectoryText.getText());
 		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));

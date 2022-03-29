@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 
 public class AttachTab extends AbstractLaunchConfigurationTab {
@@ -63,7 +64,7 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(NodeAttachDebugDelegate.ADDRESS, "localhost");
-		configuration.setAttribute(NodeAttachDebugDelegate.PORT, defaultPort);
+		configuration.setAttribute(LaunchConstants.PORT, defaultPort);
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(NodeAttachDebugDelegate.ADDRESS, this.addressText.getText());
-		configuration.setAttribute(NodeAttachDebugDelegate.PORT, this.portSpinner.getSelection());
+		configuration.setAttribute(LaunchConstants.PORT, this.portSpinner.getSelection());
 	}
 
 	@Override
