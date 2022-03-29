@@ -17,6 +17,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -82,25 +83,31 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 		decoration.setImage(fieldDecoration.getImage());
 		this.programPathText.addModifyListener(event -> {
 			setDirty(true);
-			File file = new File(programPathText.getText());
-			if (!file.isFile()) {
-				String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_unknownFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
+			try {
+				File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
+				if (!file.isFile()) {
+					String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_unknownFile;
+					setErrorMessage(errorMessage);
+					decoration.setDescriptionText(errorMessage);
+					decoration.show();
+				} else if (!shortcut.canLaunch(file)) {
+					String errorMessage = Messages.NPMLaunchTab_notPackageJSONFile;
+					setErrorMessage(errorMessage);
+					decoration.setDescriptionText(errorMessage);
+					decoration.show();
+				} else if (!file.canRead()) {
+					String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_nonReadableFile;
+					setErrorMessage(errorMessage);
+					decoration.setDescriptionText(errorMessage);
+					decoration.show();
+				} else {
+					setErrorMessage(null);
+					decoration.hide();
+				}
+			} catch (CoreException ex) {
+				setErrorMessage(ex.getMessage());
+				decoration.setDescriptionText(ex.getMessage());
 				decoration.show();
-			} else if (!shortcut.canLaunch(file)) {
-				String errorMessage = Messages.NPMLaunchTab_notPackageJSONFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else if (!file.canRead()) {
-				String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_nonReadableFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else {
-				setErrorMessage(null);
-				decoration.hide();
 			}
 			updateLaunchConfigurationDialog();
 		});

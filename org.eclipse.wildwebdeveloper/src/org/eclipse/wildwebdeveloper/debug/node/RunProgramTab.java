@@ -20,6 +20,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -57,25 +58,32 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 		decoration.setImage(fieldDecoration.getImage());
 		this.programPathText.addModifyListener(event -> {
 			setDirty(true);
-			File file = new File(programPathText.getText());
-			if (!file.isFile()) {
-				String errorMessage = Messages.RunProgramTab_error_unknownFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
+			File file;
+			try {
+				file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
+				if (!file.isFile()) {
+					String errorMessage = Messages.RunProgramTab_error_unknownFile;
+					setErrorMessage(errorMessage);
+					decoration.setDescriptionText(errorMessage);
+					decoration.show();
+				} else if (!shortcut.canLaunch(file)){ //$NON-NLS-1$
+					String errorMessage = Messages.RunProgramTab_error_notJSFile;
+					setErrorMessage(errorMessage);
+					decoration.setDescriptionText(errorMessage);
+					decoration.show();
+				} else if (!file.canRead()) {
+					String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
+					setErrorMessage(errorMessage);
+					decoration.setDescriptionText(errorMessage);
+					decoration.show();
+				} else {
+					setErrorMessage(null);
+					decoration.hide();
+				}
+			} catch (CoreException ex) {
+				setErrorMessage(ex.getMessage());
+				decoration.setDescriptionText(ex.getMessage());
 				decoration.show();
-			} else if (!shortcut.canLaunch(file)){ //$NON-NLS-1$
-				String errorMessage = Messages.RunProgramTab_error_notJSFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} if (!file.canRead()) {
-				String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else {
-				setErrorMessage(null);
-				decoration.hide();
 			}
 			updateLaunchConfigurationDialog();
 		});
