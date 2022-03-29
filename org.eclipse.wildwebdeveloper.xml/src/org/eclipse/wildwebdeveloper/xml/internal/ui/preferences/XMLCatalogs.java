@@ -140,7 +140,11 @@ public class XMLCatalogs {
 				// as above
 				uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
 			} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
-				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+				String plugin = element.getNamespaceIdentifier();
+				String uriString = element.getAttribute("uri");
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"Error while getting URI '" + uriString + "' from plugin '" + plugin + "' : " + e.getMessage(),
+						e));
 			}
 		}
 		return uri;
