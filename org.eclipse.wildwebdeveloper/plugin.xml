@@ -57,8 +57,8 @@
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
-            file-extensions="*.eslintrc.json"
-            file-names=".eslintrc,*.eslintrc.json"
+            file-extensions="eslintrc"
+            file-patterns="*.eslintrc.json"
             id="org.eclipse.wildwebdeveloper.json.eslintrc"
             name="ESLint Configuration"
             priority="normal">
@@ -94,8 +94,7 @@
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="tsconfig.json"
-            file-patterns="tsconfig.*.json"
-            file-extensions="*.tsconfig.json"
+            file-patterns="*.tsconfig.json,tsconfig.*.json,tsconfig-*.json"
             id="org.eclipse.wildwebdeveloper.json.tsconfig"
             name="TypeScript Configuration"
             priority="normal">
@@ -103,7 +102,7 @@
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="tslint.json"
-            file-extensions="*.tslint.json"
+            file-patterns="*.tslint.json"
             id="org.eclipse.wildwebdeveloper.json.tslint"
             name="TSLint Configuration"
             priority="normal">
