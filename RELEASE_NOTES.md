@@ -2,6 +2,19 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 0.13.4
+
+* 📅 Release Date: April 11th 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.3...0.13.4
+
+* Dependency and inclusions updates
+  ** Embedded Node.js
+  ** LemMinX language server 0.19.1
+  ** Newer Eclipse Platform and other dependencies updated
+* Better support for JSX & TSX (recognized as JS/TS files, and for some config files, now recognized as json.
+* Support Eclipse variables in Launch Configuration (so they're more portable)
+* Other bugfixes and improvements
+
 ## 0.13.3
 
 * 📅 Release Date: February 8th, 2022
