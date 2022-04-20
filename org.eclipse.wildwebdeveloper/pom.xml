@@ -61,7 +61,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/stable/899d46d82c4c95423fb7e10e68eba52050e30ba3/code-stable-x64-1639562789.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/stable/dfd34e8260c270da74b5c2d86d61aee4b6d56977/code-stable-x64-1649664837.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
@@ -99,7 +99,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.2.2/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
+                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.2.3/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
 							<outputFileName>vscode-eslint-ls.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls</outputDirectory>
@@ -188,7 +188,7 @@
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.3.4.tgz</arg>
-								<arg>yaml-language-server@1.3.0</arg>
+								<arg>yaml-language-server@1.7.0</arg>
 								<arg>firefox-debugadapter@2.9.6</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.13.0.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.25.tgz</arg>
