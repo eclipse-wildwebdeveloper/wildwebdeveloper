@@ -181,8 +181,8 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.43.0.tgz</arg>
-								<arg>typescript@4.5.5</arg>
-								<arg>typescript-language-server@0.9.5</arg>
+								<arg>typescript@4.6.4</arg>
+								<arg>typescript-language-server@0.9.7</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@3.4.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
@@ -192,7 +192,7 @@
 								<arg>firefox-debugadapter@2.9.6</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.13.0.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.25.tgz</arg>
-								<arg>@angular/language-server@13.2.0</arg>
+								<arg>@angular/language-server@13.3.2</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
