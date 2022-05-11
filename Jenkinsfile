@@ -39,6 +39,7 @@ spec:
 	environment {
 		NPM_CONFIG_USERCONFIG = "$WORKSPACE/.npmrc"
 		MAVEN_OPTS="-Xmx1024m"
+		GITHUB_API_CREDENTIALS_ID = 'github-bot-token'
 	}
 	stages {
 		stage('Prepare-environment') {
@@ -53,8 +54,10 @@ spec:
 		stage('Build') {
 			steps {
 				container('container') {
-					wrap([$class: 'Xvnc', useXauthority: true]) {
-						sh 'mvn clean verify -B -Dtycho.disableP2Mirrors=true -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
+					withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
+						wrap([$class: 'Xvnc', useXauthority: true]) {
+							sh 'mvn clean verify -B -Dtycho.disableP2Mirrors=true -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository'
+						}
 					}
 				}
 			}
