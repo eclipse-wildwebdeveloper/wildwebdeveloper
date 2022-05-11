@@ -7,7 +7,7 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.21-SNAPSHOT</version>
+	<version>0.5.22-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -93,6 +93,9 @@
 							<skipCache>true</skipCache>
 							<url>https://raw.githubusercontent.com/microsoft/vscode-eslint/release/2.2.2/server/package.json</url>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls/extension/server</outputDirectory>
+							<headers>
+								<Authorization>${GITHUB_API_TOKEN}</Authorization>
+							</headers>
 						</configuration>
 					</execution>
 				</executions>
