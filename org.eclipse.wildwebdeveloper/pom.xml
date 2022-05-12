@@ -94,7 +94,7 @@
 							<url>https://raw.githubusercontent.com/microsoft/vscode-eslint/release/2.2.2/server/package.json</url>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls/extension/server</outputDirectory>
 							<headers>
-								<Authorization>${GITHUB_API_TOKEN}</Authorization>
+								<Authorization>${github.api.token}</Authorization>
 							</headers>
 						</configuration>
 					</execution>
