@@ -9,6 +9,35 @@
 	<packaging>eclipse-plugin</packaging>
 	<version>0.5.22-SNAPSHOT</version>
 
+	<profiles>
+		<profile>
+			<id>use-github-api-token</id>
+			<activation>
+				<property>
+					<name>github.api.token</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.googlecode.maven-download-plugin</groupId>
+						<artifactId>download-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>fetch-eslint-ls-package.json</id>
+								<configuration>
+									<headers>
+										<Authorization>token ${github.api.token}</Authorization>
+									</headers>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -93,9 +122,6 @@
 							<skipCache>true</skipCache>
 							<url>https://raw.githubusercontent.com/microsoft/vscode-eslint/release/2.2.2/server/package.json</url>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls/extension/server</outputDirectory>
-							<headers>
-								<Authorization>${github.api.token}</Authorization>
-							</headers>
 						</configuration>
 					</execution>
 				</executions>
