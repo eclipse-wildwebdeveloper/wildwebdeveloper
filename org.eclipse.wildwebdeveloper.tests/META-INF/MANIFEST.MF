@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests for WildWebDeveloper
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.tests;singleton:=true
-Bundle-Version: 0.4.17.qualifier
+Bundle-Version: 0.4.18.qualifier
 Bundle-Vendor: Eclipse Wild Web Developer
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-11
@@ -23,5 +23,6 @@ Require-Bundle: org.eclipse.wildwebdeveloper;bundle-version="0.5.19",
  org.eclipse.debug.ui,
  org.eclipse.core.filesystem,
  org.eclipse.ui.editors,
- org.eclipse.ui.console;bundle-version="3.11.0"
+ org.eclipse.ui.console;bundle-version="3.11.0",
+ org.eclipse.lsp4e.debug;bundle-version="0.13.0"
 Import-Package: org.eclipse.ui.editors.text

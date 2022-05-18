@@ -34,6 +34,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.ISuspendResume;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
@@ -80,6 +81,15 @@ public class TestDebug {
 				debugTarget.terminate();
 				launch.removeDebugTarget(debugTarget);
 			}
+			for (IProcess process : launch.getProcesses()) {
+				process.terminate();
+			}
+			// workaround that some debugger process don't terminate as expected
+			// LSP4E fixes it in later versions: https://github.com/eclipse/lsp4e/pull/122
+			ProcessHandle.current().descendants()
+					.filter(process -> process.info().commandLine()
+							.filter(command -> command.contains("node") && command.contains("debug")).isPresent())
+					.forEach(ProcessHandle::destroyForcibly);
 			launchManager.removeLaunch(launch);
 		}
 	}
