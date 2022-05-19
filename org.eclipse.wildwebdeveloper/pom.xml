@@ -29,6 +29,28 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>2.0.0-M1</version>
+				<executions>
+					<execution>
+						<id>fetch-eslint-ls-package.json</id>
+						<goals>
+							<goal>checkout</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<connectionUrl>scm:git:https://github.com/microsoft/vscode-eslint.git</connectionUrl>
+							<scmVersionType>tag</scmVersionType>
+							<scmVersion>release/2.2.2</scmVersion>
+							<basedir>${project.build.directory}</basedir>
+							<includes>server/package.json</includes>
+							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls/extension</checkoutDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.googlecode.maven-download-plugin</groupId>
 				<artifactId>download-maven-plugin</artifactId>
 				<executions>
@@ -81,21 +103,6 @@
 							<outputFileName>vscode-eslint-ls.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls</outputDirectory>
-						</configuration>
-					</execution>
-					<execution>
-						<id>fetch-eslint-ls-package.json</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-							<skipCache>true</skipCache>
-							<url>https://raw.githubusercontent.com/microsoft/vscode-eslint/release/2.2.2/server/package.json</url>
-							<outputDirectory>${project.build.directory}/vscode-eslint-ls/extension/server</outputDirectory>
-							<headers>
-								<Authorization>${github.api.token}</Authorization>
-							</headers>
 						</configuration>
 					</execution>
 				</executions>
