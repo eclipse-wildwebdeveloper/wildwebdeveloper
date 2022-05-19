@@ -3,7 +3,7 @@ FROM eclipsecbi/fedora-gtk3-mutter:34-gtk3.24
 # Back to root for install
 USER 0
 RUN dnf -y update && dnf -y install \
-	java-11-openjdk-devel maven
+	java-11-openjdk-devel maven git
 RUN dnf -y update && dnf -y install \
 	nodejs npm
 RUN dnf -y install xz
