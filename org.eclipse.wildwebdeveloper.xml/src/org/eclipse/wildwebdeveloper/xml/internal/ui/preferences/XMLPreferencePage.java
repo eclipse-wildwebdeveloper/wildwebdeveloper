@@ -45,9 +45,8 @@ public class XMLPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		catalogsLink.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (getContainer() instanceof IWorkbenchPreferenceContainer) {
-					((IWorkbenchPreferenceContainer) getContainer())
-							.openPage("org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage", null);
+				if (getContainer() instanceof IWorkbenchPreferenceContainer container) {
+					container.openPage("org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage", null);
 				}
 			}
 		});

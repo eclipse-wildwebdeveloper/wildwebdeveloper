@@ -196,14 +196,11 @@ public class NodeJSManager {
 	}
 
 	private static File getDefaultNodePath() {
-		switch (Platform.getOS()) {
-		case Platform.OS_MACOSX:
-			return new File("/usr/local/bin/node");
-		case Platform.OS_WIN32:
-			return new File("C:\\Program Files\\nodejs\\node.exe");
-		default:
-			return new File("/usr/bin/node");
-		}
+		return new File(switch (Platform.getOS()) {
+			case Platform.OS_MACOSX -> "/usr/local/bin/node";
+			case Platform.OS_WIN32 -> "C:\\Program Files\\nodejs\\node.exe";
+			default ->"/usr/bin/node";
+		});
 	}
 
 	private static void validateNodeVersion(File nodeJsLocation) {

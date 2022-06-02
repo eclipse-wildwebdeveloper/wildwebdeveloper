@@ -90,8 +90,8 @@ public class XMLExtensionRegistry {
 			try {
 				if (extension.getName().equals("classpathExtensionProvider") && extension.getAttribute("provider") != null) {
 					final Object executableExtension = extension.createExecutableExtension("provider");
-					if (executableExtension instanceof LemminxClasspathExtensionProvider) {
-						extensionProviders.put(extension, (LemminxClasspathExtensionProvider) executableExtension);
+					if (executableExtension instanceof LemminxClasspathExtensionProvider extensionProvider) {
+						extensionProviders.put(extension, extensionProvider);
 					}
 				}
 			} catch (Exception ex) {
@@ -131,8 +131,8 @@ public class XMLExtensionRegistry {
 			try {
 				if (extension.getName().equals("initializationOptionsProvider") && extension.getAttribute("provider") != null) {
 					final Object executableExtension = extension.createExecutableExtension("provider");
-					if (executableExtension instanceof InitializationOptionsProvider) {
-						Map<String, Object> options = ((InitializationOptionsProvider)executableExtension).get();
+					if (executableExtension instanceof InitializationOptionsProvider opt) {
+						Map<String, Object> options = opt.get();
 						if (options != null) {
 							res.putAll(options);
 						}

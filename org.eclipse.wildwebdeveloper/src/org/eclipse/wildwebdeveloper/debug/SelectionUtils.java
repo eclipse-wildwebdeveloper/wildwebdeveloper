@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -40,8 +39,8 @@ public class SelectionUtils {
 	private static IFile getSelectedIFile() {
 		try {
 			ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-			if (selection instanceof IStructuredSelection) {
-				return Adapters.adapt(((IStructuredSelection)selection).getFirstElement(), IFile.class);
+			if (selection instanceof IStructuredSelection structuredSelection) {
+				return Adapters.adapt(structuredSelection.getFirstElement(), IFile.class);
 			}
 		} catch (Exception e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
@@ -49,8 +48,8 @@ public class SelectionUtils {
 		IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if (editor != null) {
 			IEditorInput input = editor.getEditorInput();
-			if (input instanceof IFileEditorInput) {
-				return ((IFileEditorInput)input).getFile();
+			if (input instanceof IFileEditorInput file) {
+				return file.getFile();
 			}
 		}
 		return null;
@@ -92,8 +91,7 @@ public class SelectionUtils {
 	}
 
 	public static File getFile(ISelection selection, Predicate<File> condition) {
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (StructuredSelection)selection;
+		if (selection instanceof IStructuredSelection structuredSelection) {
 			Object firstElement = structuredSelection.getFirstElement();
 			IResource resource = Adapters.adapt(firstElement, IResource.class);
 			if (resource != null) {
@@ -106,22 +104,22 @@ public class SelectionUtils {
 		if (selection instanceof TextSelection) {
 			// check whether it comes from active editor
 			IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-			if (part instanceof ITextEditor) { // most likely the source of the selection
-				return getFile(((IEditorPart)part).getEditorInput(), condition);
+			if (part instanceof ITextEditor editor) { // most likely the source of the selection
+				return getFile(editor.getEditorInput(), condition);
 			}
 		}
 		return null;
 	}
 
 	public static File getFile(IEditorInput editorInput, Predicate<File> condition) {
-		if (editorInput instanceof FileEditorInput) {
-			File file = ((FileEditorInput)editorInput).getFile().getLocation().toFile();
+		if (editorInput instanceof FileEditorInput input) {
+			File file = input.getFile().getLocation().toFile();
 			if (file != null && (condition == null || condition.test(file))) {
 				return file;
 			}
 		}
-		if (editorInput instanceof IURIEditorInput) {
-			File file = new File(((IURIEditorInput)editorInput).getURI());
+		if (editorInput instanceof IURIEditorInput input) {
+			File file = new File(input.getURI());
 			if (condition == null || condition.test(file)) {
 				return file;
 			}

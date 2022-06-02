@@ -98,8 +98,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 
 	@Override
 	public IResource getLaunchableResource(ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+		if (selection instanceof IStructuredSelection structuredSelection) {
 			if (structuredSelection.size() != 1) {
 				return null;
 			}

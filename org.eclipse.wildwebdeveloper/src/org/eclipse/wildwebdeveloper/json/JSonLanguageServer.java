@@ -92,8 +92,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 
 	@Override
 	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
-		if (message instanceof ResponseMessage) {
-			ResponseMessage responseMessage = (ResponseMessage) message;
+		if (message instanceof ResponseMessage responseMessage) {
 			if (responseMessage.getResult() instanceof InitializeResult) {
 				// Send json/schemaAssociations notification to register JSON Schema on JSON
 				// Language server side.

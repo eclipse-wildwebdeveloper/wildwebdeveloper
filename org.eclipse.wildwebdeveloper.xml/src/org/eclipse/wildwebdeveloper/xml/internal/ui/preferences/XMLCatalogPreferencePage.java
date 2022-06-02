@@ -138,8 +138,8 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 				int result = (isDirty ? dialog.open() : IDialogConstants.OK_ID);
 				if (result == IDialogConstants.OK_ID) {
 					XMLCatalogPreferencePage.this.performOk();
-					if (getContainer() instanceof Window) {
-						((Window)getContainer()).close();
+					if (getContainer() instanceof Window window) {
+						window.close();
 					}
 					
 					try {
@@ -160,11 +160,10 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 			editButton.setEnabled(!event.getSelection().isEmpty());
 			selectedEntry = null;
 			ISelection selection = event.getSelection();
-			if (selection instanceof ITreeSelection) {
-				ITreeSelection treeSelection = (ITreeSelection) selection;
+			if (selection instanceof ITreeSelection treeSelection) {
 				Object object = treeSelection.getFirstElement();
-				if (object instanceof File) {
-					selectedEntry = (File) object;
+				if (object instanceof File file) {
+					selectedEntry = file;
 				}
 			}
 		});
@@ -190,8 +189,8 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 	class EntriesContentProvider implements ITreeContentProvider {
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof Set) {
-				return ((Set) parentElement).toArray();
+			if (parentElement instanceof Set<?> set) {
+				return set.toArray();
 			}
 			return new Object[0];
 		}
@@ -238,8 +237,8 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 
 		@Override
 		public String getText(Object element) {
-			if (element instanceof File) {
-				return ((File) element).getAbsolutePath();
+			if (element instanceof File file) {
+				return file.getAbsolutePath();
 			}
 			return super.getText(element);
 		}

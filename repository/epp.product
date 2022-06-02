@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Eclipse IDE for JavaScript and Web Developers" uid="org.eclipse.wildwebdeveloper.product" id="org.eclipse.wildwebdeveloper.product.branding.product" application="org.eclipse.ui.ide.workbench" version="0.13.5.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Eclipse IDE for JavaScript and Web Developers" uid="org.eclipse.wildwebdeveloper.product" id="org.eclipse.wildwebdeveloper.product.branding.product" application="org.eclipse.ui.ide.workbench" version="0.14.0.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.wildwebdeveloper.product.branding.product/eclipse_lg.png"/>
@@ -18,7 +18,7 @@
 -showsplash org.eclipse.epp.package.common
 --launcher.defaultAction openFile
       </programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=11
+      <vmArgs>-Dosgi.requiredJavaVersion=17
 -Dosgi.instance.area.default=@user.home/eclipse-workspace
 -Dsun.java.command=Eclipse
 -Xms256m

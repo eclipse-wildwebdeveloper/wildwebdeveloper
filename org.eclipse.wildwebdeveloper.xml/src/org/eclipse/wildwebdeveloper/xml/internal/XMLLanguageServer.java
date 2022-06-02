@@ -97,8 +97,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private Collection<? extends String> getProxySettings() {
 		Map<String, String> res = new HashMap<>();
 		for (Entry<Object, Object> entry : System.getProperties().entrySet()) {
-			if (entry.getKey() instanceof String && entry.getValue() instanceof String) {
-				String property = (String) entry.getKey();
+			if (entry.getKey() instanceof String property && entry.getValue() instanceof String value) {
 				if (property.toLowerCase().contains("proxy") || property.toLowerCase().contains("proxies")) {
 					res.put(property, (String) entry.getValue());
 				}

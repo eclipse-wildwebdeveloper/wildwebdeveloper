@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.xml;singleton:=true
-Bundle-Version: 0.13.4.qualifier
+Bundle-Version: 0.13.5.qualifier
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.xml
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.tm4e.registry;bundle-version="0.3.0",
  org.eclipse.tm4e.ui;bundle-version="0.1.0",
  org.eclipse.tm4e.languageconfiguration;bundle-version="0.1.0",
