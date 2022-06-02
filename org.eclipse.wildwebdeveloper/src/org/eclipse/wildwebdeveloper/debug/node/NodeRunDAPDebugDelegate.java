@@ -168,7 +168,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 			if (errorMessage == null) {
 				Object option = co.get("sourceMap");
-				boolean sourceMap  = option instanceof Boolean ? ((Boolean)option).booleanValue() : false;
+				boolean sourceMap  = option instanceof Boolean b ? b.booleanValue() : false;
 				if (!sourceMap) {
 					errorMessage = Messages.NodeDebug_TSConfirError_SourceMapIsNotEnabled;
 				}
@@ -177,17 +177,17 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			// Override "outDir" option by converting it to an absolute path
 			boolean outDirOrFileIsSet = false;
 			Object option = co.get("module");
-			String module = option instanceof String ? ((String)option).trim() : null;
+			String module = option instanceof String o ? o.trim() : null;
 						
 			option = co.get("outDir");
-			String outDir = option instanceof String ? ((String)option).trim() : null;
+			String outDir = option instanceof String o ? o.trim() : null;
 			if (outDir != null && outDir.length() > 0 && !".".equals(outDir) && !"./".equals(outDir)) {
 				param.put("outDir", cwd + "/" + outDir);
 				outDirOrFileIsSet = true;
 			}
 			
 			option = co.get("outFile");
-			String outFile = option instanceof String ? ((String)option).trim() : null;
+			String outFile = option instanceof String  o ? o.trim() : null;
 			if (outFile != null && outFile.length() != 0) {
 				param.put("outFile", cwd + "/" + outFile);
 				outDirOrFileIsSet = true;
@@ -270,8 +270,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 						void createContainers(IResource resource) throws CoreException {
 							IContainer container= resource.getParent();
-							if (container instanceof IFolder) {
-								IFolder parent= (IFolder) container;
+							if (container instanceof IFolder parent) {
 								if (parent != null && !parent.exists()) {
 									createContainers(parent);
 									parent.create(false, true, null);

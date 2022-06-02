@@ -67,8 +67,7 @@ public class CSSLanguageServer extends ProcessStreamConnectionProvider {
 	
 	@Override
 	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
-		if (message instanceof ResponseMessage) {
-			ResponseMessage responseMessage = (ResponseMessage)message;
+		if (message instanceof ResponseMessage responseMessage) {
 			if (responseMessage.getResult() instanceof InitializeResult) {
 				// enable validation: so far, no better way found than changing conf after init.
 				DidChangeConfigurationParams params = new DidChangeConfigurationParams(getInitializationOptions(rootUri));

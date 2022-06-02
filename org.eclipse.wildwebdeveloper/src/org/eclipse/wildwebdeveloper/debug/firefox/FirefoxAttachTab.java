@@ -34,13 +34,11 @@ class FirefoxAttachTab extends AttachTab {
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		Control control = getControl();
-		if (control instanceof Composite) {
-			Composite composite = (Composite)control;
+		if (control instanceof Composite composite) {
 			Link label = new Link(composite, SWT.WRAP);
 			label.setText(Messages.firefoxAttachNote);
 			Layout layout = composite.getLayout();
-			if (layout instanceof GridLayout) {
-				GridLayout gridLayout = (GridLayout)layout;
+			if (layout instanceof GridLayout gridLayout) {
 				GridDataFactory.swtDefaults()
 					.align(SWT.BEGINNING, SWT.TOP)
 					.grab(true, false)

@@ -139,8 +139,8 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		Object selectedBrowser = ((IStructuredSelection)browserToUse.getSelection()).getFirstElement();
-		if (selectedBrowser instanceof IBrowserDescriptor) {
-			configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, ((IBrowserDescriptor)selectedBrowser).getLocation());
+		if (selectedBrowser instanceof IBrowserDescriptor desc) {
+			configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, desc.getLocation());
 		} else if (selectedBrowser instanceof String) {
 			configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, selectedBrowser);
 		}
@@ -167,8 +167,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 	static class BrowserLabelProvider extends LabelProvider {
 		@Override
 		public String getText(Object element) {
-			if (element instanceof IBrowserDescriptor) {
-				IBrowserDescriptor browser = (IBrowserDescriptor)element;
+			if (element instanceof IBrowserDescriptor browser) {
 				return browser.getName();
 			}
 			if ("".equals(element)) {

@@ -48,12 +48,11 @@ public class AngularClientImpl extends LanguageClientImpl implements AngularLang
 		String message = null;
 		Either<WorkDoneProgressNotification, Object> either = params.getValue();
 		if (either.isLeft()) {
-			if (either.getLeft() instanceof WorkDoneProgressReport)
-				message = ((WorkDoneProgressReport) either.getLeft()).getMessage();
+			if (either.getLeft() instanceof WorkDoneProgressReport report)
+				message = report.getMessage();
 		}
-		else if (either.getRight() instanceof JsonObject)
+		else if (either.getRight() instanceof JsonObject json)
 		{
-			JsonObject json = (JsonObject) either.getRight();
 			if (json.has("message")) {
 				message = json.get("message").getAsString();
 			}

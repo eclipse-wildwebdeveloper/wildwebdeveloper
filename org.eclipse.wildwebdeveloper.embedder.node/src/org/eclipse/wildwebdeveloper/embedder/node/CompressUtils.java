@@ -75,7 +75,7 @@ public class CompressUtils {
 			}
 			File f = new File(destination, entry.getName());
 			f.delete();
-			boolean symlink = entry instanceof TarArchiveEntry && ((TarArchiveEntry)entry).isSymbolicLink();
+			boolean symlink = entry instanceof TarArchiveEntry tarEntry && tarEntry.isSymbolicLink();
 			if (entry.isDirectory()) {
 				if (!f.isDirectory() && !f.mkdirs()) {
 					throw new IOException("failed to create directory " + f);
@@ -93,8 +93,8 @@ public class CompressUtils {
 						IOUtils.copy(in, o);
 					}
 				}
-				if (entry instanceof TarArchiveEntry) {
-					f.setExecutable((((TarArchiveEntry)entry).getMode() & 256) != 0);
+				if (entry instanceof TarArchiveEntry tarEntry) {
+					f.setExecutable((tarEntry.getMode() & 256) != 0);
 				}
 			}
 		}

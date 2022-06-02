@@ -105,8 +105,7 @@ public class TestJsTs {
 		AtomicBoolean renameDialogCancelPressed = new AtomicBoolean();
 		AtomicBoolean errorDialogOkPressed = new AtomicBoolean();
 		Listener pressOKonRenameDialogPaint = event -> {
-			if (event.widget instanceof Composite) {
-				Composite c = (Composite) event.widget;
+			if (event.widget instanceof Composite c) {
 				Shell shell = c.getShell();
 				if (shell != ideShell && shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
 					Set<String> buttons = getButtons(c);
@@ -163,10 +162,10 @@ public class TestJsTs {
 
 	static private Set<String> getButtons(Widget w) {
 		Set<String> result = new HashSet<>();
-		if (w instanceof Button) {
-			result.add(((Button) w).getText());
-		} else if (w instanceof Composite) {
-			for (Control child : ((Composite) w).getChildren()) {
+		if (w instanceof Button button) {
+			result.add(button.getText());
+		} else if (w instanceof Composite composite) {
+			for (Control child : composite.getChildren()) {
 				result.addAll(getButtons(child));
 			}
 		}

@@ -34,12 +34,12 @@ public class IsNodeProjectPropertyTester extends PropertyTester {
 			if (resource == null) {
 				return false;
 			}
-			if (resource instanceof IFile) {
+			if (resource instanceof IFile file) {
 				IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 				IContentType jsContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.js");
 				IContentType tsContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.ts");
 				try (
-					InputStream content = ((IFile) resource).getContents();
+					InputStream content = file.getContents();
 				) {
 					List<IContentType> contentTypes = Arrays.asList(contentTypeManager.findContentTypesFor(content, resource.getName()));
 					return contentTypes.contains(jsContentType) || contentTypes.contains(tsContentType);
