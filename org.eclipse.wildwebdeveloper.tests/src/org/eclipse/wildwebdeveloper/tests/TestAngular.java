@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -16,7 +16,10 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -25,29 +28,90 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.intro.IIntroPart;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(AllCleanRule.class)
 public class TestAngular {
+	static IProject project;
+	static IFolder appFolder;
+
+	@BeforeAll
+	public static void setUp() throws Exception {
+		// The following is a copy of new AllCleanRule().afterEach(null);`
+		// excluding a call to clean the projects - we need to share the project
+		// between the existing testcases
+		//
+		IIntroPart intro = PlatformUI.getWorkbench().getIntroManager().getIntro();
+		if (intro != null) {
+			PlatformUI.getWorkbench().getIntroManager().closeIntro(intro);
+		}
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		for (IViewReference ref : activePage.getViewReferences()) {
+			activePage.hideView(ref);
+		}
+		enableLogging();
+		// End of note
+
+		project = Utils.provisionTestProject("angular-app");
+		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
+				"--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile());
+		Process process = builder.start();
+		System.out.println(builder.command().toString());
+		String result = new BufferedReader(new InputStreamReader(process.getErrorStream())).lines()
+				.collect(Collectors.joining("\n"));
+		System.out.println("Error Stream: >>>\n" + result + "\n<<<");
+
+		result = new BufferedReader(new InputStreamReader(process.getInputStream())).lines()
+				.collect(Collectors.joining("\n"));
+		System.out.println("Output Stream: >>>\n" + result + "\n<<<");
+
+		assertEquals(0, process.waitFor(), "npm install didn't complete property");
+
+		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+		assertTrue(project.exists());
+		appFolder = project.getFolder("src").getFolder("app");
+		assertTrue(appFolder.exists());
+	}
+
+	@BeforeEach
+	public void setUpTestCase() {
+		enableLogging();
+	}
+
+	@AfterAll
+	public static void tearDown() throws Exception {
+		new AllCleanRule().afterEach(null);
+	}
+
+	private static void enableLogging() {
+		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
+		prefs.putValue("org.eclipse.wildwebdeveloper.angular.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.css.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.html.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.json.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.eslint.file.logging.enabled", Boolean.toString(true));
+	}
 
 	@Test
-	public void testAngular() throws Exception {
-		IProject project = Utils.provisionTestProject("angular-app");
-		Process process = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
-				"--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile()).start();
-		assertEquals(0, process.waitFor(), "npm install didn't complete property");
-		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		IFolder appFolder = project.getFolder("src").getFolder("app");
-
+	public void testAngularTs() throws Exception {
 		IFile appComponentFile = appFolder.getFile("app.component.ts");
 		TextEditor editor = (TextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
@@ -67,13 +131,15 @@ public class TestAngular {
 					return false;
 				}
 			}
-			// The timeout is increased to 150 seconds due to the slow compilation of an
-			// angular project.
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 150000),
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
 				"Diagnostic not published in standalone component file");
 		editor.close(false);
+	}
 
-		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+	@Test
+	public void testAngularHtml() throws Exception {
+		TextEditor editor = (TextEditor) IDE.openEditor(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				appFolder.getFile("app.componentWithHtml.ts"));
 		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
 									// didChange
@@ -94,10 +160,11 @@ public class TestAngular {
 					return Arrays.stream(markers)
 							.anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
 				} catch (CoreException e) {
+					e.printStackTrace();
 					return false;
 				}
 			}
-		}.waitForCondition(editor.getSite().getShell().getDisplay(), 150000),
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
 				"No error found on erroneous HTML component file");
 		// test completion
 		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
@@ -106,5 +173,4 @@ public class TestAngular {
 		proposals[0].apply(document);
 		assertEquals("<h1>{{title}}</h1>\n", document.get(), "Incorrect completion insertion");
 	}
-
 }

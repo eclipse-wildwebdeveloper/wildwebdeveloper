@@ -192,7 +192,7 @@
 								<arg>firefox-debugadapter@2.9.6</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.13.0.tgz</arg>
 								<arg>${project.build.directory}/eslint-server-2.1.25.tgz</arg>
-								<arg>@angular/language-server@13.3.2</arg>
+								<arg>@angular/language-server@14.0.1</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
