@@ -20,4 +20,7 @@ public interface AngularLanguageServerExtention {
 
 	@JsonNotification(value = "angular/suggestIvyLanguageServiceMode")
 	public void suggestIvyLanguageServiceMode(Object o);
+	
+	@JsonNotification(value = "angular/NgccProgressEnd")
+	public void ngccProgressEnd(Object o);
 }
