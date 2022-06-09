@@ -44,6 +44,11 @@ public class AngularClientImpl extends LanguageClientImpl implements AngularLang
 	}
 	
 	@Override
+	public void ngccProgressEnd(Object o) {
+		logMessage(new MessageParams(MessageType.Info, o.toString()));
+	}
+	
+	@Override
 	public void notifyProgress(ProgressParams params) {
 		String message = null;
 		Either<WorkDoneProgressNotification, Object> either = params.getValue();
@@ -61,4 +66,5 @@ public class AngularClientImpl extends LanguageClientImpl implements AngularLang
 			logMessage(new MessageParams(MessageType.Info, params.getToken().getLeft()  + ": " + (message == null? "done":message)));
 		}
 	}
+
 }
