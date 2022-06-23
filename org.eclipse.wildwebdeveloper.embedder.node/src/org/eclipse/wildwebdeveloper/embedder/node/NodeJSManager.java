@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.internal.runtime.InternalPlatform;
 import org.eclipse.core.runtime.FileLocator;
@@ -35,28 +33,23 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.osgi.framework.Version;
 
 @SuppressWarnings("restriction")
 public class NodeJSManager {
 
 	private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
 
-	private static final Set<Integer> SUPPORT_NODEJS_MAJOR_VERSIONS = Set.of(10, 11, 12, 13, 14);
-
 	private static boolean alreadyWarned;
 	private static Properties cachedNodeJsInfoProperties;
 	private static final Object EXPAND_LOCK = new Object();
 
 	public static File getNodeJsLocation() {
-		{
-			String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
-			if (nodeJsLocation != null) {
-				File nodejs = new File(nodeJsLocation);
-				if (nodejs.exists()) {
-					validateNodeVersion(nodejs);
-					return new File(nodeJsLocation);
-				}
+		String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
+		if (nodeJsLocation != null) {
+			File nodejs = new File(nodeJsLocation);
+			if (nodejs.exists()) {
+				validateNodeVersion(nodejs);
+				return new File(nodeJsLocation);
 			}
 		}
 
@@ -177,7 +170,7 @@ public class NodeJSManager {
 
 	private static String getDefaultShellMacOS() {
 		String res = null;
-		String[] command = new String[] { "/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell" };
+		String[] command = { "/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell" };
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
 			res = reader.readLine();
@@ -197,15 +190,15 @@ public class NodeJSManager {
 
 	private static File getDefaultNodePath() {
 		return new File(switch (Platform.getOS()) {
-			case Platform.OS_MACOSX -> "/usr/local/bin/node";
-			case Platform.OS_WIN32 -> "C:\\Program Files\\nodejs\\node.exe";
-			default ->"/usr/bin/node";
+		case Platform.OS_MACOSX -> "/usr/local/bin/node";
+		case Platform.OS_WIN32 -> "C:\\Program Files\\nodejs\\node.exe";
+		default -> "/usr/bin/node";
 		});
 	}
 
 	private static void validateNodeVersion(File nodeJsLocation) {
 		String nodeVersion = null;
-		String[] nodeVersionCommand = new String[] { nodeJsLocation.getAbsolutePath(), "-v" };
+		String[] nodeVersionCommand = { nodeJsLocation.getAbsolutePath(), "-v" };
 
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(Runtime.getRuntime().exec(nodeVersionCommand).getInputStream()));) {
@@ -217,12 +210,6 @@ public class NodeJSManager {
 
 		if (nodeVersion == null) {
 			warnNodeJSVersionCouldNotBeDetermined();
-		} else {
-			Version parsedVersion = Version
-					.parseVersion(nodeVersion.startsWith("v") ? nodeVersion.replace("v", "") : nodeVersion);
-			if (!SUPPORT_NODEJS_MAJOR_VERSIONS.contains(parsedVersion.getMajor())) {
-				warnNodeJSVersionUnsupported(nodeVersion);
-			}
 		}
 	}
 
@@ -235,25 +222,11 @@ public class NodeJSManager {
 		alreadyWarned = true;
 	}
 
-	private static void warnNodeJSVersionUnsupported(String version) {
-		if (!alreadyWarned) {
-			Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
-					"Node.js " + version + " is not supported",
-					"Node.js " + version + " is not supported. This will result in editors missing key features.\n"
-							+ "Please make sure a supported version of node.js is installed and that your PATH environment variable contains the location to the `node` executable.\n"
-							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-									.map(String::valueOf).collect(Collectors.joining(", "))));
-		}
-		alreadyWarned = true;
-	}
-
 	private static void warnNodeJSVersionCouldNotBeDetermined() {
 		if (!alreadyWarned) {
 			Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
 					"Node.js version could not be determined",
-					"Node.js version could not be determined. Please make sure a supported version of node.js is installed, editors may be missing key features otherwise.\n"
-							+ "Supported major versions are: " + SUPPORT_NODEJS_MAJOR_VERSIONS.stream()
-									.map(String::valueOf).collect(Collectors.joining(", "))));
+					"Node.js version could not be determined. Please make sure a recent version of node.js is installed, editors may be missing key features otherwise.\n"));
 		}
 		alreadyWarned = true;
 	}
