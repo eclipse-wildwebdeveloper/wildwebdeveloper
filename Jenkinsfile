@@ -5,7 +5,7 @@ pipeline {
 	}
   agent {
     kubernetes {
-      label 'wildwebdeveloper-buildtest-pod-f33-java11'
+      label 'wildwebdeveloper-buildtest-pod'
       defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
