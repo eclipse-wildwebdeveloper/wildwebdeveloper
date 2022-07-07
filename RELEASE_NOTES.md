@@ -2,10 +2,18 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 0.13.6
+
+* 📅 Release Date: July 7th 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.5...0.13.6
+
+* Use Java 17
+* Bugfixes
+
 ## 0.13.5
 
 * 📅 Release Date: May 29th 2022
-* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.3...0.13.4
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.4...0.13.5
 
 * Dependency and inclusions updates
   ** Embedded Node.js
