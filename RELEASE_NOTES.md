@@ -2,6 +2,16 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## Next release: 0.15.0
+
+* 📅 Release Date: ? 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.6...master
+
+#### Incompatibility: LemMinX 0.21.0
+
+Wild Web Developer now includes LemMinX 0.21.0. This version has some API change that may break existing extensions. So if you do include a LemMinX extension via Wild Web Developer extension point, your extension will be likely failing. Remediation to to update your LemMinX extension to use LemMinX 0.21.0 and then include this new version of your extension in your Wild Web Developer extension plugin.
+
+
 ## 0.13.6
 
 * 📅 Release Date: July 7th 2022
