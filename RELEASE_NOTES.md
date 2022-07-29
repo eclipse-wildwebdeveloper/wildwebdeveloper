@@ -2,10 +2,10 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
-## Next release: 0.15.0
+## 0.15.0
 
-* 📅 Release Date: ? 2022
-* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.6...master
+* 📅 Release Date: July 29th, 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.13.6...0.15.0
 
 #### Incompatibility: LemMinX 0.21.0
 
