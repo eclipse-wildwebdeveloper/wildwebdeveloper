@@ -33,7 +33,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId, "onNamespaceEncountered");
-		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId, "onValidSchema");
+		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId, "always");
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId, "hint");
