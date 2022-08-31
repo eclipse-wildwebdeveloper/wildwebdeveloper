@@ -7,7 +7,7 @@
 		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.6.1-SNAPSHOT</version>
+	<version>0.6.2-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -42,7 +42,7 @@
 						<configuration>
 							<connectionUrl>scm:git:https://github.com/microsoft/vscode-eslint.git</connectionUrl>
 							<scmVersionType>tag</scmVersionType>
-							<scmVersion>release/2.2.2</scmVersion>
+							<scmVersion>release/2.2.6</scmVersion>
 							<basedir>${project.build.directory}</basedir>
 							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls-package-json/extension</checkoutDirectory>
 						</configuration>
@@ -60,7 +60,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://az764295.vo.msecnd.net/stable/dfd34e8260c270da74b5c2d86d61aee4b6d56977/code-stable-x64-1649664837.tar.gz</url>
+							<url>https://az764295.vo.msecnd.net/stable/e4503b30fc78200f846c62cf8091b76ff5547662/code-stable-x64-1660629670.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
@@ -98,7 +98,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.2.3/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
+                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.2.6/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
 							<outputFileName>vscode-eslint-ls.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls</outputDirectory>
@@ -204,18 +204,18 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.43.0.tgz</arg>
-								<arg>typescript@4.6.4</arg>
-								<arg>typescript-language-server@0.9.7</arg>
+								<arg>typescript@4.8.3</arg>
+								<arg>typescript-language-server@1.2.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@3.4.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
 								<arg>${project.build.directory}/vscode-json-languageserver-1.3.4.tgz</arg>
-								<arg>yaml-language-server@1.7.0</arg>
-								<arg>firefox-debugadapter@2.9.6</arg>
+								<arg>yaml-language-server@1.10.0</arg>
+								<arg>firefox-debugadapter@2.9.8</arg>
 								<arg>${project.build.directory}/debugger-for-chrome-4.13.0.tgz</arg>
-								<arg>${project.build.directory}/eslint-server-2.1.25.tgz</arg>
-								<arg>@angular/language-server@14.0.1</arg>
+								<arg>${project.build.directory}/eslint-server-2.2.5.tgz</arg>
+								<arg>@angular/language-server@14.2.0</arg>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
