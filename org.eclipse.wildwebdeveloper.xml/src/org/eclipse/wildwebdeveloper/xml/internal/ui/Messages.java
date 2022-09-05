@@ -29,6 +29,22 @@ public class Messages extends NLS {
 
 	public static String XMLCodelensPreferencePage_codelens_enabled;
 
+	// --------- XML Formatting preference page
+
+	public static String XMLFormattingPreferencePage_format_emptyElements;
+	public static String XMLFormattingPreferencePage_format_emptyElements_collapse;
+	public static String XMLFormattingPreferencePage_format_emptyElements_expand;
+	public static String XMLFormattingPreferencePage_format_spaceBeforeEmptyCloseTag;
+	public static String XMLFormattingPreferencePage_format_splitAttributes;
+	public static String XMLFormattingPreferencePage_format_splitAttributesIndentSize;
+	public static String XMLFormattingPreferencePage_format_preserveAttributeLineBreaks;
+	public static String XMLFormattingPreferencePage_format_closingBracketNewLine;
+	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit;
+	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit_onElement;
+	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit_onPair;
+	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit_none;
+	public static String XMLFormattingPreferencePage_format_joinCommentLines;
+
 	// --------- XML Validation preference page
 
 	public static String XMLValidationPreferencePage_validation_enabled;

@@ -148,7 +148,14 @@
             id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCodeLensPreferencePage"
             name="%XMLCodeLensPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlcodelens"/>
-         </page>         
+         </page>
+         <page
+            category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
+            class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLFormattingPreferencePage"
+            id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLLFormattingPreferencePage"
+            name="%XMLFormattingPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlformatting"/>
+         </page>
          <page
             category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
             class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLValidationPreferencePage"
@@ -165,7 +172,10 @@
 			id="org.eclipse.wildwebdeveloper.xml.ui.xmlcatalogs"/>
 		<keyword
 			label="%XMLCodeLensPreferencesPage.preferenceKeywords.xmlcodelens"
-			id="org.eclipse.wildwebdeveloper.xml.ui.xmlcodelens"/>			
+			id="org.eclipse.wildwebdeveloper.xml.ui.xmlcodelens"/>
+		<keyword
+			label="%XMLCodeLensPreferencesPage.preferenceKeywords.xmlformatting"
+			id="org.eclipse.wildwebdeveloper.xml.ui.xmlformatting"/>
 		<keyword
 			label="%XMLValidationPreferencesPage.preferenceKeywords.xmlvalidation"
 			id="org.eclipse.wildwebdeveloper.xml.ui.xmlvalidation"/>			
