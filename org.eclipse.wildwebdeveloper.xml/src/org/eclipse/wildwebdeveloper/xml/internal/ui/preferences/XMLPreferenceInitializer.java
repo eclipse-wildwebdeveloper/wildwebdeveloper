@@ -14,6 +14,14 @@ package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CODELENS_ENABLED;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_JOIN_COMMENTLINES;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_ENABLED;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED;
@@ -32,13 +40,21 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
 		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.preferenceId, true);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS.preferenceId, "ignore");
+		STORE.setDefault(XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG.preferenceId, true);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE.preferenceId, 2);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS.preferenceId, true);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT.preferenceId, "onPair");
+		STORE.setDefault(XML_PREFERENCES_FORMAT_JOIN_COMMENTLINES.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId, "onNamespaceEncountered");
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId, "always");
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId, "hint");
-		STORE.setDefault(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.preferenceId, true);
 	}
 
 }
