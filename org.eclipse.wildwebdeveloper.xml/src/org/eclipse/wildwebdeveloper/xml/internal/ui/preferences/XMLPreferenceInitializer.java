@@ -13,6 +13,7 @@ package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CODELENS_ENABLED;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS;
@@ -38,6 +39,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
+		STORE.setDefault(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
 		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.preferenceId, true);

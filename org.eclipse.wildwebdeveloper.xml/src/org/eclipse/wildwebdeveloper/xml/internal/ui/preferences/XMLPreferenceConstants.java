@@ -61,6 +61,10 @@ public class XMLPreferenceConstants {
 		}
 	}
 
+
+	// General settings
+	public static final LemminxPreference XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES = new LemminxPreference("downloadExternalResources/enabled");
+
 	// Catalog settings
 	public static final LemminxPreference XML_PREFERENCES_CATAGLOGS = new LemminxPreference("catalogs");
 	
@@ -82,6 +86,7 @@ public class XMLPreferenceConstants {
 
 	// Validation settings
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_ENABLED = new LemminxPreference("validation/enabled");
+
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED = new LemminxPreference("validation/namespaces/enabled");
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED = new LemminxPreference("validation/schema/enabled");
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL = new LemminxPreference("validation/disallowDocTypeDecl");
@@ -89,6 +94,7 @@ public class XMLPreferenceConstants {
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NO_GRAMMAR = new LemminxPreference("validation/noGrammar");
 	
 	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = {
+			XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES,
 			XML_PREFERENCES_CATAGLOGS,
 			XML_PREFERENCES_CODELENS_ENABLED,
 			XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD,
@@ -117,7 +123,10 @@ public class XMLPreferenceConstants {
 	}
 
 	public static void storePreferencesToLemminxOptions(IPreferenceStore store, Map<String, Object> xmlOpts) {
-		// Catalo settings
+		// General settings
+		XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId), xmlOpts);
+		
+		// Catalog settings
 		XML_PREFERENCES_CATAGLOGS.storeToLemminxOptions(
 				XMLCatalogs.getAllCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
 				xmlOpts);
