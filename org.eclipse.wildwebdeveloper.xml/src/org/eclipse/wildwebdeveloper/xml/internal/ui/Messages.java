@@ -15,10 +15,13 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
+	// --------- XML Preference page
+	public static String XMLPreferencePage_XMLCatalogsLink;
+	public static String XMLPreferencePage_downloadExternalResources_enabled;
+	
 	// --------- XML Catalog preference page
 
-	public static String XMLPreferencePage_XMLCatalogsLink;
-
+	
 	public static String XMLCatalogPreferencePage_Entries;
 	public static String XMLCatalogPreferencePage_Edit;
 	public static String XMLCatalogPreferencePage_OpenInEditorTitle;
