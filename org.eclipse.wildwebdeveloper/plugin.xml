@@ -427,11 +427,11 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.js"
-            path="language-configurations/javascript/javascript-language-configuration.json">
+            path="language-configurations/javascript/javascript-language-configuration.jsonc">
       </languageConfiguration>
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.ts"
-            path="language-configurations/typescript/language-configuration.json">
+            path="language-configurations/typescript/language-configuration.jsonc">
       </languageConfiguration>
       <!-- TODO replace with more specific language configuration if we include some -->
       <languageConfiguration
