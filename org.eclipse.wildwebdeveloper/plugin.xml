@@ -308,7 +308,7 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.html"
-            path="language-configurations/html/language-configuration.json">
+            path="language-configurations/html/language-configuration.jsonc">
       </languageConfiguration>
    </extension>
 
