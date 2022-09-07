@@ -14,17 +14,26 @@
 		["<", ">"],
 		["'", "'"],
 		["\"", "\""]
+	],
+	"onEnterRules": [
+		{
+			"beforeText": {
+				"pattern": "<([_:\\w][_:\\w-\\.\\d]*)(?:(?:[^'\"/>]|\"[^\"]*\"|'[^']*')*?(?!\\/)>)[^<]*$",
+				"flags": "i"
+			},
+			"afterText": {
+				"pattern": "^<\\/([_:\\w][_:\\w\\-.\\d]*)\\s*>",
+				"flags": "i"
+			},
+			"action": {
+				"indent": "indentOutdent"
+			}
+		},
+		{
+			"beforeText": "<(\\w[\\w\\d]*)([^/>]*(?!/)>)[^<]*$",
+			"action": {
+				"indent": "indent"
+			}
+		}
 	]
-
-	// enhancedBrackets: [{
-	// 	tokenType: 'tag.tag-$1.xml',
-	// 	openTrigger: '>',
-	// 	open: /<(\w[\w\d]*)([^\/>]*(?!\/)>)[^<>]*$/i,
-	// 	closeComplete: '</$1>',
-	// 	closeTrigger: '>',
-	// 	close: /<\/(\w[\w\d]*)\s*>$/i
-	// }],
-
-	// autoClosingPairs:  [['\'', '\''], ['"', '"'] ]
-
 }
