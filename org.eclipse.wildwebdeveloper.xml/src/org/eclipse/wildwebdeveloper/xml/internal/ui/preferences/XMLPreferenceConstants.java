@@ -23,6 +23,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
+/**
+ * XML preference server constants.
+ *
+ */
 public class XMLPreferenceConstants {
 
 	public static class LemminxPreference {

@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Wild Web Developer: web development in Eclipse IDE
+Bundle-Name: %pluginName
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper;singleton:=true
 Automatic-Module-Name: org.eclipse.wildwebdeveloper
 Bundle-Version: 0.6.1.qualifier
 Bundle-Activator: org.eclipse.wildwebdeveloper.Activator
-Bundle-Vendor: Eclipse Wild Web Developer project
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.lsp4e;bundle-version="0.13.6",

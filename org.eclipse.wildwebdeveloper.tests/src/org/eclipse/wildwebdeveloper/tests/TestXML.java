@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
@@ -139,5 +140,21 @@ public class TestXML {
 		proposals = processor.computeCompletionProposals(Utils.getViewer(editor), offset);
 		DisplayHelper.sleep(editor.getSite().getShell().getDisplay(), 2000);
 		assertTrue(proposals.length > 1);
+	}
+
+	@Test
+	public void autoCloseTags() throws Exception {
+		final IFile file = project.getFile("autoCloseTags.xml");
+		file.create(new ByteArrayInputStream("<foo".getBytes()), true, null);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		document.replace(4, 0, ">");
+		assertTrue(new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				return "<foo></foo>".equals(document.get());
+			}
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Autoclose not done");
 	}
 }

@@ -18,10 +18,9 @@ public class Messages extends NLS {
 	// --------- XML Preference page
 	public static String XMLPreferencePage_XMLCatalogsLink;
 	public static String XMLPreferencePage_downloadExternalResources_enabled;
+	public static String XMLPreferencePage_completion_autoCloseTags;
 	
 	// --------- XML Catalog preference page
-
-	
 	public static String XMLCatalogPreferencePage_Entries;
 	public static String XMLCatalogPreferencePage_Edit;
 	public static String XMLCatalogPreferencePage_OpenInEditorTitle;
@@ -29,11 +28,9 @@ public class Messages extends NLS {
 	public static String XMLCatalogPreferencePage_OpenInEditorApplyAndEdit;
 
 	// --------- XML CodeLens preference page
-
 	public static String XMLCodelensPreferencePage_codelens_enabled;
 
 	// --------- XML Formatting preference page
-
 	public static String XMLFormattingPreferencePage_format_emptyElements;
 	public static String XMLFormattingPreferencePage_format_emptyElements_collapse;
 	public static String XMLFormattingPreferencePage_format_emptyElements_expand;
@@ -49,7 +46,6 @@ public class Messages extends NLS {
 	public static String XMLFormattingPreferencePage_format_joinCommentLines;
 
 	// --------- XML Validation preference page
-
 	public static String XMLValidationPreferencePage_validation_enabled;
 	public static String XMLValidationPreferencePage_validation_namespaces_enabled;
 	public static String XMLValidationPreferencePage_validation_schema_enabled;
@@ -58,7 +54,6 @@ public class Messages extends NLS {
 	public static String XMLValidationPreferencePage_validation_noGrammar;
 
 	// --------- Buttons
-
 	public static String PreferencePage_Add;
 	public static String PreferencePage_Remove;
 

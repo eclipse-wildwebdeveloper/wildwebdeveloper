@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceClientConstants.XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CODELENS_ENABLED;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES;
@@ -34,11 +35,20 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
+/**
+ * XML preference initializer.
+ *
+ */
 public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
+
 	private static final IPreferenceStore STORE = Activator.getDefault().getPreferenceStore();
 
 	@Override
 	public void initializeDefaultPreferences() {
+		// Client settings
+		STORE.setDefault(XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS, true);
+
+		// Server settings
 		STORE.setDefault(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
 		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, false);

@@ -18,6 +18,13 @@
       </presentationReconciler>
    </extension>
 
+	<extension
+	      point="org.eclipse.ui.genericeditor.reconcilers">
+	   <reconciler
+	         class="org.eclipse.wildwebdeveloper.xml.internal.autoclose.XMLAutoCloseTagReconciler"
+	         contentType="org.eclipse.core.runtime.xml">
+	   </reconciler>
+	</extension>
 
    <!-- XML Language -->   
    <extension
@@ -49,6 +56,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.xml.internal.XMLLanguageServer"
+            serverInterface="org.eclipse.wildwebdeveloper.xml.internal.XMLLanguageServerAPI"
             clientImpl="org.eclipse.wildwebdeveloper.xml.internal.XmlLanguageClientImpl"
             id="org.eclipse.wildwebdeveloper.xml"
             label="XML Language Server"
