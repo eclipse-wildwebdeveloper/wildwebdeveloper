@@ -282,6 +282,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.html.HTMLLanguageServer"
+            serverInterface="org.eclipse.wildwebdeveloper.html.HTMLLanguageServerAPI"
             id="org.eclipse.wildwebdeveloper.html"
             label="HTML Language Server (VSCode)"
             singleton="true">
@@ -323,6 +324,32 @@
 
    <extension point="org.eclipse.ui.genericeditor.icons">
      <icon contentType="org.eclipse.wildwebdeveloper.html" icon="icons/htmlEditorIcon.png"/>
+   </extension>
+
+	<extension
+	      point="org.eclipse.ui.genericeditor.reconcilers">
+	   <reconciler
+	         class="org.eclipse.wildwebdeveloper.html.autoinsert.HTMLAutoInsertReconciler"
+	         contentType="org.eclipse.wildwebdeveloper.html">
+	   </reconciler>
+	</extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
+            id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
+            name="%HTMLPreferencePage.name">
+      </page>
+   </extension>
+
+   <extension
+         id="HTMLPreferenceInitializer"
+         name="HTMLPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceInitializer">
+      </initializer>
    </extension>
 
    <!-- JavaScript/TypeScript Language -->   
