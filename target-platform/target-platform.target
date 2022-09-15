@@ -17,7 +17,7 @@
 	<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
 	<unit id="org.objectweb.asm" version="0.0.0"/>
 	<unit id="org.hamcrest.core" version="0.0.0"/>
-	<unit id="org.junit.jupiter.api" version="0.0.0"/>
+	<unit id="junit-jupiter-api" version="0.0.0"/>
 	<unit id="javax.xml.stream" version="0.0.0"/>
 	<unit id="org.apache.commons.compress" version="0.0.0"/>
 	<!-- Product deps -->
