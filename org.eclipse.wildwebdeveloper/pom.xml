@@ -31,21 +31,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-scm-plugin</artifactId>
-				<version>2.0.0-M2</version>
+				<version>1.13.0</version>
 				<executions>
 					<execution>
 						<id>fetch-eslint-ls-package.json</id>
 						<goals>
 							<goal>checkout</goal>
 						</goals>
-						<phase>generate-resources</phase>
+						<phase>process-sources</phase>
 						<configuration>
 							<connectionUrl>scm:git:https://github.com/microsoft/vscode-eslint.git</connectionUrl>
 							<scmVersionType>tag</scmVersionType>
 							<scmVersion>release/2.2.2</scmVersion>
 							<basedir>${project.build.directory}</basedir>
-							<includes>server/package.json</includes>
-							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls/extension</checkoutDirectory>
+							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls-package-json/extension</checkoutDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -108,13 +107,37 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>install-eslint-ls-package.json</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/vscode-eslint-ls/extension/server</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/vscode-eslint-ls-package-json/extension/server</directory>
+									<includes>
+										<include>package.json</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>prepare-chrome-debug-adapter</id>
-						<phase>generate-resources</phase>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -127,7 +150,7 @@
 					</execution>
 					<execution>
 						<id>prepare-node-debug2</id>
-						<phase>generate-resources</phase>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -150,7 +173,7 @@
 						<goals>
 							<goal>exec</goal>
 						</goals>
-						<phase>generate-resources</phase>
+						<phase>compile</phase>
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
@@ -172,7 +195,7 @@
 						<goals>
 							<goal>exec</goal>
 						</goals>
-						<phase>generate-resources</phase>
+						<phase>compile</phase>
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
