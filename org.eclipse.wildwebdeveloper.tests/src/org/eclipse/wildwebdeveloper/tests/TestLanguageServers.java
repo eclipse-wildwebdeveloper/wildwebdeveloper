@@ -172,7 +172,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not published");
 	}
 
 	@Test
@@ -210,7 +210,7 @@ public class TestLanguageServers {
 					return false;
 				}
 			}
-		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not published");
 	}
 
 	@Test
