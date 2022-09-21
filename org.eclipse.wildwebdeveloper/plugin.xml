@@ -436,11 +436,11 @@
       <!-- TODO replace with more specific language configuration if we include some -->
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.jsx"
-            path="language-configurations/javascript/javascript-language-configuration.json">
+            path="language-configurations/javascript/javascript-language-configuration.jsonc">
       </languageConfiguration>
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.tsx"
-            path="language-configurations/typescript/language-configuration.json">
+            path="language-configurations/typescript/language-configuration.jsonc">
       </languageConfiguration>
    </extension>
    
