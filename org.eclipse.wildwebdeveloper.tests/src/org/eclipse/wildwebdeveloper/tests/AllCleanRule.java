@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.intro.IIntroPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -37,6 +38,7 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 			}
 		}
 		LanguageServiceAccessor.clearStartedServers();
+		DisplayHelper.sleep(2000); // Let the queues to be processed
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			try {
 				project.delete(true, null);
