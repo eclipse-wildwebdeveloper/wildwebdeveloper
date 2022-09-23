@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2022 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -30,6 +30,11 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 
 	private void clearProjects() {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
+		DisplayHelper.sleep(500); // Let the queues to be processed
+
+		LanguageServiceAccessor.clearStartedServers();
+		DisplayHelper.sleep(1000); // Let the queues to be processed
+
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			try {
 				project.close(null);
@@ -37,8 +42,8 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 				e.printStackTrace();
 			}
 		}
-		LanguageServiceAccessor.clearStartedServers();
-		DisplayHelper.sleep(2000); // Let the queues to be processed
+		DisplayHelper.sleep(500); // Let the queues to be processed
+
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			try {
 				project.delete(true, null);
