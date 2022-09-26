@@ -16,8 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -64,8 +68,18 @@ public class TestESLint {
 		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
 			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.ts").toPath());
 		}
-		Process dependencyInstaller = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install")
-				.directory(projectDirectory).start();
+		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
+				"--no-bin-links", "--ignore-scripts").directory(projectDirectory);
+		Process dependencyInstaller = builder.start();
+		System.out.println(builder.command().toString());
+		String result = new BufferedReader(new InputStreamReader(dependencyInstaller.getErrorStream())).lines()
+				.collect(Collectors.joining("\n"));
+		System.out.println("Error Stream: >>>\n" + result + "\n<<<");
+
+		result = new BufferedReader(new InputStreamReader(dependencyInstaller.getInputStream())).lines()
+				.collect(Collectors.joining("\n"));
+		System.out.println("Output Stream: >>>\n" + result + "\n<<<");
+
 		assertEquals(0, dependencyInstaller.waitFor(), "npm install didn't complete properly");
 		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		this.project.create(desc, null);
