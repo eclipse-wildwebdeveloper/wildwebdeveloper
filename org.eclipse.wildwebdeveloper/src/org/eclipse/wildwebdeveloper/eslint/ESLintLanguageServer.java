@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.eslint;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,8 +30,11 @@ public class ESLintLanguageServer extends ProcessStreamConnectionProvider {
 		//commands.add("--inspect-brk"); // for local debug
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/eslint-server/out/eslintServer.js"));
+			File nodeModules = new File(url.getPath()).getParentFile().getParentFile().getParentFile();
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			// commands.add("/home/mistria/git/vscode-eslint/server/out/eslintServer.js"); // to use and debug against local sources
+			commands.add("--tsProbeLocations");
+			commands.add(new File(nodeModules, "typescript").getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
