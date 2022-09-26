@@ -19,10 +19,10 @@ spec:
     command: [ "uid_entrypoint", "cat" ]
     resources:
       limits:
-        memory: "4Gi"
+        memory: "6Gi"
         cpu: "2000m"
       requests:
-        memory: "4Gi"
+        memory: "6Gi"
         cpu: "1000m"
   - name: jnlp
     image: 'eclipsecbi/jenkins-jnlp-agent'
@@ -58,7 +58,7 @@ spec:
 				container('container') {
 					withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
 						wrap([$class: 'Xvnc', useXauthority: true]) {
-							sh 'mvn clean verify -B -Dtycho.disableP2Mirrors=true -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository -Dgithub.api.token="${GITHUB_API_TOKEN}"'
+							sh 'mvn clean verify -B -fae -Dtycho.disableP2Mirrors=true -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign -Dmaven.repo.local=$WORKSPACE/.m2/repository -Dgithub.api.token="${GITHUB_API_TOKEN}"'
 						}
 					}
 				}
