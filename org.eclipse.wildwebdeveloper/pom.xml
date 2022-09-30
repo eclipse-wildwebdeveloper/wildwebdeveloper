@@ -204,8 +204,8 @@
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
 								<arg>${project.build.directory}/node-debug2-1.43.0.tgz</arg>
-								<arg>typescript@4.8.3</arg>
-								<arg>typescript-language-server@1.2.0</arg>
+								<arg>typescript@4.8.4</arg>
+								<arg>typescript-language-server@2.0.0</arg>
 								<arg>typescript-lit-html-plugin@0.9.0</arg>
 								<arg>typescript-plugin-css-modules@3.4.0</arg>
 								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
