@@ -126,10 +126,17 @@ public class XMLCatalogs {
 		URI uri = URI.create(element.getAttribute("uri"));
 		if (!uri.isAbsolute()) {
 			try {
-				URL url = FileLocator.find(Platform.getBundle(element.getContributor().getName()),
+				String contributorName = element.getContributor().getName();
+				URL url = FileLocator.find(Platform.getBundle(contributorName),
 						Path.fromPortableString(uri.toString()));
-				// this constructor will ensure parts are URI encoded correctly
-				uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+				if(Objects.nonNull(url)) {
+					// this constructor will ensure parts are URI encoded correctly
+					uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+				} else {
+					Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"A URL object was not found for the given URI "+uri+ " from  "+contributorName));
+				}
+				
 			} catch (InvalidRegistryObjectException | URISyntaxException e) {
 				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 			}
