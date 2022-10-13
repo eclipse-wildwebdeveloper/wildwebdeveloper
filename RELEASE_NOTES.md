@@ -2,6 +2,23 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 0.15.1
+
+* 📅 Release Date: October 13th, 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.15.0...0.15.1
+
+#### Dependency and inclusions updates
+  * Embedded Node.js
+  * TypeScript, Angular and related language servers updated
+  * Newer Eclipse Platform and other dependencies updated
+  
+#### Editing improvements
+  * XML Formatting preference page is added
+  * An option to download external resources like referenced DTD, XSDSupport is added
+  * Support for OnEnterRules for xml, html, js and ts files - indentation rules are added
+  
+### Other bugfixes and improvements
+
 ## 0.15.0
 
 * 📅 Release Date: July 29th, 2022
