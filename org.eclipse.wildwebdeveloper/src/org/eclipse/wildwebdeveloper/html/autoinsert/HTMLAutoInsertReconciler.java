@@ -12,6 +12,7 @@
 package org.eclipse.wildwebdeveloper.html.autoinsert;
 
 import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceClientConstants.HTML_PREFERENCES_AUTO_CLOSING_TAGS;
+import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceClientConstants.HTML_PREFERENCES_AUTO_CREATE_QUOTES;
 
 import java.net.URI;
 import java.util.Optional;
@@ -49,7 +50,9 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 	private Listener listener;
 
 	private void autoInsert(DocumentEvent event) {
-		if (!isEnabled()) {
+		boolean autoClosingTag = isAutoClosingTagEnabled();
+		boolean autoCreateQuotes = isAutoCreateQuotesEnabled();
+		if (!autoClosingTag && !autoCreateQuotes) {
 			return;
 		}
 		if (event == null || viewer == null) {
@@ -69,6 +72,19 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 		if (uri == null) {
 			return;
 		}
+		AutoInsertKind autoInsertKind = c == '=' ? AutoInsertKind.autoQuote : AutoInsertKind.autoClose;
+		switch (autoInsertKind) {
+		case autoClose:
+			if (!autoClosingTag) {
+				return;
+			}
+			break;
+		case autoQuote:
+			if (!autoCreateQuotes) {
+				return;
+			}
+			break;
+		}
 
 		TextDocumentIdentifier identifier = new TextDocumentIdentifier(uri.toString());
 		Optional<LSPDocumentInfo> info = LanguageServiceAccessor
@@ -87,7 +103,7 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 				try {
 					AutoInsertParams params = new AutoInsertParams();
 					params.setTextDocument(identifier);
-					params.setKind(c == '=' ? AutoInsertKind.autoQuote.name() : AutoInsertKind.autoClose.name());
+					params.setKind(autoInsertKind.name());
 					params.setPosition(LSPEclipseUtils.toPosition(offset, document));
 
 					// consumes html/autoInsert from HTML language server
@@ -122,8 +138,12 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 		}
 	}
 
-	private boolean isEnabled() {
+	private boolean isAutoClosingTagEnabled() {
 		return Activator.getDefault().getPreferenceStore().getBoolean(HTML_PREFERENCES_AUTO_CLOSING_TAGS);
+	}
+
+	private boolean isAutoCreateQuotesEnabled() {
+		return Activator.getDefault().getPreferenceStore().getBoolean(HTML_PREFERENCES_AUTO_CREATE_QUOTES);
 	}
 
 	/**

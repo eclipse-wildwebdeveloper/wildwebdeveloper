@@ -24,23 +24,27 @@ import java.util.Map;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
-import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.lsp4j.InitializeResult;
-import org.eclipse.lsp4j.jsonrpc.messages.Message;
-import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
-import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
 
-public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
+/**
+ * HTML language server.
+ *
+ */
+public class HTMLLanguageServer extends ProcessStreamConnectionProviderWithPreference {
+
+	private static final String HTML_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.html";
+
+	private static final String[] SUPPORTED_SECTIONS = { "html", "css", "javascript" };
 
 	public HTMLLanguageServer() {
+		super(HTML_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
-			URL url = FileLocator.toFileURL(getClass()
-					.getResource("/node_modules/vscode-html-languageserver/dist/node/htmlServerMain.js"));
+			URL url = FileLocator.toFileURL(
+					getClass().getResource("/node_modules/vscode-html-languageserver/dist/node/htmlServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
@@ -64,25 +68,15 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProvider {
 	}
 
 	@Override
-	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
-		if (message instanceof ResponseMessage responseMessage) {
-			if (responseMessage.getResult() instanceof InitializeResult) {
-				Map<String, Object> htmlOptions = new HashMap<>();
-
-				Map<String, Object> validateOptions = new HashMap<>();
-				validateOptions.put("scripts", true);
-				validateOptions.put("styles", true);
-				htmlOptions.put("validate", validateOptions);
-
-				htmlOptions.put("format", Collections.singletonMap("enable", Boolean.TRUE));
-
-				Map<String, Object> html = new HashMap<>();
-				html.put("html", htmlOptions);
-
-				DidChangeConfigurationParams params = new DidChangeConfigurationParams(html);
-				languageServer.getWorkspaceService().didChangeConfiguration(params);
-			}
-		}
+	protected Object createSettings() {
+		// In HTML language server case, we don't need to get the settings when client
+		// call didChangeConfiguration.
+		// because HTML language server call configuration with a given uri to get
+		// settings for a given uri.
+		// The didChangeConfiguration call will just 'reset all document settings'
+		// See
+		// https://github.com/microsoft/vscode/blob/7bd27b4287b49e61a1cb49e18f370260144c8685/extensions/html-language-features/server/src/htmlServer.ts#L246
+		return Collections.emptyMap();
 	}
 
 	@Override

@@ -283,6 +283,7 @@
       <server
             class="org.eclipse.wildwebdeveloper.html.HTMLLanguageServer"
             serverInterface="org.eclipse.wildwebdeveloper.html.HTMLLanguageServerAPI"
+            clientImpl="org.eclipse.wildwebdeveloper.html.HTMLLanguageClient"
             id="org.eclipse.wildwebdeveloper.html"
             label="HTML Language Server (VSCode)"
             singleton="true">
@@ -340,6 +341,30 @@
             class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
             id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
             name="%HTMLPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLCompletionPreferencePage"
+         id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLCompletionPreferencePage"
+         name="%HTMLCompletionPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLFormatPreferencePage"
+         id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLFormatPreferencePage"
+         name="%HTMLFormatPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLHoverPreferencePage"
+         id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLHoverPreferencePage"
+         name="%HTMLHoverPreferencePage.name">
+      </page>      
+      <page
+         category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLValidationPreferencePage"
+         id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLValidationPreferencePage"
+         name="%HTMLValidationPreferencePage.name">
       </page>
    </extension>
 
