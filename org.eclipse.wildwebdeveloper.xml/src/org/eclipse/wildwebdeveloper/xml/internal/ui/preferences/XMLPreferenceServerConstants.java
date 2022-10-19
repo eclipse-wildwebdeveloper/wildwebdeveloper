@@ -24,10 +24,10 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
 /**
- * XML preference server constants.
+ * XML pXMLPreferenceServerConstantsants.
  *
  */
-public class XMLPreferenceConstants {
+public class XMLPreferenceServerConstants {
 
 	public static class LemminxPreference {
 		public final String preferenceId;
@@ -46,6 +46,7 @@ public class XMLPreferenceConstants {
 			return Activator.PLUGIN_ID + "." + lemminxOptionPath.replace("/", ".");
 		}
 
+		@SuppressWarnings("unchecked")
 		public void storeToLemminxOptions(Object value, Map<String, Object> options) {
 			Map<String, Object> result = options;
 			String[] paths = this.lemminxOptionPath.split("/");
@@ -122,7 +123,7 @@ public class XMLPreferenceConstants {
 		return Arrays.stream(ALL_LEMMINX_PREFERENCES).filter(pref -> Objects.equals(pref.preferenceId, event.getProperty())).findAny();
 	}
 
-	private XMLPreferenceConstants() {
+	private XMLPreferenceServerConstants() {
 
 	}
 

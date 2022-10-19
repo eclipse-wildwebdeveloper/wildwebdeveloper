@@ -9,7 +9,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants.XML_PREFERENCES_CATAGLOGS;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_CATAGLOGS;
 
 import java.io.File;
 import java.io.IOException;

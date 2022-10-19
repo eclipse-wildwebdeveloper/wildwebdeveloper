@@ -39,7 +39,7 @@ import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceConstants;
+import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -53,7 +53,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final LanguageServerDefinition lemminxDefinition = LanguageServersRegistry.getInstance()
 			.getDefinition("org.eclipse.wildwebdeveloper.xml");
 	private static final IPropertyChangeListener psListener = event -> {
-		XMLPreferenceConstants.getLemminxPreference(event).ifPresent(pref -> {
+		XMLPreferenceServerConstants.getLemminxPreference(event).ifPresent(pref -> {
 			Map<String, Object> config = mergeCustomInitializationOptions(
 					extensionJarRegistry.getInitiatizationOptions());
 
@@ -165,7 +165,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
 		Map<String, Object> xmlOpts = new HashMap<>(defaults);
-		XMLPreferenceConstants.storePreferencesToLemminxOptions(store, xmlOpts);
+		XMLPreferenceServerConstants.storePreferencesToLemminxOptions(store, xmlOpts);
 		return Map.of(SETTINGS_KEY, Map.of(XML_KEY, xmlOpts));
 	}
 
