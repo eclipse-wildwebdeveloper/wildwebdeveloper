@@ -8,6 +8,10 @@
             contentTypeId="org.eclipse.core.runtime.xml"
             editorId="org.eclipse.ui.genericeditor.GenericEditor">
       </editorContentTypeBinding>
+       <editorContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.rnc"
+            editorId="org.eclipse.ui.genericeditor.GenericEditor">
+      </editorContentTypeBinding>
    </extension>
 
    <extension
@@ -15,6 +19,10 @@
       <presentationReconciler
             class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
             contentType="org.eclipse.core.runtime.xml">
+      </presentationReconciler>
+      <presentationReconciler
+            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
+            contentType="org.eclipse.wildwebdeveloper.rnc">
       </presentationReconciler>
    </extension>
 
@@ -50,6 +58,21 @@
             name="DTD"
             priority="normal">
       </content-type>
+      <!-- RelaxNG -->
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="rng"
+            id="org.eclipse.wildwebdeveloper.rng"
+            name="RNG"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            file-extensions="rnc"
+            id="org.eclipse.wildwebdeveloper.rnc"
+            name="RNC"
+            priority="normal">
+      </content-type>
    </extension>
    
    <extension
@@ -78,6 +101,10 @@
             contentType="org.eclipse.wildwebdeveloper.dtd"
             id="org.eclipse.wildwebdeveloper.xml">
       </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.rng"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>      
    </extension>
  
    <extension
@@ -85,6 +112,14 @@
       <grammar
             path="grammars/xml/xml.tmLanguage.json"
             scopeName="source.xml">
+      </grammar>
+      <grammar
+            path="grammars/dtd/dtd.tmLanguage.json"
+            scopeName="text.xml.dtd">
+      </grammar>
+            <grammar
+            path="grammars/rnc/rnc.tmLanguage.json"
+            scopeName="source.rnc">
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.core.runtime.xml"
@@ -104,7 +139,11 @@
       </scopeNameContentTypeBinding>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.dtd"
-            scopeName="source.xml">
+            scopeName="text.xml.dtd">
+      </scopeNameContentTypeBinding>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.rnc"
+            scopeName="source.rnc">
       </scopeNameContentTypeBinding>
    </extension>
    
@@ -117,6 +156,10 @@
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.xsl"
             path="language-configurations/xsl/xsl.language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.rnc"
+            path="language-configurations/rnc/rnc.language-configuration.json">
       </languageConfiguration>
    </extension>
    
@@ -131,7 +174,7 @@
    <extension
          point="org.eclipse.ui.genericeditor.icons">
       <icon
-            contentType="org.eclipse.wildwebdeveloper.xml"
+            contentType="org.eclipse.core.runtime.xml"
             icon="icons/xmlEditorIcon.png">
       </icon>
    </extension>

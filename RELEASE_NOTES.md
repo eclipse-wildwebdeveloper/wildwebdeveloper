@@ -7,6 +7,9 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Editing improvements
   * XML auto closing tag
   * HTML auto closing tag and auto creation of quotes for HTML attribute assignment
+  * RelaxNG support : XML validation, completion hover based on RelaxNG schema  
+  * Syntax coloration for DTD
+  * Syntax coloration / language configuration for RelaxNG compact syntax (.rng)
 
 ## 0.15.1
 
