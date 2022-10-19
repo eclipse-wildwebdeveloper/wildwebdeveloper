@@ -13,6 +13,7 @@
 package org.eclipse.wildwebdeveloper.html.ui.preferences;
 
 import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceClientConstants.HTML_PREFERENCES_AUTO_CLOSING_TAGS;
+import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceClientConstants.HTML_PREFERENCES_AUTO_CREATE_QUOTES;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -38,8 +39,10 @@ public class HTMLPreferencePage extends FieldEditorPreferencePage implements IWo
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new BooleanFieldEditor(HTML_PREFERENCES_AUTO_CLOSING_TAGS,
-				Messages.HTMLPreferencePage_autoClosingTags, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(HTML_PREFERENCES_AUTO_CLOSING_TAGS, Messages.HTMLPreferencePage_autoClosingTags,
+				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(HTML_PREFERENCES_AUTO_CREATE_QUOTES,
+				Messages.HTMLPreferencePage_autoCreateQuotes, getFieldEditorParent()));
 
 	}
 }

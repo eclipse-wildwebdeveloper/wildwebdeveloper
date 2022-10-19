@@ -13,11 +13,12 @@
 package org.eclipse.wildwebdeveloper.html.ui.preferences;
 
 /**
- * HTML preference client constants.
+ * HTML preference server constants.
  *
  */
 public class HTMLPreferenceClientConstants {
 
 	public static final String HTML_PREFERENCES_AUTO_CLOSING_TAGS = "wildwebdeveloper.html.autoClosingTags";
+	public static final String HTML_PREFERENCES_AUTO_CREATE_QUOTES = "wildwebdeveloper.html.autoCreateQuotes";
 
 }

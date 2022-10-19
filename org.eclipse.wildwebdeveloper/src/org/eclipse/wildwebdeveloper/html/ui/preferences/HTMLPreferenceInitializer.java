@@ -11,11 +11,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.html.ui.preferences;
 
-import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceClientConstants.HTML_PREFERENCES_AUTO_CLOSING_TAGS;
-
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.wildwebdeveloper.Activator;
 
 /**
  * HTML preference initializer.
@@ -23,12 +19,9 @@ import org.eclipse.wildwebdeveloper.Activator;
  */
 public class HTMLPreferenceInitializer extends AbstractPreferenceInitializer {
 
-	private static final IPreferenceStore STORE = Activator.getDefault().getPreferenceStore();
-
 	@Override
 	public void initializeDefaultPreferences() {
-		// Client settings
-		STORE.setDefault(HTML_PREFERENCES_AUTO_CLOSING_TAGS, true);
+		HTMLPreferenceServerConstants.initializeDefaultPreferences();
 	}
 
 }
