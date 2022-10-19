@@ -2,6 +2,12 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 0.15.2
+
+#### Editing improvements
+  * XML auto closing tag
+  * HTML auto closing tag and auto creation of quotes for HTML attribute assignment
+
 ## 0.15.1
 
 * 📅 Release Date: October 13th, 2022
