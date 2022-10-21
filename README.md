@@ -93,12 +93,4 @@ Wild Web Developer is based on the Eclipse Generic Editor framework from [Eclips
 
 ## ⌨️ Get involved
 
-<a href="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirect.html"><img src="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/cloneToEclipseBadge.png" alt="Clone to Eclipse IDE"/></a>  
-
-Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues).
-
-Contribution of Code and Documentation are welcome as [GitHub Pull Request](https://github.com/eclipse/wildwebdeveloper/pulls).
-
-Developer mailing-list can be accessed at https://accounts.eclipse.org/mailing-list/wildwebdeveloper-dev
-
-Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
+See (contribution guide)[CONTRIBUTING.md].
