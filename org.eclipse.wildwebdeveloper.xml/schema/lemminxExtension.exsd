@@ -145,7 +145,7 @@ Jars can be contributed as an extension resource (by pointing to the path of the
 &lt;p&gt;
 See https://github.com/redhat-developer/vscode-xml#custom-xml-extensions for more information.
 &lt;/p&gt;
-&lt;p&gt;This extension points uses LemMinX 0.21.0, whose extension API is &lt;b&gt;not&lt;b&gt; backward-compatible prior releases. So you may need to update your extension to newer LemMinX for your extension to work with newer Wild Web Developer.&lt;/p&gt;
+&lt;p&gt;This extension points uses LemMinX 0.22.0, whose extension API is usually &lt;b&gt;not&lt;b&gt; backward-compatible prior releases. So you may need to update your extension to newer LemMinX for your extension to work with newer Wild Web Developer.&lt;/p&gt;
 
 &lt;p&gt;
 In order to provide jars to the XML LS programmatically, contributing extensions must implement the &lt;b&gt;LemminxClasspathExtensionProvider&lt;/b&gt; interface.
