@@ -12,7 +12,7 @@ Rich 🖊️edition for:
 * TypeScript
 * JSON (including schema support)
 * YAML (including schema support, Kubernetes schema built-in)
-* XML (including schema support), XSL, XSD, DTD
+* XML (including schema support), XSL, XSD, DTD, RelaxNG
 
 and
 
