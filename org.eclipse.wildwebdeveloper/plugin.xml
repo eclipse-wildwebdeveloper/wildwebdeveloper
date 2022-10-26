@@ -191,6 +191,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.css.CSSLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.css.CSSLanguageClient"
             id="org.eclipse.wildwebdeveloper.css"
             label="CSS/LESS/SCSS Language Server (VSCode)"
             singleton="true">
@@ -265,6 +266,122 @@
   <extension point="org.eclipse.ui.genericeditor.icons">
     <icon contentType="org.eclipse.wildwebdeveloper.css" icon="icons/cssEditorIcon.png"/>
   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+            id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+            name="%CSSPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSCompletionPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSCompletionPreferencePage"
+         name="%CSSCompletionPreferencePage.name">
+      </page>
+      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this CSS format preference page to benefit with CSS formatting 
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSFormatPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSFormatPreferencePage"
+         name="%CSSFormatPreferencePage.name">
+      </page>
+      -->
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSHoverPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSHoverPreferencePage"
+         name="%CSSHoverPreferencePage.name">
+      </page>      
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSValidationPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSValidationPreferencePage"
+         name="%CSSValidationPreferencePage.name">
+      </page>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+            class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
+            id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
+            name="%LESSPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSCompletionPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSCompletionPreferencePage"
+         name="%LESSCompletionPreferencePage.name">
+      </page>
+      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this LESS format preference page to benefit with LESS formatting 
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSFormatPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSFormatPreferencePage"
+         name="%LESSFormatPreferencePage.name">
+      </page>
+      -->
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSHoverPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSHoverPreferencePage"
+         name="%LESSHoverPreferencePage.name">
+      </page>      
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSValidationPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSValidationPreferencePage"
+         name="%LESSValidationPreferencePage.name">
+      </page>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
+            class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
+            id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
+            name="%SCSSPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSCompletionPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSCompletionPreferencePage"
+         name="%SCSSCompletionPreferencePage.name">
+      </page>
+      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this SCSS format preference page to benefit with SCSS formatting 
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSFormatPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSFormatPreferencePage"
+         name="%SCSSFormatPreferencePage.name">
+      </page>
+      -->
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSHoverPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSHoverPreferencePage"
+         name="%SCSSHoverPreferencePage.name">
+      </page>      
+      <page
+         category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
+         class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSValidationPreferencePage"
+         id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSValidationPreferencePage"
+         name="%SCSSValidationPreferencePage.name">
+      </page>
+   </extension>
+
+   <extension
+         id="CSSPreferenceInitializer"
+         name="CSSPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceInitializer">
+      </initializer>
+   </extension>
 
    <!-- HTML Language -->   
    <extension

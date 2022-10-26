@@ -13,6 +13,10 @@ package org.eclipse.wildwebdeveloper.html.ui;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * HTML messages keys.
+ *
+ */
 public class Messages extends NLS {
 
 	// --------- HTML Main preference page
@@ -51,7 +55,7 @@ public class Messages extends NLS {
 	public static String HTMLHoverPreferencePage_hover_documentation;
 	public static String HTMLHoverPreferencePage_hover_references;
 
-	// --------- XML Validation preference page
+	// --------- HTML Validation preference page
 	public static String HTMLValidationPreferencePage_validate_scripts;
 	public static String HTMLValidationPreferencePage_validate_styles;
 

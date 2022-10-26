@@ -10,10 +10,11 @@
  * Contributors:
  *  Angelo ZERR (Red Hat Inc.) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.html;
+package org.eclipse.wildwebdeveloper.css;
 
 import static org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConstants.isMatchCssSection;
-import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceServerConstants.isMatchHtmlSection;
+import static org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferenceServerConstants.isMatchLessSection;
+import static org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferenceServerConstants.isMatchScssSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,36 +24,40 @@ import org.eclipse.lsp4e.LanguageClientImpl;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
 import org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConstants;
-import org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.ui.preferences.Settings;
 
 /**
  * HTML language client implementation.
  * 
  */
-public class HTMLLanguageClient extends LanguageClientImpl {
+public class CSSLanguageClient extends LanguageClientImpl {
 
 	@Override
 	public CompletableFuture<List<Object>> configuration(ConfigurationParams params) {
 		return CompletableFuture.supplyAsync(() -> {
-			// The HTML language server asks for a given uri, the settings for 'css',
-			// 'javascript', 'html'
+			// The CSS language server asks for a given uri, the settings for 'css',
+			// 'less', 'scss'
 			// See
-			// https://github.com/microsoft/vscode/blob/7bd27b4287b49e61a1cb49e18f370260144c8685/extensions/html-language-features/server/src/htmlServer.ts#L123
+			// https://github.com/microsoft/vscode/blob/7bd27b4287b49e61a1cb49e18f370260144c8685/extensions/css-language-features/server/src/cssServer.ts#L156
 			List<Object> settings = new ArrayList<>();
 			for (ConfigurationItem item : params.getItems()) {
 				String section = item.getSection();
-				if (isMatchHtmlSection(section)) {
-					// 'html' section, returns the html settings
-					Settings htmlSettings = HTMLPreferenceServerConstants.getGlobalSettings();
-					settings.add(htmlSettings.findSettings(section.split("[.]")));
-				} else if (isMatchCssSection(section)) {
+				if (isMatchCssSection(section)) {
 					// 'css' section, returns the css settings
 					Settings cssSettings = CSSPreferenceServerConstants.getGlobalSettings();
 					settings.add(cssSettings.findSettings(section.split("[.]")));
+				} else if (isMatchLessSection(section)) {
+					// 'less' section, returns the less settings
+					Settings cssSettings = LESSPreferenceServerConstants.getGlobalSettings();
+					settings.add(cssSettings.findSettings(section.split("[.]")));
+				} else if (isMatchScssSection(section)) {
+					// 'scss' section, returns the scss settings
+					Settings cssSettings = SCSSPreferenceServerConstants.getGlobalSettings();
+					settings.add(cssSettings.findSettings(section.split("[.]")));
 				} else {
-					// TODO match javascript section once those preferences will be
-					// implemented.
+					// Unkwown section
 					settings.add(null);
 				}
 			}
