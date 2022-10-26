@@ -2,6 +2,7 @@ pipeline {
 	options {
 		timeout(time: 2, unit: 'HOURS')
 		buildDiscarder(logRotator(numToKeepStr:'10'))
+		disableConcurrentBuilds(abortPrevious: true)
 	}
   agent {
     kubernetes {
