@@ -50,75 +50,6 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 
 	private Listener listener;
 
-	private void autoInsert(DocumentEvent event) {
-		if (!isEnabled()) {
-			return;
-		}
-		if (event == null || viewer == null) {
-			return;
-		}
-		IDocument document = event.getDocument();
-		if (document == null || event == null || event.getLength() != 0 || event.getText().length() != 1) {
-			return;
-		}
-
-		int offset = event.getOffset() + 1;
-		char c = event.getText().charAt(0);
-		if (c != '>' && c != '/') {
-			return;
-		}
-		URI uri = LSPEclipseUtils.toUri(document);
-		if (uri == null) {
-			return;
-		}
-
-		TextDocumentIdentifier identifier = new TextDocumentIdentifier(uri.toString());
-		Optional<LSPDocumentInfo> info = LanguageServiceAccessor
-				.getLSPDocumentInfosFor(document, (capabilities) -> true).stream()
-				.filter(doc -> (doc.getLanguageClient() instanceof XMLLanguageServerAPI)).findAny();
-		if (!info.isEmpty()) {
-			// The document is bound with XML language server, consumes the xml/closeTag
-			final Display display = viewer.getTextWidget().getDisplay();
-			CompletableFuture.supplyAsync(() -> {
-				try {
-					// Wait for textDocument/didChange
-					Thread.sleep(100);
-				} catch (InterruptedException ex) {
-					Thread.interrupted();
-				}
-				try {
-					TextDocumentPositionParams params = LSPEclipseUtils.toTextDocumentPosistionParams(uri, offset,
-							document);
-					// consumes xml/closeTag from XML language server
-					((XMLLanguageServerAPI) info.get().getLanguageClient()).closeTag(params).thenAccept(r -> {
-						if (r != null) {
-							display.asyncExec(() -> {
-								try {
-									// we receive a text like
-									// $0</foo>
-									// $0 should be used for set the cursor.
-									String text = r.snippet.replace("$0", "");
-									int replaceLength = getReplaceLength(r.range, document);
-									document.replace(offset, replaceLength, text);
-								} catch (BadLocationException e) {
-									// Do nothing
-								}
-							});
-
-						}
-					});
-				} catch (BadLocationException e) {
-					// Do nothing
-				}
-				return null;
-			});
-		}
-	}
-
-	private boolean isEnabled() {
-		return Activator.getDefault().getPreferenceStore().getBoolean(XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS);
-	}
-
 	private static int getReplaceLength(Range range, IDocument document) throws BadLocationException {
 		if (range == null) {
 			return 0;
@@ -138,24 +69,15 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 	 */
 	class Listener implements IDocumentListener, ITextInputListener {
 
-		/*
-		 * @see IDocumentListener#documentAboutToBeChanged(DocumentEvent)
-		 */
 		@Override
 		public void documentAboutToBeChanged(DocumentEvent e) {
 		}
 
-		/*
-		 * @see IDocumentListener#documentChanged(DocumentEvent)
-		 */
 		@Override
 		public void documentChanged(DocumentEvent e) {
 			autoInsert(e);
 		}
 
-		/*
-		 * @see ITextInputListener#inputDocumentAboutToBeChanged(IDocument, IDocument)
-		 */
 		@Override
 		public void inputDocumentAboutToBeChanged(IDocument oldInput, IDocument newInput) {
 			if (oldInput == document) {
@@ -166,9 +88,6 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 			}
 		}
 
-		/*
-		 * @see ITextInputListener#inputDocumentChanged(IDocument, IDocument)
-		 */
 		@Override
 		public void inputDocumentChanged(IDocument oldInput, IDocument newInput) {
 			document = newInput;
@@ -176,6 +95,75 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 				return;
 			}
 			document.addDocumentListener(this);
+		}
+		
+		private void autoInsert(DocumentEvent event) {
+			if (!isEnabled()) {
+				return;
+			}
+			if (event == null || viewer == null) {
+				return;
+			}
+			IDocument document = event.getDocument();
+			if (document == null || event == null || event.getLength() != 0 || event.getText().length() != 1) {
+				return;
+			}
+
+			int offset = event.getOffset() + 1;
+			char c = event.getText().charAt(0);
+			if (c != '>' && c != '/') {
+				return;
+			}
+			URI uri = LSPEclipseUtils.toUri(document);
+			if (uri == null) {
+				return;
+			}
+
+			TextDocumentIdentifier identifier = new TextDocumentIdentifier(uri.toString());
+			Optional<LSPDocumentInfo> info = LanguageServiceAccessor
+					.getLSPDocumentInfosFor(document, capabilities -> true).stream()
+					.filter(doc -> (doc.getLanguageClient() instanceof XMLLanguageServerAPI)).findAny();
+			if (!info.isEmpty()) {
+				// The document is bound with XML language server, consumes the xml/closeTag
+				final Display display = viewer.getTextWidget().getDisplay();
+				CompletableFuture.supplyAsync(() -> {
+					try {
+						// Wait for textDocument/didChange
+						Thread.sleep(100);
+					} catch (InterruptedException ex) {
+						Thread.interrupted();
+					}
+					try {
+						TextDocumentPositionParams params = LSPEclipseUtils.toTextDocumentPosistionParams(uri, offset,
+								document);
+						// consumes xml/closeTag from XML language server
+						((XMLLanguageServerAPI) info.get().getLanguageClient()).closeTag(params).thenAccept(r -> {
+							if (r != null) {
+								display.asyncExec(() -> {
+									try {
+										// we receive a text like
+										// $0</foo>
+										// $0 should be used for set the cursor.
+										String text = r.snippet.replace("$0", "");
+										int replaceLength = getReplaceLength(r.range, document);
+										document.replace(offset, replaceLength, text);
+									} catch (BadLocationException e) {
+										// Do nothing
+									}
+								});
+
+							}
+						});
+					} catch (BadLocationException e) {
+						// Do nothing
+					}
+					return null;
+				});
+			}
+		}
+
+		private boolean isEnabled() {
+			return Activator.getDefault().getPreferenceStore().getBoolean(XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS);
 		}
 
 	}
