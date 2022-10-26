@@ -64,7 +64,7 @@ public class MessageUtils {
 		IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, title);
 		Activator.getDefault().getLog().log(errorStatus);
 
-		int result[] = {Window.CANCEL};
+		int[] result = {Window.CANCEL};
 		Display.getDefault().syncExec(() -> {
 			int response = suggestEditLaunch ?
 					MessageDialog.open(MessageDialog.ERROR, parentShell, title, message, SWT.NONE, 

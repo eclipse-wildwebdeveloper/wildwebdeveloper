@@ -168,7 +168,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 			if (errorMessage == null) {
 				Object option = co.get("sourceMap");
-				boolean sourceMap  = option instanceof Boolean b ? b.booleanValue() : false;
+				boolean sourceMap  = option instanceof Boolean b && b.booleanValue();
 				if (!sourceMap) {
 					errorMessage = Messages.NodeDebug_TSConfirError_SourceMapIsNotEnabled;
 				}
@@ -264,11 +264,9 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 						void createContainers(IResource resource) throws CoreException {
 							IContainer container= resource.getParent();
-							if (container instanceof IFolder parent) {
-								if (parent != null && !parent.exists()) {
-									createContainers(parent);
-									parent.create(false, true, null);
-								}
+							if (container instanceof IFolder parent && !parent.exists()) {
+								createContainers(parent);
+								parent.create(false, true, null);
 							}
 						}
 					});

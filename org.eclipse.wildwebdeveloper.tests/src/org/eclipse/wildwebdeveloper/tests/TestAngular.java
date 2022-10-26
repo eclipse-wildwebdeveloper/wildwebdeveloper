@@ -111,7 +111,7 @@ public class TestAngular {
 	}
 
 	@Test
-	public void testAngularTs() throws Exception {
+	void testAngularTs() throws Exception {
 		IFile appComponentFile = appFolder.getFile("app.component.ts");
 		TextEditor editor = (TextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
@@ -137,7 +137,7 @@ public class TestAngular {
 	}
 
 	@Test
-	public void testAngularHtml() throws Exception {
+	void testAngularHtml() throws Exception {
 		TextEditor editor = (TextEditor) IDE.openEditor(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				appFolder.getFile("app.componentWithHtml.ts"));
