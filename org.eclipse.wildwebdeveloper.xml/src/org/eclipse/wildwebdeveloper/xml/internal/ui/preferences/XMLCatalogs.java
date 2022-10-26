@@ -57,9 +57,11 @@ public class XMLCatalogs {
 	
 	private static File getWTPExtensionCatalog() {
 		StringBuilder catalogFile = new StringBuilder();
-		catalogFile.append("<?xml version=\"1.0\"?>\n"
-				+ "<!DOCTYPE catalog PUBLIC \"-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN\" \"http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd\">\n"
-				+ "<catalog xmlns=\"urn:oasis:names:tc:entity:xmlns:xml:catalog\" prefer=\"public\">\n");
+		catalogFile.append("""
+			<?xml version="1.0"?>
+			<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+			<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
+			""");
 		Arrays.stream(Platform.getExtensionRegistry()
 				.getConfigurationElementsFor("org.eclipse.wst.xml.core.catalogContributions"))
 				.filter(element -> "catalogContribution".equals(element.getName()))
