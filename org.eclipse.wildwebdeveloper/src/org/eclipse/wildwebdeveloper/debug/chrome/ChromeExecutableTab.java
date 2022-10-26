@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -66,7 +65,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 		browserToUse.setLabelProvider(new BrowserLabelProvider());
 		proposals = new LinkedList<>();
 		proposals.add(""); //$NON-NLS-1$
-		proposals.addAll(BrowserManager.getInstance().getWebBrowsers().stream().filter(ChromeExecutableTab::isChrome).collect(Collectors.toList()));
+		proposals.addAll(BrowserManager.getInstance().getWebBrowsers().stream().filter(ChromeExecutableTab::isChrome).toList());
 		browserToUse.setInput(proposals);
 		browserToUse.addPostSelectionChangedListener(e -> {
 			setDirty(true);
@@ -79,7 +78,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 		link.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			Dialog dialog = PreferencesUtil.createPreferenceDialogOn(link.getShell(), "org.eclipse.ui.browser.preferencePage", null, null); //$NON-NLS-1$
 			dialog.open();
-			List<IBrowserDescriptor> previous = proposals.stream().filter(IBrowserDescriptor.class::isInstance).map(IBrowserDescriptor.class::cast).collect(Collectors.toList());
+			List<IBrowserDescriptor> previous = proposals.stream().filter(IBrowserDescriptor.class::isInstance).map(IBrowserDescriptor.class::cast).toList();
 			List<IBrowserDescriptor> next = BrowserManager.getInstance().getWebBrowsers();
 			List<IBrowserDescriptor> toRemove = new LinkedList<>(previous);
 			toRemove.removeAll(next);

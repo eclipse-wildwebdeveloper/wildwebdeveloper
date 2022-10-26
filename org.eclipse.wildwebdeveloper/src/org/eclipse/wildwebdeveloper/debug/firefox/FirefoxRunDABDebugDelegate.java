@@ -20,7 +20,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -120,7 +119,7 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 	
 	@SuppressWarnings("restriction")
 	static String findFirefoxLocation(ILaunchConfiguration configuration) {
-		List<IBrowserDescriptor> runtimes = BrowserManager.getInstance().getWebBrowsers().stream().filter(FirefoxRunDABDebugDelegate::isFirefox).collect(Collectors.toList());
+		List<IBrowserDescriptor> runtimes = BrowserManager.getInstance().getWebBrowsers().stream().filter(FirefoxRunDABDebugDelegate::isFirefox).toList();
 		for (IBrowserDescriptor browser : runtimes) {
 			if (browser.getLocation() != null) {
 				String location = browser.getLocation();
