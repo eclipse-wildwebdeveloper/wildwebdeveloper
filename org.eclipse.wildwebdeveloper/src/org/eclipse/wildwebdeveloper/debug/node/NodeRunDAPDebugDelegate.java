@@ -209,16 +209,13 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 						Messages.NodeDebug_TSConfirError_OpenTSConfigInEditor :
 							Messages.NodeDebug_TSConfirError_CreateAndOpenTSConfigInEditor;
 				
-				Display.getDefault().syncExec(new Runnable() {
-						@Override
-						public void run() {
-							MessageDialog dialog = new MessageDialog(DebugUIPlugin.getShell(),
-									Messages.NodeDebug_TSConfirError_Title, null, dialogMessage, MessageDialog.QUESTION_WITH_CANCEL,
-									2, editTSConfig,
-									Messages.NodeDebug_TSConfirError_StartDebuggingAsIs, Messages.NodeDebug_TSConfirError_Cancel);
-							result[0] = dialog.open();
-						}
-					});
+				Display.getDefault().syncExec(() -> {
+					MessageDialog dialog = new MessageDialog(DebugUIPlugin.getShell(),
+							Messages.NodeDebug_TSConfirError_Title, null, dialogMessage, MessageDialog.QUESTION_WITH_CANCEL,
+							2, editTSConfig,
+							Messages.NodeDebug_TSConfirError_StartDebuggingAsIs, Messages.NodeDebug_TSConfirError_Cancel);
+					result[0] = dialog.open();
+				});
 				
 				if (result[0] == 0) {
 					// Open TSConfig in editor
@@ -246,20 +243,17 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 							if (!(file.exists() && file.isAccessible())) {
 								IFile[] result = new IFile[1];
 								try {
-									ws.run(new IWorkspaceRunnable() {
-										@Override
-										public void run(IProgressMonitor monitor) {
-								    		result[0] = null;
-											try (ByteArrayInputStream is = new ByteArrayInputStream(new byte[0])) {
-												createContainers(file);
-												file.create(is, true, null);
-												file.refreshLocal(IResource.DEPTH_ZERO, null);
-												result[0] = file;
-											} catch (CoreException | IOException e) {
-												Activator.getDefault().getLog().error(e.getMessage(), e);
-											}
-									      }
-									   }, null);								
+									ws.run((IWorkspaceRunnable) monitor -> {
+										result[0] = null;
+										try (ByteArrayInputStream is = new ByteArrayInputStream(new byte[0])) {
+											createContainers(file);
+											file.create(is, true, null);
+											file.refreshLocal(IResource.DEPTH_ZERO, null);
+											result[0] = file;
+										} catch (CoreException | IOException e) {
+											Activator.getDefault().getLog().error(e.getMessage(), e);
+										}
+									  }, null);								
 								} catch (CoreException e) {
 									Activator.getDefault().getLog().error(e.getMessage(), e);
 								}
