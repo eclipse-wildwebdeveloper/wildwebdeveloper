@@ -45,6 +45,11 @@ public class Settings extends HashMap<String, Object> {
 		fillSetting(preferenceId, preferenceValue, this);
 	}
 
+	public void fillAsStringArray(String preferenceId, String separator) {
+		String[] preferenceValue = store.getString(preferenceId).split(separator);
+		fillSetting(preferenceId, preferenceValue, this);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private static void fillSetting(String preferenceId, Object preferenceValue, Map<String, Object> settings) {
 		Map<String, Object> result = settings;

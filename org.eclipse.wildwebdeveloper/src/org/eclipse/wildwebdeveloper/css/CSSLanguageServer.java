@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,55 +23,62 @@ import java.util.Map;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
-import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.lsp4j.InitializeResult;
-import org.eclipse.lsp4j.jsonrpc.messages.Message;
-import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
-import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
 
-public class CSSLanguageServer extends ProcessStreamConnectionProvider {
+public class CSSLanguageServer extends ProcessStreamConnectionProviderWithPreference {
+
+	private static final String CSS_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.css";
+
+	private static final String[] SUPPORTED_SECTIONS = { "css", "scss", "less" };
 
 	public CSSLanguageServer() {
+		super(CSS_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/vscode-css-languageserver/dist/node/cssServerMain.js"));
+			URL url = FileLocator.toFileURL(
+					getClass().getResource("/node_modules/vscode-css-languageserver/dist/node/cssServerMain.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+	}
+
+	@Override
+	protected Object createSettings() {
+		// In HTML language server case, we don't need to get the settings when client
+		// call didChangeConfiguration.
+		// because HTML language server call configuration with a given uri to get
+		// settings for a given uri.
+		// The didChangeConfiguration call will just 'reset all document settings'
+		// See
+		// https://github.com/microsoft/vscode/blob/7bd27b4287b49e61a1cb49e18f370260144c8685/extensions/html-language-features/server/src/htmlServer.ts#L246
+		return CSSPreferenceServerConstants.getGlobalSettings();
+	}
+
+	@Override
+	public Object getInitializationOptions(URI rootUri) {
+		Map<String, Object> settings = new HashMap<>();
+		settings.putAll(CSSPreferenceServerConstants.getGlobalSettings());
+		settings.putAll(LESSPreferenceServerConstants.getGlobalSettings());
+		settings.putAll(SCSSPreferenceServerConstants.getGlobalSettings());
+		// Enable CSS formatter
+		settings.put("provideFormatter", true);
+		return settings;
 	}
 
 	@Override
 	public String toString() {
 		return "CSS Language Server: " + super.toString();
 	}
-	
-	@Override
-	public Object getInitializationOptions(URI rootUri) {
-		Map<String, Object> settings = new HashMap<>();
-		settings.put("css", Collections.singletonMap("validate", true));
-		settings.put("scss", Collections.singletonMap("validate", true));
-		settings.put("less", Collections.singletonMap("validate", true));
-		// workaround https://github.com/microsoft/vscode/issues/79599
-		settings.put("dataPaths", Collections.emptyList());
-		return settings;
-	}
-	
-	@Override
-	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
-		if (message instanceof ResponseMessage responseMessage) {
-			if (responseMessage.getResult() instanceof InitializeResult) {
-				// enable validation: so far, no better way found than changing conf after init.
-				DidChangeConfigurationParams params = new DidChangeConfigurationParams(getInitializationOptions(rootUri));
-				languageServer.getWorkspaceService().didChangeConfiguration(params);
-			}
-		}
-	}
+
 }
