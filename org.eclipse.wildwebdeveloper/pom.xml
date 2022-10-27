@@ -200,22 +200,12 @@
 							<executable>npm</executable>
 							<arguments>
 								<arg>install</arg>
+								<arg>--omit=dev</arg>
 								<arg>--only=prod</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
-								<arg>${project.build.directory}/node-debug2-1.43.0.tgz</arg>
-								<arg>typescript@4.8.4</arg>
-								<arg>typescript-language-server@2.1.0</arg>
-								<arg>typescript-lit-html-plugin@0.9.0</arg>
-								<arg>typescript-plugin-css-modules@3.4.0</arg>
-								<arg>${project.build.directory}/vscode-css-languageserver-1.0.0.tgz</arg>
-								<arg>${project.build.directory}/vscode-html-languageserver-1.0.0.tgz</arg>
-								<arg>${project.build.directory}/vscode-json-languageserver-1.3.4.tgz</arg>
-								<arg>yaml-language-server@1.10.0</arg>
-								<arg>firefox-debugadapter@2.9.8</arg>
-								<arg>${project.build.directory}/debugger-for-chrome-4.13.0.tgz</arg>
-								<arg>${project.build.directory}/eslint-server-2.2.5.tgz</arg>
-								<arg>@angular/language-server@14.2.0</arg>
+<!-- The actual verions for the LS and other dependency NPM Modules are to be set in  './package.json file',  
+	which is used to install the dependencies -->
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
 						</configuration>
