@@ -709,6 +709,49 @@
             scopeName="source.yaml">
       </snippet>
    </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
+            id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
+            name="%YAMLPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLCompletionPreferencePage"
+         id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLCompletionPreferencePage"
+         name="%YAMLCompletionPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLFormatPreferencePage"
+         id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLFormatPreferencePage"
+         name="%YAMLFormatPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLHoverPreferencePage"
+         id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLHoverPreferencePage"
+         name="%YAMLHoverPreferencePage.name">
+      </page>      
+      <page
+         category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
+         class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLValidationPreferencePage"
+         id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLValidationPreferencePage"
+         name="%YAMLValidationPreferencePage.name">
+      </page>
+   </extension>
+
+   <extension
+         id="YAMLPreferenceInitializer"
+         name="YAMLPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferenceInitializer">
+      </initializer>
+   </extension>
+
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -718,6 +761,7 @@
             name="Schema Associations">
       </page>
    </extension>
+
    <extension
          id="JSONPreferenceInitializer"
          name="JSONPreferenceInitializer"

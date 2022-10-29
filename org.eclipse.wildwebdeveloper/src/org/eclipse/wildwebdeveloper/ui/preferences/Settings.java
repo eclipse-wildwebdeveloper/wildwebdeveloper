@@ -32,24 +32,28 @@ public class Settings extends HashMap<String, Object> {
 
 	public void fillAsBoolean(String preferenceId) {
 		boolean preferenceValue = store.getBoolean(preferenceId);
-		fillSetting(preferenceId, preferenceValue, this);
+		fillSetting(preferenceId, preferenceValue);
 	}
 
 	public void fillAsInt(String preferenceId) {
 		int preferenceValue = store.getInt(preferenceId);
-		fillSetting(preferenceId, preferenceValue, this);
+		fillSetting(preferenceId, preferenceValue);
 	}
 
 	public void fillAsString(String preferenceId) {
 		String preferenceValue = store.getString(preferenceId);
-		fillSetting(preferenceId, preferenceValue, this);
+		fillSetting(preferenceId, preferenceValue);
 	}
 
 	public void fillAsStringArray(String preferenceId, String separator) {
 		String[] preferenceValue = store.getString(preferenceId).split(separator);
+		fillSetting(preferenceId, preferenceValue);
+	}
+
+	public void fillSetting(String preferenceId, Object preferenceValue) {
 		fillSetting(preferenceId, preferenceValue, this);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private static void fillSetting(String preferenceId, Object preferenceValue, Map<String, Object> settings) {
 		Map<String, Object> result = settings;
