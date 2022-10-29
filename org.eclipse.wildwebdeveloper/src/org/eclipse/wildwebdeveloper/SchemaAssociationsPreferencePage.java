@@ -43,6 +43,8 @@ import com.google.gson.reflect.TypeToken;
 @SuppressWarnings("restriction")
 public class SchemaAssociationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
+	public static final String PAGE_ID= "org.eclipse.wildwebdeveloper.SchemaAssociationsPreferencePage";
+	
 	private IPreferenceStore store;
 	private Table schemaTable;
 

@@ -29,7 +29,7 @@ import org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferenceServer
 import org.eclipse.wildwebdeveloper.ui.preferences.Settings;
 
 /**
- * HTML language client implementation.
+ * CSS language client implementation.
  * 
  */
 public class CSSLanguageClient extends LanguageClientImpl {
