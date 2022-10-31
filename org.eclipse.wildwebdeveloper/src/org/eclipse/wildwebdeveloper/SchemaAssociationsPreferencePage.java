@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 EclipseSource and others.
+ * Copyright (c) 2020, 2022 EclipseSource and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -20,6 +20,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.accessibility.AccessibleAdapter;
+import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,6 +63,12 @@ public class SchemaAssociationsPreferencePage extends PreferencePage implements 
 		Link pageTitle = new Link(parent, SWT.NONE);
 		pageTitle.setLayoutData(new GridData(SWT.FILL));
 		pageTitle.setText(SchemaAssociationsMessages.SchemaAssociations_PreferencePage_title);
+		pageTitle.getAccessible().addAccessibleListener(new AccessibleAdapter() {
+			@Override
+			public void getDescription(AccessibleEvent event) {
+				event.result = pageTitle.getText();
+			}
+		});
 		pageTitle.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getContainer() instanceof IWorkbenchPreferenceContainer prefContainer) {
 				prefContainer.openPage("org.eclipse.ui.preferencePages.ContentTypes", null);
