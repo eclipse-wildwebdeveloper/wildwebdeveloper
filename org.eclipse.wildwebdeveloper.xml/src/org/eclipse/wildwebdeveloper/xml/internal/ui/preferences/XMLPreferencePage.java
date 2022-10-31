@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,6 +18,8 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.accessibility.AccessibleAdapter;
+import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
@@ -50,6 +52,12 @@ public class XMLPreferencePage extends FieldEditorPreferencePage implements IWor
 
 		Link catalogsLink = new Link(composite, SWT.NONE);
 		catalogsLink.setText(Messages.XMLPreferencePage_XMLCatalogsLink);
+		catalogsLink.getAccessible().addAccessibleListener(new AccessibleAdapter() {
+			@Override
+			public void getDescription(AccessibleEvent event) {
+				event.result = catalogsLink.getText();
+			}
+		});
 		catalogsLink.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
