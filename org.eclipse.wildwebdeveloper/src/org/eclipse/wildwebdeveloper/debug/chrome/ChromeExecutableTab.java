@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -26,6 +26,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.accessibility.AccessibleAdapter;
+import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -75,6 +77,12 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 		Link link = new Link(res, SWT.NONE);
 		link.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
 		link.setText(Messages.ChromeAttachTab_browserPreferences);
+		link.getAccessible().addAccessibleListener(new AccessibleAdapter() {
+			@Override
+			public void getDescription(AccessibleEvent event) {
+				event.result = link.getText();
+			}
+		});
 		link.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			Dialog dialog = PreferencesUtil.createPreferenceDialogOn(link.getShell(), "org.eclipse.ui.browser.preferencePage", null, null); //$NON-NLS-1$
 			dialog.open();
