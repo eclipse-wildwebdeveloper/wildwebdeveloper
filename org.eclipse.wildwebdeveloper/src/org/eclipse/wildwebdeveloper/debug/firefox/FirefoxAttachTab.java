@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -15,6 +15,8 @@ package org.eclipse.wildwebdeveloper.debug.firefox;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.accessibility.AccessibleAdapter;
+import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -37,6 +39,12 @@ class FirefoxAttachTab extends AttachTab {
 		if (control instanceof Composite composite) {
 			Link label = new Link(composite, SWT.WRAP);
 			label.setText(Messages.firefoxAttachNote);
+			label.getAccessible().addAccessibleListener(new AccessibleAdapter() {
+				@Override
+				public void getDescription(AccessibleEvent event) {
+					event.result = label.getText();
+				}
+			});
 			Layout layout = composite.getLayout();
 			if (layout instanceof GridLayout gridLayout) {
 				GridDataFactory.swtDefaults()
