@@ -12,10 +12,16 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.eclipse.wildwebdeveloper.css.CSSLanguageServer;
+import org.eclipse.wildwebdeveloper.html.HTMLLanguageServer;
+import org.eclipse.wildwebdeveloper.yaml.YAMLLanguageServer;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -28,6 +34,12 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+
+	private ScopedPreferenceStore cssPreferenceStore;
+
+	private ScopedPreferenceStore htmlPreferenceStore;
+
+	private ScopedPreferenceStore yamlPreferenceStore;
 	
 	/**
 	 * The constructor
@@ -57,8 +69,8 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns the currently active workbench window shell or <code>null</code>
-	 * if none.
+	 * Returns the currently active workbench window shell or <code>null</code> if
+	 * none.
 	 *
 	 * @return the currently active workbench window shell or <code>null</code>
 	 */
@@ -69,10 +81,69 @@ public class Activator extends AbstractUIPlugin {
 			if (windows.length > 0) {
 				return windows[0].getShell();
 			}
-		}
-		else {
+		} else {
 			return window.getShell();
 		}
 		return null;
+	}
+
+	/**
+	 * Returns the CSS preference store.
+	 * 
+	 * @return the CSS preference store.
+	 */
+	public IPreferenceStore getCSSPreferenceStore() {
+		// Create the preference store lazily.
+		ScopedPreferenceStore result = cssPreferenceStore;
+		if (result == null) { // First check (no locking)
+			synchronized (this) {
+				result = cssPreferenceStore;
+				if (result == null) { // Second check (with locking)
+					cssPreferenceStore = result = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+							CSSLanguageServer.LANGUAGE_SERVER_ID);
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the HTML preference store.
+	 * 
+	 * @return the HTML preference store.
+	 */
+	public IPreferenceStore getHTMLPreferenceStore() {
+		// Create the preference store lazily.
+		ScopedPreferenceStore result = htmlPreferenceStore;
+		if (result == null) { // First check (no locking)
+			synchronized (this) {
+				result = htmlPreferenceStore;
+				if (result == null) { // Second check (with locking)
+					htmlPreferenceStore = result = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+							HTMLLanguageServer.LANGUAGE_SERVER_ID);
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the YAML preference store.
+	 * 
+	 * @return the YAML preference store.
+	 */
+	public IPreferenceStore getYAMLPreferenceStore() {
+		// Create the preference store lazily.
+		ScopedPreferenceStore result = yamlPreferenceStore;
+		if (result == null) { // First check (no locking)
+			synchronized (this) {
+				result = yamlPreferenceStore;
+				if (result == null) { // Second check (with locking)
+					yamlPreferenceStore = result = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+							YAMLLanguageServer.LANGUAGE_SERVER_ID);
+				}
+			}
+		}
+		return result;
 	}
 }

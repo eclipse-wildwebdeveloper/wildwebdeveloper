@@ -58,6 +58,6 @@ public class LESSFormatPreferencePage extends FieldEditorPreferencePage implemen
 
 	@Override
 	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(Activator.getDefault().getCSSPreferenceStore());
 	}
 }

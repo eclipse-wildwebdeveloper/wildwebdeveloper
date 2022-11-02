@@ -42,6 +42,6 @@ public class SCSSHoverPreferencePage extends FieldEditorPreferencePage implement
 
 	@Override
 	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(Activator.getDefault().getCSSPreferenceStore());
 	}
 }

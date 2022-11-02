@@ -32,12 +32,12 @@ import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProvid
 
 public class CSSLanguageServer extends ProcessStreamConnectionProviderWithPreference {
 
-	private static final String CSS_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.css";
+	public static final String LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.css";
 
 	private static final String[] SUPPORTED_SECTIONS = { "css", "scss", "less" };
 
 	public CSSLanguageServer() {
-		super(CSS_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
+		super(LANGUAGE_SERVER_ID, Activator.getDefault().getCSSPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {

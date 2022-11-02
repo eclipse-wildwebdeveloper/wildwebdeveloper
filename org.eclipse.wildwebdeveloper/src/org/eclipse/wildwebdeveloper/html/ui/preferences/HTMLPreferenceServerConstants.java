@@ -55,7 +55,7 @@ public class HTMLPreferenceServerConstants {
 	public static final String HTML_PREFERENCES_VALIDATE_STYLES = "html.validate.styles";
 
 	public static Settings getGlobalSettings() {
-		Settings settings = new Settings(Activator.getDefault().getPreferenceStore());
+		Settings settings = new Settings(Activator.getDefault().getHTMLPreferenceStore());
 
 		// Completion settings
 		settings.fillAsString(HTML_PREFERENCES_COMPLETION_ATTRIBUTE_DEFAULT_VALUE);
@@ -89,7 +89,7 @@ public class HTMLPreferenceServerConstants {
 	}
 
 	public static void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = Activator.getDefault().getHTMLPreferenceStore();
 
 		// Client settings
 		store.setDefault(HTML_PREFERENCES_AUTO_CLOSING_TAGS, true);

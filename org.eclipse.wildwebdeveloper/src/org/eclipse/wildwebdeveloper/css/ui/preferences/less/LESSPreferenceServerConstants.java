@@ -70,7 +70,7 @@ public class LESSPreferenceServerConstants {
 	public static final String LESS_PREFERENCES_LINT_UNKNOWNATRULES = "less.lint.unknownAtRules";
 
 	public static Settings getGlobalSettings() {
-		Settings settings = new Settings(Activator.getDefault().getPreferenceStore());
+		Settings settings = new Settings(Activator.getDefault().getCSSPreferenceStore());
 
 		// Completion settings
 		settings.fillAsBoolean(LESS_PREFERENCES_COMPLETION_TRIGGER_PROPERTY_VALUE_COMPLETION);
@@ -117,7 +117,7 @@ public class LESSPreferenceServerConstants {
 	}
 
 	public static void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = Activator.getDefault().getCSSPreferenceStore();
 
 		// Server settings
 

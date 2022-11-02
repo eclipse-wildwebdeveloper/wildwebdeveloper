@@ -70,7 +70,7 @@ public class SCSSPreferenceServerConstants {
 	public static final String SCSS_PREFERENCES_LINT_UNKNOWNATRULES = "scss.lint.unknownAtRules";
 
 	public static Settings getGlobalSettings() {
-		Settings settings = new Settings(Activator.getDefault().getPreferenceStore());
+		Settings settings = new Settings(Activator.getDefault().getCSSPreferenceStore());
 
 		// Completion settings
 		settings.fillAsBoolean(SCSS_PREFERENCES_COMPLETION_TRIGGER_PROPERTY_VALUE_COMPLETION);
@@ -117,7 +117,7 @@ public class SCSSPreferenceServerConstants {
 	}
 
 	public static void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = Activator.getDefault().getCSSPreferenceStore();
 
 		// Server settings
 

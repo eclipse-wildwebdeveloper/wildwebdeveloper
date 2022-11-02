@@ -68,7 +68,7 @@ public class YAMLPreferenceServerConstants {
 	public static final String YAML_PREFERENCES_STYLE_FLOWSEQUENCE = "yaml.style.flowSequence";
 
 	public static Settings getGlobalSettings() {
-		Settings settings = new Settings(getPreferenceStore());
+		Settings settings = new Settings(Activator.getDefault().getYAMLPreferenceStore());
 
 		settings.fillSetting(YAML_PREFERENCES_SCHEMAS,
 				getSchemaAssociations(Activator.getDefault().getPreferenceStore()));
@@ -103,7 +103,7 @@ public class YAMLPreferenceServerConstants {
 	}
 
 	public static void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = Activator.getDefault().getYAMLPreferenceStore();
 
 		// Server settings
 		store.setDefault(YAML_PREFERENCES_SCHEMASTORE_ENABLE, true);
@@ -191,7 +191,4 @@ public class YAMLPreferenceServerConstants {
 		return associations;
 	}
 
-	public static IPreferenceStore getPreferenceStore() {
-		return Activator.getDefault().getPreferenceStore();
-	}
 }

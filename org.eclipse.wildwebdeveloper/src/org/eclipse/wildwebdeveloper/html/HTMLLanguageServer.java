@@ -34,12 +34,12 @@ import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProvid
  */
 public class HTMLLanguageServer extends ProcessStreamConnectionProviderWithPreference {
 
-	private static final String HTML_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.html";
+	public static final String LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.html";
 
 	private static final String[] SUPPORTED_SECTIONS = { "html", "css", "javascript" };
 
 	public HTMLLanguageServer() {
-		super(HTML_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
+		super(LANGUAGE_SERVER_ID, Activator.getDefault().getHTMLPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {

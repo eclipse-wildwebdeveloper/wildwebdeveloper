@@ -67,11 +67,6 @@ public class YAMLPreferencePage extends FieldEditorPreferencePage implements IWo
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-	}
-
-	@Override
 	protected void createFieldEditors() {
 		addField(new BooleanFieldEditor(YAML_PREFERENCES_SCHEMASTORE_ENABLE,
 				Messages.YAMLPreferencePage_schemaStore_enable, getFieldEditorParent()));
@@ -80,5 +75,10 @@ public class YAMLPreferencePage extends FieldEditorPreferencePage implements IWo
 		addField(new IntegerFieldEditor(YAML_PREFERENCES_MAXITEMSCOMPUTED, Messages.YAMLPreferencePage_maxItemsComputed,
 				getFieldEditorParent()));
 
+	}
+	
+	@Override
+	public void init(IWorkbench workbench) {
+		setPreferenceStore(Activator.getDefault().getYAMLPreferenceStore());
 	}
 }
