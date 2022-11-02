@@ -262,6 +262,10 @@ public class TestLanguageServers {
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 				String relativePathInsideBundle = pluginPath.relativize(file).toString();
+				if (maxLocation.length() < relativePathInsideBundle.length()) {
+					maxLocation.setLength(0);
+					maxLocation.append(relativePathInsideBundle);
+				}
 				if (relativePathInsideBundle.length() > MAX_ALLOWED_RELATIVE_PATH) {
 					tooLongPaths.put(relativePathInsideBundle, relativePathInsideBundle.length());
 				}
