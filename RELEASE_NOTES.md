@@ -2,7 +2,10 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
-## 0.15.2
+## 1.0.0
+
+* 📅 Release Date: November 4th, 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/0.15.0...1.0.0
 
 #### Editing improvements
   * XML auto closing tag  
@@ -12,6 +15,12 @@ This page describes the noteworthy improvements provided by each release of Ecli
   * HTML auto closing tag and auto creation of quotes for HTML attribute assignment
   * HTML preferences (without spaces/tabs configuration)
   * CSS preferences (without spaces/tabs configuration)
+  
+#### Dependencies update
+
+  * Use newer Node.js (18.12.0) internally
+  * Updated language servers
+  * Use LemMinX 0.22 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
 
 ## 0.15.1
 
