@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -160,7 +161,25 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	@Override
 	public Object getInitializationOptions(URI rootUri) {
-		return mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
+		Map<String, Object> initializationOptions = new HashMap<>();
+		Map<String, Object> settings = mergeCustomInitializationOptions(
+				extensionJarRegistry.getInitiatizationOptions());
+		initializationOptions.put(SETTINGS_KEY, settings.get(SETTINGS_KEY));
+		Object extendedClientCapabilities = createExtendedClientCapabilities();
+		initializationOptions.put("extendedClientCapabilities", extendedClientCapabilities);
+		return initializationOptions;
+	}
+
+	private Object createExtendedClientCapabilities() {
+		Map<String, Object> extendedClientCapabilities = new HashMap<>();
+		Map<String, Object> codeLens = new HashMap<>();
+		extendedClientCapabilities.put("codeLens", codeLens);
+		Map<String, Object> codeLensKind = new HashMap<>();
+		codeLens.put("codeLensKind", codeLensKind);
+		List<String> valueSet = Arrays.asList("references", "open.uri", "association");
+		codeLensKind.put("valueSet", valueSet);
+		extendedClientCapabilities.put("bindingWizardSupport", Boolean.TRUE);
+		return extendedClientCapabilities;
 	}
 
 	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
