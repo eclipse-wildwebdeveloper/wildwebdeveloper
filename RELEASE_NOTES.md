@@ -2,6 +2,11 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.0.1
+
+#### Editing improvements
+  * Bind schema/grammar (XSD, DTD, RelaxNG) with codelens in XML file
+
 ## 1.0.0
 
 * 📅 Release Date: November 4th, 2022

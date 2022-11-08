@@ -51,7 +51,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 		// Server settings
 		STORE.setDefault(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
-		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS.preferenceId, "ignore");
 		STORE.setDefault(XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG.preferenceId, true);
