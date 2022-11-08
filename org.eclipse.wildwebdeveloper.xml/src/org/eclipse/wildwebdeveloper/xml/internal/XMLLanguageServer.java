@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,13 +46,28 @@ import org.osgi.framework.ServiceReference;
 
 @SuppressWarnings("restriction")
 public class XMLLanguageServer extends ProcessStreamConnectionProvider {
+	
+	private static final String XML_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.xml";
+	
 	private static final String SETTINGS_KEY = "settings";
 	private static final String XML_KEY = "xml";
 
+	// Extended capabilities for set CodeLens capabilities
+	private static final String EXTENDED_CLIENT_CAPABILITIES_KEY = "extendedClientCapabilities";
+	private static final String CODE_LENS_KEY = "codeLens";
+	private static final String CODE_LENS_KIND_KEY = "codeLensKind";
+	private static final String VALUE_SET_KEY = "valueSet";
+	private static final String BINDING_WIZARD_SUPPORT_KEY = "bindingWizardSupport";
+	
+	private static enum CodeLensKind {
+		association;
+	}
+	
 	private static final XMLExtensionRegistry extensionJarRegistry = new XMLExtensionRegistry();
 	private static final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 	private static final LanguageServerDefinition lemminxDefinition = LanguageServersRegistry.getInstance()
-			.getDefinition("org.eclipse.wildwebdeveloper.xml");
+			.getDefinition(XML_LANGUAGE_SERVER_ID);
+	
 	private static final IPropertyChangeListener psListener = event -> {
 		XMLPreferenceServerConstants.getLemminxPreference(event).ifPresent(pref -> {
 			Map<String, Object> config = mergeCustomInitializationOptions(
@@ -154,15 +170,28 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	}
 
 	@Override
-	public String toString() {
-		return "XML Language Server: " + super.toString();
-	}
-
-	@Override
 	public Object getInitializationOptions(URI rootUri) {
-		return mergeCustomInitializationOptions(extensionJarRegistry.getInitiatizationOptions());
+		Map<String, Object> initializationOptions = new HashMap<>();
+		Map<String, Object> settings = mergeCustomInitializationOptions(
+				extensionJarRegistry.getInitiatizationOptions());
+		initializationOptions.put(SETTINGS_KEY, settings.get(SETTINGS_KEY));
+		Object extendedClientCapabilities = createExtendedClientCapabilities();
+		initializationOptions.put(EXTENDED_CLIENT_CAPABILITIES_KEY, extendedClientCapabilities);
+		return initializationOptions;
 	}
 
+	private static Object createExtendedClientCapabilities() {
+		Map<String, Object> extendedClientCapabilities = new HashMap<>();
+		Map<String, Object> codeLens = new HashMap<>();
+		extendedClientCapabilities.put(CODE_LENS_KEY, codeLens);
+		Map<String, Object> codeLensKind = new HashMap<>();
+		codeLens.put(CODE_LENS_KIND_KEY, codeLensKind);
+		List<String> valueSet = Arrays.asList(CodeLensKind.association.name());
+		codeLensKind.put(VALUE_SET_KEY, valueSet);
+		extendedClientCapabilities.put(BINDING_WIZARD_SUPPORT_KEY, Boolean.TRUE);
+		return extendedClientCapabilities;
+	}
+	
 	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
 		Map<String, Object> xmlOpts = new HashMap<>(defaults);
 		XMLPreferenceServerConstants.storePreferencesToLemminxOptions(store, xmlOpts);
@@ -179,5 +208,10 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	public void stop() {
 		store.removePropertyChangeListener(psListener);
 		super.stop();
+	}
+	
+	@Override
+	public String toString() {
+		return "XML Language Server: " + super.toString();
 	}
 }
