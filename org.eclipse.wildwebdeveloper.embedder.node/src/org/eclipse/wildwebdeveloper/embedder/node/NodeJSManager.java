@@ -32,10 +32,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 
 @SuppressWarnings("restriction")
 public class NodeJSManager {
+	public static final String NODE_ROOT_DIRECTORY = ".node";
 
 	private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
 
@@ -43,6 +45,18 @@ public class NodeJSManager {
 	private static Properties cachedNodeJsInfoProperties;
 	private static final Object EXPAND_LOCK = new Object();
 
+	/**
+	 * Finds Node.js executable installed in following list of locations:
+	 * - Location, specified in `org.eclipse.wildwebdeveloper.nodeJSLocation` system property
+	 * - Platform Install Location
+	 * - Platform User Location
+	 * - WWD Node bundle configuration location
+	 * - OS dependent default installation path
+	 * In case of Node.js cannot be found installs the embedded version into the first 
+	 * available location of platform install/user/workspace locations
+	 * 
+	 * @return The file for Node.js executable or null if it cannot be installed 
+	 */
 	public static File getNodeJsLocation() {
 		String nodeJsLocation = System.getProperty("org.eclipse.wildwebdeveloper.nodeJSLocation");
 		if (nodeJsLocation != null) {
@@ -56,10 +70,14 @@ public class NodeJSManager {
 		Properties properties = getNodeJsInfoProperties();
 		if (properties != null) {
 			try {
-				IPath stateLocationPath = Platform.getStateLocation(Activator.getDefault().getBundle());
-				if (stateLocationPath != null) {
-					File installationPath = stateLocationPath.toFile();
-					File nodePath = new File(installationPath, properties.getProperty("nodePath"));
+				File nodePath = probeNodeJsExacutable(properties);
+				if (nodePath != null) {
+					return nodePath;
+				}
+				
+				File installationPath = probeNodeJsInstallLocationn();
+				if (installationPath != null) {
+					nodePath = new File(installationPath, properties.getProperty("nodePath"));
 					synchronized (EXPAND_LOCK) {
 						if (!nodePath.exists() || !nodePath.canRead() || !nodePath.canExecute()) {
 							CompressUtils.unarchive(FileLocator.find(Activator.getDefault().getBundle(),
@@ -87,10 +105,11 @@ public class NodeJSManager {
 		}
 		return null;
 	}
-
+	
 	/**
+	 * Finds NPM executable installed in Node.js bundle location
 	 *
-	 * @return
+	 * @return The file for NPM executable or null if it cannot be found 
 	 * @since 0.2
 	 */
 	public static File getNpmLocation() {
@@ -108,20 +127,15 @@ public class NodeJSManager {
 	public static File which(String program) {
 		Properties properties = getNodeJsInfoProperties();
 		if (properties != null) {
-			IPath stateLocationPath = InternalPlatform.getDefault()
-					.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
-			if (stateLocationPath != null) {
-				File installationPath = stateLocationPath.toFile();
-				File nodePath = new File(installationPath, properties.getProperty("nodePath"));
-				if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
-					File exe = new File(nodePath.getParent(), program);
+			File nodePath = probeNodeJsExacutable(properties);
+			if (nodePath != null && nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
+				File exe = new File(nodePath.getParent(), program);
+				if (exe.canExecute()) {
+					return exe;
+				} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
+					exe = new File(nodePath.getParent(), program + ".exe");
 					if (exe.canExecute()) {
 						return exe;
-					} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
-						exe = new File(nodePath.getParent(), program + ".exe");
-						if (exe.canExecute()) {
-							return exe;
-						}
 					}
 				}
 			}
@@ -168,6 +182,68 @@ public class NodeJSManager {
 		return cachedNodeJsInfoProperties;
 	}
 
+	private static final File probeNodeJsInstallLocationn() {
+		File[] nodeJsLocations = getOrderedInstallationLocations();
+		for (File installationPath : nodeJsLocations) {
+			if (probeDirectoryForInstallation(installationPath)) {
+				return installationPath;
+			}
+		}
+		return null;
+	}
+	
+	private static final boolean probeDirectoryForInstallation(File directory) {
+		if (directory == null) {
+			return false;
+		}
+		if (directory.exists() && directory.isDirectory() 
+				&& directory.canWrite() && directory.canExecute()) {
+			return true;
+		}
+		return probeDirectoryForInstallation(directory.getParentFile());
+	}
+	
+	private static final File probeNodeJsExacutable(Properties properties) {
+		File[] nodeJsLocations = getOrderedInstallationLocations();
+		for (File installationPath : nodeJsLocations) {
+			File nodePath = getNodeJsExecutablen(installationPath, properties);
+			if (nodePath != null) {
+				return nodePath;
+			}
+		}
+		return null;
+	}
+
+	private static final File[] getOrderedInstallationLocations() {
+		return new File[] {
+				toFile(Platform.getInstallLocation(), NODE_ROOT_DIRECTORY),	// Platform Install Location
+				toFile(Platform.getUserLocation(), NODE_ROOT_DIRECTORY),		// Platform User Location
+				toFile(Platform.getStateLocation(Activator.getDefault().getBundle())) // Default
+		};
+	}
+	
+	private static final File toFile(Location location, String binDirectory) {
+		File installLocation = location != null && location.getURL() != null ? new File(location.getURL().getFile()) : null;
+		if (installLocation != null && binDirectory != null) {
+			installLocation = new File(installLocation, binDirectory);
+		}
+		return installLocation;
+	}
+	
+	private static final File toFile(IPath locationPath) {
+		return locationPath != null ? locationPath.toFile() : null;
+	}
+	
+	private static final File getNodeJsExecutablen(File installationLocation, Properties properties) {
+		if (installationLocation != null) {
+			File nodePath = new File(installationLocation, properties.getProperty("nodePath"));
+			if (nodePath.exists() && nodePath.canRead() && nodePath.canExecute()) {
+				return nodePath;
+			}
+		}
+		return null;
+	}
+	
 	private static String getDefaultShellMacOS() {
 		String res = null;
 		String[] command = { "/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell" };
@@ -230,5 +306,4 @@ public class NodeJSManager {
 		}
 		alreadyWarned = true;
 	}
-
 }
