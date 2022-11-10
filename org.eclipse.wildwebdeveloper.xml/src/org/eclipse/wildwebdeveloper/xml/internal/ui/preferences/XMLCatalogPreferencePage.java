@@ -94,7 +94,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 
 		Button addButton = new Button(buttonComposite, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addButton.setText(Messages.PreferencePage_Add);
+		addButton.setText(Messages.Add_button);
 		addButton.addSelectionListener(widgetSelectedAdapter(e -> {
 			File result = openSelectFileDialog();
 			if (result == null) {
@@ -108,7 +108,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		
 		final Button removeButton = new Button(buttonComposite, SWT.PUSH);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeButton.setText(Messages.PreferencePage_Remove);
+		removeButton.setText(Messages.Remove_button);
 		removeButton.setEnabled(false);
 		removeButton.addSelectionListener(widgetSelectedAdapter(e -> {
 			if (selectedEntry != null) {

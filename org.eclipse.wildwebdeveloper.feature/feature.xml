@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.wildwebdeveloper.feature"
       label="%name"
-      version="1.0.0.qualifier"
+      version="1.0.1.qualifier"
       provider-name="Eclipse Wild Web Developer project"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
@@ -25,7 +25,7 @@
          optional="true"/>
 
    <requires>
-      <import feature="org.eclipse.wildwebdeveloper.xml.feature" version="1.0.0"/>
+      <import feature="org.eclipse.wildwebdeveloper.xml.feature" version="1.0.1"/>
    </requires>
 
    <plugin

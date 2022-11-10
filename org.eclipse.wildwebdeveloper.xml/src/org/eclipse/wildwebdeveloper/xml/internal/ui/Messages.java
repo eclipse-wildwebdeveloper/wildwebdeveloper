@@ -19,7 +19,7 @@ public class Messages extends NLS {
 	public static String XMLPreferencePage_XMLCatalogsLink;
 	public static String XMLPreferencePage_downloadExternalResources_enabled;
 	public static String XMLPreferencePage_completion_autoCloseTags;
-	
+
 	// --------- XML Catalog preference page
 	public static String XMLCatalogPreferencePage_Entries;
 	public static String XMLCatalogPreferencePage_Edit;
@@ -57,10 +57,20 @@ public class Messages extends NLS {
 	public static String XMLValidationPreferencePage_validation_namespace_option_onNamespaceEncountered;
 	public static String XMLValidationPreferencePage_validation_schema_option_onValidSchema;
 	public static String XMLValidationPreferencePage_validation_noGrammar_option_hint;
+  
+  // --------- Associate Grammar Dialog
+	public static String AssociateGrammarDialog_title;
+	public static String AssociateGrammarDialog_grammar_field;
+	public static String AssociateGrammarDialog_bindingType_field;
+	public static String AssociateGrammarDialog_validation_grammar_file_required;
+	public static String AssociateGrammarDialog_validation_grammar_file_notExists;
+	public static String AssociateGrammarDialog_validation_grammar_file_invalid_fileExtension;
+	public static String AssociateGrammarDialog_validation_grammar_file_invalid_association_for_relaxng;
 
 	// --------- Buttons
-	public static String PreferencePage_Add;
-	public static String PreferencePage_Remove;
+	public static String Add_button;
+	public static String Remove_button;
+	public static String Browse_button;
 
 	static {
 		NLS.initializeMessages("org.eclipse.wildwebdeveloper.xml.internal.ui.messages", Messages.class); //$NON-NLS-1$

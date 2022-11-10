@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,6 +27,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.wildwebdeveloper.embedder.node.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 import org.junit.jupiter.api.Test;
@@ -55,16 +57,11 @@ public class TestNodeJsEmbedder {
 
 		File nodePath = NodeJSManager.getNodeJsLocation();
 		assertNotNull(nodePath, "Node.Js location cannot be found");
-
-		IPath stateLocationPath = InternalPlatform.getDefault()
-				.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
-		assertNotNull(stateLocationPath, "State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"");
-
-		File installationPath = stateLocationPath.toFile();
-		File embeddedNodePath = new File(installationPath, properties.getProperty("nodePath"));
 		assertTrue(nodePath.exists() && nodePath.canRead() && nodePath.canExecute(),
 				"Embedded NodeJs is not extracted");
-		assertEquals(nodePath, embeddedNodePath, "Embedded NodeJs installation is not used");
+
+		assertNodeInstalledInOneOfLocations(nodePath, getOrderedInstallationLocations(),
+				properties.getProperty("nodePath"));
 	}
 
 	@Test
@@ -84,17 +81,13 @@ public class TestNodeJsEmbedder {
 		assertTrue(properties.getProperty("nodePath") != null && !properties.getProperty("nodePath").isEmpty(),
 				"Property \"nodePath\" is not defined");
 
-		File nodePath = NodeJSManager.getNodeJsLocation();
-		assertNotNull(nodePath, "Node.Js location cannot be found");
-
-		IPath stateLocationPath = InternalPlatform.getDefault()
-				.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
-		assertNotNull(stateLocationPath, "State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"");
-
-		File installationPath = stateLocationPath.toFile();
-		File embeddedNodePath = new File(installationPath, properties.getProperty("nodePath"));
-		assertTrue(nodePath.exists() && nodePath.canRead() && nodePath.canExecute(),
+		File embeddedNodePath = NodeJSManager.getNodeJsLocation();
+		assertNotNull(embeddedNodePath, "Node.Js location cannot be found");
+		assertTrue(embeddedNodePath.exists() && embeddedNodePath.canRead() && embeddedNodePath.canExecute(),
 				"Embedded NodeJs is not extracted");
+
+		assertNodeInstalledInOneOfLocations(embeddedNodePath, getOrderedInstallationLocations(),
+				properties.getProperty("nodePath"));
 
 		File whichNode = NodeJSManager.which("node");
 		assertTrue(
@@ -121,5 +114,37 @@ public class TestNodeJsEmbedder {
 		assertTrue(npm.isFile());
 		assertTrue(npm.length() > 0);
 		assertTrue(Platform.OS_WIN32.equals(Platform.getOS()) || Files.isSymbolicLink(npm.toPath()));
+	}
+
+	private static final File[] getOrderedInstallationLocations() {
+		Location installLocation = Platform.getInstallLocation(); // Platform Install Location, can be null
+		File installLocationFile = installLocation != null && installLocation.getURL() != null
+				? new File(installLocation.getURL().getFile(), NodeJSManager.NODE_ROOT_DIRECTORY)
+				: null;
+
+		Location userLocation = Platform.getUserLocation(); // Platform User Location, can be null
+		File userLocationFile = userLocation != null && userLocation.getURL() != null
+				? new File(userLocation.getURL().getFile(), NodeJSManager.NODE_ROOT_DIRECTORY)
+				: null;
+
+		IPath stateLocationPath = InternalPlatform.getDefault()
+				.getStateLocation(Platform.getBundle(Activator.PLUGIN_ID));
+		assertNotNull(stateLocationPath, "State location cannot be found for plugin \"" + Activator.PLUGIN_ID + "\"");
+		File stateLocationFile = stateLocationPath.toFile();
+
+		return new File[] { installLocationFile, userLocationFile, stateLocationFile };
+	}
+
+	private static void assertNodeInstalledInOneOfLocations(@NonNull File nodePath, File[] locations,
+			String nodeRelativePath) {
+		for (File location : locations) {
+			if (location != null) {
+				File embeddedNodePath = new File(location, nodeRelativePath);
+				if (nodePath.equals(embeddedNodePath)) {
+					return;
+				}
+			}
+		}
+		fail("Embedded NodeJs installation is not used");
 	}
 }
