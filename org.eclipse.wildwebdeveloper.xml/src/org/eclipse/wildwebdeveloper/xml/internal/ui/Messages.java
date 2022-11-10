@@ -58,7 +58,7 @@ public class Messages extends NLS {
 	public static String XMLValidationPreferencePage_validation_schema_option_onValidSchema;
 	public static String XMLValidationPreferencePage_validation_noGrammar_option_hint;
   
-  // --------- Associate Grammar Dialog
+	// --------- Associate Grammar Dialog
 	public static String AssociateGrammarDialog_title;
 	public static String AssociateGrammarDialog_grammar_field;
 	public static String AssociateGrammarDialog_bindingType_field;
