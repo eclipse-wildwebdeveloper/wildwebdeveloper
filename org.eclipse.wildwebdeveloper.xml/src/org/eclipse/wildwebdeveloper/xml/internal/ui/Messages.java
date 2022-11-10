@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2022 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -53,6 +53,11 @@ public class Messages extends NLS {
 	public static String XMLValidationPreferencePage_validation_resolveExternalEntities;
 	public static String XMLValidationPreferencePage_validation_noGrammar;
 
+	// -------- XML Validation preference page settings
+	public static String XMLValidationPreferencePage_validation_namespace_option_onNamespaceEncountered;
+	public static String XMLValidationPreferencePage_validation_schema_option_onValidSchema;
+	public static String XMLValidationPreferencePage_validation_noGrammar_option_hint;
+  
 	// --------- Associate Grammar Dialog
 	public static String AssociateGrammarDialog_title;
 	public static String AssociateGrammarDialog_grammar_field;
