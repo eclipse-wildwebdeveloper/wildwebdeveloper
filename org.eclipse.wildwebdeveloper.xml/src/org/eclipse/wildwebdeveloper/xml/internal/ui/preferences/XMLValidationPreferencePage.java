@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Red Hat Inc. and others.
+ * Copyright (c) 2021, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -47,12 +47,19 @@ public class XMLValidationPreferencePage extends FieldEditorPreferencePage imple
 				Messages.XMLValidationPreferencePage_validation_enabled, getFieldEditorParent()));
 		addField(new ComboFieldEditor(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_namespaces_enabled,
-				new String[][] { { Action.removeMnemonics(IDEWorkbenchMessages.Always), "always" }, { Action.removeMnemonics(IDEWorkbenchMessages.Never), "never" },
-						{ "On namespace encountered", "onNamespaceEncountered" } },
+				new String[][] { 
+					{ Action.removeMnemonics(IDEWorkbenchMessages.Always), "always" }, 
+					{ Action.removeMnemonics(IDEWorkbenchMessages.Never), "never" },
+					{ Messages.XMLValidationPreferencePage_validation_namespace_option_onNamespaceEncountered, "onNamespaceEncountered" } 
+				},
 				getFieldEditorParent()));
 		addField(new ComboFieldEditor(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_schema_enabled,
-				new String[][] { { Action.removeMnemonics(IDEWorkbenchMessages.Always), "always" }, { Action.removeMnemonics(IDEWorkbenchMessages.Never), "never" }, { "In valid schema", "onValidSchema" } },
+				new String[][] { 
+					{ Action.removeMnemonics(IDEWorkbenchMessages.Always), "always" }, 
+					{ Action.removeMnemonics(IDEWorkbenchMessages.Never), "never" }, 
+					{ Messages.XMLValidationPreferencePage_validation_schema_option_onValidSchema, "onValidSchema" } 
+				},
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_disallowDocTypeDecl, getFieldEditorParent()));
@@ -60,8 +67,13 @@ public class XMLValidationPreferencePage extends FieldEditorPreferencePage imple
 				Messages.XMLValidationPreferencePage_validation_resolveExternalEntities, getFieldEditorParent()));
 		addField(new ComboFieldEditor(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId,
 				Messages.XMLValidationPreferencePage_validation_noGrammar,
-				new String[][] { { Action.removeMnemonics(IDialogConstants.IGNORE_LABEL), "ignore" }, { "Hint", "hint" }, { JFaceResources.getString("info"), "info" },
-						{ JFaceResources.getString("warning"), "warning" }, { JFaceResources.getString("error"), "error" } },
+				new String[][] { 
+					{ Action.removeMnemonics(IDialogConstants.IGNORE_LABEL), "ignore" },
+					{ Messages.XMLValidationPreferencePage_validation_noGrammar_option_hint, "hint" }, 
+					{ JFaceResources.getString("info"), "info" },
+					{ JFaceResources.getString("warning"), "warning" }, 
+					{ JFaceResources.getString("error"), "error" } 
+				},
 				getFieldEditorParent()));
 	}
 
