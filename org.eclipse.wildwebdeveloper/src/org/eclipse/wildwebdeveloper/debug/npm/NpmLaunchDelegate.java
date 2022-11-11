@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.resources.IProject;
@@ -28,6 +29,7 @@ import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -40,8 +42,9 @@ import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 
-	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"; //$NON-NLS-1$
-	static final String ARGUMENTS = "runtimeArgs";
+	public static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"; //$NON-NLS-1$
+	public static final String ARGUMENTS = "runtimeArgs";
+
 	private MessageConsole console;
 
 	public NpmLaunchDelegate() {
@@ -66,7 +69,23 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 		monitor.worked(1);
 		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(packageJSONDirectory.getName());
 		try {
-			final Process npmProcess = new ProcessBuilder(arguments).directory(packageJSONDirectory).start();
+			ProcessBuilder pb = new ProcessBuilder(arguments).directory(packageJSONDirectory);
+			Map<String, String> envp = configuration.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map<String, String>) null);
+			if (envp != null && !envp.isEmpty()) {
+				Map<String, String> env = pb.environment();
+				envp.entrySet().forEach(e -> {
+					String value = e.getValue();
+					try {
+						value = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(value);
+					} catch (CoreException ex) {
+						IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex);
+						Activator.getDefault().getLog().log(errorStatus);
+					}
+					env.put(e.getKey(), value);
+				});
+			}
+			
+			final Process npmProcess = pb.start();
 			DebugPlugin.newProcess(launch, npmProcess, argumentString);
 			CompletableFuture.runAsync(() -> {
 				try {
