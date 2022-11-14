@@ -535,18 +535,22 @@
             label="JavaScript-TypeScript Language Server">
       </server>
       <contentTypeMapping
+            languageId="javascript"
             contentType="org.eclipse.wildwebdeveloper.js"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
+            languageId="typescript"
             contentType="org.eclipse.wildwebdeveloper.ts"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
+            languageId="javascript"
             contentType="org.eclipse.wildwebdeveloper.jsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
+            languageId="typescript"
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
@@ -612,8 +616,7 @@
             path="language-configurations/typescript/language-configuration.jsonc">
       </languageConfiguration>
    </extension>
-   
-   
+
    <extension
          point="org.eclipse.tm4e.ui.snippets">
       <snippet
@@ -637,6 +640,59 @@
      <icon contentType="org.eclipse.wildwebdeveloper.jsx" icon="icons/jsEditorIcon.png"/>
      <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
      <icon contentType="org.eclipse.wildwebdeveloper.tsx" icon="icons/tsEditorIcon.png"/>
+   </extension>
+
+   <extension
+         id="JavaScriptPreferenceInitializer"
+         name="JavaScriptPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
+         id="TypeScriptPreferenceInitializer"
+         name="TypeScriptPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
+            id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
+            name="%JSTSPreferencePage.name">
+      </page>
+      <!-- JavaScript -->
+      <page
+            category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
+            class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
+            id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
+            name="%JavaScriptPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptInlayHintPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptInlayHintPreferencePage"
+         name="%JavaScriptInlayHintPreferencePage.name">
+      </page>      
+      <!-- TypeScript -->
+      <page
+            category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
+            class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
+            id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
+            name="%TypeScriptPreferencePage.name">
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptInlayHintPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptInlayHintPreferencePage"
+         name="%TypeScriptInlayHintPreferencePage.name">
+      </page>
    </extension>
 
    <!-- Angular -->
