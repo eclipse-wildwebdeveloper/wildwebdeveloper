@@ -6,6 +6,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 #### Editing improvements
   * Bind schema/grammar (XSD, DTD, RelaxNG) with codelens in XML file
+  * UI preferences for TypeScript/ Javascript Inlay Hints 
 
 ## 1.0.0
 

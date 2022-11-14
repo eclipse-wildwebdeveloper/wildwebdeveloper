@@ -25,31 +25,47 @@ import java.util.Map;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
+import org.eclipse.lsp4j.DidChangeConfigurationParams;
+import org.eclipse.lsp4j.InitializeResult;
+import org.eclipse.lsp4j.jsonrpc.messages.Message;
+import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
+import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
 
-public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
+public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPreference {
+
+	private static final String JSTS_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.jsts";
+
+	private static final String[] SUPPORTED_SECTIONS = { "typescript", "javascript" };
 
 	public JSTSLanguageServer() {
+		super(JSTS_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript-language-server/lib/cli.js"));
+			URL url = FileLocator
+					.toFileURL(getClass().getResource("/node_modules/typescript-language-server/lib/cli.js"));
 			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/"));
 			setCommands(commands);
-			setWorkingDirectory(nodeDependencies.getPath()); //Required for typescript-eslint-language-service to find it's dependencies
+			setWorkingDirectory(nodeDependencies.getPath()); // Required for typescript-eslint-language-service to find
+																// it's dependencies
 
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
 	}
-	
+
 	@Override
 	public Object getInitializationOptions(URI rootUri) {
 		Map<String, Object> options = new HashMap<>();
+		// plugins
 		List<TypeScriptPlugin> plugins = new ArrayList<>();
 		try {
 //			plugins.add(new TypeScriptPlugin("@angular/language-service"));
@@ -57,9 +73,30 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
 		return options;
 	}
-	
+
+	@Override
+	protected Object createSettings() {
+		Map<String, Object> settings = new HashMap<>();
+		// javascript
+		settings.putAll(JavaScriptPreferenceServerConstants.getGlobalSettings());
+		// typescript
+		settings.putAll(TypeScriptPreferenceServerConstants.getGlobalSettings());
+		return settings;
+	}
+
+	@Override
+	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
+		if (message instanceof ResponseMessage responseMessage) {
+			if (responseMessage.getResult() instanceof InitializeResult) {
+				// enable validation: so far, no better way found than changing conf after init.
+				DidChangeConfigurationParams params = new DidChangeConfigurationParams(createSettings());
+				languageServer.getWorkspaceService().didChangeConfiguration(params);
+			}
+		}
+	}
 }
