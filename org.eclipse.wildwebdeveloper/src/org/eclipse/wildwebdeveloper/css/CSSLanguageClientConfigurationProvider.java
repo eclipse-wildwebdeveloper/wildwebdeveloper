@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2022 Red Hat Inc. and others.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *  Angelo ZERR (Red Hat Inc.) - initial implementation
- *******************************************************************************/
 package org.eclipse.wildwebdeveloper.css;
 
 import static org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConstants.isMatchCssSection;
@@ -18,21 +6,21 @@ import static org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferenc
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.lsp4e.LanguageClientImpl;
+import org.eclipse.lsp4e.LanguageClientConfigurationProvider;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
+import org.eclipse.lsp4j.FormattingOptions;
+import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.ui.preferences.Settings;
 
-/**
- * CSS language client implementation.
- * 
- */
-public class CSSLanguageClient extends LanguageClientImpl {
+public class CSSLanguageClientConfigurationProvider implements LanguageClientConfigurationProvider {
 
 	@Override
 	public CompletableFuture<List<Object>> configuration(ConfigurationParams params) {
@@ -64,4 +52,38 @@ public class CSSLanguageClient extends LanguageClientImpl {
 			return settings;
 		});
 	}
+
+	@Override
+	public void collectFormatting(FormattingOptions formattingOptions, TextDocumentIdentifier identifier,
+			String languageId) {
+		Settings settings = getSettings(languageId);
+		if (settings != null) {
+			Map<String, Object> result = (Map<String, Object>) settings.findSettings(languageId, "format");
+			if (result != null) {
+				for (Entry<String, Object> entry : result.entrySet()) {
+					if (entry.getValue() instanceof String) {
+						formattingOptions.putString(entry.getKey(), (String) entry.getValue());
+					} else if (entry.getValue() instanceof Boolean) {
+						formattingOptions.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+					} else if (entry.getValue() instanceof Number) {
+						formattingOptions.putNumber(entry.getKey(), (Number) entry.getValue());
+					}
+				}
+			}
+		}
+	}
+
+	private static Settings getSettings(String languageId) {
+		if (isMatchCssSection(languageId)) {
+			return CSSPreferenceServerConstants.getGlobalSettings();
+		}
+		if (isMatchLessSection(languageId)) {
+			return LESSPreferenceServerConstants.getGlobalSettings();
+		}
+		if (isMatchScssSection(languageId)) {
+			return SCSSPreferenceServerConstants.getGlobalSettings();
+		}
+		return null;
+	}
+
 }

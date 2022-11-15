@@ -191,7 +191,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.css.CSSLanguageServer"
-            clientImpl="org.eclipse.wildwebdeveloper.css.CSSLanguageClient"
+            languageClientConfigurationProvider="org.eclipse.wildwebdeveloper.css.CSSLanguageClientConfigurationProvider"
             id="org.eclipse.wildwebdeveloper.css"
             label="CSS/LESS/SCSS Language Server (VSCode)"
             singleton="true">
@@ -285,14 +285,12 @@
          name="%CSSCompletionPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.css" />
       </page>
-      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this CSS format preference page to benefit with CSS formatting 
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSFormatPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSFormatPreferencePage"
          name="%CSSFormatPreferencePage.name">
-      </page>
-      -->
+      </page>     
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSHoverPreferencePage"
@@ -325,14 +323,12 @@
          name="%LESSCompletionPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.less" />
       </page>
-      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this LESS format preference page to benefit with LESS formatting 
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSFormatPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSFormatPreferencePage"
          name="%LESSFormatPreferencePage.name">
       </page>
-      -->
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSHoverPreferencePage"
@@ -367,14 +363,12 @@
             <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
             <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
       </page>
-      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this SCSS format preference page to benefit with SCSS formatting 
-      <page
+     <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSFormatPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSFormatPreferencePage"
          name="%SCSSFormatPreferencePage.name">
       </page>
-      -->
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSHoverPreferencePage"
