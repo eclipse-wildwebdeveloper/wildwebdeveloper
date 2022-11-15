@@ -150,13 +150,14 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			return false;
 		}
 		
+		File programFile = new File(program);
 		if (Platform.getContentTypeManager().getContentType("org.eclipse.wildwebdeveloper.ts")
-					.isAssociatedWith(new File(program).getName())) {
+					.isAssociatedWith(programFile.getName())) {
 			// TypeScript Source Mappings Configuration
-			String tsConfigPath = cwd + "/tsconfig.json";
+			File parentDirectory = cwd == null ? programFile.getParentFile() : new File(cwd);
+			File tsConfigFile = findTSConfigFile(parentDirectory);
 			String errorMessage = null;
-			File tsConfigFile = new File(tsConfigPath);
-			Map<String, Object> tsConfig = readTsConfig(tsConfigFile);
+			Map<String, Object> tsConfig = readJSonFile(tsConfigFile);
 			Map<String, Object> co = tsConfig == null ? null : (Map<String, Object>)tsConfig.get("compilerOptions");
 			if (co == null) {
 				errorMessage = Messages.NodeDebug_TSConfirError_NoTsConfig;
@@ -222,7 +223,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							IFile file = createNewEmptyFile(tsConfigPath);
+							IFile file = createNewEmptyFile(new File(parentDirectory, "tsconfig.json"));
 							if (file != null) {
 								try {
 									IDE.openEditor(
@@ -236,10 +237,10 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 							}
 						}
 
-						private IFile createNewEmptyFile(String tsConfigPath) {
+						private IFile createNewEmptyFile(File fsFile) {
 							IWorkspace ws = ResourcesPlugin.getWorkspace();
 							IWorkspaceRoot wr = ws.getRoot();
-							IFile file = wr.getFileForLocation(new Path(tsConfigPath));
+							IFile file = wr.getFileForLocation(new Path(fsFile.getAbsolutePath()));
 							if (!(file.exists() && file.isAccessible())) {
 								IFile[] result = new IFile[1];
 								try {
@@ -279,7 +280,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			
 			return true;
 		} else if (Platform.getContentTypeManager().getContentType("org.eclipse.wildwebdeveloper.js")
-				.isAssociatedWith(new File(program).getName())) {
+				.isAssociatedWith(programFile.getName())) {
 
 			// JavaScript configuration
 			
@@ -291,8 +292,23 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		}
 		return false;
 	}
+
+	private File findTSConfigFile(File parentDirectory) {
+		File tsConfigFile;
+		do {
+			tsConfigFile = new File(parentDirectory, "tsconfig.json");
+			if (tsConfigFile.isFile()) {
+				return tsConfigFile;
+			}
+			parentDirectory = parentDirectory.getParentFile();
+		} while (parentDirectory != null && parentDirectory.isDirectory());
+		return null;
+	}
 	
-	public Map<String, Object> readTsConfig(File tsConfgFile) {
+	public Map<String, Object> readJSonFile(File tsConfgFile) {
+		if (tsConfgFile == null || !tsConfgFile.isFile()) {
+			return Map.of();
+		}
 		try (BufferedReader in = new BufferedReader(new FileReader(tsConfgFile))) {
 			String inputLine;
 			StringBuffer response = new StringBuffer();
@@ -302,7 +318,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			Type type = new TypeToken<Map<String, Object>>() {}.getType();
 			return new Gson().fromJson(response.toString(), type);
 		} catch (IOException e) {
-			return null;
+			return Map.of();
 		}
 	}
 }
