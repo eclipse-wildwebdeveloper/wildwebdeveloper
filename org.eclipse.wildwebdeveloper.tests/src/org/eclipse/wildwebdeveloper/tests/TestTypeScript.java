@@ -61,8 +61,10 @@ public class TestTypeScript {
 									// didChange
 		HoverParams params = new HoverParams(new TextDocumentIdentifier(LSPEclipseUtils.toUri(document).toString()),
 				new Position(0, 18));
-		Hover hover = LanguageServiceAccessor.getLanguageServers(document, null).get().get(0).getTextDocumentService()
-				.hover(params).get();
+		Hover hover = LanguageServiceAccessor
+				.getLanguageServers(document,
+						capability -> LSPEclipseUtils.hasCapability(capability.getHoverProvider()))
+				.get().get(0).getTextDocumentService().hover(params).get();
 		assertTrue(hover.getContents().toString().contains("button"));
 	}
 

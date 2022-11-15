@@ -559,12 +559,32 @@
             id="org.eclipse.wildwebdeveloper.eslint"
             label="ESLint"
             clientImpl="org.eclipse.wildwebdeveloper.eslint.ESLintClientImpl"/>
+      <!-- See https://github.com/microsoft/vscode-eslint/blob/main/server/src/languageDefaults.ts#L14
+      about language id -->
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.js"
-            id="org.eclipse.wildwebdeveloper.eslint"/>
+            id="org.eclipse.wildwebdeveloper.eslint"
+            languageId="javascript"/>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.ts"
-            id="org.eclipse.wildwebdeveloper.eslint"/>
+            id="org.eclipse.wildwebdeveloper.eslint"
+            languageId="typescript"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.ts"
+            id="org.eclipse.wildwebdeveloper.html"
+            languageId="html"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.jsx"
+            id="org.eclipse.wildwebdeveloper.eslint"
+            languageId="javascriptreact"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.tsx"
+            id="org.eclipse.wildwebdeveloper.eslint"
+            languageId="typescriptreact"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.yaml"
+            id="org.eclipse.wildwebdeveloper.eslint"
+            languageId="yaml"/>
    </extension>
    
    <extension
