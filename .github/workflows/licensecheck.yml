@@ -14,9 +14,31 @@ on:
     types: [created]
     
 jobs:
-  call-license-check:
+  call-mvn-license-check:
     uses: eclipse/dash-licenses/.github/workflows/mavenLicenseCheck.yml@master
     with:
       projectId: tools.wildwebdeveloper
     secrets:
       gitlabAPIToken: ${{ secrets.GITLAB_API_TOKEN }}
+  npm-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Cache local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Prepare NPM deps
+      run: mvn -DskipTests -pl target-platform,org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
+    - name: Get Dash license tool
+      run: mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:0.0.1-SNAPSHOT
+    - name: License check NPM deps
+      run: java -jar $(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/0.0.1-SNAPSHOT/org.eclipse.dash.licenses-*.jar | tail -n 1) org.eclipse.wildwebdeveloper/package-lock.json -excludeSources local
