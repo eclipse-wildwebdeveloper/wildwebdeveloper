@@ -7,31 +7,16 @@ on:
   push:
     branches: 
       - 'master'
-      - 'tycho-*'
   pull_request:
     branches: 
      - 'master'
-     - 'tycho-*'
-
+  issue_comment:
+    types: [created]
+    
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Cache local Maven repository
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: License check
-      run: | 
-        mvn -U -V -e -B -ntp org.eclipse.dash:license-tool-plugin:license-check --file pom.xml
+  call-license-check:
+    uses: eclipse/dash-licenses/.github/workflows/mavenLicenseCheck.yml@master
+    with:
+      projectId: tools.wildwebdeveloper
+    secrets:
+      gitlabAPIToken: ${{ secrets.GITLAB_API_TOKEN }}
