@@ -5,8 +5,8 @@
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<repository location="https://download.eclipse.org/eclipse/updates/latest/"/>
 	<unit id="org.eclipse.ui.tests.harness" version="0.0.0"/>
-	<unit id="org.eclipse.pde.junit.runtime" version="0.0.0" />
-	<unit id="org.eclipse.jdt.junit5.runtime" version="0.0.0" />
+	<unit id="org.eclipse.pde.junit.runtime" version="0.0.0"/>
+	<unit id="org.eclipse.jdt.junit5.runtime" version="0.0.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<repository location="https://download.eclipse.org/releases/latest/"/>
@@ -49,5 +49,45 @@
 	<repository location="http://download.eclipse.org/cbi/updates/license/"/>
 	<unit id="org.eclipse.license.feature.group" version="0.0.0"/>
 </location>
+	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>jakarta.interceptor</groupId>
+				<artifactId>jakarta.interceptor-api</artifactId>
+				<version>1.2.5</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>jakarta.transaction</groupId>
+				<artifactId>jakarta.transaction-api</artifactId>
+				<version>1.3.3</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>4.0.4</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>jakarta.enterprise</groupId>
+				<artifactId>jakarta.enterprise.cdi-api</artifactId>
+				<version>2.0.2</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
 </locations>
 </target>
