@@ -4,9 +4,15 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 1.0.1
 
-#### Editing improvements
-  * Bind schema/grammar (XSD, DTD, RelaxNG) with codelens in XML file
-  * UI preferences for TypeScript/ Javascript Inlay Hints 
+* 📅 Release Date: November 27th, 2022
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.0.0...1.0.1
+
+* Show a code mining action to bind schema/grammar (XSD, DTD, RelaxNG) with codelens in XML file
+* UI preferences for TypeScript/ Javascript Inlay Hints 
+* Embedded node.js now installed in the IDE installation folder (instead of workspace)
+* Bugfix to better detect tsconfig.json files when debugging .ts files. This usually makes debugger work better out of the box.
+* Bugfix ESLint support
+* Update dependencies
 
 ## 1.0.0
 
