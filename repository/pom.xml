@@ -12,6 +12,23 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>tycho-p2-extras-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<!-- TODO: It's needed the only verision check for the product, but not for the whole repository contents -->
+					<execution>
+						<id>compare-version-with-baseline</id>
+						<goals>
+							<goal>compare-version-with-baselines</goal>
+						</goals>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>3.3.0</version>
