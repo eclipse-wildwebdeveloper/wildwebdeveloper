@@ -7,7 +7,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-repository</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -23,7 +23,7 @@
 							<goal>compare-version-with-baselines</goal>
 						</goals>
 						<configuration>
-							<skip>true</skip>
+							<skip>false</skip>
 						</configuration>
 					</execution>
 				</executions>
