@@ -61,6 +61,14 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		} catch (URISyntaxException e) {
 			// shouldn't happen else what to do here?
 		}
+		
+		// `pre-release/2.3.0`: Disable using experimental Flat Config system 
+		config.put("experimental", Collections.emptyMap());
+
+		// `pre-release/2.3.0`: Add stub `problems` settings due to:
+		//   ESLint: Cannot read properties of undefined (reading \u0027shortenToSingleLine\u0027). Please see the \u0027ESLint\u0027 output channel for details.
+		config.put("problems", Collections.emptyMap());
+
 		config.put("workspaceFolder", Collections.singletonMap("uri", highestPackageJsonDir.toURI().toString())); 
 
 		// if you set a workspaceFolder and then the working dir in auto mode eslint will try to get to the right config location.
