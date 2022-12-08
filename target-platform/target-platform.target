@@ -19,7 +19,6 @@
 	<unit id="org.hamcrest.core" version="0.0.0"/>
 	<unit id="junit-jupiter-api" version="0.0.0"/>
 	<unit id="javax.xml.stream" version="0.0.0"/>
-	<unit id="org.apache.commons.compress" version="0.0.0"/>
 	<!-- Product deps -->
 	<unit id="org.eclipse.epp.package.common.feature.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
@@ -49,18 +48,26 @@
 	<repository location="http://download.eclipse.org/cbi/updates/license/"/>
 	<unit id="org.eclipse.license.feature.group" version="0.0.0"/>
 </location>
-	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" label="Jakarta APIs" missingManifest="generate" type="Maven">
 		<dependencies>
+			<dependency>
+				<groupId>jakarta.enterprise</groupId>
+				<artifactId>jakarta.enterprise.cdi-api</artifactId>
+				<version>2.0.2</version>
+				<type>jar</type>
+			</dependency>
 			<dependency>
 				<groupId>jakarta.interceptor</groupId>
 				<artifactId>jakarta.interceptor-api</artifactId>
 				<version>1.2.5</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
+			<dependency>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>4.0.4</version>
+				<type>jar</type>
+			</dependency>
 			<dependency>
 				<groupId>jakarta.transaction</groupId>
 				<artifactId>jakarta.transaction-api</artifactId>
@@ -72,19 +79,9 @@
 	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
-				<groupId>jakarta.servlet</groupId>
-				<artifactId>jakarta.servlet-api</artifactId>
-				<version>4.0.4</version>
-				<type>jar</type>
-			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
-			<dependency>
-				<groupId>jakarta.enterprise</groupId>
-				<artifactId>jakarta.enterprise.cdi-api</artifactId>
-				<version>2.0.2</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.22</version>
 				<type>jar</type>
 			</dependency>
 		</dependencies>
