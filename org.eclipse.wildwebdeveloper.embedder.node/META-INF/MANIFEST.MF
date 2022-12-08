@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Manager for embedded Node.js
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.embedder.node
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: Eclipse Wild Web Developer
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.embedder.node
 Bundle-RequiredExecutionEnvironment: JavaSE-17
@@ -10,8 +10,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench,
  org.eclipse.swt,
  org.eclipse.core.runtime;bundle-version="3.18.0",
- org.eclipse.jface;bundle-version="3.20.0",
- org.apache.commons.compress;bundle-version="1.19.0"
+ org.eclipse.jface;bundle-version="3.20.0"
+Import-Package: org.apache.commons.compress.archivers,
+ org.apache.commons.compress.archivers.dump,
+ org.apache.commons.compress.archivers.tar,
+ org.apache.commons.compress.archivers.zip,
+ org.apache.commons.compress.compressors.gzip,
+ org.apache.commons.compress.compressors.xz,
+ org.apache.commons.compress.utils
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.wildwebdeveloper.embedder.node.Activator
 Export-Package: org.eclipse.wildwebdeveloper.embedder.node
