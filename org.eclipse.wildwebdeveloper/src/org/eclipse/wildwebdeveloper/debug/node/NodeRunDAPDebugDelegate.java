@@ -305,10 +305,25 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		} while (parentDirectory != null && parentDirectory.isDirectory());
 		return null;
 	}
-	
+
 	private static final Pattern BlockCommentPattern = Pattern.compile("(?<!//.*)/\\*(?:.|\\R)*?\\*/");
 	private static final Pattern LineCommentPattern = Pattern.compile("\\s*//.*");
 	private static final Pattern TrailingCommaPattern = Pattern.compile(",(\\s*)\\}");
+
+	/**
+	 * Given a string representing the content of a tsconfig.json file, modify the
+	 * string so that it may be safely passed to {@link Gson#fromJson} for parsing.
+	 * The resulting string will be semantically equivalent to the original content.
+	 * @param tsConfgContent A copy of a tsconfig.json file's content.
+	 * @return A modified version of the tsconfig.json content.
+	 */
+	private String getSanitisedTSConfigForGson(String tsConfgContent) {
+		tsConfgContent = BlockCommentPattern.matcher(tsConfgContent).replaceAll("");
+		tsConfgContent = LineCommentPattern.matcher(tsConfgContent).replaceAll("");
+		tsConfgContent = TrailingCommaPattern.matcher(tsConfgContent).replaceAll("$1}");
+		return tsConfgContent;
+	}
+
 	public Map<String, Object> readJSonFile(File tsConfgFile) {
 		if (tsConfgFile == null || !tsConfgFile.isFile()) {
 			return Map.of();
@@ -320,11 +335,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 				response.append(inputLine).append('\n');
 			}
 			Type type = new TypeToken<Map<String, Object>>() {}.getType();
-			var responseString = response.toString();
-			responseString = BlockCommentPattern.matcher(responseString).replaceAll("");
-			responseString = LineCommentPattern.matcher(responseString).replaceAll("");
-			responseString = TrailingCommaPattern.matcher(responseString).replaceAll("$1}");
-			return new Gson().fromJson(responseString, type);
+			return new Gson().fromJson(getSanitisedTSConfigForGson(response.toString()), type);
 		} catch (IOException e) {
 			return Map.of();
 		}
