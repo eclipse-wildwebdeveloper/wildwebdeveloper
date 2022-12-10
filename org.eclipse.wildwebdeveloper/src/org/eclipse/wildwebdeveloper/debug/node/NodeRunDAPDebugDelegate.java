@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -305,6 +306,9 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		return null;
 	}
 	
+	private static final Pattern BlockCommentPattern = Pattern.compile("(?<!//.*)/\\*(?:.|\\R)*?\\*/");
+	private static final Pattern LineCommentPattern = Pattern.compile("\\s*//.*");
+	private static final Pattern TrailingCommaPattern = Pattern.compile(",(\\s*)\\}");
 	public Map<String, Object> readJSonFile(File tsConfgFile) {
 		if (tsConfgFile == null || !tsConfgFile.isFile()) {
 			return Map.of();
@@ -316,7 +320,11 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 				response.append(inputLine).append('\n');
 			}
 			Type type = new TypeToken<Map<String, Object>>() {}.getType();
-			return new Gson().fromJson(response.toString(), type);
+			var responseString = response.toString();
+			responseString = BlockCommentPattern.matcher(responseString).replaceAll("");
+			responseString = LineCommentPattern.matcher(responseString).replaceAll("");
+			responseString = TrailingCommaPattern.matcher(responseString).replaceAll("$1}");
+			return new Gson().fromJson(responseString, type);
 		} catch (IOException e) {
 			return Map.of();
 		}
