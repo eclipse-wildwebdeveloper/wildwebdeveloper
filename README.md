@@ -93,4 +93,4 @@ Wild Web Developer is based on the Eclipse Generic Editor framework from [Eclips
 
 ## ⌨️ Get involved
 
-See (contribution guide)[CONTRIBUTING.md].
+See [contribution guide](CONTRIBUTING.md).
