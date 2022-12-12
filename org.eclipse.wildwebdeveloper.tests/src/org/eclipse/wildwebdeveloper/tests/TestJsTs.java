@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2022 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
@@ -104,10 +105,15 @@ public class TestJsTs {
 		AtomicBoolean renameDialogContinuePressed = new AtomicBoolean();
 		AtomicBoolean renameDialogCancelPressed = new AtomicBoolean();
 		AtomicBoolean errorDialogOkPressed = new AtomicBoolean();
+		AtomicBoolean newTextIsSet = new AtomicBoolean();
+
 		Listener pressOKonRenameDialogPaint = event -> {
 			if (event.widget instanceof Composite c) {
 				Shell shell = c.getShell();
 				if (shell != ideShell && shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
+					if (!newTextIsSet.get()) {
+						newTextIsSet.set(setNewText(c, newName));
+					}
 					Set<String> buttons = getButtons(c);
 					if (WIZARD_RENAME.equals(shell.getText())) {
 						if (!renameDialogOkPressed.get()) {
@@ -167,6 +173,26 @@ public class TestJsTs {
 		} else if (w instanceof Composite composite) {
 			for (Control child : composite.getChildren()) {
 				result.addAll(getButtons(child));
+			}
+		}
+		return result;
+	}
+
+	static private boolean setNewText(Widget w, String newText) {
+		Set<Text> textWidgets = getTextWidgets(w);
+		if (!textWidgets.isEmpty()) {
+			textWidgets.forEach(t -> t.setText(newText));
+		}
+		return false;
+	}
+
+	static private Set<Text> getTextWidgets(Widget w) {
+		Set<Text> result = new HashSet<>();
+		if (w instanceof Text text) {
+			result.add(text);
+		} else if (w instanceof Composite composite) {
+			for (Control child : composite.getChildren()) {
+				result.addAll(getTextWidgets(child));
 			}
 		}
 		return result;
