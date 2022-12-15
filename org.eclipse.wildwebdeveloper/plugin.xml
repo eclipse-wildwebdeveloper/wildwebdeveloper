@@ -554,11 +554,11 @@
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
-      <!--<server
+      <server
             class="org.eclipse.wildwebdeveloper.eslint.ESLintLanguageServer"
             id="org.eclipse.wildwebdeveloper.eslint"
             label="ESLint"
-            clientImpl="org.eclipse.wildwebdeveloper.eslint.ESLintClientImpl"/>-->
+            clientImpl="org.eclipse.wildwebdeveloper.eslint.ESLintClientImpl"/>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.js"
             id="org.eclipse.wildwebdeveloper.eslint"/>
