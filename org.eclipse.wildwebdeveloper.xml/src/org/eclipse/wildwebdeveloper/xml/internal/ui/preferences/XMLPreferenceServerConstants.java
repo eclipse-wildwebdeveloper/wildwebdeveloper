@@ -33,6 +33,7 @@ public class XMLPreferenceServerConstants {
 		public final String preferenceId;
 		/**
 		 * without the "xml" prefix
+		 * 
 		 * @see https://github.com/redhat-developer/vscode-xml#supported-vs-code-settings
 		 */
 		public final String lemminxOptionPath;
@@ -41,7 +42,7 @@ public class XMLPreferenceServerConstants {
 			this.preferenceId = getPreferenceId(lemminxOptionPath);
 			this.lemminxOptionPath = lemminxOptionPath;
 		}
-		
+
 		private static String getPreferenceId(String lemminxOptionPath) {
 			return Activator.PLUGIN_ID + "." + lemminxOptionPath.replace("/", ".");
 		}
@@ -66,61 +67,117 @@ public class XMLPreferenceServerConstants {
 		}
 	}
 
-
 	// General settings
-	public static final LemminxPreference XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES = new LemminxPreference("downloadExternalResources/enabled");
+	public static final LemminxPreference XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES = new LemminxPreference(
+			"downloadExternalResources/enabled");
 
 	// Catalog settings
 	public static final LemminxPreference XML_PREFERENCES_CATAGLOGS = new LemminxPreference("catalogs");
-	
+
 	// CodeLens settings
 	public static final LemminxPreference XML_PREFERENCES_CODELENS_ENABLED = new LemminxPreference("codeLens/enabled");
-	
+
 	// Folding settings
-	public static final LemminxPreference XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD = new LemminxPreference("foldings/includeClosingTagInFold");
+	public static final LemminxPreference XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD = new LemminxPreference(
+			"foldings/includeClosingTagInFold");
 
 	// Format settings
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS = new LemminxPreference("format/emptyElements");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG = new LemminxPreference("format/spaceBeforeEmptyCloseTag");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES = new LemminxPreference("format/splitAttributes");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE = new LemminxPreference("format/splitAttributesIndentSize");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS = new LemminxPreference("format/preserveAttributeLineBreaks");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE = new LemminxPreference("format/closingBracketNewLine");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT = new LemminxPreference("format/xsiSchemaLocationSplit");
-	public static final LemminxPreference XML_PREFERENCES_FORMAT_JOIN_COMMENTLINES = new LemminxPreference("format/joinCommentLines");
+
+	// General
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_MAX_LINE_WIDTH = new LemminxPreference(
+			"format/maxLineWidth");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_GRAMMAR_AWARE_FORMATTING = new LemminxPreference(
+			"format/grammarAwareFormatting");
+
+	// Format settings for Text content
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_PRESERVED_NEW_LINES = new LemminxPreference(
+			"format/preservedNewlines");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_JOIN_CONTENT_LINES = new LemminxPreference(
+			"format/joinContentLines");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_INSERT_FINAL_NEWLINE = new LemminxPreference(
+			"format/insertFinalNewline");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_TRIM_FINAL_NEWLINES = new LemminxPreference(
+			"format/trimFinalNewlines");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_TRIM_TRAILING_WHITESPACE = new LemminxPreference(
+			"format/trimTrailingWhitespace");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_PRESERVE_SPACE = new LemminxPreference(
+			"format/preserveSpace");
+
+	// Format settings for Tag elements
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS = new LemminxPreference(
+			"format/emptyElements");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG = new LemminxPreference(
+			"format/spaceBeforeEmptyCloseTag");
+
+	// Format settings for Attributes
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES = new LemminxPreference(
+			"format/splitAttributes");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE = new LemminxPreference(
+			"format/splitAttributesIndentSize");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS = new LemminxPreference(
+			"format/preserveAttributeLineBreaks");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE = new LemminxPreference(
+			"format/closingBracketNewLine");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT = new LemminxPreference(
+			"format/xsiSchemaLocationSplit");
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_ENFORCE_QUOTE_STYLE = new LemminxPreference(
+			"format/enforceQuoteStyle");
+
+	// Format settings for comments
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_JOIN_COMMENT_LINES = new LemminxPreference(
+			"format/joinCommentLines");
+
+	// Format settings for comments
+	public static final LemminxPreference XML_PREFERENCES_FORMAT_JOIN_CDATA_LINES = new LemminxPreference(
+			"format/joinCDATALines");
 
 	// Validation settings
-	public static final LemminxPreference XML_PREFERENCES_VALIDATION_ENABLED = new LemminxPreference("validation/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_ENABLED = new LemminxPreference(
+			"validation/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED = new LemminxPreference(
+			"validation/namespaces/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED = new LemminxPreference(
+			"validation/schema/enabled");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL = new LemminxPreference(
+			"validation/disallowDocTypeDecl");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES = new LemminxPreference(
+			"validation/resolveExternalEntities");
+	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NO_GRAMMAR = new LemminxPreference(
+			"validation/noGrammar");
 
-	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED = new LemminxPreference("validation/namespaces/enabled");
-	public static final LemminxPreference XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED = new LemminxPreference("validation/schema/enabled");
-	public static final LemminxPreference XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL = new LemminxPreference("validation/disallowDocTypeDecl");
-	public static final LemminxPreference XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES = new LemminxPreference("validation/resolveExternalEntities");
-	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NO_GRAMMAR = new LemminxPreference("validation/noGrammar");
-	
-	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = {
-			XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES,
-			XML_PREFERENCES_CATAGLOGS,
-			XML_PREFERENCES_CODELENS_ENABLED,
-			XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD,
-			XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS,
-			XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG,
-			XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES,
-			XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE,
-			XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS,
-			XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE,
-			XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT,
-			XML_PREFERENCES_FORMAT_JOIN_COMMENTLINES,
-			XML_PREFERENCES_VALIDATION_ENABLED,
-			XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED,
-			XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED,
-			XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL,
-			XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES,
-			XML_PREFERENCES_VALIDATION_NO_GRAMMAR
-	};
-			
+	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = { //
+			XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES, //
+			XML_PREFERENCES_CATAGLOGS, //
+			XML_PREFERENCES_CODELENS_ENABLED, //
+			XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD, //
+			XML_PREFERENCES_FORMAT_MAX_LINE_WIDTH, //
+			XML_PREFERENCES_FORMAT_GRAMMAR_AWARE_FORMATTING, //
+			XML_PREFERENCES_FORMAT_PRESERVED_NEW_LINES, //
+			XML_PREFERENCES_FORMAT_JOIN_CONTENT_LINES, //
+			XML_PREFERENCES_FORMAT_INSERT_FINAL_NEWLINE, //
+			XML_PREFERENCES_FORMAT_TRIM_FINAL_NEWLINES, //
+			XML_PREFERENCES_FORMAT_TRIM_TRAILING_WHITESPACE, //
+			XML_PREFERENCES_FORMAT_PRESERVE_SPACE, //
+			XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS, //
+			XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG, //
+			XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES, //
+			XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE, //
+			XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS, //
+			XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE, //
+			XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT, //
+			XML_PREFERENCES_FORMAT_ENFORCE_QUOTE_STYLE, //
+			XML_PREFERENCES_FORMAT_JOIN_COMMENT_LINES, //
+			XML_PREFERENCES_FORMAT_JOIN_CDATA_LINES, //
+			XML_PREFERENCES_VALIDATION_ENABLED, //
+			XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED, //
+			XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, //
+			XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, //
+			XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, //
+			XML_PREFERENCES_VALIDATION_NO_GRAMMAR };
+
 	public static Optional<LemminxPreference> getLemminxPreference(PropertyChangeEvent event) {
-		return Arrays.stream(ALL_LEMMINX_PREFERENCES).filter(pref -> Objects.equals(pref.preferenceId, event.getProperty())).findAny();
+		return Arrays.stream(ALL_LEMMINX_PREFERENCES)
+				.filter(pref -> Objects.equals(pref.preferenceId, event.getProperty())).findAny();
 	}
 
 	private XMLPreferenceServerConstants() {
@@ -129,39 +186,63 @@ public class XMLPreferenceServerConstants {
 
 	public static void storePreferencesToLemminxOptions(IPreferenceStore store, Map<String, Object> xmlOpts) {
 		// General settings
-		XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId), xmlOpts);
-		
+		setAsBoolean(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES, store, xmlOpts);
+
 		// Catalog settings
 		XML_PREFERENCES_CATAGLOGS.storeToLemminxOptions(
-				XMLCatalogs.getAllCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new),
-				xmlOpts);
-		
+				XMLCatalogs.getAllCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new), xmlOpts);
+
 		// CodeLens settings
-		XML_PREFERENCES_CODELENS_ENABLED.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_CODELENS_ENABLED.preferenceId), xmlOpts);
+		setAsBoolean(XML_PREFERENCES_CODELENS_ENABLED, store, xmlOpts);
 
 		// Folding settings
-		XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.preferenceId), xmlOpts);
-		
+		setAsBoolean(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD, store, xmlOpts);
+
 		// Format settings
-		XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS.storeToLemminxOptions(store.getString(XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE.storeToLemminxOptions(store.getInt(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT.storeToLemminxOptions(store.getString(XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT.preferenceId), xmlOpts);
-		XML_PREFERENCES_FORMAT_JOIN_COMMENTLINES.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_FORMAT_JOIN_COMMENTLINES.preferenceId), xmlOpts);
-		
+		setAsInt(XML_PREFERENCES_FORMAT_MAX_LINE_WIDTH, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_GRAMMAR_AWARE_FORMATTING, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_JOIN_CONTENT_LINES, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_INSERT_FINAL_NEWLINE, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_TRIM_FINAL_NEWLINES, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_TRIM_TRAILING_WHITESPACE, store, xmlOpts);
+		setAsArrayString(XML_PREFERENCES_FORMAT_PRESERVE_SPACE, store, xmlOpts);
+		setAsInt(XML_PREFERENCES_FORMAT_PRESERVED_NEW_LINES, store, xmlOpts);
+		setAsString(XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES, store, xmlOpts);
+		setAsInt(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE, store, xmlOpts);
+		setAsString(XML_PREFERENCES_FORMAT_XSI_SCHEMA_LOCATION_SPLIT, store, xmlOpts);
+		setAsString(XML_PREFERENCES_FORMAT_ENFORCE_QUOTE_STYLE, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_JOIN_COMMENT_LINES, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_FORMAT_JOIN_CDATA_LINES, store, xmlOpts);
+
 		// Validation settings
-		XML_PREFERENCES_VALIDATION_ENABLED.storeToLemminxOptions(store.getBoolean(XML_PREFERENCES_VALIDATION_ENABLED.preferenceId), xmlOpts);
-		XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED.preferenceId), xmlOpts);
-		XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED.preferenceId),
-				xmlOpts);
-		XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.storeToLemminxOptions(
-				store.getBoolean(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId), xmlOpts);
-		XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.storeToLemminxOptions(
-				store.getBoolean(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId), xmlOpts);
-		XML_PREFERENCES_VALIDATION_NO_GRAMMAR.storeToLemminxOptions(store.getString(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId),
-				xmlOpts);		
+		setAsBoolean(XML_PREFERENCES_VALIDATION_ENABLED, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, store, xmlOpts);
+		setAsBoolean(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, store, xmlOpts);
+		setAsString(XML_PREFERENCES_VALIDATION_NO_GRAMMAR, store, xmlOpts);
 	}
+
+	private static void setAsString(LemminxPreference preference, IPreferenceStore store, Map<String, Object> xmlOpts) {
+		preference.storeToLemminxOptions(store.getString(preference.preferenceId), xmlOpts);
+	}
+
+	private static void setAsArrayString(LemminxPreference preference, IPreferenceStore store, Map<String, Object> xmlOpts) {
+		String value = store.getString(preference.preferenceId);		
+		preference.storeToLemminxOptions(value.split(","), xmlOpts);
+	}
+	
+	private static void setAsBoolean(LemminxPreference preference, IPreferenceStore store,
+			Map<String, Object> xmlOpts) {
+		preference.storeToLemminxOptions(store.getBoolean(preference.preferenceId), xmlOpts);
+	}
+
+	private static void setAsInt(LemminxPreference preference, IPreferenceStore store, Map<String, Object> xmlOpts) {
+		preference.storeToLemminxOptions(store.getInt(preference.preferenceId), xmlOpts);
+	}
+
 }
