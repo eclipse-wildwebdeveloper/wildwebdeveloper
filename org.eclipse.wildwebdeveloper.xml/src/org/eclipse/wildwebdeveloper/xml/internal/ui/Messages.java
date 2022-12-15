@@ -31,6 +31,8 @@ public class Messages extends NLS {
 	public static String XMLCodelensPreferencePage_codelens_enabled;
 
 	// --------- XML Formatting preference page
+	public static String XMLFormattingPreferencePage_format_maxLineWidth;
+	public static String XMLFormattingPreferencePage_format_grammarAwareFormatting;
 	public static String XMLFormattingPreferencePage_format_emptyElements;
 	public static String XMLFormattingPreferencePage_format_emptyElements_collapse;
 	public static String XMLFormattingPreferencePage_format_emptyElements_expand;
@@ -43,7 +45,17 @@ public class Messages extends NLS {
 	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit_onElement;
 	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit_onPair;
 	public static String XMLFormattingPreferencePage_format_xsiSchemaLocationSplit_none;
+	public static String XMLFormattingPreferencePage_format_preservedNewlines;
+	public static String XMLFormattingPreferencePage_format_joinContentLines;
+	public static String XMLFormattingPreferencePage_format_insertFinalNewline;
+	public static String XMLFormattingPreferencePage_format_trimFinalNewlines;
+	public static String XMLFormattingPreferencePage_format_trimTrailingWhitespace;
+	public static String XMLFormattingPreferencePage_format_preserveSpace;
 	public static String XMLFormattingPreferencePage_format_joinCommentLines;
+	public static String XMLFormattingPreferencePage_format_joinCDATALines;
+	
+	public static String PreserveSpaceFieldEditor_inputDialog_description;
+	public static String PreserveSpaceFieldEditor_inputDialog_title;
 
 	// --------- XML Validation preference page
 	public static String XMLValidationPreferencePage_validation_enabled;
@@ -71,7 +83,7 @@ public class Messages extends NLS {
 	public static String Add_button;
 	public static String Remove_button;
 	public static String Browse_button;
-
+	
 	static {
 		NLS.initializeMessages("org.eclipse.wildwebdeveloper.xml.internal.ui.messages", Messages.class); //$NON-NLS-1$
 	}
