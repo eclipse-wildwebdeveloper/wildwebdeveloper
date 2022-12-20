@@ -61,7 +61,7 @@ jobs:
         gitlabAPIToken="${{ secrets.GITLAB_API_TOKEN }}"
         dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/0.0.1-SNAPSHOT/org.eclipse.dash.licenses-*.jar | tail -n 1)
         npmArgs=" --no-bin-links --ignore-scripts"
-        dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-deps-summary"
+        dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-review-summary"
         exitStatus=0
         if [ ${{ env.request-review }} ]; then 
           # Add "-project <Project Name> -token <Token>" here when a review is required
@@ -105,23 +105,30 @@ jobs:
           fi
         done
         cd $savePWD
-        if [ ${{ env.request-review }} ]; then 
-          echo ""
-          if [[ $exitStatus == 0 ]]; then # All licenses are vetted
-            echo "::set-output name=build-succeeded::$(echo 1)"
-            echo "All licenses are vetted"
-          else
-            echo "::set-output name=build-succeeded::$(echo 0)"
-            echo "Some contents requires a review"
-          fi
+        
+        echo ""
+        if [[ $exitStatus == 0 ]]; then # All licenses are vetted
+          # echo "::set-output name=build-succeeded::$(echo 1)"
+          echo "build-succeeded=1" >> $GITHUB_OUTPUT
+          echo "All licenses are vetted"
         else
-          if [[ $exitStatus != 0 ]]; then
-            echo "::set-output name=build-succeeded::$(echo 0)"
+          # echo "::set-output name=build-succeeded::$(echo 0)"
+          echo "build-succeeded=0" >> $GITHUB_OUTPUT
+          if [ ${{ env.request-review }} ]; then 
+            echo "Some contents requires a review"
             echo ""
+            echo "The NPM dependency License Check review summary is saved in `target/dash/npm-review-summary`" 
+          else
             echo "Committers can request a review by commenting '/request-license-review'"
-            echo ""
-            echo "Dash License Tool review summary:"
-            cat $savePWD/target/dash/npm-deps-summary
             exit 1
           fi
         fi
+        echo ""
+
+    - uses: actions/upload-artifact@v3
+      if: always() && env.request-review
+      with:
+        name: 'tools.wildwebdeveloper-license-vetting-summary'
+        path: |
+          target/dash/npm-review-summary
+          target/dash/summary
