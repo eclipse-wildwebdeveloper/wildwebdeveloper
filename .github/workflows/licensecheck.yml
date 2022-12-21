@@ -117,7 +117,7 @@ jobs:
           if [ ${{ env.request-review }} ]; then 
             echo "Some contents requires a review"
             echo ""
-            echo "The NPM dependency License Check review summary is saved in `target/dash/npm-review-summary`" 
+            echo "The NPM dependency License Check review summary is saved in 'target/dash/npm-review-summary'" 
           else
             echo "Committers can request a review by commenting '/request-license-review'"
             exit 1
