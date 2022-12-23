@@ -29,8 +29,3 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
-- package-ecosystem: npm
-  directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/HelloWorldTS"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 10
