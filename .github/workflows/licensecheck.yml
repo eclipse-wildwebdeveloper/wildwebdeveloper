@@ -100,33 +100,6 @@ jobs:
         if [[ $currentStatus != 0 ]]; then
           exitStatus=$(($exitStatus + $currentStatus)) # Save for future
         fi
-        #
-        # Check NPM dependency licenses in WildWebDeveloper JUnit test projects 
-        #
-        for p in $(find */ -print | grep org.eclipse.wildwebdeveloper.tests | grep -wv node_modules | grep -wv target | grep package.json)
-        do 
-          projectPath="${p%%/package.json*}"      # remove prefix '/package.json'
-          projectName="${projectPath##*/}"        # remove longest prefix `*/`
-          
-          echo ""
-          echo "------ Checking project [$projectPath] ------"
-          echo "Project path: ${projectPath}"
-          echo "Project name: $projectName"
-          echo "Installing: $projectPath/$projectName/package-lock.json"
-          
-          echo "Executing: npm install $npmArgs"
-          cd $savePWD/$projectPath
-          npm install $npmArgs
-          
-          cd $savePWD
-          echo "Verifying: $projectPath/package-lock.json"
-          echo "Executing: java -jar $dashLicenseToolJar $dashArgs $projectPath/package-lock.json"
-          java -jar $dashLicenseToolJar $dashArgs $projectPath/package-lock.json
-          currentStatus=$?
-          if [[ $currentStatus != 0 ]]; then
-            exitStatus=$(($exitStatus + $currentStatus)) # Save for future
-          fi
-        done
         cd $savePWD
         
         echo ""
