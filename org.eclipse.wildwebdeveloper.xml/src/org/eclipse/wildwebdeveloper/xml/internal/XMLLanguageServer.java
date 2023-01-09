@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -68,7 +69,7 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final LanguageServerDefinition lemminxDefinition = LanguageServersRegistry.getInstance()
 			.getDefinition(XML_LANGUAGE_SERVER_ID);
 	
-	private static final IPropertyChangeListener psListener = event -> {
+	private final IPropertyChangeListener psListener = event -> {
 		XMLPreferenceServerConstants.getLemminxPreference(event).ifPresent(pref -> {
 			Map<String, Object> config = mergeCustomInitializationOptions(
 					extensionJarRegistry.getInitiatizationOptions());
@@ -83,6 +84,8 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		});
 	};
 
+	private final String logLevelString;
+
 	public XMLLanguageServer() {
 		List<String> commands = new ArrayList<>();
 		List<String> jarPaths = new ArrayList<>();
@@ -91,6 +94,10 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		String debugPortString = System.getProperty(getClass().getName() + ".debugPort");
 		if (debugPortString != null) {
 			commands.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" + debugPortString);
+		}
+		logLevelString = System.getProperty(getClass().getName() + ".log.level");
+		if (logLevelString != null) {
+			commands.add("-Dlog.level=" + logLevelString); // defined in org.eclipse.lemminx.logs.LogHelper
 		}
 		commands.add("-classpath");
 		try {
@@ -192,9 +199,12 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		return extendedClientCapabilities;
 	}
 	
-	private static Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
+	private Map<String, Object> mergeCustomInitializationOptions(Map<String, Object> defaults) {
 		Map<String, Object> xmlOpts = new HashMap<>(defaults);
 		XMLPreferenceServerConstants.storePreferencesToLemminxOptions(store, xmlOpts);
+		if (logLevelString != null) {
+			xmlOpts.put("logs", Map.of("file", new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile(), ".metadata/lemminx.log").getAbsolutePath()));
+		}
 		return Map.of(SETTINGS_KEY, Map.of(XML_KEY, xmlOpts));
 	}
 
