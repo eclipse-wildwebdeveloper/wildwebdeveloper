@@ -19,7 +19,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -69,7 +68,7 @@ public class XMLCatalogs {
 					switch (element.getName()) {
 					case "public": {
 						String publicId = element.getAttribute("publicId");
-						URI uri = createURI(element);
+						URI uri = resolveURI(element);
 						if (publicId != null && uri != null) {
 							catalogFile.append("<public publicId=\"").append(publicId).append("\" uri=\"").append(uri)
 									.append("\"/>\n");
@@ -78,7 +77,7 @@ public class XMLCatalogs {
 					}
 					case "system": {
 						String namespace = element.getAttribute("systemId");
-						URI uri = createURI(element);
+						URI uri = resolveURI(element);
 						if (namespace != null && uri != null) {
 							catalogFile.append("<system systemId=\"").append(namespace).append("\" uri=\"").append(uri)
 									.append("\"/>\n");
@@ -87,7 +86,7 @@ public class XMLCatalogs {
 					}
 					case "uri": {
 						String name = element.getAttribute("name");
-						URI uri = createURI(element);
+						URI uri = resolveURI(element);
 						if (name != null && uri != null) {
 							catalogFile.append("<uri name=\"").append(name).append("\" uri=\"").append(uri)
 									.append("\"/>\n");
@@ -125,36 +124,43 @@ public class XMLCatalogs {
 		return SYSTEM_CATALOG;
 	}
 
-	private static URI createURI(IConfigurationElement element) {
+	/**
+	 * 
+	 * @param element
+	 * @return the resolved URI, or <code>null</code> is no URI could be resolved.
+	 */
+	private static URI resolveURI(IConfigurationElement element) {
 		URI uri = URI.create(element.getAttribute("uri"));
 		if (!uri.isAbsolute()) {
 			try {
 				String contributorName = element.getContributor().getName();
 				URL url = FileLocator.find(Platform.getBundle(contributorName),
 						Path.fromPortableString(uri.toString()));
-				if(Objects.nonNull(url)) {
+				if(url != null) {
 					// this constructor will ensure parts are URI encoded correctly
 					uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
 				} else {
 					Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
 							"A URL object was not found for the given URI "+uri+ " from  "+contributorName));
+					return null;
 				}
-				
 			} catch (InvalidRegistryObjectException | URISyntaxException e) {
 				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+				return null;
 			}
 		}
 		if (!"file".equals(uri.getScheme())) { // are some other scheme supported directly by LemMinX ?
 			try {
 				URL url = FileLocator.toFileURL(uri.toURL());
 				// as above
-				uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+				return new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
 			} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
 				String plugin = element.getNamespaceIdentifier();
 				String uriString = element.getAttribute("uri");
 				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 						"Error while getting URI '" + uriString + "' from plugin '" + plugin + "' : " + e.getMessage(),
 						e));
+				return null;
 			}
 		}
 		return uri;
