@@ -49,6 +49,7 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 			commands.add(new File(nodeModules, "@angular/language-service").getAbsolutePath());
 			commands.add("--tsProbeLocations");
 			commands.add(new File(nodeModules, "typescript").getAbsolutePath());
+			commands.add("--disableAutomaticNgcc"); // See: https://github.com/eclipse/wildwebdeveloper/issues/836
 			commands.add("--stdio");
 			if (isLoggingToFileEnabled) {
 				commands.add("--logFile");
