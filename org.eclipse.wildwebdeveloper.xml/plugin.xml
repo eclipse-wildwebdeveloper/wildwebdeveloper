@@ -82,7 +82,7 @@
             serverInterface="org.eclipse.wildwebdeveloper.xml.internal.XMLLanguageServerAPI"
             clientImpl="org.eclipse.wildwebdeveloper.xml.internal.XmlLanguageClientImpl"
             id="org.eclipse.wildwebdeveloper.xml"
-            label="XML Language Server"
+            label="LemMinX"
             singleton="true">
       </server>
       <contentTypeMapping
