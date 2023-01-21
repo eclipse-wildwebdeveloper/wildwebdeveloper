@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -78,6 +78,21 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 	private static final String ENV = "env"; //$NON-NLS-1$
 	private static final String RUNTIME_EXECUTABLE = "runtimeExecutable"; //$NON-NLS-1$
 
+	public static final String NODE_DEBUG_CMD = "/node_modules/node-debug2/out/src/nodeDebug.js"; //$NON-NLS-1$
+	public static final String TYPESCRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.ts"; //$NON-NLS-1$
+	public static final String JAVACRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.js"; //$NON-NLS-1$
+
+	private static final String TS_CONFIG_NAME = "tsconfig.json"; //$NON-NLS-1$
+	private static final String COMPILER_OPTIONS = "compilerOptions"; //$NON-NLS-1$
+	private static final String SOURCE_MAP = "sourceMap"; //$NON-NLS-1$
+	private static final String SOURCE_MAPS = "sourceMaps"; //$NON-NLS-1$
+	private static final String MODULE = "module"; //$NON-NLS-1$
+	private static final String MODULE_AMD = "amd"; //$NON-NLS-1$
+	private static final String MODULE_SYSTEM = "system"; //$NON-NLS-1$
+	private static final String OUT_DIR = "outDir"; //$NON-NLS-1$
+	private static final String OUT_FILE = "outFile"; //$NON-NLS-1$
+	private static final String ROOT_DIR = "rootDir"; //$NON-NLS-1$
+
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
@@ -126,7 +141,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 		try {
 			URL fileURL = FileLocator.toFileURL(
-					getClass().getResource("/node_modules/node-debug2/out/src/nodeDebug.js"));
+					getClass().getResource(NODE_DEBUG_CMD));
 			File file = new File(fileURL.getPath());
 			List<String> debugCmdArgs = Collections.singletonList(file.getAbsolutePath());
 
@@ -152,14 +167,20 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 		}
 		
 		File programFile = new File(program);
-		if (Platform.getContentTypeManager().getContentType("org.eclipse.wildwebdeveloper.ts")
+		if (Platform.getContentTypeManager().getContentType(TYPESCRIPT_CONTENT_TYPE)
 					.isAssociatedWith(programFile.getName())) {
 			// TypeScript Source Mappings Configuration
 			File parentDirectory = cwd == null ? programFile.getParentFile() : new File(cwd);
 			File tsConfigFile = findTSConfigFile(parentDirectory);
+			if (tsConfigFile != null && tsConfigFile.exists()) {
+				parentDirectory = tsConfigFile.getParentFile();
+			}
+			
 			String errorMessage = null;
 			Map<String, Object> tsConfig = readJSonFile(tsConfigFile);
-			Map<String, Object> co = tsConfig == null ? null : (Map<String, Object>)tsConfig.get("compilerOptions");
+			
+			@SuppressWarnings("unchecked")
+			Map<String, Object> co = tsConfig == null ? null : (Map<String, Object>)tsConfig.get(COMPILER_OPTIONS);
 			if (co == null) {
 				errorMessage = Messages.NodeDebug_TSConfirError_NoTsConfig;
 				co = new HashMap<>();
@@ -169,7 +190,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			param.putAll(co);
 
 			if (errorMessage == null) {
-				Object option = co.get("sourceMap");
+				Object option = co.get(SOURCE_MAP);
 				boolean sourceMap  = option instanceof Boolean b && b.booleanValue();
 				if (!sourceMap) {
 					errorMessage = Messages.NodeDebug_TSConfirError_SourceMapIsNotEnabled;
@@ -178,25 +199,52 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 
 			// Override "outDir" option by converting it to an absolute path
 			boolean outDirOrFileIsSet = false;
-			Object option = co.get("module");
+			Object option = co.get(MODULE);
 			String module = option instanceof String o ? o.trim() : null;
 						
-			option = co.get("outDir");
+			option = co.get(OUT_DIR);
 			String outDir = option instanceof String o ? o.trim() : null;
 			if (outDir != null && outDir.length() > 0 && !".".equals(outDir) && !"./".equals(outDir)) {
-				param.put("outDir", cwd + "/" + outDir);
+				File outDirFile = new File(parentDirectory, outDir);
+				try {
+					outDir = outDirFile.getCanonicalPath();
+				} catch (IOException e) {
+					// Default to an absolute file path (non-checked)
+					outDir = outDirFile.getAbsolutePath();
+				}
+				param.put(OUT_DIR, outDir);
 				outDirOrFileIsSet = true;
 			}
 			
-			option = co.get("outFile");
+			option = co.get(OUT_FILE);
 			String outFile = option instanceof String  o ? o.trim() : null;
 			if (outFile != null && outFile.length() != 0) {
-				param.put("outFile", cwd + "/" + outFile);
+				File outFileFile = new File(parentDirectory, outFile);
+				try {
+					outFile = outFileFile.getCanonicalPath();
+				} catch (IOException e) {
+					// Default to an absolute file path (non-checked)
+					outFile = outFileFile.getAbsolutePath();
+				}
+				param.put(OUT_FILE, outFile);
 				outDirOrFileIsSet = true;
 				
-				if (!"amd".equalsIgnoreCase(module)  && !"system".equalsIgnoreCase(module)) {
+				if (!MODULE_AMD.equalsIgnoreCase(module)  && !MODULE_SYSTEM.equalsIgnoreCase(module)) {
 					errorMessage = Messages.NodeDebug_TSConfigError_OutDirNotSupportedModule;
 				}
+			}
+			
+			option = co.get(ROOT_DIR);
+			String rootDir = option instanceof String o ? o.trim() : null;
+			if (rootDir != null && rootDir.length() > 0 && !".".equals(outDir) && !"./".equals(outDir)) {
+				File rootDirFile = new File(parentDirectory, rootDir);
+				try {
+					rootDir = rootDirFile.getCanonicalPath();
+				} catch (IOException e) {
+					// Default to an absolute file path (non-checked)
+					rootDir = rootDirFile.getAbsolutePath();
+				}
+				param.put(ROOT_DIR, rootDir);
 			}
 			
 			if (!outDirOrFileIsSet && errorMessage == null) {
@@ -210,6 +258,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 				final String editTSConfig = tsConfigFile.exists() && tsConfigFile.isFile() ?
 						Messages.NodeDebug_TSConfirError_OpenTSConfigInEditor :
 							Messages.NodeDebug_TSConfirError_CreateAndOpenTSConfigInEditor;
+				final File directory = parentDirectory;
 				
 				Display.getDefault().syncExec(() -> {
 					MessageDialog dialog = new MessageDialog(DebugUIPlugin.getShell(),
@@ -224,7 +273,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							IFile file = createNewEmptyFile(new File(parentDirectory, "tsconfig.json"));
+							IFile file = createNewEmptyFile(new File(directory, TS_CONFIG_NAME));
 							if (file != null) {
 								try {
 									IDE.openEditor(
@@ -280,7 +329,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			}
 			
 			return true;
-		} else if (Platform.getContentTypeManager().getContentType("org.eclipse.wildwebdeveloper.js")
+		} else if (Platform.getContentTypeManager().getContentType(JAVACRIPT_CONTENT_TYPE)
 				.isAssociatedWith(programFile.getName())) {
 
 			// JavaScript configuration
@@ -288,7 +337,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			// workaround until
 			// https://github.com/microsoft/vscode-node-debug2/commit/f2dfa4ca4026fb3e4f143a391270a03df8187b42#diff-d03a74f75ec189cbc7dd3d2e105fc9c9R625
 			// is released in VSCode
-			param.put("sourceMaps", false);
+			param.put(SOURCE_MAPS, false);
 			return true;
 		}
 		return false;
@@ -297,7 +346,7 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 	private File findTSConfigFile(File parentDirectory) {
 		File tsConfigFile;
 		do {
-			tsConfigFile = new File(parentDirectory, "tsconfig.json");
+			tsConfigFile = new File(parentDirectory, TS_CONFIG_NAME);
 			if (tsConfigFile.isFile()) {
 				return tsConfigFile;
 			}
