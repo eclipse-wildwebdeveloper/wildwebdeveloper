@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019-2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -103,7 +103,7 @@ public class TestHTML {
 				.getProject("testHTMLFile" + System.currentTimeMillis());
 		project.create(null);
 		project.open(null);
-		final IFile file = project.getFile("autoCloseTags.xml");
+		final IFile file = project.getFile("autoCloseTags.html");
 		file.create(new ByteArrayInputStream("<foo".getBytes()), true, null);
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
