@@ -82,6 +82,10 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 	public static final String TYPESCRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.ts"; //$NON-NLS-1$
 	public static final String JAVACRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.js"; //$NON-NLS-1$
 
+	public static final String JAVACRIPT_DEBUGGABLE_PATTERNS = "__debuggablePatterns";
+	public static final String JAVACRIPT_DEBUGGABLE_PATTERNS_DEFAULT = "[\"*.js\",\"*.es6\",\"*.jsx\",\"*.mjs\".\"*.cjs\"]";
+
+	
 	private static final String TS_CONFIG_NAME = "tsconfig.json"; //$NON-NLS-1$
 	private static final String COMPILER_OPTIONS = "compilerOptions"; //$NON-NLS-1$
 	private static final String SOURCE_MAP = "sourceMap"; //$NON-NLS-1$
@@ -338,6 +342,8 @@ public class NodeRunDAPDebugDelegate extends DSPLaunchDelegate {
 			// https://github.com/microsoft/vscode-node-debug2/commit/f2dfa4ca4026fb3e4f143a391270a03df8187b42#diff-d03a74f75ec189cbc7dd3d2e105fc9c9R625
 			// is released in VSCode
 			param.put(SOURCE_MAPS, false);
+			param.put(JAVACRIPT_DEBUGGABLE_PATTERNS, JAVACRIPT_DEBUGGABLE_PATTERNS_DEFAULT);
+			
 			return true;
 		}
 		return false;
