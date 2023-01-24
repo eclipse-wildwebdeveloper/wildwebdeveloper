@@ -198,15 +198,18 @@
       </server>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.css"
-            id="org.eclipse.wildwebdeveloper.css">
+            id="org.eclipse.wildwebdeveloper.css"
+            languageId="css">
       </contentTypeMapping>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.scss"
-            id="org.eclipse.wildwebdeveloper.css">
+            id="org.eclipse.wildwebdeveloper.css"
+            languageId="scss">
       </contentTypeMapping>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.less"
-            id="org.eclipse.wildwebdeveloper.css">
+            id="org.eclipse.wildwebdeveloper.css"
+            languageId="less">
       </contentTypeMapping>
    </extension>
    
