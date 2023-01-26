@@ -42,6 +42,8 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 
 	private static final String[] SUPPORTED_SECTIONS = { "typescript", "javascript" };
 
+	private static String tsserverPath;
+	
 	public JSTSLanguageServer() {
 		super(JSTS_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
@@ -49,10 +51,12 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 		try {
 			URL url = FileLocator
 					.toFileURL(getClass().getResource("/node_modules/typescript-language-server/lib/cli.mjs"));
+			File nodeModules = new File(url.getPath()).getParentFile().getParentFile().getParentFile();
+			tsserverPath = new File(nodeModules, "typescript/lib/tssserver.js").getAbsolutePath();
 			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
-			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/"));
 			setCommands(commands);
+			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/"));
 			setWorkingDirectory(nodeDependencies.getPath()); // Required for typescript-eslint-language-service to find
 																// it's dependencies
 
@@ -72,6 +76,11 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
+			
+			// Initialize tsserver path
+			Map<String, String> tsServer = new HashMap<>();
+			tsServer.put("path", tsserverPath);
+			options.put("tsserver", tsServer);
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
