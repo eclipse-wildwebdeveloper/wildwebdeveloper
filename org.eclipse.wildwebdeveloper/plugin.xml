@@ -534,6 +534,7 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageClientImpl"
             id="org.eclipse.wildwebdeveloper.jsts"
             label="JavaScript-TypeScript Language Server">
       </server>
