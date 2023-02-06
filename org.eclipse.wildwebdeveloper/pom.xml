@@ -204,6 +204,7 @@
 								<arg>--only=prod</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
+								<arg>--install-links=false</arg>
 <!-- The actual verions for the LS and other dependency NPM Modules are to be set in  './package.json file',  
 	which is used to install the dependencies -->
 							</arguments>

@@ -68,7 +68,7 @@ class TestESLint {
 			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.ts").toPath());
 		}
 		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
-				"--no-bin-links", "--ignore-scripts").directory(projectDirectory);
+				"--no-bin-links", "--ignore-scripts", "--install-links=false").directory(projectDirectory);
 		Process dependencyInstaller = builder.start();
 		System.out.println(builder.command().toString());
 		String result = new BufferedReader(new InputStreamReader(dependencyInstaller.getErrorStream())).lines()

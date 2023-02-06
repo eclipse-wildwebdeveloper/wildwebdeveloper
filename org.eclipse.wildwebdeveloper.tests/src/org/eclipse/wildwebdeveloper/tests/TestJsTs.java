@@ -13,6 +13,7 @@
 package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
@@ -111,47 +112,52 @@ public class TestJsTs {
 		AtomicBoolean newTextIsSet = new AtomicBoolean();
 
 		Listener pressOKonRenameDialogPaint = event -> {
-			if (event.widget instanceof Composite c) {
-				Shell shell = c.getShell();
-				if (shell != ideShell && shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
-					if (!newTextIsSet.get()) {
-						newTextIsSet.set(setNewText(c, newName));
-						System.out.println("testRefactoringRename(): New name is set: " + newName);
-					}
-					Set<String> buttons = getButtons(c);
-					if (WIZARD_RENAME.equals(shell.getText())) {
-						if (!renameDialogOkPressed.get()) {
-							if (buttons.contains(BUTTON_OK)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_OK");
-								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
-								renameDialogOkPressed.set(true);
-							}
-						} else if (!renameDialogContinuePressed.get()) {
-							if (buttons.contains(BUTTON_CONTINUE)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_CONTINUE");
-								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
-								renameDialogContinuePressed.set(true);
-							} else if (!renameDialogCancelPressed.get() && buttons.contains(BUTTON_CANCEL)
-									&& buttons.contains(BUTTON_BACK)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_RENAME Emulating pressCancel when BUTTON_CANCEL & BUTTON_BACK");
-								event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
-								renameDialogCancelPressed.set(true);
-							}
+			try {
+				if (event.widget instanceof Composite c) {
+					Shell shell = c.getShell();
+					if (shell != ideShell
+							&& shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
+						if (!newTextIsSet.get()) {
+							newTextIsSet.set(setNewText(c, newName));
+							System.out.println("testRefactoringRename(): New name is set: " + newName);
 						}
-					} else if (WIZARD_REFACTORING.equals(shell.getText())) {
-						if (!errorDialogOkPressed.get()) {
-							if (buttons.contains(BUTTON_OK)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_REFACTORING Emulating pressOK when BUTTON_OK");
-								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
-								errorDialogOkPressed.set(true);
+						Set<String> buttons = getButtons(c);
+						if (WIZARD_RENAME.equals(shell.getText())) {
+							if (!renameDialogOkPressed.get()) {
+								if (buttons.contains(BUTTON_OK)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_OK");
+									event.widget.getDisplay().asyncExec(() -> pressOk(shell));
+									renameDialogOkPressed.set(true);
+								}
+							} else if (!renameDialogContinuePressed.get()) {
+								if (buttons.contains(BUTTON_CONTINUE)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_CONTINUE");
+									event.widget.getDisplay().asyncExec(() -> pressOk(shell));
+									renameDialogContinuePressed.set(true);
+								} else if (!renameDialogCancelPressed.get() && buttons.contains(BUTTON_CANCEL)
+										&& buttons.contains(BUTTON_BACK)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_RENAME Emulating pressCancel when BUTTON_CANCEL & BUTTON_BACK");
+									event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
+									renameDialogCancelPressed.set(true);
+								}
+							}
+						} else if (WIZARD_REFACTORING.equals(shell.getText())) {
+							if (!errorDialogOkPressed.get()) {
+								if (buttons.contains(BUTTON_OK)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_REFACTORING Emulating pressOK when BUTTON_OK");
+									event.widget.getDisplay().asyncExec(() -> pressOk(shell));
+									errorDialogOkPressed.set(true);
+								}
 							}
 						}
 					}
 				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 		};
 
@@ -174,6 +180,9 @@ public class TestJsTs {
 				}
 			}.waitForCondition(display, 5000), "document not modified, rename not applied");
 			System.out.println("testRefactoringRename(): Executed command: " + IWorkbenchCommandConstants.FILE_RENAME);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail(ex);
 		} finally {
 			ideShell.getDisplay().removeFilter(SWT.Paint, pressOKonRenameDialogPaint);
 		}

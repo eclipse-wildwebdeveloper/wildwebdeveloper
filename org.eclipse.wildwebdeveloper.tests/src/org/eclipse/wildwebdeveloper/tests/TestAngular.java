@@ -69,7 +69,8 @@ public class TestAngular {
 
 		project = Utils.provisionTestProject("angular-app");
 		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
-				"--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile());
+				"--no-bin-links", "--ignore-scripts", "--install-links=false")
+				.directory(project.getLocation().toFile());
 		Process process = builder.start();
 		System.out.println(builder.command().toString());
 		String result = new BufferedReader(new InputStreamReader(process.getErrorStream())).lines()
