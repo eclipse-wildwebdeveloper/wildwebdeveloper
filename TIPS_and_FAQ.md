@@ -77,3 +77,34 @@ Example `tsconfig.json`:
 #### Reuse Embedded Node.js?
 
 Developers may [reuse the Node.js Embedder](https://github.com/eclipse/wildwebdeveloper/blob/master/org.eclipse.wildwebdeveloper.embedder.node/README.md) in their products.
+
+#### Attach a debugger to the XML Language Server process?
+
+Run Eclipse with the following JVM property, e.g. set in `eclipse.ini`:
+
+```text
+-vmargs
+...
+-Dorg.eclipse.wildwebdeveloper.xml.internal.XMLLanguageServer.debugPort=8001
+```
+
+Note this is a JVM property you set in the parent JVM (the Eclipse IDE) so that the (LemMinX) XML Language Server child process gets started, suspended, in debug mode, waiting for the debugger attachment.  You can set the property's value to a different port if you'd like to select a different port value (than 8001 in the example).
+
+#### Enable java.util.logging in the XML Language Server process?
+
+Run Eclipse with the following JVM property, e.g. set in `eclipse.ini`:
+
+```text
+-vmargs
+...
+-Dorg.eclipse.wildwebdeveloper.xml.internal.XMLLanguageServer.log.level=all
+```
+
+Note this is a JVM property you set in the parent JVM (the Eclipse IDE) to take effect within the (LemMinX) XML Language Server child process.
+
+The LemMinX process will use this property value as the "level" for its "root" Logger.   
+
+This workflow doesn't support the full set of **java.util.logging** function: handlers/formatters/etc.  The normal handler registration (e.g. **ConsoleHandler**) is disabled and in its place a handler is created which writes the log messages to the file:  `<workspace-root>/.metadata/lemminx.log`.  Currently this handler is coded to only log messages at Level.INFO or higher.
+
+ 
+
