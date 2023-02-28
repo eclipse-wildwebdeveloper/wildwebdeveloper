@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.commands.Command;
@@ -48,6 +49,7 @@ import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(AllCleanRule.class)
@@ -70,6 +72,7 @@ public class TestJsTs {
 	}
 
 	@Test
+	@Timeout(value = 60, unit = TimeUnit.SECONDS)
 	public void testRefactoringRename() throws Exception {
 		final IFile file = project.getFile("TestJsTs.js");
 		String content = "function testVar(test) {\n	if (\"truetrue\" == \"true\" + test ) {\n"
@@ -113,20 +116,27 @@ public class TestJsTs {
 				if (shell != ideShell && shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
 					if (!newTextIsSet.get()) {
 						newTextIsSet.set(setNewText(c, newName));
+						System.out.println("testRefactoringRename(): New name is set: " + newName);
 					}
 					Set<String> buttons = getButtons(c);
 					if (WIZARD_RENAME.equals(shell.getText())) {
 						if (!renameDialogOkPressed.get()) {
 							if (buttons.contains(BUTTON_OK)) {
+								System.out.println(
+										"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_OK");
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								renameDialogOkPressed.set(true);
 							}
 						} else if (!renameDialogContinuePressed.get()) {
 							if (buttons.contains(BUTTON_CONTINUE)) {
+								System.out.println(
+										"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_CONTINUE");
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								renameDialogContinuePressed.set(true);
 							} else if (!renameDialogCancelPressed.get() && buttons.contains(BUTTON_CANCEL)
 									&& buttons.contains(BUTTON_BACK)) {
+								System.out.println(
+										"testRefactoringRename(): WIZARD_RENAME Emulating pressCancel when BUTTON_CANCEL & BUTTON_BACK");
 								event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
 								renameDialogCancelPressed.set(true);
 							}
@@ -134,6 +144,8 @@ public class TestJsTs {
 					} else if (WIZARD_REFACTORING.equals(shell.getText())) {
 						if (!errorDialogOkPressed.get()) {
 							if (buttons.contains(BUTTON_OK)) {
+								System.out.println(
+										"testRefactoringRename(): WIZARD_REFACTORING Emulating pressOK when BUTTON_OK");
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								errorDialogOkPressed.set(true);
 							}
@@ -146,21 +158,22 @@ public class TestJsTs {
 		try {
 			display.addFilter(SWT.Paint, pressOKonRenameDialogPaint);
 			ExecutionEvent executionEvent = handlerService.createExecutionEvent(command, e);
+			System.out.println("testRefactoringRename(): Executing command: " + IWorkbenchCommandConstants.FILE_RENAME);
 			command.executeWithChecks(executionEvent);
-
 			assertTrue(new DisplayHelper() {
 				@Override
 				protected boolean condition() {
 					return renameDialogOkPressed.get();
 				}
 			}.waitForCondition(display, 2000), "Rename dialog not shown");
-
+			System.out.println("testRefactoringRename(): Rename dialog is shown");
 			assertTrue(new DisplayHelper() {
 				@Override
 				protected boolean condition() {
 					return newContent.equals(document.get());
 				}
 			}.waitForCondition(display, 5000), "document not modified, rename not applied");
+			System.out.println("testRefactoringRename(): Executed command: " + IWorkbenchCommandConstants.FILE_RENAME);
 		} finally {
 			ideShell.getDisplay().removeFilter(SWT.Paint, pressOKonRenameDialogPaint);
 		}
@@ -182,6 +195,7 @@ public class TestJsTs {
 		Set<Text> textWidgets = getTextWidgets(w);
 		if (!textWidgets.isEmpty()) {
 			textWidgets.forEach(t -> t.setText(newText));
+			return true;
 		}
 		return false;
 	}
@@ -204,6 +218,7 @@ public class TestJsTs {
 			Method okPressedMethod = Dialog.class.getDeclaredMethod("okPressed");
 			okPressedMethod.setAccessible(true);
 			okPressedMethod.invoke(dialog);
+			System.out.println("testRefactoringRename(): pressOK is executed");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new Error(ex);
@@ -216,6 +231,7 @@ public class TestJsTs {
 			Method cancelPressedMethod = Dialog.class.getDeclaredMethod("cancelPressed");
 			cancelPressedMethod.setAccessible(true);
 			cancelPressedMethod.invoke(dialog);
+			System.out.println("testRefactoringRename(): pressCancel is executed");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new Error(ex);
