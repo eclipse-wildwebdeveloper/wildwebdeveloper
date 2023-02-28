@@ -2,6 +2,30 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.0.2
+
+* 📅 Release Date: February 28th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.0.1...1.0.2
+
+#### Editing improvements
+
+* Improved support for tsconfig.json
+* New XML formatting preferences
+* Support configurable log level for LemMinX
+* Try being more tolerant when reading XML catalog 
+* Bugfix to Debugging TypeScript in non-root folder
+* Added launch/debug support for `*.cjs` (Coommon JS) files
+* Bugfix to Angular Language Server pop-up error
+* Bugfx to 'Unknown at rule' on file extensions associated with content type LESS
+* Bugfix for Typescript analysis broken - TypeScript Language Server is forced to use the WWD provided `tsserver.js`
+* Bugfix to `Unsupported notification method: $/typescriptVersion`
+
+#### Dependencies update
+
+  * Use newer Node.js (18.13.0) internally
+  * Updated language servers
+  * Use LemMinX 0.23 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
+
 ## 1.0.1
 
 * 📅 Release Date: November 27th, 2022
