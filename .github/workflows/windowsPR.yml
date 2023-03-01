@@ -20,5 +20,9 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
+    - name: Before Build - Free Disk Space Statistics
+      run: echo ${env:GITHUB_WORKSPACE} && dir ${env:GITHUB_WORKSPACE} && df -h ${env:GITHUB_WORKSPACE}
     - name: Build with Maven
-      run: mvn -B clean verify
+      run: mvn -B -D "maven.repo.local=${env:GITHUB_WORKSPACE}/.m2/repository" clean verify --file pom.xml
+    - name: After Build - Free Disk Space Statistics
+      run: echo ${env:GITHUB_WORKSPACE} && dir ${env:GITHUB_WORKSPACE} && df -h ${env:GITHUB_WORKSPACE}
