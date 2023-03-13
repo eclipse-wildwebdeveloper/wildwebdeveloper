@@ -13,6 +13,7 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -136,24 +137,42 @@ public class XMLCatalogs {
 				String contributorName = element.getContributor().getName();
 				URL url = FileLocator.find(Platform.getBundle(contributorName),
 						Path.fromPortableString(uri.toString()));
-				if(url != null) {
-					// this constructor will ensure parts are URI encoded correctly
-					uri = new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+				if (url != null) {
+					uri = convertToURI(url);
 				} else {
 					Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-							"A URL object was not found for the given URI "+uri+ " from  "+contributorName));
+							"A URL object was not found for the given URI " + uri + " from " + contributorName));
 					return null;
 				}
-			} catch (InvalidRegistryObjectException | URISyntaxException e) {
+			} catch (InvalidRegistryObjectException | URISyntaxException | MalformedURLException e) {
 				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 				return null;
 			}
 		}
-		if (!"file".equals(uri.getScheme())) { // are some other scheme supported directly by LemMinX ?
+		if (!isSchemeSupportedInCatalog(uri)) {
 			try {
-				URL url = FileLocator.toFileURL(uri.toURL());
-				// as above
-				return new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+				String contributorName = element.getContributor().getName();
+
+				// Try to resolve to a system supported Scheme
+				URL url = FileLocator.resolve(uri.toURL());
+				uri = convertToURI(url);
+				if (isSchemeSupportedInCatalog(uri)) {
+					return uri;
+				}
+
+				// Try to extract and cache the contents if necessary
+				// This will possibly break includes with relative paths 
+				url = FileLocator.toFileURL(url);
+				uri = convertToURI(url);
+				if (isSchemeSupportedInCatalog(uri)) {
+					return uri;
+				}
+
+				// Could not convert to any supported scheme
+				Activator.getDefault().getLog().log(
+						new Status(IStatus.WARNING, Activator.PLUGIN_ID, "The given URI " + element.getAttribute("uri")
+								+ " from " + contributorName + " could not be resolved for local access"));
+				return null;
 			} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
 				String plugin = element.getNamespaceIdentifier();
 				String uriString = element.getAttribute("uri");
@@ -164,6 +183,62 @@ public class XMLCatalogs {
 			}
 		}
 		return uri;
+	}
+
+	/**
+	 * Converts an URI to a URL.
+	 * <p>
+	 * Realized as a separate method, as URLs possibly include not properly encoded
+	 * parts (Issue #756), that require special treatment.
+	 * </p>
+	 * 
+	 * @param url URL to convert
+	 * @return converted URI
+	 * @throws MalformedURLException Error creating a
+	 */
+	private static URI convertToURI(URL url) throws URISyntaxException, MalformedURLException {
+		if ("file".equals(url.getProtocol())) {
+			return new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
+		}
+		if ("jar".equals(url.getProtocol())) {
+			/*
+			 * JAR-URLs might be based on a file URL that as well possibly doesn't properly
+			 * encode parts. Use our own conversion logic to get this fixed.
+			 */
+
+			// opaque part that contains the URL of the JAR
+			String file = url.getFile();
+
+			// determine the URL of the JAR
+			String jarURLString = file;
+			// possibly cut of the entry part
+			int startEntry = file.indexOf("!/");
+			if (startEntry >= 0) {
+				jarURLString = jarURLString.substring(0, startEntry);
+			}
+
+			// convert JAR-URL
+			URL jarURL = new URL(jarURLString);
+			URI jarURI = convertToURI(jarURL);
+
+			// build URI with valid JAR-URL by replacing the URL of the JAR with the valid
+			// one
+			return new URI(url.toExternalForm().replace(jarURLString, jarURI.toString()));
+		}
+		return url.toURI();
+	}
+
+	/**
+	 * Check whether the provided scheme is supported for the XML-catalog
+	 * 
+	 * @param scheme scheme to test
+	 * @return <code>true</code> if supported, otherwise <code>false</code>
+	 */
+	private static boolean isSchemeSupportedInCatalog(URI uri) {
+		// are some other scheme supported directly by LemMinX ?
+		// LemminX-Issue for supported protocols:
+		// https://github.com/eclipse/lemminx/issues/1477
+		return "file".equals(uri.getScheme()) || "jar".equals(uri.getScheme());
 	}
 
 	public static void storeUserCatalogs(IPreferenceStore store, Set<File> catalogs) {
