@@ -25,4 +25,5 @@ Require-Bundle: org.eclipse.tm4e.registry;bundle-version="0.3.0",
  com.google.gson
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.wildwebdeveloper.xml.internal.Activator
-Export-Package: org.eclipse.wildwebdeveloper.xml;x-friends:="org.eclipse.m2e.editor.lemminx"
+Export-Package: org.eclipse.wildwebdeveloper.xml;x-friends:="org.eclipse.m2e.editor.lemminx",
+ org.eclipse.wildwebdeveloper.xml.internal;x-friends:="org.eclipse.wildwebdeveloper.tests"
