@@ -19,6 +19,7 @@
 	<unit id="org.hamcrest.core" version="0.0.0"/>
 	<unit id="junit-jupiter-api" version="0.0.0"/>
 	<unit id="javax.xml.stream" version="0.0.0"/>
+	<unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
 	<!-- Product deps -->
 	<unit id="org.eclipse.epp.package.common.feature.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
