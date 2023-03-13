@@ -10,7 +10,7 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.54.0",
-		"@typescript-eslint/parser": "5.54.0",
+		"@typescript-eslint/parser": "5.54.1",
 		"eslint": "^8.24.0",
 		"typescript": "4.9.5"
 	}
