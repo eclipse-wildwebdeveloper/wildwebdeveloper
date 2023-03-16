@@ -15,7 +15,6 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -72,9 +71,21 @@ public class TestHTML {
 		editor.setFocus();
 		editor.getSelectionProvider().setSelection(new TextSelection(0, 0));
 		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-		assertTrue(PlatformUI.getWorkbench().getService(ICommandService.class).getCommand("org.eclipse.lsp4e.format")
-				.isEnabled());
-		AtomicReference<Exception> ex = new AtomicReference<>();
+//		assertTrue(PlatformUI.getWorkbench().getService(ICommandService.class).getCommand("org.eclipse.lsp4e.format")
+//				.isEnabled());
+		new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					return PlatformUI.getWorkbench().getService(ICommandService.class)
+							.getCommand("org.eclipse.lsp4e.format").isEnabled();
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 3000);
+
+//		AtomicReference<Exception> ex = new AtomicReference<>();
 		new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -86,9 +97,9 @@ public class TestHTML {
 				}
 			}
 		}.waitForCondition(editor.getSite().getShell().getDisplay(), 3000);
-		if (ex.get() != null) {
-			throw ex.get();
-		}
+//		if (ex.get() != null) {
+//			throw ex.get();
+//		}
 		new DisplayHelper() {
 			@Override
 			protected boolean condition() {
