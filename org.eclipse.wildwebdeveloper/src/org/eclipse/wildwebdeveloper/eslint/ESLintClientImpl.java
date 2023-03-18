@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -111,7 +111,15 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 	
 	@Override
 	public CompletableFuture<Void> noLibrary(Map<String,Map<String,String>> data) {
-		MessageParams params = new MessageParams(MessageType.Info, "No ES Libary found for file: " + data.get("source").get("uri"));
+		MessageParams params = new MessageParams(MessageType.Info, "No ES Library found for file: " + data.get("source").get("uri"));
+		logMessage(params);
+		return CompletableFuture.completedFuture(null);
+	}
+
+	@Override
+	public CompletableFuture<Void> noConfig(Map<String, Map<String, String>> data) {
+		MessageParams params = new MessageParams(MessageType.Info, "No ES Configuration found for file: " + data.get("source").get("uri") 
+				+ ": " + data.get("message"));
 		logMessage(params);
 		return CompletableFuture.completedFuture(null);
 	}

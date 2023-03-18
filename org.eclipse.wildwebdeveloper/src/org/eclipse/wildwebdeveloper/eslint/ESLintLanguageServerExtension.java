@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -27,4 +27,7 @@ public interface ESLintLanguageServerExtension {
 	
 	@JsonRequest(value = "eslint/noLibrary")
 	public CompletableFuture<Void> noLibrary(Map<String,Map<String,String>> data);
+	
+	@JsonRequest(value = "eslint/noConfig")
+	public CompletableFuture<Void> noConfig(Map<String,Map<String,String>> data);
 }
