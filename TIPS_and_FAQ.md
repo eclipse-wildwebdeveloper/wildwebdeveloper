@@ -4,7 +4,20 @@
 
 #### Use Embedded Node.js?
 
-When a developer's system suits the supported OSs (Linux, MacOS and Win32) and architectures (x86_64) the embedded Node.js from Wild Web Developer will be used by WildWebDeveloper to run language Servers as well as for Node Debugger unless the `"org.eclipse.wildwebdeveloper.nodeJSLocation"` system property is set.
+When a developer's system suits the supported OSs (Linux, MacOS and Win32) and architectures (x86_64, aarch64) the embedded Node.js from Wild Web Developer will be used by WildWebDeveloper to run language Servers as well as for Node Debugger unless the `"org.eclipse.wildwebdeveloper.nodeJSLocation"` system property is set.
+
+The WildWebDeveloper project always aims to embed the latest LTS (Long Term Support) version of Node.js available for the download at [NodeJS.org](https://nodejs.org/en/download), however it's not always possible due to the needs of testing, fixing the issues found if any and the [IP Team  Due Diligence Process](https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/wikis/home) which may take quite a long time.
+
+However, due to different reasons, the projects may be in need of use either the latest available Node.js version, or a specific one, for example, because of their internal Due Diligence processes, or a custom version, for example, because of the company internal restriction rules on 3rd-party software installation and usage. In such cases, the users can force WWD to use such a specific Node.js version by adding the following property to their WWD `eclipse.ini` configuration file: 
+
+```
+-Dorg.eclipse.wildwebdeveloper.nodeJSLocation==<Path-to-Node.js-executable>  
+```
+
+This property will force WWD to use the specified Node.js installation instead of the embedded one.
+
+It's still recommended the use of LTS Node.js versions - as their functionality is tested in conjunction with WWD as well as they are supposed to be stable and secure. 
+
 
 #### Automatically compile TypeScript to JavaScript ?
 
