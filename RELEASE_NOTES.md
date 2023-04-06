@@ -2,6 +2,22 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.0.4
+
+* 📅 Release Date: April 6th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.0.3...1.0.4
+
+#### Editing improvements
+
+* XML catalogs are able to be contributed from a plugin
+* Bugfix for "Unsupported request method: eslint/noConfig" error 
+* Updated the TypeScript/JavaScript Grammars
+
+#### Dependencies update
+
+* Embed latest Node.js (v.18.15.0) with the latest Security fixes
+* Use the latest VSCode extensions v..1.77.0 for CSS/HTML/JSON editing
+
 ## 1.0.3
 
 * 📅 Release Date: March 8th, 2023
