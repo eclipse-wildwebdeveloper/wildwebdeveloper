@@ -53,6 +53,46 @@ Java 17 and Maven 3.8.6 (only if you want to build from the command-line), or ne
 
 Simply `mvn clean verify`, this will run the tests (`-DskipTests` to skip them) and the resulting p2 repository and specific IDE applications will be available for further manual testing in `repository/target`.
 
+To full build and test use the following commands:
+```
+$ cd <WildWebDeveloper project root directory>
+$ mvn clean install   
+```
+
+You can use `-DskipTests` argument to skip the JUnit tests execution:
+
+```
+$ mvn clean install -DskipTests
+```
+
+To run all the JUnit tests use the following commands:
+
+```
+$ mvn clean verify
+```
+
+Or you can run an individual JUnit test by using `-Dtest=...` argument, for example:
+
+```
+$ mvn clean verify -Dtest=TestHTML   
+```
+
+In case you need to work on tests only or repeatedly execute several tests, it's easier and faster to build everything then run only the tests:
+
+```
+$ cd <WildWebDeveloper project root directory>
+
+# Build WWD: 
+$ mvn clean install -DskipTests
+  
+# In order to run `org.eclipse.wildwebdeveloper.tests.TestHTML` use the following command:
+$ cd org.eclipse.wildwebdeveloper.tests/
+$ mvn clean verify -Dtest=TestHTML   
+
+#`Repeat running TestHTML or run any other tests, for example:
+$ mvn clean verify -Dtest=TestJSON   
+```
+
 ### ⬆️ Version bump
 
 Wild Web Developer tries to use OSGi Semantic Version (to properly expose its API contracts and breakage) and Reproducible Version Qualifiers (to minimize the avoid producing multiple equivalent artifacts for identical source). This requires the developer to manually bump version from time to time. Somes rules are that:
