@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -76,9 +77,17 @@ public class TestDebug {
 
 	private void removeAllLaunches() throws DebugException {
 		for (ILaunch launch : this.launchManager.getLaunches()) {
-			launch.terminate();
+			try {
+				launch.terminate();
+			} catch (DebugException e) {
+				e.printStackTrace();
+			}
 			for (IDebugTarget debugTarget : launch.getDebugTargets()) {
-				debugTarget.terminate();
+				try {
+					debugTarget.terminate();
+				} catch (DebugException e) {
+					e.printStackTrace();
+				}
 				launch.removeDebugTarget(debugTarget);
 			}
 			for (IProcess process : launch.getProcesses()) {
@@ -170,21 +179,18 @@ public class TestDebug {
 				return launchManager.getDebugTargets().length > before.size();
 			}
 		}.waitForCondition(Display.getDefault(), 30000), "New Debug Target not created");
-		Set<IDebugTarget> after = new HashSet<>(Arrays.asList(launchManager.getDebugTargets()));
-		after.removeAll(before);
-		assertEquals(1, after.size(), "Extra DebugTarget not found");
-		IDebugTarget target = after.iterator().next();
 		assertTrue(new DisplayHelper() {
 			@Override
 			public boolean condition() {
 				try {
-					return target.getThreads().length > 0;
+					return debugTargetWithThreads(before) != null;
 				} catch (DebugException e) {
 					e.printStackTrace();
 					return false;
 				}
 			}
 		}.waitForCondition(Display.getDefault(), 30000), "Debug Target shows no threads");
+		IDebugTarget target = debugTargetWithThreads(before);
 		assertTrue(new DisplayHelper() {
 			@Override
 			public boolean condition() {
@@ -221,4 +227,82 @@ public class TestDebug {
 		}).findAny().get();
 		assertEquals("1605", nVariable.getValue().getValueString());
 	}
+
+	private IDebugTarget debugTargetWithThreads(Collection<IDebugTarget> toExclude) throws DebugException {
+		Set<IDebugTarget> current = new HashSet<>(Arrays.asList(launchManager.getDebugTargets()));
+		current.removeAll(toExclude);
+		for (IDebugTarget target : current) {
+			if (target.getThreads().length > 0) {
+				return target;
+			}
+		}
+		return null;
+	}
+
+	@Test
+	public void testFindThreadsAndHitsBreakpointTypeScript() throws Exception {
+		IProject project = Utils.provisionTestProject("HelloWorldTS");
+		IFile tsFile = project.getFile("index.ts");
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), tsFile);
+		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		TextSelection selection = new TextSelection(doc, doc.getLineOffset(2) + 1, 0);
+		IToggleBreakpointsTarget toggleBreakpointsTarget = DebugUITools.getToggleBreakpointsTargetManager()
+				.getToggleBreakpointsTarget(editor, selection);
+		toggleBreakpointsTarget.toggleLineBreakpoints(editor, selection);
+		Set<IDebugTarget> before = new HashSet<>(Arrays.asList(launchManager.getDebugTargets()));
+		DisplayHelper.sleep(1000);
+		new NodeRunDebugLaunchShortcut().launch(editor, ILaunchManager.DEBUG_MODE);
+		assertTrue(new DisplayHelper() {
+			@Override
+			public boolean condition() {
+				try {
+					return debugTargetWithThreads(before) != null;
+				} catch (DebugException e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+		}.waitForCondition(Display.getDefault(), 30000), "Debug Target shows no threads");
+		IDebugTarget target = debugTargetWithThreads(before);
+		assertTrue(new DisplayHelper() {
+			@Override
+			public boolean condition() {
+				try {
+					return Arrays.stream(target.getThreads()).anyMatch(ISuspendResume::isSuspended);
+				} catch (DebugException e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+		}.waitForCondition(Display.getDefault(), 3000), "No thread is suspended");
+		IThread suspendedThread = Arrays.stream(target.getThreads()).filter(ISuspendResume::isSuspended).findFirst()
+				.get();
+		assertTrue(new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					return suspendedThread.getStackFrames().length > 0
+							&& suspendedThread.getStackFrames()[0].getVariables().length > 0;
+				} catch (Exception ex) {
+					// ignore
+					return false;
+				}
+			}
+		}.waitForCondition(Display.getDefault(), 3000), "Suspended Thread doesn't show variables");
+		IVariable closureVar = null;
+		for (IVariable variable : suspendedThread.getStackFrames()[0].getVariables()) {
+			if ("Closure".equals(variable.getName())) {
+				closureVar = variable;
+			}
+		}
+		IVariable userVariable = null;
+		for (IVariable variable : closureVar.getValue().getVariables()) {
+			if ("user".equals(variable.getName())) {
+				userVariable = variable;
+			}
+		}
+		assertEquals("'Eclipse User'", userVariable.getValue().getValueString());
+	}
+
 }
