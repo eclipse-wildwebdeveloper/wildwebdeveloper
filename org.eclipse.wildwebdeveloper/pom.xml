@@ -66,19 +66,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>fetch-node-debug2</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-							<url>https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/node-debug2/1.43.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
-							<outputFileName>node-debug2.zip</outputFileName>
-							<unpack>true</unpack>
-							<outputDirectory>${project.build.directory}/node-debug2</outputDirectory>
-						</configuration>
-					</execution>
-					<execution>
 						<id>fetch-chrome-debug-adapter</id>
 						<phase>generate-resources</phase>
 						<goals>
@@ -102,6 +89,19 @@
 							<outputFileName>vscode-eslint-ls.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>fetch-js-debug</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://github.com/microsoft/vscode-js-debug/releases/download/v1.83.0/js-debug-dap-v1.83.0.tar.gz</url>
+							<outputFileName>js-debug.tar.gz</outputFileName>
+							<unpack>true</unpack>
+							<outputDirectory>${project.basedir}</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -149,19 +149,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>prepare-node-debug2</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<delete
-									file="${project.build.directory}/node-debug2/extension/.gitignore" />
-							</target>
-						</configuration>
-					</execution>
-					<execution>
 						<id>remove package-lock before install</id>
 						<phase>compile</phase>
 						<goals>
@@ -197,7 +184,6 @@
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
-								<arg>node-debug2/extension/</arg>
 								<arg>chrome-debug-adapter/extension/</arg>
 								<arg>vscode-eslint-ls/extension/server</arg>
 							</arguments>
@@ -235,6 +221,7 @@
 					<jgit.ignore>
 						node_modules
 						package-lock.json
+						js-debug
 					</jgit.ignore>
 				</configuration>
 			</plugin>
