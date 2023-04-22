@@ -2,6 +2,17 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.0.5
+
+* 📅 Release Date: April 22nd, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.0.4...1.0.5
+
+#### Dependencies update
+
+* Embed latest Node.js (v.18.16.0) with the latest Security fixes
+* Use LemMinX 0.24 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
+ * Updated language servers
+
 ## 1.0.4
 
 * 📅 Release Date: April 6th, 2023
