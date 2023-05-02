@@ -8,9 +8,9 @@ RUN dnf -y update && dnf -y install \
 	nodejs npm
 RUN dnf -y install xz
 
-RUN curl -L https://nodejs.org/dist/v16.13.0/node-v16.13.0-linux-x64.tar.xz | tar -xJ
+RUN curl -L https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-x64.tar.xz | tar -xJ
 
-ENV PATH=/node-v16.13.0-linux-x64/bin:/usr/lib/jvm/java-17/bin:$PATH
+ENV PATH=/node-v18.16.0-linux-x64/bin:/usr/lib/jvm/java-17/bin:$PATH
 ENV JAVA_HOME=/usr/lib/jvm/java-17
 
 #Back to named user
