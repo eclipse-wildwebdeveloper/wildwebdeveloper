@@ -18,7 +18,7 @@ podman run USER_NAME/fedora-gtk3-mutter-java-node:latest  npm --version
 * Assign a tag to the image
 
 ```
-podman tag localhost/USER_NAME/fedora-gtk3-mutter-java-node:latest docker.io/vrubezhny/fedora-gtk3-mutter-java-node:TAG
+podman tag localhost/USER_NAME/fedora-gtk3-mutter-java-node:latest docker.io/USER_NAME/fedora-gtk3-mutter-java-node:TAG
 ```
 
 * Login
