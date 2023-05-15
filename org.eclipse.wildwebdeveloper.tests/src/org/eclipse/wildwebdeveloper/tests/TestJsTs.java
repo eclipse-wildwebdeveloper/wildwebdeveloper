@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -73,7 +73,20 @@ public class TestJsTs {
 
 	@Test
 	@Timeout(value = 60, unit = TimeUnit.SECONDS)
-	public void testRefactoringRename() throws Exception {
+	public void testRefactoringRenameInTypeaScript() throws Exception {
+		final IFile file = project.getFile("TestJsTs.ts");
+		String content = "function testVar(test) {\n	if (\"truetrue\" == \"true\" + test ) {\n"
+				+ "		return true;\n	}\n	return false;\n}\n"
+				+ "print(\"Testing var with true argument == \" + testVar(true));\n"
+				+ "print(\"Testing var with false argument == \" + testVar(false));\n";
+		final String oldName = "testVar";
+		final String newName = "newName";
+		internalTestRename(file, content, oldName, newName);
+	}
+
+	@Test
+	@Timeout(value = 60, unit = TimeUnit.SECONDS)
+	public void testRefactoringRenameInJavaScript() throws Exception {
 		final IFile file = project.getFile("TestJsTs.js");
 		String content = "function testVar(test) {\n	if (\"truetrue\" == \"true\" + test ) {\n"
 				+ "		return true;\n	}\n	return false;\n}\n"
@@ -81,6 +94,10 @@ public class TestJsTs {
 				+ "print(\"Testing var with false argument == \" + testVar(false));\n";
 		final String oldName = "testVar";
 		final String newName = "newName";
+		internalTestRename(file, content, oldName, newName);
+	}
+
+	private void internalTestRename(IFile file, String content, String oldName, String newName) throws Exception {
 		String newContent = content.replaceAll(oldName, newName);
 
 		int offset = content.indexOf(oldName);
@@ -113,41 +130,61 @@ public class TestJsTs {
 		Listener pressOKonRenameDialogPaint = event -> {
 			if (event.widget instanceof Composite c) {
 				Shell shell = c.getShell();
-				if (shell != ideShell && shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
-					if (!newTextIsSet.get()) {
-						newTextIsSet.set(setNewText(c, newName));
-						System.out.println("testRefactoringRename(): New name is set: " + newName);
-					}
-					Set<String> buttons = getButtons(c);
-					if (WIZARD_RENAME.equals(shell.getText())) {
-						if (!renameDialogOkPressed.get()) {
-							if (buttons.contains(BUTTON_OK)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_OK");
-								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
-								renameDialogOkPressed.set(true);
+				if (shell != ideShell) {
+					if (shell.getData().getClass().getName().startsWith(WIZARD_CLASSNAME_TEMPLATE)) {
+						if (!newTextIsSet.get()) {
+							newTextIsSet.set(setNewText(c, newName));
+							System.out.println("testRefactoringRename(): New name is set: " + newName);
+						}
+						Set<String> buttons = getButtons(c);
+						if (WIZARD_RENAME.equals(shell.getText())) {
+							if (!renameDialogOkPressed.get()) {
+								if (buttons.contains(BUTTON_OK)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_OK");
+									event.widget.getDisplay().asyncExec(() -> pressOk(shell));
+									renameDialogOkPressed.set(true);
+								}
+							} else if (!renameDialogContinuePressed.get()) {
+								if (buttons.contains(BUTTON_CONTINUE)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_CONTINUE");
+									event.widget.getDisplay().asyncExec(() -> pressOk(shell));
+									renameDialogContinuePressed.set(true);
+								} else if (!renameDialogCancelPressed.get() && buttons.contains(BUTTON_CANCEL)
+										&& buttons.contains(BUTTON_BACK)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_RENAME Emulating pressCancel when BUTTON_CANCEL & BUTTON_BACK");
+									event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
+									renameDialogCancelPressed.set(true);
+								}
 							}
-						} else if (!renameDialogContinuePressed.get()) {
-							if (buttons.contains(BUTTON_CONTINUE)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_RENAME Emulating pressOK when BUTTON_CONTINUE");
-								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
-								renameDialogContinuePressed.set(true);
-							} else if (!renameDialogCancelPressed.get() && buttons.contains(BUTTON_CANCEL)
-									&& buttons.contains(BUTTON_BACK)) {
-								System.out.println(
-										"testRefactoringRename(): WIZARD_RENAME Emulating pressCancel when BUTTON_CANCEL & BUTTON_BACK");
-								event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
-								renameDialogCancelPressed.set(true);
+						} else if (WIZARD_REFACTORING.equals(shell.getText())) {
+							if (!errorDialogOkPressed.get()) {
+								if (buttons.contains(BUTTON_OK)) {
+									System.out.println(
+											"testRefactoringRename(): WIZARD_REFACTORING Emulating pressOK when BUTTON_OK");
+									event.widget.getDisplay().asyncExec(() -> pressOk(shell));
+									errorDialogOkPressed.set(true);
+								}
 							}
 						}
-					} else if (WIZARD_REFACTORING.equals(shell.getText())) {
+					} else if (shell.getData().getClass().getName()
+							.startsWith("org.eclipse.jface.dialogs.MessageDialog")) {
+						// Most probably it's "The Rename request is not valid at the given position"
+						// -like error
+						Set<String> buttons = getButtons(c);
 						if (!errorDialogOkPressed.get()) {
 							if (buttons.contains(BUTTON_OK)) {
 								System.out.println(
-										"testRefactoringRename(): WIZARD_REFACTORING Emulating pressOK when BUTTON_OK");
+										"testRefactoringRename(): MESSAGE_DIALOG Emulating pressOK when BUTTON_OK");
 								event.widget.getDisplay().asyncExec(() -> pressOk(shell));
 								errorDialogOkPressed.set(true);
+							} else if (buttons.contains(BUTTON_CANCEL)) {
+								System.out.println(
+										"testRefactoringRename(): MESSAGE_DIALOG Emulating pressCancel when BUTTON_CANCEL");
+								event.widget.getDisplay().asyncExec(() -> pressCancel(shell));
+								errorDialogOkPressed.set(true); // Report as OK pressed just to say the dialog is closed
 							}
 						}
 					}
