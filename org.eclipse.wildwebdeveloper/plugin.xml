@@ -569,6 +569,12 @@
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.ts"
             id="org.eclipse.wildwebdeveloper.eslint"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.jsx"
+            id="org.eclipse.wildwebdeveloper.eslint"/>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.tsx"
+            id="org.eclipse.wildwebdeveloper.eslint"/>
    </extension>
    
    <extension

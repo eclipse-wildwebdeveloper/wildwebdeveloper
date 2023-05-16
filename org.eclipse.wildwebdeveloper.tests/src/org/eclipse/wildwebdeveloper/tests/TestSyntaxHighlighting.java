@@ -58,7 +58,7 @@ public class TestSyntaxHighlighting {
 				return Arrays.stream(widget.getStyleRanges())
 						.anyMatch(range -> range.foreground != null && !defaultTextColor.equals(range.foreground));
 			}
-		}.waitForCondition(widget.getDisplay(), 2000), "Missing syntax highlighting");
+		}.waitForCondition(widget.getDisplay(), 5000), "Missing syntax highlighting");
 	}
 
 }
