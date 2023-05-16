@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2019, 2022 Red Hat Inc. and others.
+* Copyright (c) 2019, 2023 Red Hat Inc. and others.
 *
 * This program and the accompanying materials are made
 * available under the terms of the Eclipse Public License 2.0
@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -35,37 +37,46 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(AllCleanRule.class)
 class TestESLint {
 
-	private IProject project;
+	private static IProject project;
 
-	@BeforeEach
-	public void setUpProject() throws Exception {
-		String projectName = getClass().getName() + System.nanoTime();
+	@BeforeAll
+	public static void setUpProject() throws Exception {
+		AllCleanRule.closeIntro();
+		AllCleanRule.enableLogging();
+
+		String projectName = TestESLint.class.getName() + System.nanoTime();
 		IProjectDescription desc = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
 		IPath projectLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation().append(projectName);
 		desc.setLocation(projectLocation);
 		File projectDirectory = projectLocation.toFile();
 		projectDirectory.mkdir();
-		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/.eslintrc")) {
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/.eslintrc")) {
 			Files.copy(eslintRc, new File(projectDirectory, ".eslintrc").toPath());
 		}
-		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/tsconfig.json")) {
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/tsconfig.json")) {
 			Files.copy(eslintRc, new File(projectDirectory, "tsconfig.json").toPath());
 		}
-		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/package.json")) {
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/package.json")) {
 			Files.copy(eslintRc, new File(projectDirectory, "package.json").toPath());
 		}
-		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
 			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.js").toPath());
 		}
-		try (InputStream eslintRc = getClass().getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
+			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.jsx").toPath());
+		}
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
 			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.ts").toPath());
+		}
+		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
+			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.tsx").toPath());
 		}
 		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
 				"--no-bin-links", "--ignore-scripts").directory(projectDirectory);
@@ -80,18 +91,45 @@ class TestESLint {
 		System.out.println("Output Stream: >>>\n" + result + "\n<<<");
 
 		assertEquals(0, dependencyInstaller.waitFor(), "npm install didn't complete properly");
-		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		this.project.create(desc, null);
+		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		project.create(desc, null);
 		project.open(null);
 	}
 
+	@BeforeEach
+	public void setUpTestCase() {
+		AllCleanRule.enableLogging();
+	}
+
+	@AfterAll
+	public static void cleanUp() throws Exception {
+		new AllCleanRule().afterEach(null);
+	}
+
 	@Test
-	void testESLintDiagnostics() throws Exception {
+	void testESLintDiagnosticsInJS() throws Exception {
 		IFile file = project.getFile("ESLintProj.js");
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		assertESLintIndentMarkerExists(file);
+	}
 
-		file = project.getFile("ESLintProj.ts");
+	@Test
+	void testESLintDiagnosticsInTS() throws Exception {
+		IFile file = project.getFile("ESLintProj.ts");
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		assertESLintIndentMarkerExists(file);
+	}
+
+	@Test
+	void testESLintDiagnosticsInJSX() throws Exception {
+		IFile file = project.getFile("ESLintProj.jsx");
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		assertESLintIndentMarkerExists(file);
+	}
+
+	@Test
+	void testESLintDiagnosticsInTSX() throws Exception {
+		IFile file = project.getFile("ESLintProj.tsx");
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		assertESLintIndentMarkerExists(file);
 	}
@@ -114,8 +152,9 @@ class TestESLint {
 			@Override
 			protected boolean condition() {
 				try {
-					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO)[0]
-							.getAttribute(IMarker.MESSAGE, null).toLowerCase().contains("indentation");
+					return Arrays.asList(file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO))
+							.stream().filter(Objects::nonNull)
+							.anyMatch(m -> m.getAttribute(IMarker.MESSAGE, null).toLowerCase().contains("indentation"));
 				} catch (CoreException e) {
 					e.printStackTrace();
 					return false;

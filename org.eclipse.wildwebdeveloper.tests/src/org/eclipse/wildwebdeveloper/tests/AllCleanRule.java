@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2023 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -55,6 +55,12 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 
 	@Override
 	public void beforeEach(ExtensionContext context) throws Exception {
+		closeIntro();
+		enableLogging();
+		clearProjects();
+	}
+
+	public static void closeIntro() {
 		IIntroPart intro = PlatformUI.getWorkbench().getIntroManager().getIntro();
 		if (intro != null) {
 			PlatformUI.getWorkbench().getIntroManager().closeIntro(intro);
@@ -63,6 +69,9 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 		for (IViewReference ref : activePage.getViewReferences()) {
 			activePage.hideView(ref);
 		}
+	}
+
+	public static void enableLogging() {
 		ScopedPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.lsp4e");
 		prefs.putValue("org.eclipse.wildwebdeveloper.angular.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.jsts.file.logging.enabled", Boolean.toString(true));
@@ -72,7 +81,6 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 		prefs.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.eslint.file.logging.enabled", Boolean.toString(true));
-		clearProjects();
 	}
 
 	@Override
