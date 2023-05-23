@@ -549,12 +549,12 @@
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
-            languageId="javascript"
+            languageId="javascriptreact"
             contentType="org.eclipse.wildwebdeveloper.jsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
-            languageId="typescript"
+            languageId="typescriptreact"
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
@@ -564,15 +564,19 @@
             label="ESLint"
             clientImpl="org.eclipse.wildwebdeveloper.eslint.ESLintClientImpl"/>
       <contentTypeMapping
+            languageId="javascript"
             contentType="org.eclipse.wildwebdeveloper.js"
             id="org.eclipse.wildwebdeveloper.eslint"/>
       <contentTypeMapping
+            languageId="typescript"
             contentType="org.eclipse.wildwebdeveloper.ts"
             id="org.eclipse.wildwebdeveloper.eslint"/>
       <contentTypeMapping
+            languageId="javascriptreact"
             contentType="org.eclipse.wildwebdeveloper.jsx"
             id="org.eclipse.wildwebdeveloper.eslint"/>
       <contentTypeMapping
+            languageId="typescriptreact"
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.eslint"/>
    </extension>
