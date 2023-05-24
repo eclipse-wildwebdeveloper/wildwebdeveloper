@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -201,6 +202,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
+		
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -211,6 +213,24 @@ public class TestLanguageServers {
 				}
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not published");
+		
+		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("const x = <></>;export default x;");
+		assertTrue(new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					IMarker[] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+					for(IMarker m: markers){
+						if(((String) m.getAttribute(IMarker.MESSAGE)).contains("React")){
+							return true;
+						}
+					}
+					return false;
+				} catch (CoreException e) {
+					return false;
+				}
+			}
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not cleared");
 	}
 
 	@Test
