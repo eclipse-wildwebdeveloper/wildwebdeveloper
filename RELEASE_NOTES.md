@@ -2,6 +2,23 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.1.1
+
+* 📅 Release Date: May 25th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.1.0...1.1.1
+
+#### Editing improvements
+
+* Bugfix for "ESLint errors not showing in jsx files" 
+* Bugfix for "Errors in tsx since upgrading to 1.0.0"
+* Bugfix for "Refactorings->Rename doesn't work for TypeScript files" upstream issue (Requires updating to LSP4E v.0.23.0)
+
+#### Dependencies update
+
+* Use the latest VSCode ESLint extension v.2.4.1
+* Use the latest VSCode extensions v..1.78.2 for CSS/HTML/JSON editing
+* Use the latest YAML Language Server v.1.13.0
+
 ## 1.1.0
 
 * 📅 Release Date: May 5th, 2023
