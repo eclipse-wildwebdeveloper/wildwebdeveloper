@@ -85,6 +85,10 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+		String maxTsServerMemory = System.getProperty("org.eclipse.wildwebdeveloper.maxTsServerMemory");
+		if (maxTsServerMemory != null) {
+			options.put("maxTsServerMemory", maxTsServerMemory);
+		}
 		return options;
 	}
 

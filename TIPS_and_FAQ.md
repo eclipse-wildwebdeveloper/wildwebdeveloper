@@ -85,6 +85,15 @@ Example `tsconfig.json`:
 3. Drag the editor/browser to get them side by side or stacked one on top of the other in the IDE.
 4. In the Web Browser, click the arrow besides the refresh button, and select "Auto-refersh local changes"
 
+### Change the memory allocated to the JavaScript/TypeScript language server?
+
+Add the following property to the WWD `eclipse.ini` configuration file:
+
+```
+-Dorg.eclipse.wildwebdeveloper.maxTsServerMemory=<memory in megabytes>
+```
+This will set the maximum size of V8's old memory section for the JavaScript/TypeScript language server. Values are in megabytes, for example `4096` means 4GB. The default value is dynamically configured by Node.js so can differ per system. Increase for very big projects that exceed allowed memory usage.
+
 ### As an Eclipse plugin developer, how can I...
 
 #### Reuse Embedded Node.js?
