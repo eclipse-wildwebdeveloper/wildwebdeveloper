@@ -17,6 +17,10 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v4.5
+      with:
+        maven-version: 3.9.2
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
