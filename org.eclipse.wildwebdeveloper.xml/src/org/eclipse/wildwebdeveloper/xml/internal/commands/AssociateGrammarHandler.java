@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Red Hat Inc. and others.
+ * Copyright (c) 2022 2023 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -22,7 +23,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.lsp4e.LSPEclipseUtils;
-import org.eclipse.lsp4e.LanguageServiceAccessor;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.command.LSPCommandHandler;
 import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.ExecuteCommandOptions;
@@ -87,22 +88,28 @@ public class AssociateGrammarHandler extends LSPCommandHandler {
 	}
 
 	private static CompletableFuture<Object> executeServerCommand(String commandId, Object... params) throws Exception {
-		List<LanguageServer> commandHandlers = LanguageServiceAccessor
-				.getActiveLanguageServers(handlesCommand(commandId));
-		if (commandHandlers != null) {
-			if (commandHandlers.size() == 1) {
-				LanguageServer handler = commandHandlers.get(0);
-				return handler.getWorkspaceService()
-						.executeCommand(new ExecuteCommandParams(commandId, Arrays.asList(params)));
-			} else if (commandHandlers.size() > 1) {
-				throw new IllegalStateException(
-						"Multiple language servers have registered to handle command '" + commandId + "'");
-			}
+		List<LanguageServer> commandHandlers = new ArrayList<>();
+		LanguageServers.forProject(null).withCapability(serverCapabilities -> {
+				ExecuteCommandOptions executeCommandProvider = serverCapabilities.getExecuteCommandProvider();
+				return  Either.forLeft(executeCommandProvider != null ? 
+						executeCommandProvider.getCommands().contains(commandId) : false);
+			}).excludeInactive().collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
+			.thenAccept(commandHandlers::addAll).get(100, TimeUnit.MILLISECONDS);
+
+		if (commandHandlers.size() == 1) {
+			LanguageServer handler = commandHandlers.get(0);
+			return handler.getWorkspaceService()
+					.executeCommand(new ExecuteCommandParams(commandId, Arrays.asList(params)));
+		} else if (commandHandlers.size() > 1) {
+			throw new IllegalStateException(
+					"Multiple language servers have registered to handle command '" + commandId + "'");
 		}
+
 		throw new UnsupportedOperationException(
 				"No language server has registered to handle command '" + commandId + "'");
 	}
 
+	// TODO: not used - a subject to remove
 	private static Predicate<ServerCapabilities> handlesCommand(String commandId) {
 		return (serverCaps) -> {
 			ExecuteCommandOptions executeCommandProvider = serverCaps.getExecuteCommandProvider();
@@ -112,5 +119,4 @@ public class AssociateGrammarHandler extends LSPCommandHandler {
 			return false;
 		};
 	}
-
 }

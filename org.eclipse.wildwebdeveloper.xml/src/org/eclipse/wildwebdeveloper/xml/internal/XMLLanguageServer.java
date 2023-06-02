@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.net.proxy.IProxyData;
@@ -36,9 +37,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.LanguageServersRegistry;
 import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
-import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants;
@@ -77,10 +78,10 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 			@SuppressWarnings("rawtypes")
 			DidChangeConfigurationParams params = new DidChangeConfigurationParams(
 					Collections.singletonMap(XML_KEY, ((Map) config.get(SETTINGS_KEY)).get(XML_KEY)));
-			LanguageServiceAccessor.getActiveLanguageServers(null).stream()
-					.filter(server -> lemminxDefinition
-							.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
-					.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
+
+			LanguageServers.forProject(null).withPreferredServer(lemminxDefinition).excludeInactive()
+					.collectAll((w, ls) -> CompletableFuture.completedFuture(ls)).thenAccept(
+							lss -> lss.stream().forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params)));
 		});
 	};
 
