@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Rogue Wave Software Inc. and others.
+ * Copyright (c) 2016, 2023 Rogue Wave Software Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -34,9 +35,9 @@ import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.LanguageServersRegistry;
 import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
-import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
@@ -66,10 +67,9 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 			if (SchemaAssociationsPreferenceInitializer.SCHEMA_ASSOCIATIONS_PREFERENCE.equals(event.getProperty())) {
 				Map<String, List<String>> associations = getSchemaAssociations();
 
-				LanguageServiceAccessor.getActiveLanguageServers(null).stream()
-						.filter(server -> JSON_LS_DEFINITION
-								.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
-						.forEach(ls -> ((JSonLanguageServerInterface) ls).sendJSonchemaAssociations(associations));
+				LanguageServers.forProject(null).withPreferredServer(JSON_LS_DEFINITION).excludeInactive()
+						.collectAll((w, ls) -> CompletableFuture.completedFuture(ls)).thenAccept(
+								lss -> lss.stream().forEach(ls -> ((JSonLanguageServerInterface) ls).sendJSonchemaAssociations(associations)));
 			}
 		}
 	};

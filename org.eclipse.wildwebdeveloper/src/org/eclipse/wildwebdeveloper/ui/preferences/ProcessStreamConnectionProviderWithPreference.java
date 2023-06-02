@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Red Hat Inc. and others.
+ * Copyright (c) 2022, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,13 +18,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.LanguageServersRegistry;
 import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
-import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
@@ -160,10 +161,10 @@ public abstract class ProcessStreamConnectionProviderWithPreference extends Proc
 			LanguageServerDefinition languageServerDefinition = getLanguageServerDefinition();
 			@SuppressWarnings("rawtypes")
 			DidChangeConfigurationParams params = new DidChangeConfigurationParams(createSettings());
-			LanguageServiceAccessor.getActiveLanguageServers(null).stream()
-					.filter(server -> languageServerDefinition
-							.equals(LanguageServiceAccessor.resolveServerDefinition(server).get()))
-					.forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params));
+
+			LanguageServers.forProject(null).withPreferredServer(languageServerDefinition).excludeInactive()
+					.collectAll((w, ls) -> CompletableFuture.completedFuture(ls)).thenAccept(
+							lss -> lss.stream().forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params)));
 		}
 	}
 
