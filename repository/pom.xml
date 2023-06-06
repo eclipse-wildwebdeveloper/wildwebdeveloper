@@ -103,6 +103,7 @@
 				<artifactId>tycho-p2-repository-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
+					<filterProvided>true</filterProvided>
 					<extraArtifactRepositoryProperties>
 						<p2.statsURI>http://download.eclipse.org/stats/wildwebdeveloper/</p2.statsURI>
 					</extraArtifactRepositoryProperties>
