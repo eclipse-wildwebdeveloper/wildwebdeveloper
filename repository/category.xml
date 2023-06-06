@@ -81,4 +81,6 @@
    <category-def name="Wild Web Developer" label="Eclipse Wild Web Developer - Web Dev in Eclipse IDE"/>
    <category-def name="Dependencies" label="Transitive Dependencies (no need to install directly)"/>
    <category-def name="Sources" label="Sources and Tests (for integrators)"/>
+   <repository-reference location="https://download.eclipse.org/eclipse/updates/latest" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/justj/jres/latest" enabled="true" />
 </site>
