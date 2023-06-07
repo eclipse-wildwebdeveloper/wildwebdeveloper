@@ -1,0 +1,1 @@
+This is a copy from https://github.com/vuejs/language-tools/tree/master/packages/vscode-vue/syntaxes/
