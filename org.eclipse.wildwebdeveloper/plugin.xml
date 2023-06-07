@@ -719,6 +719,64 @@
      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.ts" id="org.eclipse.wildwebdeveloper.angular"/>
      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.html" id="org.eclipse.wildwebdeveloper.angular"/>
    </extension>
+   
+   <!-- VUE -->
+   <extension
+      point="org.eclipse.core.contenttype.contentTypes">
+     <content-type
+           base-type="org.eclipse.wildwebdeveloper.parent"
+           file-extensions="vue"
+           id="org.eclipse.wildwebdeveloper.vue"
+           name="VUE module"
+           priority="normal">
+     </content-type>
+   </extension>
+   <extension point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.vue.VueLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.vue.VueClientImpl"
+            id="org.eclipse.wildwebdeveloper.vue"
+            label="VUE Language Server"/>
+      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" id="org.eclipse.wildwebdeveloper.vue"/>
+    </extension>
+    <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="grammars/vue/vue.tmLanguage.json"
+            scopeName="source.vue">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.wildwebdeveloper.vue"
+            scopeName="source.vue">
+      </scopeNameContentTypeBinding>
+      <grammar
+      	
+            path="grammars/vue/markdown-vue.json"
+            scopeName="markdown.vue.codeblock">
+      </grammar>
+      <grammar
+            path="grammars/vue/vue-directives.json"
+            scopeName="vue.directives">
+      </grammar>
+      <grammar
+            path="grammars/vue/vue-interpolations.json"
+            scopeName="vue.interpolations">
+      </grammar>
+      <grammar
+            path="grammars/vue/vue-sfc-style-variable-injection.json"
+            scopeName="vue.sfc.style.variable.injections">
+      </grammar>
+
+   </extension>
+
+   <extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.vue"
+            path="language-configurations/vue/vue-language-configuration.json">
+      </languageConfiguration>
+      
+   </extension>
 
    <!-- YAML Language -->   
    <extension
