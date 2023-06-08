@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Red Hat Inc. and others.
+ * Copyright (c) 2022, 2023 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -14,7 +14,6 @@ package org.eclipse.wildwebdeveloper.xml.internal.autoclose;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceClientConstants.XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -26,8 +25,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.lsp4e.LSPEclipseUtils;
-import org.eclipse.lsp4e.LanguageServiceAccessor;
-import org.eclipse.lsp4e.LanguageServiceAccessor.LSPDocumentInfo;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
@@ -120,46 +118,45 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 			}
 
 			TextDocumentIdentifier identifier = new TextDocumentIdentifier(uri.toString());
-			Optional<LSPDocumentInfo> info = LanguageServiceAccessor
-					.getLSPDocumentInfosFor(document, capabilities -> true).stream()
-					.filter(doc -> (doc.getLanguageClient() instanceof XMLLanguageServerAPI)).findAny();
-			if (!info.isEmpty()) {
-				// The document is bound with XML language server, consumes the xml/closeTag
-				final Display display = viewer.getTextWidget().getDisplay();
-				CompletableFuture.supplyAsync(() -> {
-					try {
-						// Wait for textDocument/didChange
-						Thread.sleep(100);
-					} catch (InterruptedException ex) {
-						Thread.interrupted();
-					}
-					try {
-						TextDocumentPositionParams params = LSPEclipseUtils.toTextDocumentPosistionParams(uri, offset,
-								document);
-						// consumes xml/closeTag from XML language server
-						((XMLLanguageServerAPI) info.get().getLanguageClient()).closeTag(params).thenAccept(r -> {
-							if (r != null) {
-								display.asyncExec(() -> {
+			LanguageServers.forDocument(document).collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
+					.thenAccept(lss -> lss.stream().filter(XMLLanguageServerAPI.class::isInstance)
+							.map(XMLLanguageServerAPI.class::cast).findAny().ifPresent(info -> {
+								// The document is bound with XML language server, consumes the xml/closeTag
+								final Display display = viewer.getTextWidget().getDisplay();
+								CompletableFuture.supplyAsync(() -> {
 									try {
-										// we receive a text like
-										// $0</foo>
-										// $0 should be used for set the cursor.
-										String text = r.snippet.replace("$0", "");
-										int replaceLength = getReplaceLength(r.range, document);
-										document.replace(offset, replaceLength, text);
+										// Wait for textDocument/didChange
+										Thread.sleep(100);
+									} catch (InterruptedException ex) {
+										Thread.interrupted();
+									}
+									try {
+										TextDocumentPositionParams params = LSPEclipseUtils
+												.toTextDocumentPosistionParams(uri, offset, document);
+										// consumes xml/closeTag from XML language server
+										info.closeTag(params).thenAccept(r -> {
+											if (r != null) {
+												display.asyncExec(() -> {
+													try {
+														// we receive a text like
+														// $0</foo>
+														// $0 should be used for set the cursor.
+														String text = r.snippet.replace("$0", "");
+														int replaceLength = getReplaceLength(r.range, document);
+														document.replace(offset, replaceLength, text);
+													} catch (BadLocationException e) {
+														// Do nothing
+													}
+												});
+
+											}
+										});
 									} catch (BadLocationException e) {
 										// Do nothing
 									}
+									return null;
 								});
-
-							}
-						});
-					} catch (BadLocationException e) {
-						// Do nothing
-					}
-					return null;
-				});
-			}
+							}));
 		}
 
 		private boolean isEnabled() {

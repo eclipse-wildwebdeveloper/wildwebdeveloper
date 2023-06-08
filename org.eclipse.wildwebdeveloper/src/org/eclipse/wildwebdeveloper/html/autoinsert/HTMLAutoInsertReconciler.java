@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Red Hat Inc. and others.
+ * Copyright (c) 2022, 2023 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -15,7 +15,6 @@ import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceCli
 import static org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceClientConstants.HTML_PREFERENCES_AUTO_CREATE_QUOTES;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -27,8 +26,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.lsp4e.LSPEclipseUtils;
-import org.eclipse.lsp4e.LanguageServiceAccessor;
-import org.eclipse.lsp4e.LanguageServiceAccessor.LSPDocumentInfo;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.Activator;
@@ -87,55 +85,56 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 		}
 
 		TextDocumentIdentifier identifier = new TextDocumentIdentifier(uri.toString());
-		Optional<LSPDocumentInfo> info = LanguageServiceAccessor
-				.getLSPDocumentInfosFor(document, (capabilities) -> true).stream()
-				.filter(doc -> (doc.getLanguageClient() instanceof HTMLLanguageServerAPI)).findAny();
-		if (!info.isEmpty()) {
-			// The document is bound with HTML language server, consumes the html/autoInsert
-			final Display display = viewer.getTextWidget().getDisplay();
-			CompletableFuture.supplyAsync(() -> {
-				try {
-					// Wait for textDocument/didChange
-					Thread.sleep(100);
-				} catch (InterruptedException ex) {
-					Thread.interrupted();
-				}
-				try {
-					AutoInsertParams params = new AutoInsertParams();
-					params.setTextDocument(identifier);
-					params.setKind(autoInsertKind.name());
-					params.setPosition(LSPEclipseUtils.toPosition(offset, document));
-
-					// consumes html/autoInsert from HTML language server
-					((HTMLLanguageServerAPI) info.get().getLanguageClient()).autoInsert(params).thenAccept(r -> {
-						if (r != null) {
-							display.asyncExec(() -> {
+		
+		LanguageServers.forDocument(document).collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
+				.thenAccept(lss -> lss.stream().filter(HTMLLanguageServerAPI.class::isInstance)
+						.map(HTMLLanguageServerAPI.class::cast).findAny().ifPresent(info -> {
+							// The document is bound with HTML language server, consumes the html/autoInsert
+							final Display display = viewer.getTextWidget().getDisplay();
+							CompletableFuture.supplyAsync(() -> {
 								try {
-									// we receive a text like
-									// $0</foo>
-									// $0 should be used for set the cursor.
-									String text = r.replace("$0", "").replace("$1", "");
-									int index = r.indexOf("$1");
+									// Wait for textDocument/didChange
+									Thread.sleep(100);
+								} catch (InterruptedException ex) {
+									Thread.interrupted();
+								}
+								try {
+									AutoInsertParams params = new AutoInsertParams();
+									params.setTextDocument(identifier);
+									params.setKind(autoInsertKind.name());
+									params.setPosition(LSPEclipseUtils.toPosition(offset, document));
 
-									int replaceLength = 0;
-									document.replace(offset, replaceLength, text);
-									if (index != -1) {
-										viewer.setSelectedRange(offset + index, 0);
-									}
-									// viewer.setSelectedRange(offset, c)
+									// consumes html/autoInsert from HTML language server
+									info.autoInsert(params)
+											.thenAccept(r -> {
+												if (r != null) {
+													display.asyncExec(() -> {
+														try {
+															// we receive a text like
+															// $0</foo>
+															// $0 should be used for set the cursor.
+															String text = r.replace("$0", "").replace("$1", "");
+															int index = r.indexOf("$1");
+
+															int replaceLength = 0;
+															document.replace(offset, replaceLength, text);
+															if (index != -1) {
+																viewer.setSelectedRange(offset + index, 0);
+															}
+															// viewer.setSelectedRange(offset, c)
+														} catch (BadLocationException e) {
+															// Do nothing
+														}
+													});
+
+												}
+											});
 								} catch (BadLocationException e) {
 									// Do nothing
 								}
+								return null;
 							});
-
-						}
-					});
-				} catch (BadLocationException e) {
-					// Do nothing
-				}
-				return null;
-			});
-		}
+						}));
 	}
 
 	private boolean isAutoClosingTagEnabled() {
