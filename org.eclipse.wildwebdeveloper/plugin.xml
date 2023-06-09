@@ -173,10 +173,17 @@
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="scss,sass"
+            file-extensions="scss"
             id="org.eclipse.wildwebdeveloper.scss"
-            name="SCSS/SASS"
+            name="SCSS"
             priority="low">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="sass"
+            id="org.eclipse.wildwebdeveloper.sass"
+            name="SASS"
+            priority="normal">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
@@ -207,6 +214,11 @@
             languageId="scss">
       </contentTypeMapping>
       <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.sass"
+            id="org.eclipse.wildwebdeveloper.css"
+            languageId="scss">
+      </contentTypeMapping>
+      <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.less"
             id="org.eclipse.wildwebdeveloper.css"
             languageId="less">
@@ -232,8 +244,12 @@
             scopeName="source.css.less">
       </scopeNameContentTypeBinding>
       <grammar
-            path="grammars/scss/scss.json"
+            path="grammars/scss/scss.tmLanguage.json"
             scopeName="source.css.scss">
+      </grammar>
+      <grammar
+            path="grammars/scss/sassdoc.tmLanguage.json"
+            scopeName="source.sassdoc">
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.scss"
