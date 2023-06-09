@@ -80,6 +80,44 @@ public class TestLanguageServers {
 	}
 
 	@Test
+	public void testSCSSFile() throws Exception {
+		final IFile file = project.getFile("blah.scss");
+		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
+		assertTrue(new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+				} catch (CoreException e) {
+					return false;
+				}
+			}
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+	}
+
+	@Test
+	public void testSASSFile() throws Exception {
+		final IFile file = project.getFile("blah.sass");
+		file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+		ITextEditor editor = (ITextEditor) IDE
+				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
+		assertTrue(new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				try {
+					return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+				} catch (CoreException e) {
+					return false;
+				}
+			}
+		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+	}
+
+	@Test
 	public void testHTMLFile() throws Exception {
 		final IFile file = project.getFile("blah.html");
 		file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
@@ -202,7 +240,7 @@ public class TestLanguageServers {
 		ITextEditor editor = (ITextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-		
+
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -213,15 +251,15 @@ public class TestLanguageServers {
 				}
 			}
 		}.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not published");
-		
+
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("const x = <></>;export default x;");
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				try {
 					IMarker[] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
-					for(IMarker m: markers){
-						if(((String) m.getAttribute(IMarker.MESSAGE)).contains("React")){
+					for (IMarker m : markers) {
+						if (((String) m.getAttribute(IMarker.MESSAGE)).contains("React")) {
 							return true;
 						}
 					}
