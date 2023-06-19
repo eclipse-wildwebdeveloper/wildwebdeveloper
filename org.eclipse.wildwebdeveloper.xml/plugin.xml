@@ -109,6 +109,7 @@
  
    <extension
          point="org.eclipse.tm4e.registry.grammars">
+ <!--
       <grammar
             path="grammars/xml/xml.tmLanguage.json"
             scopeName="source.xml">
@@ -117,10 +118,12 @@
             path="grammars/dtd/dtd.tmLanguage.json"
             scopeName="text.xml.dtd">
       </grammar>
-            <grammar
+ -->
+      <grammar
             path="grammars/rnc/rnc.tmLanguage.json"
             scopeName="source.rnc">
       </grammar>
+<!--
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.core.runtime.xml"
             scopeName="source.xml">
@@ -141,6 +144,7 @@
             contentTypeId="org.eclipse.wildwebdeveloper.dtd"
             scopeName="text.xml.dtd">
       </scopeNameContentTypeBinding>
+-->
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.rnc"
             scopeName="source.rnc">
@@ -149,6 +153,7 @@
    
    <extension
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+ <!--
       <languageConfiguration
             contentTypeId="org.eclipse.core.runtime.xml"
             path="language-configurations/xml/xml.language-configuration.json">
@@ -157,6 +162,7 @@
             contentTypeId="org.eclipse.wildwebdeveloper.xsl"
             path="language-configurations/xsl/xsl.language-configuration.json">
       </languageConfiguration>
+-->
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.rnc"
             path="language-configurations/rnc/rnc.language-configuration.json">

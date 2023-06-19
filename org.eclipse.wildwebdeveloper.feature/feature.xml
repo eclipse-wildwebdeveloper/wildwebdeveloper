@@ -26,6 +26,7 @@
 
    <requires>
       <import feature="org.eclipse.wildwebdeveloper.xml.feature" version="1.0.1"/>
+      <import feature="org.eclipse.tm4e.language_pack.feature" version="0.2.0"/>
    </requires>
 
    <plugin

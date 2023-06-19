@@ -130,7 +130,8 @@
             id="org.eclipse.wildwebdeveloper.json">
       </contentTypeMapping>
    </extension>
-   
+
+<!--   
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
@@ -150,7 +151,7 @@
             path="language-configurations/json/language-configuration.json">
       </languageConfiguration>
    </extension>
-
+-->
    <extension
          point="org.eclipse.tm4e.ui.snippets">
       <snippet
@@ -213,6 +214,7 @@
       </contentTypeMapping>
    </extension>
    
+<!--
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
@@ -240,12 +242,17 @@
             scopeName="source.css.scss">
       </scopeNameContentTypeBinding>
    </extension>
+ -->
 
+<!--
    <extension
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.css"
             path="language-configurations/css/language-configuration.json">
+     <languageConfiguration
+            contentTypeId="org.eclipse.wildwebdeveloper.css"
+            path="platform:/plugin/org.eclipse.tm4e.language_pack/css/language-configuration.json">
       </languageConfiguration>
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.less"
@@ -256,6 +263,7 @@
             path="language-configurations/scss/language-configuration.json">
       </languageConfiguration>
    </extension>
+-->
 
    <extension
          point="org.eclipse.tm4e.ui.snippets">
@@ -414,6 +422,7 @@
       </contentTypeMapping>
    </extension>
 
+<!--
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
@@ -433,6 +442,7 @@
             path="language-configurations/html/language-configuration.jsonc">
       </languageConfiguration>
    </extension>
+-->
 
    <extension
          point="org.eclipse.tm4e.ui.snippets">
@@ -580,7 +590,8 @@
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.eslint"/>
    </extension>
-   
+  
+  <!-- 
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
@@ -620,7 +631,9 @@
             contentTypeId="org.eclipse.wildwebdeveloper.ts"
             path="language-configurations/typescript/language-configuration.jsonc">
       </languageConfiguration>
+-->
       <!-- TODO replace with more specific language configuration if we include some -->
+ <!--
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.jsx"
             path="language-configurations/javascript/javascript-language-configuration.jsonc">
@@ -630,6 +643,7 @@
             path="language-configurations/typescript/language-configuration.jsonc">
       </languageConfiguration>
    </extension>
+-->
 
    <extension
          point="org.eclipse.tm4e.ui.snippets">
