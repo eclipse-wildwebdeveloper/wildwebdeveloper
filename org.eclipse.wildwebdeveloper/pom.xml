@@ -42,7 +42,7 @@
 						<configuration>
 							<connectionUrl>scm:git:https://github.com/microsoft/vscode-eslint.git</connectionUrl>
 							<scmVersionType>tag</scmVersionType>
-							<scmVersion>pre-release/2.4.1</scmVersion>
+							<scmVersion>release/2.4.2</scmVersion>
 							<basedir>${project.build.directory}</basedir>
 							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls-package-json/extension</checkoutDirectory>
 						</configuration>
@@ -98,7 +98,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.4.1/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
+                            <url>https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/2.4.2/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
 							<outputFileName>vscode-eslint-ls.zip</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode-eslint-ls</outputDirectory>
