@@ -29,3 +29,8 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
+- package-ecosystem: npm
+  directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/vue-app"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
