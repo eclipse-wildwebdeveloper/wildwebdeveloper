@@ -17,20 +17,20 @@ updates:
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/angular-app"
   schedule:
-    interval: weekly
+    interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/HelloWorldTS"
   schedule:
-    interval: weekly
+    interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/eslint"
   schedule:
-    interval: weekly
+    interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/vue-app"
   schedule:
-    interval: weekly
+    interval: daily
   open-pull-requests-limit: 10
