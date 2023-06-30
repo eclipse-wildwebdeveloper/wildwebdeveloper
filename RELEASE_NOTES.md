@@ -2,6 +2,23 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.2.0
+
+* 📅 Release Date: June 30th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.1.1...1.2.0
+
+#### Editing improvements
+
+* Allow configuring maxTsServerMemory parameter for JS/TS language server
+* Added support for Vue.js editing
+
+#### Dependencies update
+
+* Use the latest VSCode ESLint extension v.2.4.2
+* Use the latest VSCode extensions v..1.79.0 for CSS/HTML/JSON editing
+* Use LemMinX 0.26.1 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
+* Embed latest Node.js (v.18.16.1) with the latest Security fixes
+
 ## 1.1.1
 
 * 📅 Release Date: May 25th, 2023
