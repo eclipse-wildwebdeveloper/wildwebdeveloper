@@ -20,6 +20,7 @@ and
 * Angular (Components & Templates, in TypeScript and HTML files)
 * React (JSX, TSX, embedded HTML)
 * ESLint (for JavaScript and TypeScript)
+* Vue.js
 
 Supported features for edition are
 
