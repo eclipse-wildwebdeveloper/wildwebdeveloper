@@ -86,7 +86,7 @@ jobs:
 
         projectId="tools.wildwebdeveloper"
         gitlabAPIToken="${{ secrets.GITLAB_API_TOKEN }}"
-        dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/0.0.1-SNAPSHOT/org.eclipse.dash.licenses-*.jar | tail -n 1)
+        dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/1.0.3-SNAPSHOT/org.eclipse.dash.licenses-*.jar | tail -n 1)
         npmArgs=" --no-bin-links --ignore-scripts"
         dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-review-summary"
         exitStatus=0
