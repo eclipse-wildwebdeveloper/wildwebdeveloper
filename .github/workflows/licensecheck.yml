@@ -69,7 +69,7 @@ jobs:
       run: mvn -DskipTests -pl target-platform,org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
     - name: Get Dash license tool
       run: |
-        mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:0.0.1-SNAPSHOT
+        mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.0.3-SNAPSHOT
         mkdir -p target/dash         # Make directory for dash-license review summary 
     - name: Set request review parameters
       if: github.event_name == 'issue_comment'
