@@ -274,10 +274,13 @@
 		</pluginRepository>
 		<pluginRepository>
 			<id>dash-licenses-snapshots</id>
-			<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+			<url>https://repo.eclipse.org/content/repositories/dash-licenses/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</pluginRepository>
 		<pluginRepository>
 			<id>tycho-snapshots</id>

@@ -69,7 +69,7 @@ jobs:
       run: mvn -DskipTests -pl target-platform,org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
     - name: Get Dash license tool
       run: |
-        mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.0.3-SNAPSHOT
+        mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.0.2 -DremoteRepositories="https://repo.eclipse.org/content/repositories/dash-licenses"
         mkdir -p target/dash         # Make directory for dash-license review summary 
     - name: Set request review parameters
       if: github.event_name == 'issue_comment'
@@ -86,7 +86,7 @@ jobs:
 
         projectId="tools.wildwebdeveloper"
         gitlabAPIToken="${{ secrets.GITLAB_API_TOKEN }}"
-        dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/1.0.3-SNAPSHOT/org.eclipse.dash.licenses-*.jar | tail -n 1)
+        dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/1.0.2/org.eclipse.dash.licenses-*.jar | tail -n 1)
         npmArgs=" --no-bin-links --ignore-scripts"
         dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-review-summary"
         exitStatus=0
