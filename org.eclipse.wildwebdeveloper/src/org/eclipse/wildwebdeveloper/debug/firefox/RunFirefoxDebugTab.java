@@ -12,11 +12,14 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.firefox;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractRunHTMLDebugTab;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 
@@ -37,7 +40,18 @@ public class RunFirefoxDebugTab extends AbstractRunHTMLDebugTab {
 			updateLaunchConfigurationDialog();
 		}));
 	}
-	
+
+	@Override
+	public void initializeFrom(ILaunchConfiguration configuration) {
+		super.initializeFrom(configuration);
+		try {
+			boolean reloadOnChangeValue = configuration.getAttribute(FirefoxRunDABDebugDelegate.RELOAD_ON_CHANGE, false);
+			reloadOnChange.setSelection(reloadOnChangeValue);
+		} catch (CoreException ex) {
+			Activator.getDefault().getLog().log(ex.getStatus());
+		}
+	}
+
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		super.performApply(configuration);
