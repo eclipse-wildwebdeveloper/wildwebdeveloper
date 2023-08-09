@@ -74,7 +74,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 		STORE.setDefault(XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS, true);
 
 		// Server settings
-		STORE.setDefault(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId, true);
+		STORE.setDefault(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_CATAGLOGS.preferenceId, "");
 		STORE.setDefault(XML_PREFERENCES_CODELENS_ENABLED.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD.preferenceId, true);
