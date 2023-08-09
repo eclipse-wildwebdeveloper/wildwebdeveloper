@@ -764,7 +764,7 @@
       </grammar>
       <grammar
             path="grammars/vue/vue-sfc-style-variable-injection.json"
-            scopeName="vue.sfc.style.variable.injections">
+            scopeName="vue.sfc.style.variable.injection">
       </grammar>
 
    </extension>
