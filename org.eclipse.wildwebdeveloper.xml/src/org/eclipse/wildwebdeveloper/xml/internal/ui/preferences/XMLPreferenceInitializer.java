@@ -91,7 +91,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 
 		STORE.setDefault(XML_PREFERENCES_FORMAT_EMPTY_ELEMENTS.preferenceId, "ignore");
 		STORE.setDefault(XML_PREFERENCES_FORMAT_SPACE_BEFORE_EMPTY_CLOSE_TAG.preferenceId, true);
-		STORE.setDefault(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.preferenceId, "preserve");
 		STORE.setDefault(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE.preferenceId, 2);
 		STORE.setDefault(XML_PREFERENCES_FORMAT_PRESERVE_ATTRIBUTE_LINE_BREAKS.preferenceId, true);
 		STORE.setDefault(XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE.preferenceId, false);

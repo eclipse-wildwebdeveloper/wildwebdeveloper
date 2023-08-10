@@ -38,6 +38,9 @@ public class Messages extends NLS {
 	public static String XMLFormattingPreferencePage_format_emptyElements_expand;
 	public static String XMLFormattingPreferencePage_format_spaceBeforeEmptyCloseTag;
 	public static String XMLFormattingPreferencePage_format_splitAttributes;
+	public static String XMLFormattingPreferencePage_format_splitAttribute_spreserve;
+	public static String XMLFormattingPreferencePage_format_splitAttributes_splitNewLine;
+	public static String XMLFormattingPreferencePage_format_splitAttributes_alignWithFirstAttr;
 	public static String XMLFormattingPreferencePage_format_splitAttributesIndentSize;
 	public static String XMLFormattingPreferencePage_format_preserveAttributeLineBreaks;
 	public static String XMLFormattingPreferencePage_format_closingBracketNewLine;

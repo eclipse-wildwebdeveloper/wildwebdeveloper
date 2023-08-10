@@ -70,8 +70,13 @@ public class XMLFormattingPreferencePage extends FieldEditorPreferencePage imple
 				Messages.XMLFormattingPreferencePage_format_spaceBeforeEmptyCloseTag, getFieldEditorParent()));
 
 		// Settings for attributes
-		addField(new BooleanFieldEditor(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.preferenceId,
-				Messages.XMLFormattingPreferencePage_format_splitAttributes, getFieldEditorParent()));
+		addField(new ComboFieldEditor(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES.preferenceId,
+				Messages.XMLFormattingPreferencePage_format_splitAttributes,
+				new String[][] { 
+					{ Messages.XMLFormattingPreferencePage_format_splitAttribute_spreserve, "preserve" }, 
+					{ Messages.XMLFormattingPreferencePage_format_splitAttributes_splitNewLine, "splitNewLine" }, 
+					{ Messages.XMLFormattingPreferencePage_format_splitAttributes_alignWithFirstAttr, "alignWithFirstAttr" } 
+				}, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(XML_PREFERENCES_FORMAT_SPLIT_ATTRIBUTES_INDENT_SIZE.preferenceId,
 				Messages.XMLFormattingPreferencePage_format_splitAttributesIndentSize, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(XML_PREFERENCES_FORMAT_CLOSING_BRACKET_NEW_LINE.preferenceId,
