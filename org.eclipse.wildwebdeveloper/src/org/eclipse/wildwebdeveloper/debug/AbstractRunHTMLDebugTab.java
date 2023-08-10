@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -17,6 +17,9 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProje
 import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -82,7 +85,9 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				.getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		decoration.setImage(fieldDecoration.getImage());
 		this.programPathText.addModifyListener(event -> {
+			setDirty(true);
 			validateProgramPath();
+			updateLaunchConfigurationDialog();
 		});
 		filePath = new Button(resComposite, SWT.PUSH);
 		filePath.setText(Messages.AbstractRunHTMLDebugTab_browse);
@@ -115,6 +120,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 		urlText.setLayoutData(urlTextGD);
 		urlText.addModifyListener(e -> {
 			setDirty(true);
+			validateProgramPath();
 			updateLaunchConfigurationDialog();
 		});
 		
@@ -153,33 +159,43 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	private void validateProgramPath() {
 		setDirty(true);
 
-		File file;
-		try {
-			file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
-			if (!file.isFile()) {
-				String errorMessage = Messages.RunProgramTab_error_unknownFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else if (!shortcut.canLaunch(file)) {
-				String errorMessage = "Not a html file"; //$NON-NLS-1$
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else if (!file.canRead()) {
-				String errorMessage = Messages.RunProgramTab_error_nonReadableFile;
-				setErrorMessage(errorMessage);
-				decoration.setDescriptionText(errorMessage);
-				decoration.show();
-			} else {
-				setErrorMessage(null);
-				decoration.hide();
+		String errorMessage = null;
+		if (fileRadio.getSelection()) {
+			try {
+				if (programPathText.getText().length() > 0) {
+					File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
+					if (!file.isFile()) {
+						errorMessage = Messages.RunProgramTab_error_unknownFile;
+					} else if (!shortcut.canLaunch(file)) {
+						errorMessage = "Not a html file"; //$NON-NLS-1$
+					} else if (!file.canRead()) {
+						errorMessage = Messages.RunProgramTab_error_nonReadableFile;
+					}
+				}
+			} catch (CoreException ex) {
+				errorMessage = ex.getMessage();
 			}
-		} catch (CoreException ex) {
-			setErrorMessage(ex.getMessage());
-			decoration.setDescriptionText(ex.getMessage());
-			decoration.show();
+		} else if (urlRadio.getSelection()) {
+			if (urlText.getText().length() > 0) {
+				try {
+					new URL(urlText.getText());
+				} catch (MalformedURLException ex) {
+					errorMessage = MessageFormat.format(
+							Messages.RunProgramTab_error_malformedUR, 
+							ex.getMessage());
+				}
+			}
 		}
+
+		if (errorMessage != null) {
+			setErrorMessage(errorMessage);
+			decoration.setDescriptionText(errorMessage);
+			decoration.show();
+		} else {
+			setErrorMessage(null);
+			decoration.hide();
+		}
+
 		updateLaunchConfigurationDialog();
 	}
 

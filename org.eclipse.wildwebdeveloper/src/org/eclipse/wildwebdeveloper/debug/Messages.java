@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -28,6 +28,7 @@ public class Messages extends NLS {
 	public static String RunProgramTab_error_nonReadableFile;
 	public static String RunProgramTab_error_notJSFile;
 	public static String RunProgramTab_error_unknownFile;
+	public static String RunProgramTab_error_malformedUR;
 	public static String RunProgramTab_program;
 	public static String RunProgramTab_title;
 	public static String RunProgramTab_workingDirectory;
