@@ -220,8 +220,8 @@ public class XMLPreferenceServerConstants {
 
 		// Validation settings
 		setAsBoolean(XML_PREFERENCES_VALIDATION_ENABLED, store, xmlOpts);
-		setAsBoolean(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED, store, xmlOpts);
-		setAsBoolean(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, store, xmlOpts);
+		setAsString(XML_PREFERENCES_VALIDATION_NAMESPACES_ENABLED, store, xmlOpts);
+		setAsString(XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, store, xmlOpts);
 		setAsBoolean(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, store, xmlOpts);
 		setAsBoolean(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, store, xmlOpts);
 		setAsString(XML_PREFERENCES_VALIDATION_NO_GRAMMAR, store, xmlOpts);
