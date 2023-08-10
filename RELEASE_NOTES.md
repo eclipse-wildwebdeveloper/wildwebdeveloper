@@ -2,6 +2,28 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.0
+
+* 📅 Release Date: August 11th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.2.0...1.3.0
+
+#### Editing improvements
+
+* Bugfix for Run Chrome/Firefox Debug launch configurations to save edited values
+* Bugfix for Run Debug HTML launch configurations validation for edited values
+* Bugfix for "No grammar provided for <vue.sfc.style.variable.injections>" error
+* Bugfix for "Disable download external resources by default" 
+* Bugfix for XML LS (Lemminx) configuration preferences using wrong/not supported values
+
+#### Dependencies update
+
+* Use the latest Vue.js LS to v.1.8.8
+* Use the latest Angular LS to v.16.1.4
+* Use the latest YAML Language Server v.1.14.0
+* Use LemMinX v.0.27.0 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
+* Embed latest Node.js to v.18.17.1 LTS  with the latest Security Fixes
+* Other dependency updates
+
 ## 1.2.0
 
 * 📅 Release Date: June 30th, 2023
