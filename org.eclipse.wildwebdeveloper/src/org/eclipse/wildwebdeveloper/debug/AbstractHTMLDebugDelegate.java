@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -29,6 +30,7 @@ import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 	public static final String ARGUMENTS = "runtimeArgs"; //$NON-NLS-1$
+	public static final String WEBROOT = "webRoot";
 
 	public void launchWithParameters(ILaunchConfiguration configuration, String mode, ILaunch launch,
 			IProgressMonitor monitor, Map<String, Object> param, File debugAdapter) throws CoreException {
@@ -39,6 +41,12 @@ public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 					monitor);
 			builder.setLaunchDebugAdapter(NodeJSManager.getNodeJsLocation().getAbsolutePath(), debugCmdArgs);
 			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
+
+			//If webRoot is set -> Inform DSPLaunchDelegate
+			if (!configuration.getAttribute(WEBROOT, "").isBlank()) {
+				param.put(WEBROOT, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(WEBROOT,"")));
+			}
+
 			builder.setDspParameters(param);
 
 			super.launch(builder);
