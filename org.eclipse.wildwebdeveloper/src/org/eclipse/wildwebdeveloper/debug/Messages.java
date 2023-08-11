@@ -18,6 +18,10 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.wildwebdeveloper.debug.messages"; //$NON-NLS-1$
 	public static String AbstractRunHTMLDebugTab_browse;
 	public static String AbstractRunHTMLDebugTab_fileRadioToolTip;
+	public static String AbstractRunHTMLDebugTab_webRoot_folder;
+	public static String AbstractRunHTMLDebugTab_browse_workspace;
+	public static String AbstractRunHTMLDebugTab_select_webroot;
+	public static String AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
 	public static String AttachTab_address;
 	public static String AttachTab_port;
 	public static String AttachTab_title;

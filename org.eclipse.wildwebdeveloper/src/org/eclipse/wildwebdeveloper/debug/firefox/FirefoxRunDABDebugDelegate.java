@@ -78,8 +78,6 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "");
 		if (!url.isEmpty()) {
 			param.put(ChromeRunDAPDebugDelegate.URL, url);
-			File projectDirectory = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "")));
-			param.put("webRoot", projectDirectory.getAbsolutePath());
 		} else {
 			param.put(FILE, VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "No program path set").trim())); //$NON-NLS-1$
 		}
