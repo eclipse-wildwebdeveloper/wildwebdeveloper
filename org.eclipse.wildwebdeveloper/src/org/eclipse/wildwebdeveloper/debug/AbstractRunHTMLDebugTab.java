@@ -272,12 +272,31 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 					urlDecoration.setDescriptionText(errorMessage);
 					urlDecoration.show();
 				}				
+				boolean showWebRootDecoration = false;
 				if(webRootText.getText().isBlank()) {
 					errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
+					showWebRootDecoration = true;
+				} else {
+					try {
+						File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(webRootText.getText()));
+						if (!file.exists()) {
+							errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_access_webroot_folder;
+							showWebRootDecoration = true;
+						} else if (!file.isDirectory()) {
+							errorMessage = Messages.AbstractRunHTMLDebugTab_webroot_folder_is_not_a_directory;
+							showWebRootDecoration = true;
+						}
+					} catch (CoreException e) {
+						errorMessage = e.getMessage();
+						showWebRootDecoration = true;
+					}
+				}
+
+				if (showWebRootDecoration) {
 					webRootDecoration.setDescriptionText(errorMessage);
 					webRootDecoration.show();
 				}
-				
+
 				if (errorMessage != null) {
 					setErrorMessage(errorMessage);
 				}
