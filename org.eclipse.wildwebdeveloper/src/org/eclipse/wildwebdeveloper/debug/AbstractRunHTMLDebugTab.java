@@ -303,22 +303,29 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 					configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject())));
 			this.urlText.setText(configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "")); //$NON-NLS-1$
 			this.webRootText.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.WEBROOT, ""));
-			if (urlText.getText().isEmpty()) {
+			boolean fileRadioButtonSelected = configuration.getAttribute(AbstractHTMLDebugDelegate.FILE_RADIO_BUTTON_SELECTED, true);
+			if (fileRadioButtonSelected) {
 				fileRadio.setSelection(true);
+				urlRadio.setSelection(false);
+				programPathText.setEnabled(true);
+				filePath.setEnabled(true);
 				urlText.setEnabled(false);
 				webRootText.setEnabled(false);
 				webRootProjectSelectButton.setEnabled(false);
 				webRootFilesystemSelectButton.setEnabled(false);
 			} else {
+				fileRadio.setSelection(false);
+				urlRadio.setSelection(true);
 				programPathText.setEnabled(false);
 				filePath.setEnabled(false);
 				urlText.setEnabled(true);
 				webRootText.setEnabled(true);
 				webRootProjectSelectButton.setEnabled(true);
 				webRootFilesystemSelectButton.setEnabled(true);
-				urlRadio.setSelection(true);
-				fileDecoration.hide();
 			}
+			
+			validateProgramPathAndURL();
+			
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
@@ -327,14 +334,10 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		String programPath = this.programPathText.getText();
-		if (programPathText.isEnabled()) {
-			configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
-			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, "");
-		} else if (urlText.isEnabled()) {
-			configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, urlText.getText());
-			configuration.setAttribute(LaunchConstants.PROGRAM, "");
-			configuration.setAttribute(AbstractHTMLDebugDelegate.WEBROOT, this.webRootText.getText());
-		}
+		configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
+		configuration.setAttribute(ChromeRunDAPDebugDelegate.URL, urlText.getText());
+		configuration.setAttribute(AbstractHTMLDebugDelegate.WEBROOT, this.webRootText.getText());
+		configuration.setAttribute(AbstractHTMLDebugDelegate.FILE_RADIO_BUTTON_SELECTED, fileRadio.getSelection());
 
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		String workingDirectory = this.workingDirectoryText.getText();
