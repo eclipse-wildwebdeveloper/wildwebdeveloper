@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat Inc. and others.
+ * Copyright (c) 2016-2023 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -10,8 +10,12 @@
  * Contributors:
  *   Mickael Istria (Red Hat Inc.) - initial implementation
  *   Andrew Obuchowicz (Red Hat Inc.) - Add ESLint support
+ *   Pierre-Yves Bigourdan - Allow using TypeScript version specified by project
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts;
+
+import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT;
+import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.getTypeScriptVersion;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,10 +81,13 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 			
-			// Initialize tsserver path
-			Map<String, String> tsServer = new HashMap<>();
-			tsServer.put("path", tsserverPath);
-			options.put("tsserver", tsServer);
+			// If the tsserver path is not explicitly specified, tsserver will use the local
+			// TypeScript version installed as part of the project's dependencies, if found.
+			if (!TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT.equals(getTypeScriptVersion())) {
+				Map<String, String> tsServer = new HashMap<>();
+				tsServer.put("path", tsserverPath);
+				options.put("tsserver", tsServer);
+			}
 		} catch (IOException e) {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));

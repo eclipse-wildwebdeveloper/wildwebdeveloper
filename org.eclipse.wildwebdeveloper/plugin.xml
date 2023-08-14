@@ -657,6 +657,15 @@
    </extension>
 
    <extension
+         id="JSTSPreferenceInitializer"
+         name="JSTSPreferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
          id="JavaScriptPreferenceInitializer"
          name="JavaScriptPreferenceInitializer"
          point="org.eclipse.core.runtime.preferences">
