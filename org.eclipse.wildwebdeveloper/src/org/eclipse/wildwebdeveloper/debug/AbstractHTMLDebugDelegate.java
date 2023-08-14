@@ -31,6 +31,7 @@ import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 	public static final String ARGUMENTS = "runtimeArgs"; //$NON-NLS-1$
 	public static final String WEBROOT = "webRoot";
+	public static final String FILE_RADIO_BUTTON_SELECTED = "fileRadioButtonSelected";
 
 	public void launchWithParameters(ILaunchConfiguration configuration, String mode, ILaunch launch,
 			IProgressMonitor monitor, Map<String, Object> param, File debugAdapter) throws CoreException {
