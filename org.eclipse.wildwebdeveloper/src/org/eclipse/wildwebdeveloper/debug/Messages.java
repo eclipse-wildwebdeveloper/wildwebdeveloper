@@ -22,6 +22,8 @@ public class Messages extends NLS {
 	public static String AbstractRunHTMLDebugTab_browse_workspace;
 	public static String AbstractRunHTMLDebugTab_select_webroot;
 	public static String AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
+	public static String AbstractRunHTMLDebugTab_cannot_access_webroot_folder;
+	public static String AbstractRunHTMLDebugTab_webroot_folder_is_not_a_directory;
 	public static String AttachTab_address;
 	public static String AttachTab_port;
 	public static String AttachTab_title;
