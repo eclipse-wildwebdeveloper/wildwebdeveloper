@@ -110,7 +110,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 		filePath.setText(Messages.AbstractRunHTMLDebugTab_browse);
 		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter((e) -> {
 			FileDialog filePathDialog = new FileDialog(resComposite.getShell());
-			filePathDialog.setFilterPath(workingDirectoryText.getText());
+			filePathDialog.setFilterPath(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
 			filePathDialog.setText("Select a .html file to debug"); //$NON-NLS-1$
 			String path = filePathDialog.open();
 			if (path != null) {
@@ -196,8 +196,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				webRootText.setText(path);
 			}
 		}));
-		
-		
+
 		new Label(resComposite, SWT.NONE).setText(Messages.RunProgramTab_argument);
 		this.argumentsText = new Text(resComposite, SWT.BORDER);
 		GridData argsGD = new GridData(SWT.FILL, SWT.DEFAULT, true, false);
@@ -241,15 +240,13 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 		String errorMessage = null;
 		if (fileRadio.getSelection()) {
 			try {
-				if (programPathText.getText().length() > 0) {
-					File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
-					if (!file.isFile()) {
-						errorMessage = Messages.RunProgramTab_error_unknownFile;
-					} else if (!shortcut.canLaunch(file)) {
-						errorMessage = "Not a html file"; //$NON-NLS-1$
-					} else if (!file.canRead()) {
-						errorMessage = Messages.RunProgramTab_error_nonReadableFile;
-					}
+				File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
+				if (!file.isFile()) {
+					errorMessage = Messages.RunProgramTab_error_unknownFile;
+				} else if (!shortcut.canLaunch(file)) {
+					errorMessage = "Not a html file"; //$NON-NLS-1$
+				} else if (!file.canRead()) {
+					errorMessage = Messages.RunProgramTab_error_nonReadableFile;
 				}
 			} catch (CoreException ex) {
 				errorMessage = ex.getMessage();
@@ -262,34 +259,32 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			}
 			
 		} else if (urlRadio.getSelection()) {
-			if (urlText.getText().length() > 0) {
+			try {
+				new URL(urlText.getText());
+			} catch (MalformedURLException ex) {
+				errorMessage = MessageFormat.format(
+						Messages.RunProgramTab_error_malformedUR, 
+						ex.getMessage());
+				urlDecoration.setDescriptionText(errorMessage);
+				urlDecoration.show();
+			}				
+			boolean showWebRootDecoration = false;
+			if(webRootText.getText().isBlank()) {
+				errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
+				showWebRootDecoration = true;
+			} else {
 				try {
-					new URL(urlText.getText());
-				} catch (MalformedURLException ex) {
-					errorMessage = MessageFormat.format(
-							Messages.RunProgramTab_error_malformedUR, 
-							ex.getMessage());
-					urlDecoration.setDescriptionText(errorMessage);
-					urlDecoration.show();
-				}				
-				boolean showWebRootDecoration = false;
-				if(webRootText.getText().isBlank()) {
-					errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
-					showWebRootDecoration = true;
-				} else {
-					try {
-						File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(webRootText.getText()));
-						if (!file.exists()) {
-							errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_access_webroot_folder;
-							showWebRootDecoration = true;
-						} else if (!file.isDirectory()) {
-							errorMessage = Messages.AbstractRunHTMLDebugTab_webroot_folder_is_not_a_directory;
-							showWebRootDecoration = true;
-						}
-					} catch (CoreException e) {
-						errorMessage = e.getMessage();
+					File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(webRootText.getText()));
+					if (!file.exists()) {
+						errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_access_webroot_folder;
+						showWebRootDecoration = true;
+					} else if (!file.isDirectory()) {
+						errorMessage = Messages.AbstractRunHTMLDebugTab_webroot_folder_is_not_a_directory;
 						showWebRootDecoration = true;
 					}
+				} catch (CoreException e) {
+					errorMessage = e.getMessage();
+					showWebRootDecoration = true;
 				}
 
 				if (showWebRootDecoration) {
