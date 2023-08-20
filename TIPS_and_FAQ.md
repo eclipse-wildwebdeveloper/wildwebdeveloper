@@ -11,7 +11,7 @@ The WildWebDeveloper project always aims to embed the latest LTS (Long Term Supp
 However, due to different reasons, the projects may be in need of use either the latest available Node.js version, or a specific one, for example, because of their internal Due Diligence processes, or a custom version, for example, because of the company internal restriction rules on 3rd-party software installation and usage. In such cases, the users can force WWD to use such a specific Node.js version by adding the following property to their WWD `eclipse.ini` configuration file: 
 
 ```
--Dorg.eclipse.wildwebdeveloper.nodeJSLocation==<Path-to-Node.js-executable>  
+-Dorg.eclipse.wildwebdeveloper.nodeJSLocation=<Path-to-Node.js-executable>  
 ```
 
 This property will force WWD to use the specified Node.js installation instead of the embedded one.
