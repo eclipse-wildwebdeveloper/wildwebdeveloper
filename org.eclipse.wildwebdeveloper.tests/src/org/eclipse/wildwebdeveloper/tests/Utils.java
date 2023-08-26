@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -34,6 +35,7 @@ public class Utils {
 
 	/**
 	 * Provisions a project that's part of the "testProjects"
+	 *
 	 * @param folderName the folderName under "testProjects" to provision from
 	 * @return the provisioned project
 	 * @throws CoreException
@@ -53,7 +55,10 @@ public class Utils {
 
 			Files.walk(sourceFolder).forEach(source -> {
 				try {
-					Files.copy(source, destFolder.resolve(sourceFolder.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(source, destFolder.resolve(sourceFolder.relativize(source)),
+							StandardCopyOption.REPLACE_EXISTING);
+				} catch (DirectoryNotEmptyException e) {
+					// Ignore
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -68,7 +73,7 @@ public class Utils {
 		try {
 			Method method = AbstractTextEditor.class.getDeclaredMethod("getSourceViewer");
 			method.setAccessible(true);
-			return (ISourceViewer)method.invoke(editor);
+			return (ISourceViewer) method.invoke(editor);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
