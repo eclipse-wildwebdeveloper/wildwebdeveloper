@@ -25,7 +25,7 @@ jobs:
     # Run on all non-comment events specified by the calling workflow and for comments on PRs that have a corresponding body.
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       if: github.event_name == 'push' || github.event_name == 'pull_request'   
     - uses: actions/github-script@v6
       if: github.event_name == 'issue_comment' 
@@ -44,7 +44,7 @@ jobs:
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
           }
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       if: github.event_name == 'issue_comment' 
       with:
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
