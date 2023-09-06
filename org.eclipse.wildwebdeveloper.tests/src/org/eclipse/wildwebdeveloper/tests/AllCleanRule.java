@@ -81,6 +81,8 @@ public class AllCleanRule implements BeforeEachCallback, AfterEachCallback {
 		prefs.putValue("org.eclipse.wildwebdeveloper.xml.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.yaml.file.logging.enabled", Boolean.toString(true));
 		prefs.putValue("org.eclipse.wildwebdeveloper.eslint.file.logging.enabled", Boolean.toString(true));
+		prefs.putValue("org.eclipse.wildwebdeveloper.vue.file.logging.enabled", Boolean.toString(true));
+
 	}
 
 	@Override

@@ -30,6 +30,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.lsp4e.LSPEclipseUtils;
+import org.eclipse.lsp4e.LanguageServerWrapper;
+import org.eclipse.lsp4e.LanguageServersRegistry;
+import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -86,8 +90,9 @@ public class TestVue {
 		IFile appComponentFile = project.getFile("src/App.vue");
 		TextEditor editor = (TextEditor) IDE
 				.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
-		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
-									// didChange
+		LanguageServerWrapper lsWrapper = LanguageServiceAccessor.getLSWrapper(project,
+				LanguageServersRegistry.getInstance().getDefinition("org.eclipse.wildwebdeveloper.vue"));
+
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -104,6 +109,14 @@ public class TestVue {
 		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
 				"Diagnostic not published in standalone component file");
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		assertTrue(new DisplayHelper() {
+
+			@Override
+			protected boolean condition() {
+				return lsWrapper.isActive() && lsWrapper.isConnectedTo(LSPEclipseUtils.toUri(document))
+						&& lsWrapper.canOperate(project) && lsWrapper.canOperate(document);
+			}
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
 		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
 		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
 				document.get().indexOf(" }}"));
@@ -113,7 +126,7 @@ public class TestVue {
 		assertTrue(proposal.isPresent(), "Proposal not exists");
 		proposal.get().apply(document);
 
-		assertTrue(document.get().contains("{{ appParameter }}"), "Incorrect completion insertion");
+		assertTrue(document.get().contains("{{ this.appParameter }}"), "Incorrect completion insertion");
 
 		editor.close(false);
 	}
@@ -123,16 +136,14 @@ public class TestVue {
 		TextEditor editor = (TextEditor) IDE.openEditor(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				componentFolder.getFile("HelloWorld.vue"));
-		DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
-									// didChange
+		LanguageServerWrapper lsWrapper = LanguageServiceAccessor.getLSWrapper(project,
+				LanguageServersRegistry.getInstance().getDefinition("org.eclipse.wildwebdeveloper.vue"));
 		IFile appComponentHTML = componentFolder.getFile("HelloWorld.vue");
 		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				appComponentHTML);
-		// Give some time for LS to load
-		DisplayHelper.sleep(2000);
-		// then make an edit
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		document.set(document.get() + "\n");
+		String tag = "<only-start>";
+		document.set(document.get().replace(tag, tag + "<"));
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -148,12 +159,25 @@ public class TestVue {
 			}
 		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
 				"No error found on erroneous HTML component file");
-		// test completion
+
+		assertTrue(new DisplayHelper() {
+
+			@Override
+			protected boolean condition() {
+				return lsWrapper.isActive() && lsWrapper.isConnectedTo(LSPEclipseUtils.toUri(document))
+						&& lsWrapper.canOperate(project) && lsWrapper.canOperate(document);
+			}
+		}.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
+
 		LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
+
+		int pos = document.get().indexOf(tag) + tag.length();
 		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
-				document.get().indexOf("<only-start>") + " <only-start>".length() - 1);
+				pos + 1);
 		proposals[0].apply(document);
 		assertEquals(new String(componentFolder.getFile("HelloWorldCorrect.vue").getContents().readAllBytes()).trim(),
 				document.get().trim(), "Incorrect completion insertion");
+
+		editor.close(false);
 	}
 }

@@ -1,6 +1,6 @@
 <template>
   <HelloWorld msg="Welcome to Your Vue.js App"/>
-  {{ appPar }}
+  {{ this. }}
 </template>
 
 <script>
