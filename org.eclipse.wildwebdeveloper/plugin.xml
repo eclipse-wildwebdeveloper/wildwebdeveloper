@@ -276,12 +276,14 @@
             class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
             id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
             name="%CSSPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.css" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSCompletionPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSCompletionPreferencePage"
          name="%CSSCompletionPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.css" />
       </page>
       <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this CSS format preference page to benefit with CSS formatting 
       <page
@@ -296,12 +298,14 @@
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSHoverPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSHoverPreferencePage"
          name="%CSSHoverPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.css" />
       </page>      
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSValidationPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSValidationPreferencePage"
          name="%CSSValidationPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.css" />
       </page>
    </extension>
 
@@ -312,12 +316,14 @@
             class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
             id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
             name="%LESSPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.less" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSCompletionPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSCompletionPreferencePage"
          name="%LESSCompletionPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.less" />
       </page>
       <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this LESS format preference page to benefit with LESS formatting 
       <page
@@ -332,12 +338,14 @@
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSHoverPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSHoverPreferencePage"
          name="%LESSHoverPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.less" />
       </page>      
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSValidationPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSValidationPreferencePage"
          name="%LESSValidationPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.less" />
       </page>
    </extension>
 
@@ -348,12 +356,16 @@
             class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
             id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
             name="%SCSSPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSCompletionPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSCompletionPreferencePage"
          name="%SCSSCompletionPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
       </page>
       <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this SCSS format preference page to benefit with SCSS formatting 
       <page
@@ -368,12 +380,16 @@
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSHoverPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSHoverPreferencePage"
          name="%SCSSHoverPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
       </page>      
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSValidationPreferencePage"
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSValidationPreferencePage"
          name="%SCSSValidationPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
       </page>
    </extension>
 
@@ -447,13 +463,13 @@
      <icon contentType="org.eclipse.wildwebdeveloper.html" icon="icons/htmlEditorIcon.png"/>
    </extension>
 
-	<extension
-	      point="org.eclipse.ui.genericeditor.reconcilers">
-	   <reconciler
-	         class="org.eclipse.wildwebdeveloper.html.autoinsert.HTMLAutoInsertReconciler"
-	         contentType="org.eclipse.wildwebdeveloper.html">
-	   </reconciler>
-	</extension>
+   <extension
+         point="org.eclipse.ui.genericeditor.reconcilers">
+      <reconciler
+            class="org.eclipse.wildwebdeveloper.html.autoinsert.HTMLAutoInsertReconciler"
+            contentType="org.eclipse.wildwebdeveloper.html">
+      </reconciler>
+   </extension>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -461,30 +477,35 @@
             class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
             id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
             name="%HTMLPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.html" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLCompletionPreferencePage"
          id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLCompletionPreferencePage"
          name="%HTMLCompletionPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.html" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLFormatPreferencePage"
          id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLFormatPreferencePage"
          name="%HTMLFormatPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.html" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLHoverPreferencePage"
          id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLHoverPreferencePage"
          name="%HTMLHoverPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.html" />
       </page>      
       <page
          category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLValidationPreferencePage"
          id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLValidationPreferencePage"
          name="%HTMLValidationPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.html" />
       </page>
    </extension>
 
@@ -689,6 +710,10 @@
             class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
             id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
             name="%JSTSPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.js" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
       </page>
       <!-- JavaScript -->
       <page
@@ -696,12 +721,16 @@
             class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
             id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
             name="%JavaScriptPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.js" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
          class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptInlayHintPreferencePage"
          id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptInlayHintPreferencePage"
          name="%JavaScriptInlayHintPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.js" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
       </page>      
       <!-- TypeScript -->
       <page
@@ -709,12 +738,16 @@
             class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
             id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
             name="%TypeScriptPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
          class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptInlayHintPreferencePage"
          id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptInlayHintPreferencePage"
          name="%TypeScriptInlayHintPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
       </page>
    </extension>
 
@@ -759,7 +792,7 @@
             scopeName="source.vue">
       </scopeNameContentTypeBinding>
       <grammar
-      	
+         
             path="grammars/vue/markdown-vue.json"
             scopeName="markdown.vue.codeblock">
       </grammar>
@@ -853,30 +886,35 @@
             class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
             id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
             name="%YAMLPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.yaml" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLCompletionPreferencePage"
          id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLCompletionPreferencePage"
          name="%YAMLCompletionPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.yaml" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLFormatPreferencePage"
          id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLFormatPreferencePage"
          name="%YAMLFormatPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.yaml" />
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLHoverPreferencePage"
          id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLHoverPreferencePage"
          name="%YAMLHoverPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.yaml" />
       </page>      
       <page
          category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLValidationPreferencePage"
          id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLValidationPreferencePage"
          name="%YAMLValidationPreferencePage.name">
+         <keywordReference id="org.eclipse.wildwebdeveloper.yaml" />
       </page>
    </extension>
 
@@ -1226,6 +1264,18 @@
             contentMergeViewerId="org.eclipse.ui.genericeditor.compareViewer"
             contentTypeId="org.eclipse.wildwebdeveloper.parent">
       </contentTypeBinding>
+   </extension>
+   <extension point="org.eclipse.ui.keywords">
+      <keyword label="%preferenceKeywords.yaml" id="org.eclipse.wildwebdeveloper.yaml"  />
+      <keyword label="%preferenceKeywords.js" id="org.eclipse.wildwebdeveloper.js" />
+      <keyword label="%preferenceKeywords.ts" id="org.eclipse.wildwebdeveloper.ts" />
+      <keyword label="%preferenceKeywords.javascript" id="org.eclipse.wildwebdeveloper.javascript" />
+      <keyword label="%preferenceKeywords.typescript" id="org.eclipse.wildwebdeveloper.typescript" />
+      <keyword label="%preferenceKeywords.css" id="org.eclipse.wildwebdeveloper.css" />
+      <keyword label="%preferenceKeywords.less" id="org.eclipse.wildwebdeveloper.less" />
+      <keyword label="%preferenceKeywords.sass" id="org.eclipse.wildwebdeveloper.sass" />
+      <keyword label="%preferenceKeywords.scss" id="org.eclipse.wildwebdeveloper.scss" />
+      <keyword label="%preferenceKeywords.html" id="org.eclipse.wildwebdeveloper.html" />
    </extension>
 
 </plugin>
