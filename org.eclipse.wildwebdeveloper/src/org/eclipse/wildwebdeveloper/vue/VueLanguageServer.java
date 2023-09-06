@@ -59,9 +59,10 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider {
 
 		try {
 			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript/lib"));
-			System.out.println(new File(url.getPath()).getAbsolutePath());
 			return Collections.singletonMap("typescript", Collections.singletonMap("tsdk", new File(url.getPath()).getAbsolutePath()));
 		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
 		return null;
 	}
