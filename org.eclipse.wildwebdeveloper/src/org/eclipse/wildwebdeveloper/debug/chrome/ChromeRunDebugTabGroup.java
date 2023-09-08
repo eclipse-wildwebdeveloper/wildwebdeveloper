@@ -26,7 +26,6 @@ public class ChromeRunDebugTabGroup extends AbstractLaunchConfigurationTabGroup 
 		setTabs(new ILaunchConfigurationTab[] {
 			new RunChromeDebugTab(),
 			new EnvironmentTab(),
-			new ChromeExecutableTab(),
 			new DSPOverrideSettingsTab(),
 			new CommonTab()
 		});

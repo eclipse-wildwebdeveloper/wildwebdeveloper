@@ -40,8 +40,6 @@ import org.eclipse.ui.internal.browser.IBrowserDescriptor;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
-import org.eclipse.wildwebdeveloper.debug.MessageUtils;
-import org.eclipse.wildwebdeveloper.debug.Messages;
 
 import com.google.gson.JsonObject;
 
@@ -54,6 +52,10 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 	public static final String RUNTIME_EXECUTABLE = "runtimeExecutable";
 	public static final String URL = "url";
 	private static final String SOURCE_MAPS = "sourceMaps";
+	public static final String TYPE = "type";
+	public static final String CHROME = "chrome";
+	public static final String REQUEST = "request";
+	public static final String LAUNCH = "launch";
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -108,14 +110,9 @@ public class ChromeRunDAPDebugDelegate extends AbstractHTMLDebugDelegate {
 
 		param.put(SOURCE_MAPS, true);
 		
-		// Let user point to the location of their Chrome executable
-		String chromeLocation = findChromeLocation(configuration);
-		File executable = chromeLocation != null && !chromeLocation.isBlank() ? new File(chromeLocation) : null;
-		if (executable == null || !executable.isAbsolute() || !executable.canExecute()) {
-			MessageUtils.showBrowserLocationsConfigurationError(Activator.getShell(), configuration, mode, Messages.RuntimeExecutable_Chrome, true);
-			return;
-		}
-		param.put(RUNTIME_EXECUTABLE, chromeLocation);
+		//Tell the debugger that we want to start a chrome debug session 
+		param.put(TYPE, CHROME);
+		param.put(REQUEST, LAUNCH);
 		
 		if (configuration.getAttribute(VERBOSE, false)) {
 			param.put(TRACE, VERBOSE);
