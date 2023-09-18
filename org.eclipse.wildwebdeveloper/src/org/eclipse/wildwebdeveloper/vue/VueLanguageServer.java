@@ -18,7 +18,9 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
@@ -28,16 +30,18 @@ import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class VueLanguageServer extends ProcessStreamConnectionProvider {
-
+	private static String tsserverPath = null;
+	private static String vuePath = null;
 
 	public VueLanguageServer() {
 
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
-			URL url = FileLocator
-					.toFileURL(getClass().getResource("/node_modules/@vue/language-server/bin/vue-language-server.js"));
-			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
+			if (vuePath == null || tsserverPath == null) {
+				resolvePaths();
+			}
+			commands.add(vuePath);
 			commands.add("--stdio");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
@@ -45,6 +49,15 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider {
 			Activator.getDefault().getLog().log(
 					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
 		}
+	}
+
+	private void resolvePaths() throws IOException {
+		URL url = FileLocator
+				.toFileURL(getClass().getResource("/node_modules/@vue/language-server/bin/vue-language-server.js"));
+		vuePath = new File(url.getPath()).getAbsolutePath();
+		
+		url = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript/lib"));
+		tsserverPath = new File(url.getPath()).getAbsolutePath();
 	}
 
 	@Override
@@ -56,15 +69,21 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider {
 
 	@Override
 	public Object getInitializationOptions(URI rootUri) {
-
-		try {
-			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/typescript/lib"));
-			return Collections.singletonMap("typescript", Collections.singletonMap("tsdk", new File(url.getPath()).getAbsolutePath()));
-		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
-		}
-		return null;
+		Map<String, Object> options = new HashMap<>();
+		setWorkingDirectory(rootUri.getRawPath());
+		
+		options.put("typescript", Collections.singletonMap("tsdk", tsserverPath));
+		options.put("fullCompletionList", false);
+		options.put("serverMode", 0);
+		options.put("diagnosticModel", 1);
+		options.put("additionalExtensions", new String[] {});
+		
+		Map<String, Object> legend = new HashMap<>();
+		legend.put("tokenTypes", new String[] {"compontent"} );
+		legend.put("tokenModifiers", new String[] {} );
+		options.put("semanticTokensLegend", legend);
+		
+		return options;
 	}
 
 	@Override
