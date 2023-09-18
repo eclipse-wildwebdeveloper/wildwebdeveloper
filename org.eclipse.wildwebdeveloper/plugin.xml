@@ -769,7 +769,7 @@
            base-type="org.eclipse.wildwebdeveloper.parent"
            file-extensions="vue"
            id="org.eclipse.wildwebdeveloper.vue"
-           name="VUE module"
+           name="VUE component"
            priority="normal">
      </content-type>
    </extension>
@@ -777,6 +777,7 @@
       <server
             class="org.eclipse.wildwebdeveloper.vue.VueLanguageServer"
             clientImpl="org.eclipse.wildwebdeveloper.vue.VueClientImpl"
+            serverInterface="org.eclipse.wildwebdeveloper.vue.VueLanguageServerAPI"
             id="org.eclipse.wildwebdeveloper.vue"
             label="VUE Language Server"/>
       <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" id="org.eclipse.wildwebdeveloper.vue"/>
@@ -818,6 +819,14 @@
             path="language-configurations/vue/vue-language-configuration.json">
       </languageConfiguration>
       
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.genericeditor.reconcilers">
+      <reconciler
+            class="org.eclipse.wildwebdeveloper.vue.autoinsert.VueAutoInsertReconciler"
+            contentType="org.eclipse.wildwebdeveloper.vue">
+      </reconciler>
    </extension>
 
    <!-- YAML Language -->   
