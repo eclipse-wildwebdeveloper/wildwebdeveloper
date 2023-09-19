@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.core.internal.runtime.InternalPlatform;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -38,7 +37,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 
-@SuppressWarnings("restriction")
 public class NodeJSManager {
 	public static final String NODE_ROOT_DIRECTORY = ".node";
 
