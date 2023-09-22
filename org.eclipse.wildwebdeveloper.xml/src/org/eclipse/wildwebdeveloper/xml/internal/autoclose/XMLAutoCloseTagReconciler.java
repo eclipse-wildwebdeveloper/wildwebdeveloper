@@ -125,12 +125,6 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 								final Display display = viewer.getTextWidget().getDisplay();
 								CompletableFuture.supplyAsync(() -> {
 									try {
-										// Wait for textDocument/didChange
-										Thread.sleep(100);
-									} catch (InterruptedException ex) {
-										Thread.interrupted();
-									}
-									try {
 										TextDocumentPositionParams params = LSPEclipseUtils
 												.toTextDocumentPosistionParams(uri, offset, document);
 										// consumes xml/closeTag from XML language server

@@ -93,12 +93,6 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 							final Display display = viewer.getTextWidget().getDisplay();
 							CompletableFuture.supplyAsync(() -> {
 								try {
-									// Wait for textDocument/didChange
-									Thread.sleep(100);
-								} catch (InterruptedException ex) {
-									Thread.interrupted();
-								}
-								try {
 									AutoInsertParams params = new AutoInsertParams();
 									params.setTextDocument(identifier);
 									params.setKind(autoInsertKind.name());

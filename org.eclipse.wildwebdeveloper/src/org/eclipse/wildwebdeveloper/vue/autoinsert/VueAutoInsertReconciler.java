@@ -70,12 +70,7 @@ public class VueAutoInsertReconciler implements IReconciler {
 							// The document is bound with HTML language server, consumes the html/autoInsert
 							final Display display = viewer.getTextWidget().getDisplay();
 							CompletableFuture.supplyAsync(() -> {
-								try {
-									// Wait for textDocument/didChange
-									Thread.sleep(100);
-								} catch (InterruptedException ex) {
-									Thread.interrupted();
-								}
+								
 								try {
 									
 									AutoInsertParams params = new AutoInsertParams();
