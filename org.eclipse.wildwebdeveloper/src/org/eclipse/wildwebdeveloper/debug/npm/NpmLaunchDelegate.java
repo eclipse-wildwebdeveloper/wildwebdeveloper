@@ -63,7 +63,7 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 		final String argumentString = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(ARGUMENTS, "No NPM argument set") //$NON-NLS-1$
 				.trim());
 		List<String> arguments = new ArrayList<>();
-		arguments.add(NodeJSManager.getNpmLocation().getAbsolutePath());
+		arguments.addAll(NodeJSManager.prepareNPMProcessBuilder().command());
 		arguments.addAll(Arrays.asList(argumentString.split(" "))); //$NON-NLS-1$
 		monitor.beginTask(argumentString + ' ' + packageJSON.getAbsolutePath(), 2);
 		monitor.worked(1);

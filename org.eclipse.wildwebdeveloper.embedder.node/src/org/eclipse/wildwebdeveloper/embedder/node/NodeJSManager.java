@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.internal.runtime.InternalPlatform;
@@ -117,11 +120,67 @@ public class NodeJSManager {
 		File nodeJsLocation = getNodeJsLocation();
 		if (nodeJsLocation != null) {
 			File res = new File(nodeJsLocation.getParentFile(), npmFileName);
-			if (res.canExecute()) {
+			if (res.exists()) {
 				return res;
 			}
 		}
 		return which(npmFileName);
+	}
+	
+	public static File getNpmJSLocation() {
+	
+		try {
+			File npmLocation = getNpmLocation().getCanonicalFile();
+			if (npmLocation.getAbsolutePath().endsWith(".js")) {
+				return npmLocation;
+			}
+			String path = "node_modules/npm/bin/npm-cli.js";
+			if (new File(npmLocation.getParentFile(), "node_modules").exists()) {
+				return new File(npmLocation.getParentFile(), path);
+			}
+			File target = new File( npmLocation.getParentFile().getParentFile(), path);
+			if (target.exists()) {
+				return target;
+			}
+			
+			
+			return new File( npmLocation.getParentFile(), "lib/cli.js");
+		} catch (IOException e) {
+		}
+		
+		return null;
+		
+		
+	}
+	
+	public static ProcessBuilder prepareNodeProcessBuilder(String... commands)
+	{
+		return prepareNodeProcessBuilder(Arrays.asList(commands));
+	}
+	
+	public static ProcessBuilder prepareNodeProcessBuilder(List<String> commands)
+	{
+		List<String> tmp = new ArrayList<>();
+		tmp.add(getNodeJsLocation().getAbsolutePath());
+		tmp.addAll(commands);
+		
+		return new ProcessBuilder(tmp);
+	}
+	
+	public static ProcessBuilder prepareNPMProcessBuilder(String... commands)
+	{
+		return prepareNPMProcessBuilder(Arrays.asList(commands));
+	}
+	
+	public static ProcessBuilder prepareNPMProcessBuilder(List<String> commands)
+	{
+		List<String> tmp = new ArrayList<>();
+		
+		
+		tmp.add(getNpmJSLocation().getAbsolutePath());
+		tmp.addAll(commands);
+		
+		return prepareNodeProcessBuilder(tmp);
 	}
 
 	public static File which(String program) {

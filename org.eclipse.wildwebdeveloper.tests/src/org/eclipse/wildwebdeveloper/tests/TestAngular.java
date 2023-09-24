@@ -51,8 +51,8 @@ public class TestAngular {
 		AllCleanRule.enableLogging();
 
 		project = Utils.provisionTestProject("angular-app");
-		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
-				"--no-bin-links", "--ignore-scripts").directory(project.getLocation().toFile());
+		ProcessBuilder builder = NodeJSManager.prepareNPMProcessBuilder("install", "--no-bin-links", "--ignore-scripts")
+				.directory(project.getLocation().toFile());
 		Process process = builder.start();
 		System.out.println(builder.command().toString());
 		String result = new BufferedReader(new InputStreamReader(process.getErrorStream())).lines()
