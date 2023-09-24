@@ -78,8 +78,8 @@ class TestESLint {
 		try (InputStream eslintRc = TestESLint.class.getResourceAsStream("/testProjects/eslint/ESLintProj.js")) {
 			Files.copy(eslintRc, new File(projectDirectory, "ESLintProj.tsx").toPath());
 		}
-		ProcessBuilder builder = new ProcessBuilder(NodeJSManager.getNpmLocation().getAbsolutePath(), "install",
-				"--no-bin-links", "--ignore-scripts").directory(projectDirectory);
+		ProcessBuilder builder = NodeJSManager.prepareNPMProcessBuilder("install", "--no-bin-links", "--ignore-scripts")
+				.directory(projectDirectory);
 		Process dependencyInstaller = builder.start();
 		System.out.println(builder.command().toString());
 		String result = new BufferedReader(new InputStreamReader(dependencyInstaller.getErrorStream())).lines()

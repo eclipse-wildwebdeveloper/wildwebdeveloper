@@ -193,6 +193,7 @@
 								<arg>pack</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
+								<arg>--install-strategy=hoisted</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
