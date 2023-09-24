@@ -161,6 +161,19 @@
 							</target>
 						</configuration>
 					</execution>
+					<execution>
+						<id>remove package-lock before install</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<delete
+									file="${project.directory}/package-lock.json" />
+							</target>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -204,6 +217,8 @@
 								<arg>--only=prod</arg>
 								<arg>--no-bin-links</arg>
 								<arg>--ignore-scripts</arg>
+								<arg>--install-strategy=hoisted</arg>
+								<arg>--force</arg>
 <!-- The actual verions for the LS and other dependency NPM Modules are to be set in  './package.json file',  
 	which is used to install the dependencies -->
 							</arguments>
