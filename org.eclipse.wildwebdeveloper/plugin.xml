@@ -10,7 +10,7 @@
             base-type="org.eclipse.core.runtime.text"
             id="org.eclipse.wildwebdeveloper.parent"
             name="Wild Web Developer supported web dev file"
-            priority="normal"/>
+            priority="low"/>
    </extension>
 
    <extension
@@ -39,21 +39,21 @@
             file-extensions="json, jsonc, eslintrc, bowerrc"
             id="org.eclipse.wildwebdeveloper.json"
             name="JSON"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names=".bower.json,bower.json"
             id="org.eclipse.wildwebdeveloper.json.bower"
             name="Bower"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names=".bowerrc"
             id="org.eclipse.wildwebdeveloper.json.bowerrc"
             name="Bower Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
@@ -61,35 +61,35 @@
             file-patterns="*.eslintrc.json"
             id="org.eclipse.wildwebdeveloper.json.eslintrc"
             name="ESLint Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="jsconfig.json"
             id="org.eclipse.wildwebdeveloper.json.jsconfig"
             name="JavaScript Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
        <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="lerna.json"
             id="org.eclipse.wildwebdeveloper.json.lerna"
             name="Lerna Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="package.json"
             id="org.eclipse.wildwebdeveloper.json.npmpackage"
             name="NPM package.json"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="omnisharp.json"
             id="org.eclipse.wildwebdeveloper.json.omnisharp"
             name="OmniSharp Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
@@ -97,7 +97,7 @@
             file-patterns="*.tsconfig.json,tsconfig.*.json,tsconfig-*.json"
             id="org.eclipse.wildwebdeveloper.json.tsconfig"
             name="TypeScript Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
@@ -105,14 +105,14 @@
             file-patterns="*.tslint.json"
             id="org.eclipse.wildwebdeveloper.json.tslint"
             name="TSLint Configuration"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.json"
             file-names="typings.json"
             id="org.eclipse.wildwebdeveloper.json.typings"
             name="TypeScript Typings"
-            priority="normal">
+            priority="low">
       </content-type>
    </extension>
    
@@ -169,21 +169,21 @@
             file-extensions="less"
             id="org.eclipse.wildwebdeveloper.less"
             name="LESS"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="scss,sass"
             id="org.eclipse.wildwebdeveloper.scss"
             name="SCSS/SASS"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="css"
             id="org.eclipse.wildwebdeveloper.css"
             name="CSS"
-            priority="normal">
+            priority="low">
       </content-type>
    </extension>
 
@@ -410,7 +410,7 @@
             file-extensions="html,htm"
             id="org.eclipse.wildwebdeveloper.html"
             name="HTML"
-            priority="normal">
+            priority="low">
       </content-type>
    </extension>
    
@@ -526,28 +526,28 @@
             file-extensions="js, cjs, mjs"
             id="org.eclipse.wildwebdeveloper.js"
             name="JavaScript"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="ts"
             id="org.eclipse.wildwebdeveloper.ts"
             name="TypeScript"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="jsx"
             id="org.eclipse.wildwebdeveloper.jsx"
             name="JSX"
-            priority="normal">
+            priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="tsx"
             id="org.eclipse.wildwebdeveloper.tsx"
             name="TSX"
-            priority="normal">
+            priority="low">
       </content-type>
    </extension>
    
@@ -770,7 +770,7 @@
            file-extensions="vue"
            id="org.eclipse.wildwebdeveloper.vue"
            name="VUE component"
-           priority="normal">
+           priority="low">
      </content-type>
    </extension>
    <extension point="org.eclipse.lsp4e.languageServer">
@@ -852,7 +852,7 @@
             file-extensions="yaml,yml"
             id="org.eclipse.wildwebdeveloper.yaml"
             name="YAML"
-            priority="normal">
+            priority="low">
       </content-type>
    </extension>
       
