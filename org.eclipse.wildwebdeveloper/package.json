@@ -16,7 +16,7 @@
     "debugger-for-chrome": "file:target/debugger-for-chrome-4.13.0.tgz",
     "eslint-server": "file:target/eslint-server-2.4.1.tgz",
     "node-debug2": "file:target/node-debug2-1.43.0.tgz",
-    "@vue/language-server" : "1.8.11",
+    "@vue/language-server" : "1.8.13",
     "fsevents" : "2.3.3"
   }
 }
