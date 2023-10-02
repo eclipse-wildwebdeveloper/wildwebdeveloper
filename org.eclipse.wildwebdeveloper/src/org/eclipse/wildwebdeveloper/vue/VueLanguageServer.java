@@ -22,16 +22,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
-public class VueLanguageServer extends ProcessStreamConnectionProvider {
+public class VueLanguageServer extends ProcessStreamConnectionProvider implements IExecutableExtension {
 	private static String tsserverPath = null;
 	private static String vuePath = null;
+	private int mode = 1;
 
 	public VueLanguageServer() {
 
@@ -74,7 +78,7 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider {
 		
 		options.put("typescript", Collections.singletonMap("tsdk", tsserverPath));
 		options.put("fullCompletionList", false);
-		options.put("serverMode", 0);
+		options.put("serverMode", mode);
 		options.put("diagnosticModel", 1);
 		options.put("additionalExtensions", new String[] {});
 		
@@ -89,5 +93,14 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider {
 	@Override
 	public String toString() {
 		return "VUE Language Server: " + super.toString();
+	}
+
+	@Override
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data)
+			throws CoreException {
+		if (config.getAttribute("id").contains("syntax")) {
+			mode = 2;
+		}
+		
 	}
 }

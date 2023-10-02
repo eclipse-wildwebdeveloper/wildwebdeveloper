@@ -779,8 +779,19 @@
             clientImpl="org.eclipse.wildwebdeveloper.vue.VueClientImpl"
             serverInterface="org.eclipse.wildwebdeveloper.vue.VueLanguageServerAPI"
             id="org.eclipse.wildwebdeveloper.vue"
+            singleton="true"
             label="VUE Language Server"/>
-      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" id="org.eclipse.wildwebdeveloper.vue"/>
+      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue"/>
+    </extension>
+    <extension point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="org.eclipse.wildwebdeveloper.vue.VueLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.vue.VueClientImpl"
+            serverInterface="org.eclipse.wildwebdeveloper.vue.VueLanguageServerAPI"
+            id="org.eclipse.wildwebdeveloper.vue.syntax"
+            singleton="true"
+            label="VUE Language Server Syntax"/>
+      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue.syntax"/>
     </extension>
     <extension
          point="org.eclipse.tm4e.registry.grammars">
@@ -809,7 +820,6 @@
             path="grammars/vue/vue-sfc-style-variable-injection.json"
             scopeName="vue.sfc.style.variable.injection">
       </grammar>
-
    </extension>
 
    <extension
