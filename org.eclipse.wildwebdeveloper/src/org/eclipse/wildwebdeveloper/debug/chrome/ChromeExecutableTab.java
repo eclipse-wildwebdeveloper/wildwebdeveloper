@@ -39,6 +39,7 @@ import org.eclipse.ui.internal.browser.BrowserManager;
 import org.eclipse.ui.internal.browser.IBrowserDescriptor;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.Messages;
+import org.eclipse.wildwebdeveloper.debug.node.VSCodeJSDebugDelegate;
 
 public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 
@@ -100,7 +101,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.removeAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE);
+		configuration.removeAttribute(VSCodeJSDebugDelegate.RUNTIME_EXECUTABLE);
 	}
 
 

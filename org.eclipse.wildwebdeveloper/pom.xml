@@ -66,19 +66,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>fetch-chrome-debug-adapter</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-                            <url>https://msjsdiag.gallery.vsassets.io/_apis/public/gallery/publisher/msjsdiag/extension/debugger-for-chrome/4.13.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage</url>
-							<outputFileName>chromeDebugAdapter.zip</outputFileName>
-							<unpack>true</unpack>
-							<outputDirectory>${project.build.directory}/chrome-debug-adapter</outputDirectory>
-						</configuration>
-					</execution>
-					<execution>
 						<id>fetch-eslint-ls</id>
 						<phase>generate-resources</phase>
 						<goals>
@@ -136,19 +123,6 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>prepare-chrome-debug-adapter</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<delete
-									file="${project.build.directory}/chrome-debug-adapter/extension/.gitignore" />
-							</target>
-						</configuration>
-					</execution>
-					<execution>
 						<id>remove package-lock before install</id>
 						<phase>compile</phase>
 						<goals>
@@ -184,7 +158,6 @@
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/html-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/css-language-features/server</arg>
 								<arg>vscode/VSCode-linux-x64/resources/app/extensions/json-language-features/server</arg>
-								<arg>chrome-debug-adapter/extension/</arg>
 								<arg>vscode-eslint-ls/extension/server</arg>
 							</arguments>
 							<workingDirectory>${project.build.directory}</workingDirectory>

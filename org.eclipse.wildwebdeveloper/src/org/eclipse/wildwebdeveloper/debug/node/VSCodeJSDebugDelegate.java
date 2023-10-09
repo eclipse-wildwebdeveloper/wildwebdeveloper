@@ -88,7 +88,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 	public static final String ARGUMENTS = "args"; //$NON-NLS-1$
 	private static final String CWD = "cwd"; //$NON-NLS-1$
 	private static final String ENV = "env"; //$NON-NLS-1$
-	protected static final String RUNTIME_EXECUTABLE = "runtimeExecutable"; //$NON-NLS-1$
+	public static final String RUNTIME_EXECUTABLE = "runtimeExecutable"; //$NON-NLS-1$
 
 	public static final String NODE_DEBUG_CMD = "/js-debug/src/dapDebugServer.js"; //$NON-NLS-1$
 	public static final String TYPESCRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.ts"; //$NON-NLS-1$
@@ -115,7 +115,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			throws CoreException {
 		// user settings
 		Map<String, Object> param = new HashMap<>();
-		String program = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "no program path defined")); //$NON-NLS-1$
+		String program = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(configuration.getAttribute(LaunchConstants.PROGRAM, "")); //$NON-NLS-1$
 		param.put(LaunchConstants.PROGRAM, program);
 		param.put("type", type);
 		param.put("request", "launch");
@@ -147,13 +147,20 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			param.put(ENV, envJson);
 		}
 		String cwd = configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, "").trim(); //$NON-NLS-1$
-		param.put(CWD, cwd.isEmpty() ? new File(program).getParentFile().getAbsolutePath() : VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(cwd));
-		File runtimeExecutable = NodeJSManager.getNodeJsLocation();
+		if (cwd.isEmpty() && program != null && !program.isEmpty()) {
+			cwd = new File(program).getParentFile().getAbsolutePath();
+		} else {
+			cwd = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(cwd);
+		}
+		if (!cwd.isEmpty()) {
+			param.put(CWD, cwd);
+		}
+		File runtimeExecutable = computeRuntimeExecutable(configuration);
 		if (runtimeExecutable != null) {
 			param.put(RUNTIME_EXECUTABLE, runtimeExecutable.getAbsolutePath());
 		}
 		
-		if (!configureAdditionalParameters(param)) {
+		if (!configureAdditionalParameters(configuration, param)) {
 			return;
 		}
 
@@ -168,7 +175,9 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 				Activator.getDefault().getLog().log(Status.error(ex.getMessage(), ex));
 			}
 			File cwdFile = cwd == null || cwd.isBlank() ? new File(System.getProperty("user.dir")) : new File(cwd); //$NON-NLS-1$
-			Process vscodeJsDebugExec = DebugPlugin.exec(new String[] { runtimeExecutable.getAbsolutePath(), file.getAbsolutePath(), Integer.toString(port) }, cwdFile, new String[] { "DA_TEST_DISABLE_TELEMETRY=true"}, false);
+			Map<String, String> processEnv = new HashMap<>(System.getenv());
+			processEnv.put("DA_TEST_DISABLE_TELEMETRY", Boolean.TRUE.toString());
+			Process vscodeJsDebugExec = DebugPlugin.exec(new String[] { NodeJSManager.getNodeJsLocation().getAbsolutePath(), file.getAbsolutePath(), Integer.toString(port) }, cwdFile, processEnv.entrySet().stream().map(entry -> entry.getKey() + '=' + entry.getValue()).toArray(String[]::new), false);
 			IProcess vscodeJsDebugIProcess = DebugPlugin.newProcess(launch, vscodeJsDebugExec, "debug adapter");
 			AtomicBoolean started = new AtomicBoolean();
 			vscodeJsDebugIProcess.getStreamsProxy().getOutputStreamMonitor().addListener((text, mon) -> {
@@ -215,7 +224,11 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 		}
 	}
 
-	private boolean configureAdditionalParameters(Map<String, Object> param) {
+	protected File computeRuntimeExecutable(ILaunchConfiguration configuration) {
+		return NodeJSManager.getNodeJsLocation();
+	}
+
+	protected boolean configureAdditionalParameters(ILaunchConfiguration config, Map<String, Object> param) throws CoreException {
 		String program = (String)param.get(LaunchConstants.PROGRAM);
 		String cwd = (String)param.get(CWD);
 		
@@ -224,10 +237,10 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 		}
 		
 		File programFile = new File(program);
+		param.put(SOURCE_MAPS, true);
 		if (Platform.getContentTypeManager().getContentType(TYPESCRIPT_CONTENT_TYPE)
 					.isAssociatedWith(programFile.getName())) {
 			// TypeScript Source Mappings Configuration
-			param.put(SOURCE_MAPS, true);
 			File parentDirectory = cwd == null ? programFile.getParentFile() : new File(cwd);
 			File tsConfigFile = findTSConfigFile(parentDirectory);
 			if (tsConfigFile != null && tsConfigFile.exists()) {
@@ -374,7 +387,8 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			
 			return true;
 		}
-		return false;
+		// other content-types (eg HTML), let's try and continue
+		return true;
 	}
 
 	private String toJS(String name) {

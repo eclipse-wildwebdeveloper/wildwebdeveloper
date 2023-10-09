@@ -13,35 +13,30 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 
-public class ChromeAttachDebugDelegate extends AbstractHTMLDebugDelegate {
+public class ChromeAttachDebugDelegate extends ChromeRunDAPDebugDelegate {
 	
 	static final String ID = "org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug"; //$NON-NLS-1$
 
 	static final String ADDRESS = "address"; //$NON-NLS-1$
 
 	@Override
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
-			throws CoreException {
-		// user settings
-		Map<String, Object> param = new HashMap<>();
-		param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
-		param.put(LaunchConstants.PORT, configuration.getAttribute(LaunchConstants.PORT, 9229));
-		String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "https://www.google.ca/");
-		param.put(ChromeRunDAPDebugDelegate.URL, url);			
-		param.put("runtimeExecutable", ChromeRunDAPDebugDelegate.findChromeLocation(configuration));
-		
-		super.launchWithParameters(configuration, mode, launch, monitor, param, ChromeRunDAPDebugDelegate.findDebugAdapter());
-
+	protected boolean configureAdditionalParameters(ILaunchConfiguration configuration, Map<String, Object> param) throws CoreException {
+		if (super.configureAdditionalParameters(configuration, param)) {
+			param.remove("file");
+			param.put("request", "attach");
+			String url = configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, "https://github.com/eclipse/wildwebdeveloper/"); //$NON-NLS-1$
+			param.put(ChromeRunDAPDebugDelegate.URL, url);	
+			param.put(ADDRESS, configuration.getAttribute(ADDRESS, "no address defined")); //$NON-NLS-1$
+			param.put(LaunchConstants.PORT, configuration.getAttribute(LaunchConstants.PORT, 9229));
+			return true;
+		}
+		return false;
 	}
 
 }

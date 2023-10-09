@@ -13,7 +13,6 @@
     "vscode-css-languageserver": "file:target/vscode-css-languageserver-1.0.0.tgz",
     "vscode-html-languageserver": "file:target/vscode-html-languageserver-1.0.0.tgz",
     "vscode-json-languageserver": "file:target/vscode-json-languageserver-1.3.4.tgz",
-    "debugger-for-chrome": "file:target/debugger-for-chrome-4.13.0.tgz",
     "eslint-server": "file:target/eslint-server-2.4.1.tgz",
     "@vue/language-server" : "1.8.15",
     "fsevents" : "2.3.3"
