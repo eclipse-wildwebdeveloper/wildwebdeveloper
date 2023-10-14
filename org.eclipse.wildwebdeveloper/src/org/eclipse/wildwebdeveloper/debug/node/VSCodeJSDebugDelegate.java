@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -179,14 +179,21 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			processEnv.put("DA_TEST_DISABLE_TELEMETRY", Boolean.TRUE.toString());
 			Process vscodeJsDebugExec = DebugPlugin.exec(new String[] { NodeJSManager.getNodeJsLocation().getAbsolutePath(), file.getAbsolutePath(), Integer.toString(port) }, cwdFile, processEnv.entrySet().stream().map(entry -> entry.getKey() + '=' + entry.getValue()).toArray(String[]::new), false);
 			IProcess vscodeJsDebugIProcess = DebugPlugin.newProcess(launch, vscodeJsDebugExec, "debug adapter");
-			AtomicBoolean started = new AtomicBoolean();
+			AtomicReference<String> host = new AtomicReference<>(); // sometimes ::1, sometimes 127.0.0.1...
+			String portSuffix = ":" + port;
 			vscodeJsDebugIProcess.getStreamsProxy().getOutputStreamMonitor().addListener((text, mon) -> {
 				if (text.toLowerCase().contains("listening")) {
-					started.set(true);
+					for (String word : text.split(" ")) {
+						word = word.trim();
+						if (word.endsWith(portSuffix)) {
+							host.set(word.substring(0, word.length() - portSuffix.length()));
+							return;
+						}
+					}
 				}
 			});
 			Instant request = Instant.now();
-			while (!started.get() && Duration.between(request, Instant.now()).compareTo(Duration.ofSeconds(3)) < 3) {
+			while (host.get() == null && Duration.between(request, Instant.now()).compareTo(Duration.ofSeconds(3)) < 3) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -195,7 +202,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
 					monitor);
-			builder.setAttachDebugAdapter("::1", port);
+			builder.setAttachDebugAdapter(host.get(), port);
 			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
 			builder.setDspParameters(param);
 			super.launch(builder);
