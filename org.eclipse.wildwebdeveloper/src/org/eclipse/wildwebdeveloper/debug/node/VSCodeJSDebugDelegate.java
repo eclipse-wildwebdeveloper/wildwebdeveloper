@@ -271,8 +271,9 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			boolean outDirOrFileIsSet = false;
 
 			String outDir = co.get(OUT_DIR) instanceof String o ? o.trim() : null;
+			File outDirFile = parentDirectory;
 			if (outDir != null && outDir.length() > 0 && !".".equals(outDir) && !"./".equals(outDir)) {
-				File outDirFile = new File(parentDirectory, outDir);
+				outDirFile = new File(parentDirectory, outDir);
 				try {
 					outDir = outDirFile.getCanonicalPath();
 				} catch (IOException e) {
@@ -287,8 +288,9 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 
 			param.put("rootPath", tsConfigFile.getParentFile().getAbsolutePath());
 			String rootDir = co.get(ROOT_DIR) instanceof String o ? o.trim() : null;
+			File rootDirFile = parentDirectory;
 			if (rootDir != null && rootDir.length() > 0 && !".".equals(outDir) && !"./".equals(outDir)) {
-				File rootDirFile = new File(parentDirectory, rootDir);
+				rootDirFile = new File(parentDirectory, rootDir);
 				try {
 					rootDir = rootDirFile.getCanonicalPath();
 				} catch (IOException e) {
@@ -298,6 +300,8 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 				param.put(ROOT_DIR, rootDir);
 				param.put("rootPath", rootDir);
 			}
+			Path jsFile = outDirFile.toPath().resolve(rootDirFile.toPath().relativize(programFile.toPath().getParent().resolve(toJS(programFile.getName()))));
+			param.put("program", jsFile.toString());
 			
 			if (!outDirOrFileIsSet && errorMessage == null) {
 				errorMessage = Messages.NodeDebug_TSConfigError_OutDirIsNotSet;
