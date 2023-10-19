@@ -119,6 +119,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 		param.put(LaunchConstants.PROGRAM, program);
 		param.put("type", type);
 		param.put("request", "launch");
+		param.put("outputCapture", "std");
 		String argsString = configuration.getAttribute(ARGUMENTS, "").trim(); //$NON-NLS-1$
 		if (!argsString.isEmpty()) {
 			Object[] args = Arrays.asList(argsString.split(" ")).stream() //$NON-NLS-1$
