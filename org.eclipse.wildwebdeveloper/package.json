@@ -14,7 +14,7 @@
     "vscode-html-languageserver": "file:target/vscode-html-languageserver-1.0.0.tgz",
     "vscode-json-languageserver": "file:target/vscode-json-languageserver-1.3.4.tgz",
     "eslint-server": "file:target/eslint-server-2.4.1.tgz",
-    "@vue/language-server" : "1.8.21",
+    "@vue/language-server" : "1.8.22",
     "fsevents" : "2.3.3"
   }
 }
