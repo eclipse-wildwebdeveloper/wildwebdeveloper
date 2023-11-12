@@ -526,28 +526,28 @@
             file-extensions="js, cjs, mjs"
             id="org.eclipse.wildwebdeveloper.js"
             name="JavaScript"
-            priority="low">
+            priority="normal">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="ts"
             id="org.eclipse.wildwebdeveloper.ts"
             name="TypeScript"
-            priority="low">
+            priority="normal">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="jsx"
             id="org.eclipse.wildwebdeveloper.jsx"
             name="JSX"
-            priority="low">
+            priority="normal">
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
             file-extensions="tsx"
             id="org.eclipse.wildwebdeveloper.tsx"
             name="TSX"
-            priority="low">
+            priority="normal">
       </content-type>
    </extension>
    
