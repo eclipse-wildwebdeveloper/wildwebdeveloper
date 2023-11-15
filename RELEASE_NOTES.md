@@ -2,6 +2,43 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.1
+
+* 📅 Release Date: November 15th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.0...1.3.1
+
+#### Editing improvements
+
+* Bugfix for WebRoot folder setup in Launch configuration
+* Bugfix for "Chrome Debug Launch configuration
+* Bugfix for WebRoot folder validation in Launch configuration
+* Bugfix for allow using TypeScript version specified by project
+* Bugfix for Run HTML Debug configuration validation
+* Bugfix for "Chrome Debug" session start when a chrome window is already open
+* Bugfix for Preference pages are not found when searching for "yaml"
+* Added autoinsert support for Vue.js
+* Bugfix for Maven build use node from PATH on mac os
+* Added Support for Syntactic and Semantic server modes for Vue.js
+* Use vscode-js-debug instead of deprecated node-debug2 and for Chrome 
+* Bugfix for Read host name from output when debugging
+* Bugfix for Resolve ts->js mapping relative to rootDir
+* Bugfix for Use "outputCapture": "std" for Node launches
+* Bugfix for Drop Thread.sleep from reconcilers
+* Bugfix for Adjusting priority for JS/TS content types
+
+#### Dependencies update
+
+* Snakeyaml dependency is added to WWD repository
+* Switched to use TM4E's own repository to use the most latest release
+* Added 'fsevents' NPM dependency for MacOS users
+* Use the latest Vue.js LS to v.1.8.22
+* Use the latest VSCode extensions v..1.83.0 for CSS/HTML/JSON editing
+* Embed latest Node.js to v.18.18.2 LTS with the latest Security Fixes
+* Use the latest Firefox Debug adapter v.2.9.9
+* Use the latest TypeScript LS v.4.0.0
+* Use the latest Angular LS v.17.0.2
+* Other dependency updates
+
 ## 1.3.0
 
 * 📅 Release Date: August 11th, 2023
