@@ -3,7 +3,7 @@
 
 <product name="Eclipse IDE for JavaScript and Web Developers" uid="org.eclipse.wildwebdeveloper.product" 
 	id="org.eclipse.wildwebdeveloper.product.branding.product" application="org.eclipse.ui.ide.workbench" 
-	version="1.3.1.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="true">
+	version="1.3.2.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.wildwebdeveloper.product.branding.product/eclipse_lg.png"/>
