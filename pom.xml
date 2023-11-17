@@ -211,13 +211,81 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	
-	
+
 	<profiles>
 		<profile>
 			<id>packAndSign</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+					    <dependencies>
+							<dependency>
+								<groupId>ant-contrib</groupId>
+								<artifactId>ant-contrib</artifactId>
+								<version>1.0b3</version>
+								<exclusions>
+									<exclusion>
+										<groupId>ant</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>sign-node-files</id>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>package</phase> <!-- Do this before extracting sources-->
+								<configuration>
+									<target>
+										<!-- See last answer of https://stackoverflow.com/questions/4368243/maven-antrun-with-sequential-ant-contrib-fails-to-run/45958355 -->
+										<!-- and http://ant-contrib.sourceforge.net/tasks/tasks/index.html -->
+										<taskdef resource="net/sf/antcontrib/antlib.xml" 
+											classpathref="maven.plugin.classpath" />
+										<for param="jarFile">
+											<fileset dir="${project.basedir}/target" includes="**/*.jar" />
+											<sequential>
+												<local name="jarFilename" />
+												<basename property="jarFilename" file="@{jarFile}" suffix=".jar" />
+												<local name="signingDir" />
+												<property name="signingDir" value="${project.build.directory}/node-signing/${jarFilename}" />
+
+												<unzip src="@{jarFile}" dest="${signingDir}">
+													<patternset includes="node_modules/**/*.node" />
+												</unzip>
+
+												<for param="nodeFileAbsolute">
+													<fileset dir="${signingDir}" includes="node_modules/**/*.node" erroronmissingdir="false" />
+													<sequential>
+														<echo level="info" message="Mac-sign @{nodeFileAbsolute}" />
+														<local name="nodeFile" />
+														<property name="nodeFile" value="@{nodeFileAbsolute}" relative="true" basedir="${signingDir}" />
+														<move file="@{nodeFileAbsolute}" tofile="@{nodeFileAbsolute}-tosign" />
+														<exec executable="curl" dir="${signingDir}" failonerror="true">
+															<arg value="-o" />
+															<arg value="${nodeFile}" />
+															<arg value="-F" />
+															<arg value="file=@${nodeFile}-tosign" />
+															<arg value="https://cbi.eclipse.org/macos/codesign/sign" />
+														</exec>
+														<exec executable="jar" dir="${signingDir}" failonerror="true">
+															<arg value="--update" />
+															<arg value="--file=@{jarFile}" />
+															<arg value="${nodeFile}" />
+														</exec>
+													</sequential>
+												</for>
+											</sequential>
+										</for>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-jarsigner-plugin</artifactId>
@@ -252,6 +320,7 @@
 				</plugins>
 			</build>
 		</profile>
+
 		<!-- Automatic profile for Mac-specific settings -->
 		<profile>
 			<id>macos</id>
