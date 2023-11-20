@@ -2,6 +2,19 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.2
+
+* 📅 Release Date: November 20th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.1...1.3.2
+
+#### Editing improvements
+
+* Bugfix for fsevents.node is not signed
+
+#### Dependencies update
+
+* Use the latest VSCode extensions v..1.84.0 for CSS/HTML/JSON editing
+
 ## 1.3.1
 
 * 📅 Release Date: November 15th, 2023
@@ -9,7 +22,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 #### Editing improvements
 
-* Bugfix for WebRoot folder setup in Launch configuration
+* Bugfix for fsevents.node is not signed
 * Bugfix for "Chrome Debug Launch configuration
 * Bugfix for WebRoot folder validation in Launch configuration
 * Bugfix for allow using TypeScript version specified by project
