@@ -2,6 +2,19 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.3
+
+* 📅 Release Date: November 21th, 2023
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.2...1.3.3
+
+#### Editing improvements
+
+* Bugfix for fsevents.node is not signed (repeated)
+
+#### Dependencies update
+
+* Other dependency updates
+
 ## 1.3.2
 
 * 📅 Release Date: November 20th, 2023
