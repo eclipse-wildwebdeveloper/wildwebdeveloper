@@ -25,14 +25,22 @@ public class JSTSPreferenceServerConstants {
 
 	public static final String TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_ECLIPSE = "Eclipse version";
 	public static final String TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT = "Project version";
+	
+	public static final String ESLINT_PREFERENCES_NODE_PATH = "eslint.nodePath";
 
 	public static String getTypeScriptVersion() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getString(TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION);
 	}
 
+	public static String getESLintNodePath() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(ESLINT_PREFERENCES_NODE_PATH);
+	}
+
 	public static void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION, TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_ECLIPSE);
+		store.setDefault(ESLINT_PREFERENCES_NODE_PATH, "");
 	}
 }

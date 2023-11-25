@@ -9,14 +9,17 @@
  *
  * Contributors:
  *  Angelo ZERR (Red Hat Inc.) - initial implementation
+ *  Pierre-Yves Bigourdan - Allow configuring directory of ESLint package
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts.ui.preferences;
 
+import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.ESLINT_PREFERENCES_NODE_PATH;
 import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION;
 import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_ECLIPSE;
 import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT;
 
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
@@ -50,5 +53,6 @@ public class JSTSPreferencePage extends FieldEditorPreferencePage implements IWo
 						{ Messages.JSTSPreferencePage_typeScriptVersion_project,
 								TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT } },
 				parent));
+		addField(new DirectoryFieldEditor(ESLINT_PREFERENCES_NODE_PATH, Messages.JSTSPreferencePage_eslintNodePath, parent));
 	}
 }

@@ -9,6 +9,7 @@
  * Contributors:
  *  Angelo ZERR (Red Hat Inc.) - initial implementation
  *  Pierre-Yves Bigourdan - Allow using TypeScript version specified by project
+ *  Pierre-Yves Bigourdan - Allow configuring directory of ESLint package
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts.ui;
 
@@ -23,6 +24,8 @@ public class Messages extends NLS {
 	public static String JSTSPreferencePage_typeScriptVersion;
 	public static String JSTSPreferencePage_typeScriptVersion_eclipse;
 	public static String JSTSPreferencePage_typeScriptVersion_project;
+
+	public static String JSTSPreferencePage_eslintNodePath;
 
 	// --------- TypeScript Inlay Hints preference page
 	public static String TypeScriptInlayHintPreferencePage_showInlayHintsFor_label;

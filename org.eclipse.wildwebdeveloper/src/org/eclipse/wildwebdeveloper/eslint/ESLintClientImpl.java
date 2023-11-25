@@ -6,6 +6,9 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *  Pierre-Yves Bigourdan - Allow configuring directory of ESLint package
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.eslint;
 
@@ -30,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants;
 
 public class ESLintClientImpl extends LanguageClientImpl implements ESLintLanguageServerExtension {
 
@@ -75,9 +79,16 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		config.put("workingDirectory", Collections.singletonMap("mode", "auto")); 
 
 
-		// this should not point to a nodejs executable but nodePath is the path to the "node_modules" 
-		// (or a parent having node modules, we just push in the highest dir (workspaceFolder) that has the package.json)
-		config.put("nodePath", highestPackageJsonDir.getAbsolutePath());
+		String eslintNodePath = JSTSPreferenceServerConstants.getESLintNodePath();
+		if (eslintNodePath.isEmpty()) {
+			// this should not point to a nodejs executable but nodePath is the path to the
+			// "node_modules" (or a parent having node modules, we just push in the highest
+			// dir (workspaceFolder) that has the package.json)
+			config.put("nodePath", highestPackageJsonDir.getAbsolutePath());
+		} else {
+			config.put("nodePath", eslintNodePath);
+
+		}
 		
 		config.put("validate", "on");
 		config.put("run", "onType");
