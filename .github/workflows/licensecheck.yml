@@ -20,6 +20,8 @@ jobs:
       projectId: tools.wildwebdeveloper
     secrets:
       gitlabAPIToken: ${{ secrets.GITLAB_API_TOKEN }}
+    permissions:
+      pull-requests: write
   npm-check:
     if: github.event_name != 'issue_comment' || ( github.event.issue.pull_request != '' && (github.event.comment.body == '/request-license-review') )
     # Run on all non-comment events specified by the calling workflow and for comments on PRs that have a corresponding body.
