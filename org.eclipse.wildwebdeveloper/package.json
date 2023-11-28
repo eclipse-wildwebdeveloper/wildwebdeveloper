@@ -8,7 +8,7 @@
     "typescript-plugin-css-modules": "5.0.2",
     "yaml-language-server": "1.14.0",
     "vscode-languageserver-types": "3.17.5",
-    "vscode-css-languageservice": "6.2.10",
+    "vscode-css-languageservice": "6.2.11",
     "vscode-html-languageservice": "5.1.1",
     "vscode-json-languageservice": "5.3.7",
     "@vue/language-server" : "1.8.22",
