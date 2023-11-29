@@ -78,18 +78,9 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		// if you set a workspaceFolder and then the working dir in auto mode eslint will try to get to the right config location.
 		config.put("workingDirectory", Collections.singletonMap("mode", "auto")); 
 
+		// this should not point to a nodejs executable but to a parent directory containing the ESLint package
+		config.put("nodePath",getESLintPackageDir(highestPackageJsonDir));
 
-		String eslintNodePath = JSTSPreferenceServerConstants.getESLintNodePath();
-		if (eslintNodePath.isEmpty()) {
-			// this should not point to a nodejs executable but nodePath is the path to the
-			// "node_modules" (or a parent having node modules, we just push in the highest
-			// dir (workspaceFolder) that has the package.json)
-			config.put("nodePath", highestPackageJsonDir.getAbsolutePath());
-		} else {
-			config.put("nodePath", eslintNodePath);
-
-		}
-		
 		config.put("validate", "on");
 		config.put("run", "onType");
 		config.put("rulesCustomizations", Collections.emptyList());
@@ -97,6 +88,25 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		config.put("codeAction", Map.of("disableRuleComment", Map.of("enable", "true", "location", "separateLine"), 
 										"showDocumentation", Collections.singletonMap("enable", "true")));
 		return CompletableFuture.completedFuture(Collections.singletonList(config));
+	}
+
+	private String getESLintPackageDir(File highestPackageJsonDir) {
+		String eslintNodePath = JSTSPreferenceServerConstants.getESLintNodePath();
+
+		// check if user specified a valid absolute path
+		File eslintNodeFileUsingAbsolutePath = new File(eslintNodePath);
+		if (eslintNodeFileUsingAbsolutePath.exists()) {
+			return eslintNodeFileUsingAbsolutePath.getAbsolutePath();
+		}
+
+		// check if user specified a valid project-relative path
+		File eslintNodeFileUsingProjectRelativePath = new File(highestPackageJsonDir.getAbsolutePath(), eslintNodePath);
+		if (eslintNodeFileUsingProjectRelativePath.exists()) {
+			return eslintNodeFileUsingProjectRelativePath.getAbsolutePath();
+		}
+
+		// fall back to the folder containing "node_modules"
+		return highestPackageJsonDir.getAbsolutePath();
 	}
 
 	@Override

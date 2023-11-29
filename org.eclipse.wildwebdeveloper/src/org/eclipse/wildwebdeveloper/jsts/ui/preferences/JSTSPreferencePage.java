@@ -19,8 +19,8 @@ import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceSer
 import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT;
 
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -53,6 +53,6 @@ public class JSTSPreferencePage extends FieldEditorPreferencePage implements IWo
 						{ Messages.JSTSPreferencePage_typeScriptVersion_project,
 								TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT } },
 				parent));
-		addField(new DirectoryFieldEditor(ESLINT_PREFERENCES_NODE_PATH, Messages.JSTSPreferencePage_eslintNodePath, parent));
+		addField(new StringFieldEditor(ESLINT_PREFERENCES_NODE_PATH, Messages.JSTSPreferencePage_eslintNodePath, parent));
 	}
 }
