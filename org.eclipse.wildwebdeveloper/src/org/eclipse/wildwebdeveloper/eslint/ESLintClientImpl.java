@@ -6,6 +6,9 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *  Pierre-Yves Bigourdan - Allow configuring directory of ESLint package
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.eslint;
 
@@ -30,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants;
 
 public class ESLintClientImpl extends LanguageClientImpl implements ESLintLanguageServerExtension {
 
@@ -74,11 +78,9 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		// if you set a workspaceFolder and then the working dir in auto mode eslint will try to get to the right config location.
 		config.put("workingDirectory", Collections.singletonMap("mode", "auto")); 
 
+		// this should not point to a nodejs executable but to a parent directory containing the ESLint package
+		config.put("nodePath",getESLintPackageDir(highestPackageJsonDir));
 
-		// this should not point to a nodejs executable but nodePath is the path to the "node_modules" 
-		// (or a parent having node modules, we just push in the highest dir (workspaceFolder) that has the package.json)
-		config.put("nodePath", highestPackageJsonDir.getAbsolutePath());
-		
 		config.put("validate", "on");
 		config.put("run", "onType");
 		config.put("rulesCustomizations", Collections.emptyList());
@@ -86,6 +88,25 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		config.put("codeAction", Map.of("disableRuleComment", Map.of("enable", "true", "location", "separateLine"), 
 										"showDocumentation", Collections.singletonMap("enable", "true")));
 		return CompletableFuture.completedFuture(Collections.singletonList(config));
+	}
+
+	private String getESLintPackageDir(File highestPackageJsonDir) {
+		String eslintNodePath = JSTSPreferenceServerConstants.getESLintNodePath();
+
+		// check if user specified a valid absolute path
+		File eslintNodeFileUsingAbsolutePath = new File(eslintNodePath);
+		if (eslintNodeFileUsingAbsolutePath.exists()) {
+			return eslintNodeFileUsingAbsolutePath.getAbsolutePath();
+		}
+
+		// check if user specified a valid project-relative path
+		File eslintNodeFileUsingProjectRelativePath = new File(highestPackageJsonDir.getAbsolutePath(), eslintNodePath);
+		if (eslintNodeFileUsingProjectRelativePath.exists()) {
+			return eslintNodeFileUsingProjectRelativePath.getAbsolutePath();
+		}
+
+		// fall back to the folder containing "node_modules"
+		return highestPackageJsonDir.getAbsolutePath();
 	}
 
 	@Override
