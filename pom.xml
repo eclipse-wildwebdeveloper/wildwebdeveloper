@@ -20,7 +20,6 @@
 	</properties>
 
 	<modules>
-		<module>target-platform</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.linux.x86_64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.linux.aarch64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64</module>
@@ -50,11 +49,7 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
 					<target>
-						<artifact>
-							<groupId>org.eclipse.wildwebdeveloper</groupId>
-							<artifactId>target-platform</artifactId>
-							<version>1.0.0-SNAPSHOT</version>
-						</artifact>
+						<file>${basedir}/../target-platform/target-platform.target</file>
 					</target>
 				</configuration>
 			</plugin>
