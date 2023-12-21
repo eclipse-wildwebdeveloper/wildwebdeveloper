@@ -6,13 +6,13 @@
   <packaging>pom</packaging>
   <name>Eclipse Wild Web Developer - Parent</name>
   <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
-  
+
 
 	<prerequisites>
-		<maven>3.6.3</maven>
+		<maven>3.9.1</maven>
 	</prerequisites>
 	<properties>
-		<tycho-version>4.0.0</tycho-version>
+		<tycho-version>4.0.4</tycho-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/wildwebdeveloper.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -178,7 +178,6 @@
 					<artifactId>target-platform-configuration</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
-					    <resolver>p2</resolver>
 						<environments>
 							<environment>
 								<os>win32</os>
@@ -244,7 +243,7 @@
 									<target>
 										<!-- See last answer of https://stackoverflow.com/questions/4368243/maven-antrun-with-sequential-ant-contrib-fails-to-run/45958355 -->
 										<!-- and http://ant-contrib.sourceforge.net/tasks/tasks/index.html -->
-										<taskdef resource="net/sf/antcontrib/antlib.xml" 
+										<taskdef resource="net/sf/antcontrib/antlib.xml"
 											classpathref="maven.plugin.classpath" />
 										<for param="jarFile">
 											<fileset dir="${project.basedir}/target" includes="**/*.jar" />
