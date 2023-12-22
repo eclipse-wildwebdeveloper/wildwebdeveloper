@@ -11,7 +11,7 @@
     "vscode-css-languageservice": "6.2.11",
     "vscode-html-languageservice": "5.1.1",
     "vscode-json-languageservice": "5.3.7",
-    "@vue/language-server" : "1.8.25",
+    "@vue/language-server" : "1.8.26",
     "fsevents" : "2.3.3",
     "vscode-css-languageserver": "file:target/vscode-css-languageserver-1.0.0.tgz",
     "vscode-html-languageserver": "file:target/vscode-html-languageserver-1.0.0.tgz",
