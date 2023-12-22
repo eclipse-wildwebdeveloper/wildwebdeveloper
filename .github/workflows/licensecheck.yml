@@ -68,7 +68,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Prepare NPM deps
-      run: mvn -DskipTests -pl target-platform,org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
+      run: mvn -DskipTests -pl org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
     - name: Get Dash license tool
       run: |
         mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.0.2 -DremoteRepositories="https://repo.eclipse.org/content/repositories/dash-licenses"
