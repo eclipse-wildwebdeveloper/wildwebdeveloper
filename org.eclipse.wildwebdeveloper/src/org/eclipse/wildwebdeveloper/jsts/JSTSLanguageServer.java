@@ -56,7 +56,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			URL url = FileLocator
 					.toFileURL(getClass().getResource("/node_modules/typescript-language-server/lib/cli.mjs"));
 			File nodeModules = new File(url.getPath()).getParentFile().getParentFile().getParentFile();
-			tsserverPath = new File(nodeModules, "typescript/lib/tssserver.js").getAbsolutePath();
+			tsserverPath = new File(nodeModules, "typescript/lib/tsserver.js").getAbsolutePath();
 			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
