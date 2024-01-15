@@ -78,7 +78,7 @@
    <bundle id="org.eclipse.wildwebdeveloper.product.branding" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.yaml.snakeyaml">
+   <bundle id="org.snakeyaml.engine">
       <category name="Dependencies"/>
    </bundle>
    <category-def name="Wild Web Developer" label="Eclipse Wild Web Developer - Web Dev in Eclipse IDE"/>
