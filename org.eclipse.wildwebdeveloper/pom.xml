@@ -42,7 +42,7 @@
 						<configuration>
 							<connectionUrl>scm:git:https://github.com/microsoft/vscode-eslint.git</connectionUrl>
 							<scmVersionType>tag</scmVersionType>
-							<scmVersion>release/2.4.2</scmVersion>
+							<scmVersion>pre-release/2.4.3</scmVersion>
 							<basedir>${project.build.directory}</basedir>
 							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls-package-json/extension</checkoutDirectory>
 						</configuration>
