@@ -9,7 +9,7 @@
     "yaml-language-server": "1.14.0",
     "vscode-languageserver-types": "3.17.5",
     "vscode-css-languageservice": "6.2.12",
-    "vscode-html-languageservice": "5.1.1",
+    "vscode-html-languageservice": "5.1.2",
     "vscode-json-languageservice": "5.3.7",
     "@vue/language-server" : "1.8.27",
     "fsevents" : "2.3.3",
