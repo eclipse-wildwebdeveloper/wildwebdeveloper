@@ -20,10 +20,10 @@ spec:
     command: [ "uid_entrypoint", "cat" ]
     resources:
       limits:
-        memory: "6Gi"
+        memory: "4Gi"
         cpu: "2000m"
       requests:
-        memory: "6Gi"
+        memory: "4Gi"
         cpu: "1000m"
   - name: jnlp
     image: 'eclipsecbi/jenkins-jnlp-agent'
