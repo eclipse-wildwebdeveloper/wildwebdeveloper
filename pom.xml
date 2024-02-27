@@ -144,7 +144,7 @@
 				<plugin>
 					<groupId>com.googlecode.maven-download-plugin</groupId>
 					<artifactId>download-maven-plugin</artifactId>
-					<version>1.6.8</version>
+					<version>1.8.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
