@@ -4,8 +4,6 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.product.branding;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: %pluginVendor
-Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.eclipse.platform,
- org.eclipse.equinox.app
+Require-Bundle: org.eclipse.platform
 Eclipse-BundleShape: dir
 Bundle-Localization: plugin
