@@ -6,11 +6,6 @@
   <packaging>pom</packaging>
   <name>Eclipse Wild Web Developer - Parent</name>
   <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
-
-
-	<prerequisites>
-		<maven>3.9.1</maven>
-	</prerequisites>
 	<properties>
 		<tycho-version>4.0.6</tycho-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/wildwebdeveloper.git</tycho.scmUrl>
