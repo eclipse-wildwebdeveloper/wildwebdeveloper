@@ -13,7 +13,6 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
 				<configuration>
 					<dependency-resolution>
 						<extraRequirements>
@@ -31,7 +30,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<argLine>${tycho.testArgLine} ${ui.test.vmargs}</argLine>
+					<argLine>${ui.test.vmargs}</argLine>
 					<useUIThread>true</useUIThread>
 					<useUIHarness>true</useUIHarness>
 				</configuration>
