@@ -97,23 +97,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.8</version>
-				<executions>
-					<execution>
-						<goals><goal>prepare-agent</goal></goals>
-					</execution>
-				</executions>
-				<configuration>
-					<append>true</append>
-					<destFile>${sonar.jacoco.reportPath}</destFile>
-					<includes>
-						<include>org.eclipse.wildwebdeveloper*</include>
-					</includes>
-				</configuration>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
