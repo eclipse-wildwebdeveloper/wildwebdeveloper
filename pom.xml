@@ -191,7 +191,7 @@
 
 	<profiles>
 		<profile>
-			<id>packAndSign</id>
+			<id>sign</id>
 			<build>
 				<plugins>
 					<plugin>
