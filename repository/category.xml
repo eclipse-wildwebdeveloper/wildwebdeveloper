@@ -21,7 +21,7 @@
    <feature id="org.eclipse.tm4e.feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
-   <feature id="org.eclipse.mylyn.wikitext_feature" version="0.0.0">
+   <feature id="org.eclipse.mylyn.wikitext.feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
    <bundle id="org.eclipse.wildwebdeveloper.tests" version="0.0.0">
