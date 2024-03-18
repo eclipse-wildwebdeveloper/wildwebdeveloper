@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
-Bundle-SymbolicName: org.eclipse.wildwebdeveloper.product.branding;singleton:=true
-Bundle-Version: 1.0.1.qualifier
-Bundle-Vendor: %pluginVendor
-Require-Bundle: org.eclipse.platform
-Eclipse-BundleShape: dir
-Bundle-Localization: plugin
