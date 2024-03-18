@@ -21,9 +21,6 @@
    <feature id="org.eclipse.tm4e.feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
-   <feature id="org.eclipse.mylyn.wikitext.feature" version="0.0.0">
-      <category name="Dependencies"/>
-   </feature>
    <bundle id="org.eclipse.wildwebdeveloper.tests" version="0.0.0">
       <category name="Sources"/>
    </bundle>
@@ -73,9 +70,6 @@
       <category name="Dependencies"/>
    </bundle>
    <bundle id="org.apache.commons.commons-compress" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.wildwebdeveloper.product.branding" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="org.snakeyaml.engine">

@@ -27,7 +27,6 @@
 		<module>org.eclipse.wildwebdeveloper.embedder.node.feature</module>
 		<module>org.eclipse.wildwebdeveloper.xml.feature</module>
 		<module>org.eclipse.wildwebdeveloper.feature</module>
-		<module>org.eclipse.wildwebdeveloper.product.branding</module>
 		<module>repository</module>
 	</modules>
 
