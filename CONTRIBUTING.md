@@ -35,7 +35,7 @@ Latest builds, for testing, can usually be found at `https://download.eclipse.or
 
 ### Prerequisites
 
-Java 17 and Maven 3.8.6 (only if you want to build from the command-line), or newer.
+Java 21 and Maven 3.9.6 (only if you want to build from the command-line), or newer.
 
 ### ⌨️ Setting up the Development Environment manually
 
