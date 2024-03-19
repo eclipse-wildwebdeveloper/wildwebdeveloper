@@ -18,6 +18,7 @@ jobs:
     uses: eclipse/dash-licenses/.github/workflows/mavenLicenseCheck.yml@master
     with:
       projectId: tools.wildwebdeveloper
+      javaVersion: 21
     secrets:
       gitlabAPIToken: ${{ secrets.GITLAB_API_TOKEN }}
     permissions:
