@@ -73,7 +73,7 @@ public class Settings extends HashMap<String, Object> {
 		result.put(path, preferenceValue);
 	}
 
-	public Object findSettings(String[] sections) {
+	public Object findSettings(String... sections) {
 		Map<String, Object> current = this;
 		for (String section : sections) {
 			Object result = current.get(section);
