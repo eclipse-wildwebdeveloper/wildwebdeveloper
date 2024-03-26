@@ -29,7 +29,7 @@ public class SCSSPreferencePage extends FieldEditorPreferencePage implements IWo
 
 	@Override
 	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(Activator.getDefault().getCSSPreferenceStore());
 	}
 
 	@Override

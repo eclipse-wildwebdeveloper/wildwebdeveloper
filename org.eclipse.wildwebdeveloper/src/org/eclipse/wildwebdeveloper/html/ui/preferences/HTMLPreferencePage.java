@@ -33,16 +33,15 @@ public class HTMLPreferencePage extends FieldEditorPreferencePage implements IWo
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-	}
-
-	@Override
 	protected void createFieldEditors() {
 		addField(new BooleanFieldEditor(HTML_PREFERENCES_AUTO_CLOSING_TAGS, Messages.HTMLPreferencePage_autoClosingTags,
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(HTML_PREFERENCES_AUTO_CREATE_QUOTES,
 				Messages.HTMLPreferencePage_autoCreateQuotes, getFieldEditorParent()));
+	}
 
+	@Override
+	public void init(IWorkbench workbench) {
+		setPreferenceStore(Activator.getDefault().getHTMLPreferenceStore());
 	}
 }

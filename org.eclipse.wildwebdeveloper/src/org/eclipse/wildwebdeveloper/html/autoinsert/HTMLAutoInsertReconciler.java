@@ -132,11 +132,11 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 	}
 
 	private boolean isAutoClosingTagEnabled() {
-		return Activator.getDefault().getPreferenceStore().getBoolean(HTML_PREFERENCES_AUTO_CLOSING_TAGS);
+		return Activator.getDefault().getHTMLPreferenceStore().getBoolean(HTML_PREFERENCES_AUTO_CLOSING_TAGS);
 	}
 
 	private boolean isAutoCreateQuotesEnabled() {
-		return Activator.getDefault().getPreferenceStore().getBoolean(HTML_PREFERENCES_AUTO_CREATE_QUOTES);
+		return Activator.getDefault().getHTMLPreferenceStore().getBoolean(HTML_PREFERENCES_AUTO_CREATE_QUOTES);
 	}
 
 	/**

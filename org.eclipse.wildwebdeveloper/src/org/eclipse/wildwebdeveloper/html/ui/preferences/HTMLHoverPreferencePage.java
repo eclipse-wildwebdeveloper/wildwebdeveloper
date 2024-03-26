@@ -42,6 +42,6 @@ public class HTMLHoverPreferencePage extends FieldEditorPreferencePage implement
 
 	@Override
 	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(Activator.getDefault().getHTMLPreferenceStore());
 	}
 }

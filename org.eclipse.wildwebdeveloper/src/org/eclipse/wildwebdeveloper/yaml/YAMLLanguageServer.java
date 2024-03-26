@@ -36,12 +36,12 @@ import org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferenceServerCons
  */
 public class YAMLLanguageServer extends ProcessStreamConnectionProviderWithPreference {
 
-	private static final String YAML_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.yaml";
+	public static final String LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.yaml";
 
 	private static final String[] SUPPORTED_SECTIONS = { "yaml" };
 
 	public YAMLLanguageServer() {
-		super(YAML_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
+		super(LANGUAGE_SERVER_ID, Activator.getDefault().getYAMLPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {

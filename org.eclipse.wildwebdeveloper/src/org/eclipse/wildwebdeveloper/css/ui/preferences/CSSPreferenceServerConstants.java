@@ -70,7 +70,7 @@ public class CSSPreferenceServerConstants {
 	public static final String CSS_PREFERENCES_LINT_UNKNOWNATRULES = "css.lint.unknownAtRules";
 
 	public static Settings getGlobalSettings() {
-		Settings settings = new Settings(Activator.getDefault().getPreferenceStore());
+		Settings settings = new Settings(getPreferenceStore());
 
 		// Completion settings
 		settings.fillAsBoolean(CSS_PREFERENCES_COMPLETION_TRIGGER_PROPERTY_VALUE_COMPLETION);
@@ -117,7 +117,7 @@ public class CSSPreferenceServerConstants {
 	}
 
 	public static void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = getPreferenceStore();
 
 		// Server settings
 
@@ -174,4 +174,14 @@ public class CSSPreferenceServerConstants {
 	public static boolean isMatchCssSection(String section) {
 		return isMatchSection(section, CSS_SECTION);
 	}
+
+	/**
+	 * Returns the CSS preference store.
+	 * 
+	 * @return the CSS preference store.
+	 */
+	public static IPreferenceStore getPreferenceStore() {
+		return Activator.getDefault().getPreferenceStore();
+	}
+
 }
