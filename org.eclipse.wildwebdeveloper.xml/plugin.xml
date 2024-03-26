@@ -111,7 +111,7 @@
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
             path="grammars/xml/xml.tmLanguage.json"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </grammar>
       <grammar
             path="grammars/dtd/dtd.tmLanguage.json"
@@ -123,19 +123,19 @@
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.core.runtime.xml"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </scopeNameContentTypeBinding>
       <grammar
             path="grammars/xsl/xsl.tmLanguage.json"
-            scopeName="source.xml.xsl">
+            scopeName="text.xml.xsl">
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.xsl"
-            scopeName="source.xml.xsl">
+            scopeName="text.xml.xsl">
       </scopeNameContentTypeBinding>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.xsd"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </scopeNameContentTypeBinding>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.dtd"
@@ -168,7 +168,7 @@
       <snippet
             name="XML Sample"
             path="snippets/xml/sample.xml"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </snippet>
    </extension>
    <extension

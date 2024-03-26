@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-xml/commit/507de2ee7daca60cf02e9e21fbeb92bbae73e280",
 	"name": "XSL",
-	"scopeName": "source.xml.xsl",
+	"scopeName": "text.xml.xsl",
 	"patterns": [
 		{
 			"begin": "(<)(xsl)((:))(template)",
