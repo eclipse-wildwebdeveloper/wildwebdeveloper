@@ -550,14 +550,38 @@
             priority="normal">
       </content-type>
    </extension>
-   
+   <extension
+         point="org.eclipse.lsp4e.languageServerConfiguration">
+         <provider class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JSTSConfigurationProvider">
+         	
+         </provider>
+         
+         <alias source="javascript.inlayHints.includeInlayEnumMemberValueHints" target="javascript.inlayHints.enumMemberValues.enabled" />
+		 <alias source="javascript.inlayHints.includeInlayParameterNameHints" target="javascript.inlayHints.parameterNames.enabled" />
+		 <alias source="javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName" target="javascript.inlayHints.parameterNames.suppressWhenArgumentMatchesName" />
+		 <alias source="javascript.inlayHints.includeInlayFunctionParameterTypeHints" target="javascript.inlayHints.parameterTypes.enabled" />
+		 <alias source="javascript.inlayHints.includeInlayVariableTypeHints" target="javascript.inlayHints.variableTypes.enabled" />
+		 <alias source="javascript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName" target="javascript.inlayHints.variableTypes.suppressWhenTypeMatchesName" />
+		 <alias source="javascript.inlayHints.includeInlayPropertyDeclarationTypeHints" target="javascript.inlayHints.propertyDeclarationTypes.enabled" />
+		 <alias source="javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints" target="javascript.inlayHints.functionLikeReturnTypes.enabled" />
+		
+		 <alias source="typescript.inlayHints.includeInlayEnumMemberValueHints" target="typescript.inlayHints.enumMemberValues.enabled" />
+		 <alias source="typescript.inlayHints.includeInlayParameterNameHints" target="typescript.inlayHints.parameterNames.enabled" />
+		 <alias source="typescript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName" target="typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName" />
+		 <alias source="typescript.inlayHints.includeInlayFunctionParameterTypeHints" target="typescript.inlayHints.parameterTypes.enabled" />
+		 <alias source="typescript.inlayHints.includeInlayVariableTypeHints" target="typescript.inlayHints.variableTypes.enabled" />
+		 <alias source="typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName" target="typescript.inlayHints.variableTypes.suppressWhenTypeMatchesName" />
+		 <alias source="typescript.inlayHints.includeInlayPropertyDeclarationTypeHints" target="typescript.inlayHints.propertyDeclarationTypes.enabled" />
+		 <alias source="typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints" target="typescript.inlayHints.functionLikeReturnTypes.enabled" />
+   </extension>
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageServer"
             clientImpl="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageClientImpl"
             id="org.eclipse.wildwebdeveloper.jsts"
-            label="JavaScript-TypeScript Language Server">
+            label="JavaScript-TypeScript Language Server"
+            watchConfiguration="javascript,typescript">
       </server>
       <contentTypeMapping
             languageId="javascript"
