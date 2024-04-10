@@ -59,8 +59,8 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			commands.add(new File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
-			URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/"));
-			setWorkingDirectory(nodeDependencies.getPath()); // Required for typescript-eslint-language-service to find
+			//URL nodeDependencies = FileLocator.toFileURL(getClass().getResource("/"));
+			//setWorkingDirectory(nodeDependencies.getPath()); // Required for typescript-eslint-language-service to find
 																// it's dependencies
 
 		} catch (IOException e) {
@@ -77,6 +77,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 //			plugins.add(new TypeScriptPlugin("@angular/language-service"));
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
+			plugins.add(new TypeScriptPlugin("@vue/typescript-plugin", new String[] {"vue"}));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 			
 			// If the tsserver path is not explicitly specified, tsserver will use the local
@@ -84,6 +85,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			if (!TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT.equals(getTypeScriptVersion())) {
 				Map<String, String> tsServer = new HashMap<>();
 				tsServer.put("path", tsserverPath);
+				tsServer.put("nodePath", NodeJSManager.getNodeJsLocation().getAbsolutePath());
 				options.put("tsserver", tsServer);
 			}
 		} catch (IOException e) {
@@ -93,6 +95,11 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 		if (maxTsServerMemory != null) {
 			options.put("maxTsServerMemory", maxTsServerMemory);
 		}
+		
+		options.put("disableAutomaticTypingAcquisition", true);  // not working on mac/linux
+		options.put("hostInfo", "Eclipse");
+		options.put("watchOptions", new HashMap<>());
+		
 		return options;
 	}
 

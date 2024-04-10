@@ -510,6 +510,11 @@
             contentType="org.eclipse.wildwebdeveloper.tsx"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
+      <contentTypeMapping
+            languageId="vue"
+            contentType="org.eclipse.wildwebdeveloper.vue"
+            id="org.eclipse.wildwebdeveloper.jsts">
+      </contentTypeMapping>
       <server
             class="org.eclipse.wildwebdeveloper.eslint.ESLintLanguageServer"
             id="org.eclipse.wildwebdeveloper.eslint"
@@ -713,16 +718,6 @@
             singleton="true"
             label="VUE Language Server"/>
       <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue"/>
-    </extension>
-    <extension point="org.eclipse.lsp4e.languageServer">
-      <server
-            class="org.eclipse.wildwebdeveloper.vue.VueLanguageServer"
-            clientImpl="org.eclipse.wildwebdeveloper.vue.VueClientImpl"
-            serverInterface="org.eclipse.wildwebdeveloper.vue.VueLanguageServerAPI"
-            id="org.eclipse.wildwebdeveloper.vue.syntax"
-            singleton="true"
-            label="VUE Language Server Syntax"/>
-      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue.syntax"/>
     </extension>
     <extension
          point="org.eclipse.tm4e.registry.grammars">

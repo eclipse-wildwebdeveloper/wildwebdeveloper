@@ -22,18 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
-public class VueLanguageServer extends ProcessStreamConnectionProvider implements IExecutableExtension {
+public class VueLanguageServer extends ProcessStreamConnectionProvider {
 	private static String tsserverPath = null;
 	private static String vuePath = null;
-	private int mode = 1;
 
 	public VueLanguageServer() {
 
@@ -74,15 +70,18 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider implement
 		setWorkingDirectory(rootUri.getRawPath());
 		
 		options.put("typescript", Collections.singletonMap("tsdk", tsserverPath));
-		options.put("fullCompletionList", false);
-		options.put("serverMode", mode);
-		options.put("diagnosticModel", 1);
+		options.put("diagnosticModel", 0);
 		options.put("additionalExtensions", new String[] {});
 		
 		Map<String, Object> legend = new HashMap<>();
-		legend.put("tokenTypes", new String[] {"compontent"} );
+		legend.put("tokenTypes", new String[] {"component"} );
 		legend.put("tokenModifiers", new String[] {} );
 		options.put("semanticTokensLegend", legend);
+		
+		Map<String, Object> vue = new HashMap<>();
+		vue.put("hybridMode", false);
+		
+		options.put("vue", vue);
 		
 		return options;
 	}
@@ -92,12 +91,5 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider implement
 		return "VUE Language Server: " + super.toString();
 	}
 
-	@Override
-	public void setInitializationData(IConfigurationElement config, String propertyName, Object data)
-			throws CoreException {
-		if (config.getAttribute("id").contains("syntax")) {
-			mode = 2;
-		}
-		
-	}
+	
 }
