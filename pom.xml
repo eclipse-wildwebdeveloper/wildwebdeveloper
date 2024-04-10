@@ -7,7 +7,7 @@
   <name>Eclipse Wild Web Developer - Parent</name>
   <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
 	<properties>
-		<tycho-version>4.0.6</tycho-version>
+		<tycho-version>4.0.7</tycho-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/wildwebdeveloper.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -196,6 +196,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
+						<version>3.1.0</version>
 					    <dependencies>
 							<dependency>
 								<groupId>ant-contrib</groupId>
