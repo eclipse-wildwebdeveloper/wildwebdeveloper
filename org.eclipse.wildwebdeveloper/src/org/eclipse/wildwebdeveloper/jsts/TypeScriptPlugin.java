@@ -23,17 +23,24 @@ import org.eclipse.core.runtime.FileLocator;
 public class TypeScriptPlugin {
 	private String pluginName;
 	private String pluginProbeLocation;
+	private String[] pluginLanguages;
 	
 	public TypeScriptPlugin(String name) throws IOException {
+		this(name, null);
+	}
+	
+	public TypeScriptPlugin(String name, String[] languages) throws IOException {
 		pluginName = name;
 		URL fileURL = FileLocator.toFileURL(getClass().getResource("/node_modules/" + name));
 		pluginProbeLocation = new File(fileURL.getPath()).getAbsolutePath();
+		pluginLanguages = languages;
 	}
 	
-	public Map<String, String> toMap() {
-		Map<String, String> tsPlugin = new HashMap<>();
+	public Map<String, Object> toMap() {
+		Map<String, Object> tsPlugin = new HashMap<>();
 		tsPlugin.put("name", pluginName);
 		tsPlugin.put("location", pluginProbeLocation);
+		tsPlugin.put("languages", pluginLanguages);
 		return tsPlugin;
 	}
 }
