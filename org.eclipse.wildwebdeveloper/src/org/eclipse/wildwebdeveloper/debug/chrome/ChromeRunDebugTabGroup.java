@@ -17,6 +17,7 @@ import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.EnvironmentTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
+import org.eclipse.debug.ui.PrototypeTab;
 import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
 import org.eclipse.wildwebdeveloper.debug.AbstractRunHTMLDebugTab;
 
@@ -28,7 +29,8 @@ public class ChromeRunDebugTabGroup extends AbstractLaunchConfigurationTabGroup 
 			new AbstractRunHTMLDebugTab() {},
 			new EnvironmentTab(),
 			new DSPOverrideSettingsTab(),
-			new CommonTab()
+			new CommonTab(),
+			new PrototypeTab()
 		});
 	}
 }

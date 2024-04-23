@@ -973,6 +973,7 @@
             modes="run,debug"
             name="Node.js application"
             public="true"
+            allowPrototypes="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
@@ -982,6 +983,7 @@
             modes="debug"
             name="Running Node.js application"
             public="true"
+            allowPrototypes="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
@@ -991,6 +993,7 @@
             modes="debug"
             name="Running Firefox Debugger"
             public="true"
+            allowPrototypes="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
@@ -1000,6 +1003,7 @@
             modes="debug"
             name="Launch Firefox Debugger"
             public="true"
+            allowPrototypes="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
@@ -1009,6 +1013,7 @@
             modes="debug"
             name="Chrome Debug"
             public="true"
+            allowPrototypes="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
@@ -1018,6 +1023,7 @@
             modes="debug"
             name="Running Chrome Debug Instance"
             public="true"
+            allowPrototypes="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">
       </launchConfigurationType>
@@ -1026,6 +1032,7 @@
             id="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"
             modes="run"
             name="Launch NPM"
+            allowPrototypes="true"
             public="true"
             sourceLocatorId="org.eclipse.lsp4e.debug.sourceLocator"
             sourcePathComputerId="org.eclipse.lsp4e.debug.sourcePathComputer">

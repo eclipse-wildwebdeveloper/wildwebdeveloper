@@ -15,13 +15,14 @@ package org.eclipse.wildwebdeveloper.debug.chrome;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
+import org.eclipse.debug.ui.PrototypeTab;
 import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
 
 public class ChromeAttachDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		setTabs(new ChromeAttachTab(), new ChromeExecutableTab(), new DSPOverrideSettingsTab(), new CommonTab());
+		setTabs(new ChromeAttachTab(), new ChromeExecutableTab(), new DSPOverrideSettingsTab(), new CommonTab(), new PrototypeTab());
 	}
 
 }

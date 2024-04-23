@@ -14,6 +14,7 @@ import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.EnvironmentTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
+import org.eclipse.debug.ui.PrototypeTab;
 
 public class NpmLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 
@@ -22,7 +23,8 @@ public class NpmLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 		setTabs(new ILaunchConfigurationTab[] {
 			new NpmLaunchTab(),
 			new EnvironmentTab(),
-			new CommonTab()
+			new CommonTab(),
+			new PrototypeTab()
 		});
 	}
 
