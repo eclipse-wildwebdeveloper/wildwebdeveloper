@@ -16,6 +16,7 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
+import org.eclipse.debug.ui.PrototypeTab;
 import org.eclipse.lsp4e.debug.launcher.DSPOverrideSettingsTab;
 
 public class FirefoxAttachDebugTabGroup extends AbstractLaunchConfigurationTabGroup {
@@ -25,7 +26,8 @@ public class FirefoxAttachDebugTabGroup extends AbstractLaunchConfigurationTabGr
 		setTabs(new ILaunchConfigurationTab[] {
 			new FirefoxAttachTab(),
 			new DSPOverrideSettingsTab(),
-			new CommonTab()
+			new CommonTab(),
+			new PrototypeTab()
 		});
 	}
 
