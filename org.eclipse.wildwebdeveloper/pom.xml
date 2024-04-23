@@ -38,7 +38,7 @@
 						<goals>
 							<goal>checkout</goal>
 						</goals>
-						<phase>process-sources</phase>
+						<phase>generate-sources</phase>
 						<configuration>
 							<connectionUrl>scm:git:https://github.com/microsoft/vscode-eslint.git</connectionUrl>
 							<scmVersionType>tag</scmVersionType>
@@ -55,7 +55,7 @@
 				<executions>
 					<execution>
 						<id>fetch-vscode</id>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>wget</goal>
 						</goals>
@@ -67,7 +67,7 @@
 					</execution>
 					<execution>
 						<id>fetch-eslint-ls</id>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>wget</goal>
 						</goals>
@@ -80,7 +80,7 @@
 					</execution>
 					<execution>
 						<id>fetch-js-debug</id>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>wget</goal>
 						</goals>
@@ -99,7 +99,7 @@
 				<executions>
 					<execution>
 						<id>install-eslint-ls-package.json</id>
-						<phase>process-resources</phase>
+						<phase>process-sources</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
@@ -147,7 +147,7 @@
 						<goals>
 							<goal>exec</goal>
 						</goals>
-						<phase>compile</phase>
+						<phase>generate-resources</phase>
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
@@ -168,7 +168,7 @@
 						<goals>
 							<goal>exec</goal>
 						</goals>
-						<phase>compile</phase>
+						<phase>process-resources</phase>
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
@@ -200,4 +200,62 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>sign</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+					    <dependencies>
+							<dependency>
+								<groupId>ant-contrib</groupId>
+								<artifactId>ant-contrib</artifactId>
+								<version>1.0b3</version>
+								<exclusions>
+									<exclusion>
+										<groupId>ant</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>sign-node-files</id>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<target>
+										<!-- See last answer of https://stackoverflow.com/questions/4368243/maven-antrun-with-sequential-ant-contrib-fails-to-run/45958355 -->
+										<!-- and http://ant-contrib.sourceforge.net/tasks/tasks/index.html -->
+										<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.plugin.classpath" />
+										<for param="nodeFileAbsolute">
+											<fileset dir="${project.basedir}/node_modules" includes="**/*.node" erroronmissingdir="false" />
+											<sequential>
+												<echo level="info" message="Mac-sign @{nodeFileAbsolute}" />
+												<move file="@{nodeFileAbsolute}" tofile="@{nodeFileAbsolute}-tosign" />
+												<exec executable="curl" dir="${project.build.directory}" failonerror="true">
+													<arg value="-o" />
+													<arg value="@{nodeFileAbsolute}" />
+													<arg value="-F" />
+													<arg value="file=@{nodeFileAbsolute}-tosign" />
+													<arg value="https://cbi.eclipse.org/macos/codesign/sign" />
+												</exec>
+												<delete file="@{nodeFileAbsolute}-tosign" />
+											</sequential>
+										</for>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
