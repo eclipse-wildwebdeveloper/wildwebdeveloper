@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -36,7 +37,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
@@ -78,8 +78,8 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 					try {
 						value = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(value);
 					} catch (CoreException ex) {
-						IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex);
-						Activator.getDefault().getLog().log(errorStatus);
+						IStatus errorStatus = Status.error(ex.getMessage(), ex);
+						ILog.get().log(errorStatus);
 					}
 					env.put(e.getKey(), value);
 				});
@@ -91,8 +91,8 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 				try {
 					npmProcess.waitFor();
 				} catch (InterruptedException e) {
-					IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-					Activator.getDefault().getLog().log(errorStatus);
+					IStatus errorStatus = Status.error(e.getMessage(), e);
+					ILog.get().log(errorStatus);
 					Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
 							Messages.NpmLaunchDelegate_npmError, e.getMessage(), errorStatus)); // $NON-NLS-1$
 				}
@@ -101,8 +101,8 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 					try {
 						project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 					} catch (CoreException e) {
-						IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-						Activator.getDefault().getLog().log(errorStatus);
+						IStatus errorStatus = Status.error(e.getMessage(), e);
+						ILog.get().log(errorStatus);
 						Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
 								Messages.NpmLaunchDelegate_npmError, e.getMessage(), errorStatus)); // $NON-NLS-1$
 					}
@@ -110,8 +110,8 @@ public class NpmLaunchDelegate implements ILaunchConfigurationDelegate {
 				monitor.done();
 			});
 		} catch (IOException e) {
-			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-			Activator.getDefault().getLog().log(errorStatus);
+			IStatus errorStatus = Status.error(e.getMessage(), e);
+			ILog.get().log(errorStatus);
 			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
 					Messages.NpmLaunchDelegate_npmError, e.getMessage(), errorStatus)); // $NON-NLS-1$
 		}

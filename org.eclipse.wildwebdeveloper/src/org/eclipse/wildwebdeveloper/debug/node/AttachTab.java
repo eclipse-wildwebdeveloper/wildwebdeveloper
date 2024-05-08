@@ -13,6 +13,7 @@
 package org.eclipse.wildwebdeveloper.debug.node;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -23,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 
@@ -75,7 +75,7 @@ public class AttachTab extends AbstractLaunchConfigurationTab {
 			this.addressText.setText(configuration.getAttribute(NodeAttachDebugDelegate.ADDRESS, DEFAULT_ADDRESS));
 			this.portSpinner.setSelection(configuration.getAttribute(LaunchConstants.PORT, defaultPort));
 		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(e.getStatus());
+			ILog.get().log(e.getStatus());
 		}
 	}
 

@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
@@ -149,7 +150,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 							"org.eclipse.ui.genericeditor.GenericEditor",
 							true);
 					} catch (PartInitException e1) {
-						Activator.getDefault().getLog().error(e1.getMessage(), e1);
+						ILog.get().error(e1.getMessage(), e1);
 					}
 				}
 			}
@@ -226,7 +227,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 			try (InputStream imageResource = getClass().getResourceAsStream("/icons/xmlEditorIcon.png")) {
 				image = new Image(Display.getDefault(), imageResource);
 			} catch (IOException e) {
-				Activator.getDefault().getLog().error(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 		

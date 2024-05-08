@@ -17,9 +17,7 @@ import java.util.Arrays;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 
 public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
@@ -39,7 +37,7 @@ public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortc
 				return jsFiles[0];
 			}
 		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+			ILog.get().error(e.getMessage(), e);
 		}
 		return null;
 		

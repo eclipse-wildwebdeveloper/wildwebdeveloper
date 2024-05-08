@@ -10,6 +10,7 @@
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.swt.SWT;
@@ -17,7 +18,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.debug.node.AttachTab;
 
@@ -49,7 +49,7 @@ public class ChromeAttachTab extends AttachTab {
 		try {
 			urlText.setText(configuration.getAttribute(ChromeRunDAPDebugDelegate.URL, ""));
 		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(e.getStatus());
+			ILog.get().log(e.getStatus());
 		}
 	}
 

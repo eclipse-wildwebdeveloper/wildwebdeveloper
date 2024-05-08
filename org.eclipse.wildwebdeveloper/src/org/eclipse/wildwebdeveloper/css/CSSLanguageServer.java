@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferenceServerConstants;
@@ -48,9 +47,8 @@ public class CSSLanguageServer extends ProcessStreamConnectionProviderWithPrefer
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
-		}
+            ILog.get().error(e.getMessage(), e);
+        }
 	}
 
 	@Override

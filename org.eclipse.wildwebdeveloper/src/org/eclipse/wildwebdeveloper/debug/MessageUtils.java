@@ -11,6 +11,7 @@ package org.eclipse.wildwebdeveloper.debug;
 
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -33,7 +34,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.browser.WebBrowserPreferencePage;
-import org.eclipse.wildwebdeveloper.Activator;
 
 @SuppressWarnings("restriction")
 public class MessageUtils {
@@ -61,8 +61,8 @@ public class MessageUtils {
 		String browserTabMessage = suggestEditLaunch ? MessageFormat.format(Messages.RuntimeExecutable_NotDefinedError_Message_1, browserName) : ""; //$NON-NLS-1$
 		String webBrowsersMessage = MessageFormat.format(Messages.RuntimeExecutable_NotDefinedError_Message_2, browserName);
 		String message = MessageFormat.format(Messages.RuntimeExecutable_NotDefinedError_Message, browserName, browserTabMessage, webBrowsersMessage);
-		IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, title);
-		Activator.getDefault().getLog().log(errorStatus);
+		IStatus errorStatus = Status.error(title);
+		ILog.get().log(errorStatus);
 
 		int[] result = {Window.CANCEL};
 		Display.getDefault().syncExec(() -> {

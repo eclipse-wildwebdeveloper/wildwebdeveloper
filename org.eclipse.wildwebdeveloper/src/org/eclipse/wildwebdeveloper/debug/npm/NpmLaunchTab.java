@@ -17,6 +17,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -35,7 +36,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
@@ -151,7 +151,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 					.setText(configuration.getAttribute(LaunchConstants.PROGRAM, defaultSelectedFilePath));
 			this.argumentsCombo.setText(configuration.getAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, "install")); //$NON-NLS-1$
 		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(e.getStatus());
+			ILog.get().log(e.getStatus());
 		}
 	}
 

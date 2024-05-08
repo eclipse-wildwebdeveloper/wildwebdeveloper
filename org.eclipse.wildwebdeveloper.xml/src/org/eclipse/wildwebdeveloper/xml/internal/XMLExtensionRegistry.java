@@ -25,11 +25,10 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.wildwebdeveloper.xml.InitializationOptionsProvider;
 import org.eclipse.wildwebdeveloper.xml.LemminxClasspathExtensionProvider;
 
@@ -64,8 +63,7 @@ public class XMLExtensionRegistry {
 										new Path(extension.getValue())))
 								.getPath()).getAbsolutePath();
 					} catch (InvalidRegistryObjectException | IOException e) {
-						Activator.getDefault().getLog()
-								.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+						ILog.get().error(e.getMessage(), e);
 						return null;
 					}
 				}).filter(Objects::nonNull).collect(Collectors.toList());
@@ -95,8 +93,7 @@ public class XMLExtensionRegistry {
 					}
 				}
 			} catch (Exception ex) {
-				Activator.getDefault().getLog()
-						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex));
+				ILog.get().error(ex.getMessage(), ex);
 
 			}
 		}
@@ -114,8 +111,7 @@ public class XMLExtensionRegistry {
 						this.extensions.put(extension, extension.getAttribute("path"));
 					}
 				} catch (Exception ex) {
-					Activator.getDefault().getLog()
-							.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex));
+					ILog.get().error(ex.getMessage(), ex);
 				}
 			}
 		}
@@ -139,8 +135,7 @@ public class XMLExtensionRegistry {
 					}
 				}
 			} catch (Exception ex) {
-				Activator.getDefault().getLog()
-						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, ex.getMessage(), ex));
+				ILog.get().error(ex.getMessage(), ex);
 
 			}
 		}

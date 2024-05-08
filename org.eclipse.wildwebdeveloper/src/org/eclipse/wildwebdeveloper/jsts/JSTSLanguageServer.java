@@ -27,8 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
@@ -65,8 +64,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 																// it's dependencies
 
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
@@ -89,8 +87,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 				options.put("tsserver", tsServer);
 			}
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			ILog.get().error(e.getMessage(), e);
 		}
 		String maxTsServerMemory = System.getProperty("org.eclipse.wildwebdeveloper.maxTsServerMemory");
 		if (maxTsServerMemory != null) {

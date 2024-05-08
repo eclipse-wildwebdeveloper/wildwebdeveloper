@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
-import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 import org.eclipse.wildwebdeveloper.xml.internal.ui.Messages;
 
 /**
@@ -236,20 +235,18 @@ public class AssociateGrammarDialog extends TitleAreaDialog {
 		String grammarURI = grammarURIText.getText();
 		// Test if grammar file is filled
 		if (grammarURI.isBlank()) {
-			return createStatus(IStatus.ERROR, Messages.AssociateGrammarDialog_validation_grammar_file_required);
+			return Status.error(Messages.AssociateGrammarDialog_validation_grammar_file_required);
 		}
 		// Test if grammar file exists
 		IFile file = xmlResourceContainer.getFile(new Path(grammarURI));
 		if (file == null || !file.exists()) {
-			return createStatus(IStatus.WARNING,
-					Messages.bind(Messages.AssociateGrammarDialog_validation_grammar_file_notExists, grammarURI));
+			return Status.warning(Messages.bind(Messages.AssociateGrammarDialog_validation_grammar_file_notExists, grammarURI));
 		}
 		// In case of RelaxNG file, only xml-model association is allowed
 		if (isRelaxNGGrammarFile(file.getFileExtension())) {
 			BindingType bindingType = (BindingType) bindingTypeViewer.getStructuredSelection().getFirstElement();
 			if (bindingType == BindingType.standard) {
-				return createStatus(IStatus.ERROR,
-						Messages.bind(
+				return Status.error(Messages.bind(
 								Messages.AssociateGrammarDialog_validation_grammar_file_invalid_association_for_relaxng,
 								grammarURI, BindingType.standard.getLabel()));
 			}
@@ -257,8 +254,7 @@ public class AssociateGrammarDialog extends TitleAreaDialog {
 		}
 		// Test if selected grammar file is a XSD, DTD or RelaxNG (rnc, rng) file
 		if (!isStandardGramarFile(file.getFileExtension())) {
-			return createStatus(IStatus.WARNING,
-					Messages.bind(Messages.AssociateGrammarDialog_validation_grammar_file_invalid_fileExtension,
+			return Status.warning(Messages.bind(Messages.AssociateGrammarDialog_validation_grammar_file_invalid_fileExtension,
 							grammarURI, ALL_GRAMMAR_FILE_EXTENSION.stream().collect(Collectors.joining(", "))));
 		}
 		return Status.OK_STATUS;
@@ -274,10 +270,6 @@ public class AssociateGrammarDialog extends TitleAreaDialog {
 			return IMessageProvider.ERROR;
 		}
 		return IMessageProvider.NONE;
-	}
-
-	private static IStatus createStatus(int severity, String message) {
-		return new Status(severity, Activator.PLUGIN_ID, message, null);
 	}
 
 	private static boolean isStandardGramarFile(String fileExtension) {

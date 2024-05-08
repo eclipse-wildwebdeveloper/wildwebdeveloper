@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -100,8 +101,8 @@ public class FirefoxRunDABDebugDelegate extends AbstractHTMLDebugDelegate {
 					.getResource("/node_modules/firefox-debugadapter/adapter.bundle.js"));
 			return new File(fileURL.toURI());
 		} catch (IOException | URISyntaxException e) {
-			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-			Activator.getDefault().getLog().log(errorStatus);
+			IStatus errorStatus = Status.error(e.getMessage(), e);
+			ILog.get().log(errorStatus);
 			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
 					"Debug error", e.getMessage(), errorStatus)); //$NON-NLS-1$
 		}

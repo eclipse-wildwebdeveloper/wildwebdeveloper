@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
@@ -50,8 +49,7 @@ public class HTMLLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
