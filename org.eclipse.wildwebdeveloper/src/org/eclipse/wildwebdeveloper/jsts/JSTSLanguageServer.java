@@ -29,27 +29,16 @@ import java.util.Map;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.lsp4j.InitializeResult;
-import org.eclipse.lsp4j.jsonrpc.messages.Message;
-import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
-import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
-import org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferenceServerConstants;
-import org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferenceServerConstants;
-import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
 
-public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPreference {
-
-	private static final String JSTS_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.jsts";
-
-	private static final String[] SUPPORTED_SECTIONS = { "typescript", "javascript" };
+public class JSTSLanguageServer extends ProcessStreamConnectionProvider {
 
 	private static String tsserverPath;
 	
 	public JSTSLanguageServer() {
-		super(JSTS_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
+		super();
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
@@ -99,24 +88,4 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 		return options;
 	}
 
-	@Override
-	protected Object createSettings() {
-		Map<String, Object> settings = new HashMap<>();
-		// javascript
-		settings.putAll(JavaScriptPreferenceServerConstants.getGlobalSettings());
-		// typescript
-		settings.putAll(TypeScriptPreferenceServerConstants.getGlobalSettings());
-		return settings;
-	}
-
-	@Override
-	public void handleMessage(Message message, LanguageServer languageServer, URI rootUri) {
-		if (message instanceof ResponseMessage responseMessage) {
-			if (responseMessage.getResult() instanceof InitializeResult) {
-				// enable validation: so far, no better way found than changing conf after init.
-				DidChangeConfigurationParams params = new DidChangeConfigurationParams(createSettings());
-				languageServer.getWorkspaceService().didChangeConfiguration(params);
-			}
-		}
-	}
 }
