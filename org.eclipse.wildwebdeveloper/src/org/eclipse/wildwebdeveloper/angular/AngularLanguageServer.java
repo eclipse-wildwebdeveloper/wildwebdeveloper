@@ -16,13 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class AngularLanguageServer extends ProcessStreamConnectionProvider {
@@ -62,7 +60,7 @@ public class AngularLanguageServer extends ProcessStreamConnectionProvider {
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 

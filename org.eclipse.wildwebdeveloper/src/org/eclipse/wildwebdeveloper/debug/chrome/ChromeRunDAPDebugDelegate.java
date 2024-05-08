@@ -17,12 +17,10 @@ import java.io.File;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.ui.internal.browser.BrowserManager;
 import org.eclipse.ui.internal.browser.IBrowserDescriptor;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.node.VSCodeJSDebugDelegate;
 
@@ -52,8 +50,7 @@ public class ChromeRunDAPDebugDelegate extends VSCodeJSDebugDelegate {
 		try {
 			res = configuration.getAttribute(RUNTIME_EXECUTABLE, res);
 		} catch (CoreException e) {
-			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-			Activator.getDefault().getLog().log(errorStatus);
+			ILog.get().error(e.getMessage(), e);
 		}
 		File executable = new File(res);
 		if (executable.isAbsolute() && executable.canExecute()) {

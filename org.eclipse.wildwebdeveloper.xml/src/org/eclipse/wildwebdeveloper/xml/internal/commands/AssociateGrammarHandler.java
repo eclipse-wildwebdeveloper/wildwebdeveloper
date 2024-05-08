@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.lsp4e.LSPEclipseUtils;
@@ -35,7 +36,6 @@ import org.eclipse.lsp4j.WorkspaceEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -81,7 +81,7 @@ public class AssociateGrammarHandler extends LSPCommandHandler {
 							LSPEclipseUtils.applyWorkspaceEdit(workEdits, ASSOCIATE_GRAMMAR_INSERT);
 						});
 			} catch (Exception e) {
-				Activator.getDefault().getLog().error("Error while insert grammar association", e);
+				ILog.get().error("Error while insert grammar association", e);
 			}
 		}
 		return null;

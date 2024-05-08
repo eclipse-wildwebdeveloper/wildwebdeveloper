@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,7 +44,6 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
@@ -88,7 +88,7 @@ public class NodeAttachDebugDelegate extends VSCodeJSDebugDelegate {
 				port = serverSocket.getLocalPort();
 				serverSocket.close();
 			} catch (IOException ex) {
-				Activator.getDefault().getLog().log(Status.error(ex.getMessage(), ex));
+				ILog.get().error(ex.getMessage(), ex);
 			}
 			Process vscodeJsDebugExec = DebugPlugin.exec(new String[] { runtimeExecutable.getAbsolutePath(), file.getAbsolutePath(), Integer.toString(port) }, new File(System.getProperty("user.dir")), new String[] { "DA_TEST_DISABLE_TELEMETRY=true"}, false);
 			IProcess vscodeJsDebugIProcess = DebugPlugin.newProcess(launch, vscodeJsDebugExec, "debug adapter");
@@ -133,8 +133,8 @@ public class NodeAttachDebugDelegate extends VSCodeJSDebugDelegate {
 			};
 			DebugPlugin.getDefault().addDebugEventListener(shutdownParentOnCompletion);
 		} catch (IOException e) {
-			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-			Activator.getDefault().getLog().log(errorStatus);
+			IStatus errorStatus = Status.error(e.getMessage(), e);
+			ILog.get().log(errorStatus);
 			Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus)); //$NON-NLS-1$
 		}
 

@@ -44,11 +44,10 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -69,7 +68,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
@@ -128,8 +126,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 						try {
 							return VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(s);
 						} catch (CoreException e) {
-							IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-							Activator.getDefault().getLog().log(errorStatus);
+							ILog.get().error(e.getMessage(), e);
 							return s;
 						}
 					})
@@ -173,7 +170,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 				port = serverSocket.getLocalPort();
 				serverSocket.close();
 			} catch (IOException ex) {
-				Activator.getDefault().getLog().log(Status.error(ex.getMessage(), ex));
+				ILog.get().error(ex.getMessage(), ex);
 			}
 			File cwdFile = cwd == null || cwd.isBlank() ? new File(System.getProperty("user.dir")) : new File(cwd); //$NON-NLS-1$
 			Map<String, String> processEnv = new HashMap<>(System.getenv());
@@ -339,7 +336,7 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 										"org.eclipse.ui.genericeditor.GenericEditor",
 										true);
 								} catch (PartInitException e1) {
-									Activator.getDefault().getLog().error(e1.getMessage(), e1);
+									ILog.get().error(e1.getMessage(), e1);
 								}
 							}
 						}
@@ -359,11 +356,11 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 											file.refreshLocal(IResource.DEPTH_ZERO, null);
 											result[0] = file;
 										} catch (CoreException | IOException e) {
-											Activator.getDefault().getLog().error(e.getMessage(), e);
+											ILog.get().error(e.getMessage(), e);
 										}
 									  }, null);								
 								} catch (CoreException e) {
-									Activator.getDefault().getLog().error(e.getMessage(), e);
+									ILog.get().error(e.getMessage(), e);
 								}
 								return result[0];
 							}

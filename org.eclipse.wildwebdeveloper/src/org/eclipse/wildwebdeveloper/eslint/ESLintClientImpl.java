@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.lsp4e.LanguageClientImpl;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
@@ -32,7 +31,6 @@ import org.eclipse.lsp4j.MessageType;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants;
 
 public class ESLintClientImpl extends LanguageClientImpl implements ESLintLanguageServerExtension {
@@ -123,7 +121,7 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 				try {
 					browserSupport.createBrowser("openDoc").openURL(new URL(data.get("url")));
 				} catch (Exception e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), e.getMessage(), e));
+					ILog.get().error(e.getMessage(), e);
 				}
 			});
 		}

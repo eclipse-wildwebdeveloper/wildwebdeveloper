@@ -16,6 +16,7 @@ import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -29,7 +30,6 @@ import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.vue.VueLanguageServerAPI;
 
 /**
@@ -115,7 +115,7 @@ public class VueAutoInsertReconciler implements IReconciler {
 															}
 															// viewer.setSelectedRange(offset, c)
 														} catch (BadLocationException e) {
-															Activator.getDefault().getLog().error(e.getMessage(), e);
+															ILog.get().error(e.getMessage(), e);
 														}
 													});
 
@@ -123,7 +123,7 @@ public class VueAutoInsertReconciler implements IReconciler {
 											});
 								} catch (BadLocationException e) {
 									// Do nothing
-									Activator.getDefault().getLog().error(e.getMessage(), e);
+									ILog.get().error(e.getMessage(), e);
 								}
 								return null;
 							});

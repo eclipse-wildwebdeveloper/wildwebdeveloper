@@ -25,11 +25,10 @@ import java.util.TreeSet;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
@@ -120,7 +119,7 @@ public class XMLCatalogs {
 		try {
 			Files.writeString(SYSTEM_CATALOG.toPath(), catalogFile.toString());
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+			ILog.get().error(e.getMessage(), e);
 		}
 		return SYSTEM_CATALOG;
 	}
@@ -140,12 +139,11 @@ public class XMLCatalogs {
 				if (url != null) {
 					uri = convertToURI(url);
 				} else {
-					Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-							"A URL object was not found for the given URI " + uri + " from " + contributorName));
+					ILog.get().warn("A URL object was not found for the given URI " + uri + " from " + contributorName);
 					return null;
 				}
 			} catch (InvalidRegistryObjectException | URISyntaxException | MalformedURLException e) {
-				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+				ILog.get().error(e.getMessage(), e);
 				return null;
 			}
 		}
@@ -169,16 +167,13 @@ public class XMLCatalogs {
 				}
 
 				// Could not convert to any supported scheme
-				Activator.getDefault().getLog().log(
-						new Status(IStatus.WARNING, Activator.PLUGIN_ID, "The given URI " + element.getAttribute("uri")
-								+ " from " + contributorName + " could not be resolved for local access"));
+				ILog.get().warn("The given URI " + element.getAttribute("uri")
+								+ " from " + contributorName + " could not be resolved for local access");
 				return null;
 			} catch (InvalidRegistryObjectException | IOException | URISyntaxException e) {
 				String plugin = element.getNamespaceIdentifier();
 				String uriString = element.getAttribute("uri");
-				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"Error while getting URI '" + uriString + "' from plugin '" + plugin + "' : " + e.getMessage(),
-						e));
+				ILog.get().error("Error while getting URI '" + uriString + "' from plugin '" + plugin + "' : " + e.getMessage(), e);
 				return null;
 			}
 		}

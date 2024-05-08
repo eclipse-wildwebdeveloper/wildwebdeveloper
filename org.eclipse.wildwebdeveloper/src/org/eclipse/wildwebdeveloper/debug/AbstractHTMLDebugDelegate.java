@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,7 +26,6 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.lsp4e.debug.DSPPlugin;
 import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
 
 public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
@@ -52,16 +52,12 @@ public class AbstractHTMLDebugDelegate extends DSPLaunchDelegate {
 
 			super.launch(builder);
 		} catch (Exception e) {
-			IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-			Activator.getDefault().getLog().log(errorStatus);
-			Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-					ErrorDialog.openError(Display.getDefault().getActiveShell(), "Debug error", e.getMessage(), errorStatus); //$NON-NLS-1$
-			}
-			});
+			IStatus errorStatus = Status.error(e.getMessage(), e);
+			ILog.get().log(errorStatus);
+            Display.getDefault().asyncExec(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(),
+                    "Debug error", e.getMessage(), errorStatus));
 
-		}
+        }
 	}
 
 }

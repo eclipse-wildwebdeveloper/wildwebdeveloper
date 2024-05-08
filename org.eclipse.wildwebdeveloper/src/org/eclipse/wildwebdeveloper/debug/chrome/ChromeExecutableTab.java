@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -37,7 +38,6 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.internal.browser.BrowserManager;
 import org.eclipse.ui.internal.browser.IBrowserDescriptor;
-import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.Messages;
 import org.eclipse.wildwebdeveloper.debug.node.VSCodeJSDebugDelegate;
 
@@ -51,7 +51,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 		try (InputStream imageResource = getClass().getResourceAsStream("/icons/ChromeIcon.png")) {
 			image = new Image(Display.getDefault(), imageResource);
 		} catch (IOException e) {
-			Activator.getDefault().getLog().error(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
@@ -132,7 +132,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 				}
 			}
 		} catch (CoreException ex) {
-			Activator.getDefault().getLog().log(ex.getStatus());
+			ILog.get().log(ex.getStatus());
 		}
 	}
 
