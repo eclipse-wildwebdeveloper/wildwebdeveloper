@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console;bundle-version="3.9.0",
  org.eclipse.ui.browser;bundle-version="3.6.0",
  org.eclipse.wildwebdeveloper.embedder.node;bundle-version="1.0.3",
- org.eclipse.core.variables;bundle-version="3.5.0"
+ org.eclipse.core.variables;bundle-version="3.5.0",
+ org.eclipse.tm4e.language_pack
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir

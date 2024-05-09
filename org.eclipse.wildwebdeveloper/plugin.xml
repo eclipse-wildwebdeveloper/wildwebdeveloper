@@ -163,31 +163,6 @@
    <!-- CSS Language -->
       
    <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="less"
-            id="org.eclipse.wildwebdeveloper.less"
-            name="LESS"
-            priority="low">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="scss,sass"
-            id="org.eclipse.wildwebdeveloper.scss"
-            name="SCSS/SASS"
-            priority="low">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="css"
-            id="org.eclipse.wildwebdeveloper.css"
-            name="CSS"
-            priority="low">
-      </content-type>
-   </extension>
-
-   <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.css.CSSLanguageServer"
@@ -197,66 +172,22 @@
             singleton="true">
       </server>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.css"
+            contentType="org.eclipse.tm4e.language_pack.css"
             id="org.eclipse.wildwebdeveloper.css"
             languageId="css">
       </contentTypeMapping>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.scss"
+            contentType="org.eclipse.tm4e.language_pack.scss"
             id="org.eclipse.wildwebdeveloper.css"
             languageId="scss">
       </contentTypeMapping>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.less"
+            contentType="org.eclipse.tm4e.language_pack.less"
             id="org.eclipse.wildwebdeveloper.css"
             languageId="less">
       </contentTypeMapping>
    </extension>
    
-   <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/css/css.tmLanguage.json"
-            scopeName="source.css">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.css"
-            scopeName="source.css">
-      </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/less/less.tmLanguage.json"
-            scopeName="source.css.less">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.less"
-            scopeName="source.css.less">
-      </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/scss/scss.json"
-            scopeName="source.css.scss">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.scss"
-            scopeName="source.css.scss">
-      </scopeNameContentTypeBinding>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.css"
-            path="language-configurations/css/language-configuration.json">
-      </languageConfiguration>
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.less"
-            path="language-configurations/less/language-configuration.json">
-      </languageConfiguration>
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.scss"
-            path="language-configurations/scss/language-configuration.json">
-      </languageConfiguration>
-   </extension>
-
    <extension
          point="org.eclipse.tm4e.ui.snippets">
       <snippet
@@ -267,7 +198,7 @@
    </extension>
 
   <extension point="org.eclipse.ui.genericeditor.icons">
-    <icon contentType="org.eclipse.wildwebdeveloper.css" icon="icons/cssEditorIcon.png"/>
+    <icon contentType="org.eclipse.tm4e.language_pack.css" icon="icons/cssEditorIcon.png"/>
   </extension>
 
    <extension
