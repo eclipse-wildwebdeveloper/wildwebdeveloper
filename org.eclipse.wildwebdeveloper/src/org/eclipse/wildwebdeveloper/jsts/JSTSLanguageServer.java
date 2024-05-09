@@ -84,6 +84,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			if (!TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT.equals(getTypeScriptVersion())) {
 				Map<String, String> tsServer = new HashMap<>();
 				tsServer.put("path", tsserverPath);
+				tsServer.put("useSyntaxServer", "never");
 				options.put("tsserver", tsServer);
 			}
 		} catch (IOException e) {
