@@ -18,10 +18,6 @@
          point="org.eclipse.ui.genericeditor.presentationReconcilers">
       <presentationReconciler
             class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
-            contentType="org.eclipse.core.runtime.xml">
-      </presentationReconciler>
-      <presentationReconciler
-            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
             contentType="org.eclipse.wildwebdeveloper.rnc">
       </presentationReconciler>
    </extension>
@@ -109,10 +105,6 @@
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="grammars/xml/xml.tmLanguage.json"
-            scopeName="source.xml">
-      </grammar>
-      <grammar
             path="grammars/dtd/dtd.tmLanguage.json"
             scopeName="text.xml.dtd">
       </grammar>
@@ -122,11 +114,11 @@
       </grammar>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.core.runtime.xml"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </scopeNameContentTypeBinding>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.xsd"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </scopeNameContentTypeBinding>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.dtd"
@@ -141,10 +133,6 @@
    <extension
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
-            contentTypeId="org.eclipse.core.runtime.xml"
-            path="language-configurations/xml/xml.language-configuration.json">
-      </languageConfiguration>
-      <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.rnc"
             path="language-configurations/rnc/rnc.language-configuration.json">
       </languageConfiguration>
@@ -155,7 +143,7 @@
       <snippet
             name="XML Sample"
             path="snippets/xml/sample.xml"
-            scopeName="source.xml">
+            scopeName="text.xml">
       </snippet>
    </extension>
    <extension
