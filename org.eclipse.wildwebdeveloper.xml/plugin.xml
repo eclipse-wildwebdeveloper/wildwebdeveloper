@@ -38,8 +38,7 @@
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            base-type="org.eclipse.core.runtime.xml"
-            file-extensions="xsl"
+            base-type="org.eclipse.tm4e.language_pack.xsl"
             id="org.eclipse.wildwebdeveloper.xsl"
             name="XSL"
             priority="low">
@@ -125,14 +124,6 @@
             contentTypeId="org.eclipse.core.runtime.xml"
             scopeName="source.xml">
       </scopeNameContentTypeBinding>
-      <grammar
-            path="grammars/xsl/xsl.tmLanguage.json"
-            scopeName="source.xml.xsl">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.xsl"
-            scopeName="source.xml.xsl">
-      </scopeNameContentTypeBinding>
       <scopeNameContentTypeBinding
             contentTypeId="org.eclipse.wildwebdeveloper.xsd"
             scopeName="source.xml">
@@ -152,10 +143,6 @@
       <languageConfiguration
             contentTypeId="org.eclipse.core.runtime.xml"
             path="language-configurations/xml/xml.language-configuration.json">
-      </languageConfiguration>
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.xsl"
-            path="language-configurations/xsl/xsl.language-configuration.json">
       </languageConfiguration>
       <languageConfiguration
             contentTypeId="org.eclipse.wildwebdeveloper.rnc"
