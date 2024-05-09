@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2022, 2024 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -144,24 +144,15 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 	 */
 	class Listener implements IDocumentListener, ITextInputListener {
 
-		/*
-		 * @see IDocumentListener#documentAboutToBeChanged(DocumentEvent)
-		 */
 		@Override
 		public void documentAboutToBeChanged(DocumentEvent e) {
 		}
 
-		/*
-		 * @see IDocumentListener#documentChanged(DocumentEvent)
-		 */
 		@Override
 		public void documentChanged(DocumentEvent e) {
 			autoInsert(e);
 		}
 
-		/*
-		 * @see ITextInputListener#inputDocumentAboutToBeChanged(IDocument, IDocument)
-		 */
 		@Override
 		public void inputDocumentAboutToBeChanged(IDocument oldInput, IDocument newInput) {
 			if (oldInput == document) {
@@ -172,9 +163,6 @@ public class HTMLAutoInsertReconciler implements IReconciler {
 			}
 		}
 
-		/*
-		 * @see ITextInputListener#inputDocumentChanged(IDocument, IDocument)
-		 */
 		@Override
 		public void inputDocumentChanged(IDocument oldInput, IDocument newInput) {
 			document = newInput;
