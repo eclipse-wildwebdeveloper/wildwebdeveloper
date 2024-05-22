@@ -18,7 +18,6 @@
 	<unit id="org.objectweb.asm" version="0.0.0"/>
 	<unit id="org.hamcrest.core" version="0.0.0"/>
 	<unit id="junit-jupiter-api" version="0.0.0"/>
-	<unit id="javax.xml.stream" version="0.0.0"/>
 	<unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
