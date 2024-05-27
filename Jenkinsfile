@@ -28,12 +28,26 @@ spec:
   - name: jnlp
     image: 'eclipsecbi/jenkins-jnlp-agent'
     volumeMounts:
-    - mountPath: /home/jenkins/.ssh
-      name: volume-known-hosts
+    - name: volume-known-hosts
+      mountPath: /home/jenkins/.ssh
+    - name: settings-xml
+      mountPath: /home/jenkins/.m2/settings.xml
+      subPath: settings.xml
+      readOnly: true
+    - name: m2-repo
+      mountPath: /home/jenkins/.m2/repository
   volumes:
-  - configMap:
+  - name: volume-known-hosts
+    configMap:
       name: known-hosts
-    name: volume-known-hosts
+  - name: settings-xml
+    secret:
+      secretName: m2-secret-dir
+      items:
+      - key: settings.xml
+        path: settings.xml
+  - name: m2-repo
+    emptyDir: {}
 """
     }
   }
@@ -43,6 +57,16 @@ spec:
 		GITHUB_API_CREDENTIALS_ID = 'github-bot-token'
 	}
 	stages {
+		stage('initialize PGP') {
+			steps {
+				container('container') {
+				withCredentials([file(credentialsId: 'secret-subkeys.asc', variable: 'KEYRING')]) {
+					sh 'gpg --batch --import "${KEYRING}"'
+					sh 'for fpr in $(gpg --list-keys --with-colons  | awk -F: \'/fpr:/ {print $10}\' | sort -u); do echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key ${fpr} trust; done'
+				}
+				}
+			}
+		}
 		stage('Prepare-environment') {
 			steps {
 				container('container') {
@@ -57,9 +81,11 @@ spec:
 		stage('Build') {
 			steps {
 				container('container') {
-					withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
-						wrap([$class: 'Xvnc', useXauthority: true]) {
-							sh """mvn clean verify -B -fae -Dtycho.disableP2Mirrors=true -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -Psign -Dmaven.repo.local=$WORKSPACE/.m2/repository -Dgithub.api.token="${GITHUB_API_TOKEN}" """
+					withCredentials([string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
+						withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
+							wrap([$class: 'Xvnc', useXauthority: true]) {
+								sh """mvn clean verify -B -fae -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -Psign -Dmaven.repo.local=$WORKSPACE/.m2/repository -Dgithub.api.token="${GITHUB_API_TOKEN}" -Dgpg.passphrase="${KEYRING_PASSPHRASE}" """
+							}
 						}
 					}
 				}
