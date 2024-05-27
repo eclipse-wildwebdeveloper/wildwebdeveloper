@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2024 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -168,7 +168,6 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			int port = 0;
 			try (ServerSocket serverSocket = new ServerSocket(0)) {
 				port = serverSocket.getLocalPort();
-				serverSocket.close();
 			} catch (IOException ex) {
 				ILog.get().error(ex.getMessage(), ex);
 			}
