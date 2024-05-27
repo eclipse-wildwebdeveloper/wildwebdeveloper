@@ -35,7 +35,7 @@ public class CompressUtils {
         if (archiveURL == null || baseDir == null) {
             return;
         }
-        ArchiveInputStream archive = null;
+        ArchiveInputStream<?> archive = null;
         try (InputStream input = archiveURL.openStream()) {
             if (archiveURL.getFile().endsWith(".tar.gz")) { //$NON-NLS-1$
                 InputStream gz = new GzipCompressorInputStream(input);
@@ -66,7 +66,7 @@ public class CompressUtils {
      * @param destination
      *                    destination folder
      */
-    private static void extractArchive(ArchiveInputStream in, File destination) throws IOException {
+    private static void extractArchive(ArchiveInputStream<?> in, File destination) throws IOException {
         ArchiveEntry entry = null;
         while ((entry = in.getNextEntry()) != null) {
             if (!in.canReadEntryData(entry)) {
