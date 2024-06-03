@@ -14,11 +14,19 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  groups:
+    vue:
+      patterns:
+      - "@vue/*"
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/angular-app"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  groups:
+    angular:
+      patterns:
+      - "@angular/*"
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/HelloWorldTS"
   schedule:
@@ -29,8 +37,19 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  groups:
+    typescript-eslint:
+      patterns:
+      - "@typescript-eslint/*"
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/vue-app"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  groups:
+    babel:
+      patterns:
+      - "@babel/*"
+    vue:
+      patterns:
+      - "@vue/*"  
