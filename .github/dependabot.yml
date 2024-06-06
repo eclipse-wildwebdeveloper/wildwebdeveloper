@@ -26,6 +26,7 @@ updates:
   groups:
     angular:
       patterns:
+      - "@angular-devkit/*"
       - "@angular/*"
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/HelloWorldTS"
