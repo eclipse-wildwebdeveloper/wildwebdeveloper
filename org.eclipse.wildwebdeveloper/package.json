@@ -2,7 +2,7 @@
   "dependencies": {
     "@angular/language-server": "18.0.0",
     "firefox-debugadapter": "2.9.9",
-    "typescript": "5.4.5",
+    "typescript": "5.5.2",
     "typescript-language-server": "4.3.3",
     "typescript-lit-html-plugin": "0.9.0",
     "typescript-plugin-css-modules": "5.1.0",
