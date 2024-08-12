@@ -99,6 +99,8 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		if (logLevelString != null) {
 			commands.add("-Dlog.level=" + logLevelString); // defined in org.eclipse.lemminx.logs.LogHelper
 		}
+		commands.add("-Duser.name=" + System.getProperty("user.name"));
+		commands.add("-Duser.home=" + System.getProperty("user.home"));
 		commands.add("-classpath");
 		try {
 			URL url = FileLocator
