@@ -18,6 +18,9 @@ updates:
     vue:
       patterns:
       - "@vue/*"
+    vscode-languageservices:
+      patterns:
+      - "vscode-*-languageservice"
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/angular-app"
   schedule:
