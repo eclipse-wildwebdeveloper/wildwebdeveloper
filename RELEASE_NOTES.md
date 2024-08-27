@@ -2,6 +2,87 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.7
+
+* 📅 Release Date: August 28th, 2024
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.6...1.3.7
+
+#### Editing improvements
+
+* Bugfix for XMLLanguageServer process to properly inherit user.name and user.home
+
+#### Dependencies update
+
+* Update commons-compress to 1.27.1 
+* Use the latest YAML Language Server v.1.15.0
+* Use the latest Vue.js LS v.2.0.22
+* Use the latest TypeScript LS v.4.5.3
+* Use LemMinX v.0.28.0 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
+* Use the latest VSCode extensions v.1.92.0 for CSS/HTML/JSON editing
+* Embed latest Node.js to v.20.16.0 LTS
+* Use the latest Angular LS v.18.2.0
+* Other dependency updates
+
+## 1.3.6
+
+* 📅 Release Date: May 28th, 2024
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.5...1.3.6
+
+#### Editing improvements
+
+* Bugfix: Ensure that the update site contains org.apache.commons.lang3
+* Bugfix: Explicit close in AutoCloseable
+* Bugfix: Enable PGP signing in Jenkinsfile
+
+#### Dependencies update
+
+* Update commons-compress to 1.26.2 
+* Other dependency updates
+
+## 1.3.5
+
+* 📅 Release Date: May 23th, 2024
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.4...1.3.5
+
+#### Editing improvements
+
+* Make Status creation and logging less verbose
+* Switch CSS/LESS/SCSS to TM4E grammar/language config 
+* Use XML grammar from TM4E 
+
+#### Dependencies update
+
+* Require LSP4E v.0.18.9
+* Use the latest VSCode extensions v.1.89.0 for CSS/HTML/JSON editing
+* Use the latest Angular LS v.17.3.2
+* Embed latest Node.js to v.20.13.1 LTS
+* Use the latest Vue.js LS v.2.0.19
+* Other dependency updates
+
+## 1.3.4
+
+* 📅 Release Date: May 6t, 2024
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.3...1.3.4
+
+#### Editing improvements
+
+* Allow configuring directory of ESLint package by @PyvesB in #1412
+* Bugfix for preferences layout
+* Bugfix for wrong path to tsserver
+* Include newer snakeyaml (from TM4E repo)
+* Move to Java 21 by @akurtakov in #1495
+* Enable prototype for launch configs
+
+#### Dependencies update
+
+* Use the latest Vue.js LS v.1.8.27
+* Use the latest VSCode ESLint extension v.2.4.4
+* Use the latest VSCode extensions v.1.86.0 for CSS/HTML/JSON editing
+* Use the latest Angular LS v.17.3.1
+* Embed latest Node.js to v.20.12.1 LTS
+* Update commons-compress to 1.26.1 
+* Other dependency updates
+
 ## 1.3.3
 
 * 📅 Release Date: November 21th, 2023
