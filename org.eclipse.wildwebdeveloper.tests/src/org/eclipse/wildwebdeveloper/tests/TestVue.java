@@ -13,6 +13,7 @@
 package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
@@ -142,7 +143,8 @@ public class TestVue {
 		editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				appComponentHTML);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		String tag = "<only-start>";
+		String tagName = "only-start";
+		String tag = '<' + tagName + '>';
 		document.set(document.get().replace(tag, tag + "<"));
 		assertTrue(new DisplayHelper() {
 			@Override
@@ -174,7 +176,13 @@ public class TestVue {
 		int pos = document.get().indexOf(tag) + tag.length();
 		ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
 				pos + 1);
-		proposals[0].apply(document);
+
+		// Find closing tag proposal
+		ICompletionProposal closingTagProposal = Arrays.stream(proposals)
+				.filter(p -> p.getDisplayString().equals('/' + tagName)).findFirst().orElse(null);
+		assertNotNull(closingTagProposal, "Closing tag proposal not found for '" + tag + "'");
+
+		closingTagProposal.apply(document);
 		assertEquals(new String(componentFolder.getFile("HelloWorldCorrect.vue").getContents().readAllBytes()).trim(),
 				document.get().trim(), "Incorrect completion insertion");
 
