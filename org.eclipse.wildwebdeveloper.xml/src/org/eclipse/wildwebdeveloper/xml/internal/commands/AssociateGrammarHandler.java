@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -29,7 +28,6 @@ import org.eclipse.lsp4e.command.LSPCommandHandler;
 import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.ExecuteCommandOptions;
 import org.eclipse.lsp4j.ExecuteCommandParams;
-import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.TextDocumentEdit;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.WorkspaceEdit;
@@ -107,16 +105,5 @@ public class AssociateGrammarHandler extends LSPCommandHandler {
 
 		throw new UnsupportedOperationException(
 				"No language server has registered to handle command '" + commandId + "'");
-	}
-
-	// TODO: not used - a subject to remove
-	private static Predicate<ServerCapabilities> handlesCommand(String commandId) {
-		return (serverCaps) -> {
-			ExecuteCommandOptions executeCommandProvider = serverCaps.getExecuteCommandProvider();
-			if (executeCommandProvider != null) {
-				return executeCommandProvider.getCommands().contains(commandId);
-			}
-			return false;
-		};
 	}
 }
