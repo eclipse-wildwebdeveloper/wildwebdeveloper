@@ -189,45 +189,6 @@
 	</build>
 
 	<profiles>
-		<profile>
-			<id>sign</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.cbi.maven.plugins</groupId>
-						<artifactId>eclipse-jarsigner-plugin</artifactId>
-						<version>1.4.3</version>
-						<executions>
-							<execution>
-								<id>sign</id>
-								<phase>package</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.eclipse.tycho</groupId>
-						<artifactId>tycho-p2-plugin</artifactId>
-						<version>${tycho-version}</version>
-						<executions>
-							<execution>
-								<id>p2-metadata</id>
-								<phase>package</phase>
-								<goals>
-									<goal>p2-metadata</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<defaultP2Metadata>false</defaultP2Metadata>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
 		<!-- Automatic profile for Mac-specific settings -->
 		<profile>
 			<id>macos</id>
@@ -244,11 +205,6 @@
 
 	<pluginRepositories>
 		<pluginRepository>
-			<id>cbi</id>
-			<url>https://repo.eclipse.org/content/groups/cbi</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</pluginRepository>
-		<pluginRepository>
 			<id>dash-licenses-snapshots</id>
 			<url>https://repo.eclipse.org/content/repositories/dash-licenses/</url>
 			<snapshots>
@@ -257,10 +213,6 @@
 			<releases>
 				<enabled>true</enabled>
 			</releases>
-		</pluginRepository>
-		<pluginRepository>
-			<id>tycho-snapshots</id>
-			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>

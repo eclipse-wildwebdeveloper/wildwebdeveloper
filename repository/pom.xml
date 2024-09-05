@@ -57,6 +57,7 @@
 									<goal>sign-p2-artifacts</goal>
 								</goals>
 								<configuration>
+									<signer>bc</signer>
 									<keyname>9BC06FC97ED4ED26</keyname>
 									<skipIfJarsigned>true</skipIfJarsigned>
 								</configuration>
