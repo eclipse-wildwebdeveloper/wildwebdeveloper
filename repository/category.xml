@@ -51,9 +51,6 @@
    <bundle id="com.google.gson" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.jsoup" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
    <bundle id="com.google.guava" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
