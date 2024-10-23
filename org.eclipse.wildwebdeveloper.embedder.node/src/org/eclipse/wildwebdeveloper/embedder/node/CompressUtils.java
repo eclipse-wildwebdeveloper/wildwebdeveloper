@@ -90,7 +90,7 @@ public class CompressUtils {
                     Files.createSymbolicLink(f.toPath(), Paths.get(linkName));
                 } else {
                     try (OutputStream o = Files.newOutputStream(f.toPath())) {
-                        IOUtils.copy(in, o);
+                        in.transferTo(o);
                     }
                 }
                 if (entry instanceof TarArchiveEntry tarEntry) {
