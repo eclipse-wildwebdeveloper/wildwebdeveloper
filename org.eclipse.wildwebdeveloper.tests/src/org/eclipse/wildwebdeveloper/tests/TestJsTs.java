@@ -14,7 +14,6 @@ package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -101,7 +100,7 @@ public class TestJsTs {
         String newContent = content.replaceAll(oldName, newName);
 
         int offset = content.indexOf(oldName);
-        file.create(new ByteArrayInputStream(content.getBytes()), true, null);
+        file.create(content.getBytes(), true, false, null);
         AbstractTextEditor editor = (AbstractTextEditor) IDE.openEditor(
                 PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
                 "org.eclipse.ui.genericeditor.GenericEditor");

@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -75,7 +74,7 @@ public class TestXML {
     @Test
     public void testXMLFile() throws Exception {
         final IFile file = project.getFile("blah.xml");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<plugin></");
@@ -91,7 +90,7 @@ public class TestXML {
     @Test
     public void testXSLFile() throws Exception {
         final IFile file = project.getFile("blah.xsl");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
@@ -107,7 +106,7 @@ public class TestXML {
     @Test
     public void testXSDFile() throws Exception {
         final IFile file = project.getFile("blah.xsd");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
@@ -123,7 +122,7 @@ public class TestXML {
     @Test
     public void testDTDFile() throws Exception {
         final IFile file = project.getFile("blah.dtd");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!--<!-- -->");
@@ -144,7 +143,7 @@ public class TestXML {
                 + "	xmlns:layout=\"sap.ui.layout\">\n" + "    |\n" + "</layout:BlockLayoutCell>";
         int offset = content.indexOf('|');
         content = content.replace("|", "");
-        file.create(new ByteArrayInputStream(content.getBytes()), true, null);
+        file.create(content.getBytes(), true, false, null);
         AbstractTextEditor editor = (AbstractTextEditor) IDE.openEditor(
                 PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
                 "org.eclipse.ui.genericeditor.GenericEditor");
@@ -158,7 +157,7 @@ public class TestXML {
     @Test
     public void autoCloseTags() throws Exception {
         final IFile file = project.getFile("autoCloseTags.xml");
-        file.create(new ByteArrayInputStream("<foo".getBytes()), true, null);
+        file.create("<foo".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());

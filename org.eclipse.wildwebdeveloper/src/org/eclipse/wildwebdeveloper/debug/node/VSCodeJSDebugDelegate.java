@@ -14,7 +14,6 @@
 package org.eclipse.wildwebdeveloper.debug.node;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -349,12 +348,12 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 								try {
 									ws.run((IWorkspaceRunnable) monitor -> {
 										result[0] = null;
-										try (ByteArrayInputStream is = new ByteArrayInputStream(new byte[0])) {
+										try {
 											createContainers(file);
-											file.create(is, true, null);
+											file.create(new byte[0], true, false, null);
 											file.refreshLocal(IResource.DEPTH_ZERO, null);
 											result[0] = file;
-										} catch (CoreException | IOException e) {
+										} catch (CoreException e) {
 											ILog.get().error(e.getMessage(), e);
 										}
 									  }, null);								

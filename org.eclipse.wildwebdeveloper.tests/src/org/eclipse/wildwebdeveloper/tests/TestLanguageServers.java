@@ -15,7 +15,6 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -63,7 +62,7 @@ public class TestLanguageServers {
     @Test
     public void testCSSFile() throws Exception {
         final IFile file = project.getFile("blah.css");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
@@ -79,7 +78,7 @@ public class TestLanguageServers {
     @Test
     public void testHTMLFile() throws Exception {
         final IFile file = project.getFile("blah.html");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
@@ -95,7 +94,7 @@ public class TestLanguageServers {
     @Test
     public void testYAMLFile() throws Exception {
         final IFile file = project.getFile("blah.yaml");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("hello: '");
@@ -111,7 +110,7 @@ public class TestLanguageServers {
     @Test
     public void testJSONFile() throws Exception {
         final IFile file = project.getFile("blah.json");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("ERROR");
@@ -127,7 +126,7 @@ public class TestLanguageServers {
     @Test
     public void testJSFile() throws Exception {
         final IFile file = project.getFile("blah.js");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a
@@ -145,7 +144,7 @@ public class TestLanguageServers {
     @Test
     public void testTSFile() throws Exception {
         final IFile file = project.getFile("blah.ts");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
@@ -161,7 +160,7 @@ public class TestLanguageServers {
     @Test
     public void testJSXFile() throws Exception {
         final IFile file = project.getFile("blah.jsx");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
@@ -177,7 +176,7 @@ public class TestLanguageServers {
     @Test
     public void testTSXFile() throws Exception {
         final IFile file = project.getFile("blah.tsx");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
@@ -272,7 +271,7 @@ public class TestLanguageServers {
     @Test
     public void testSCSSFile() throws Exception {
         final IFile file = project.getFile("blah.scss");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
@@ -288,7 +287,7 @@ public class TestLanguageServers {
     @Test
     public void testLESSFile() throws Exception {
         final IFile file = project.getFile("blah.less");
-        file.create(new ByteArrayInputStream("ERROR".getBytes()), true, null);
+        file.create("ERROR".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
