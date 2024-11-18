@@ -2,6 +2,23 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.8
+
+* 📅 Release Date: November 18th, 2024
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.7...1.3.8
+
+#### Editing improvements
+
+* Register .cts and .mts file extensions with TypeScript content type
+
+#### Dependencies update
+
+* Use the latest VSCode extensions v.1.95.0 for CSS/HTML/JSON editing
+* Embed latest Node.js to v.22.11.0 LTS
+* Use the latest Vue.js LS v.2.1.10
+* Use the latest Angular LS v.19.0.1
+* Other dependency updates
+
 ## 1.3.7
 
 * 📅 Release Date: August 28th, 2024
