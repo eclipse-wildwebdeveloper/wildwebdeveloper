@@ -34,27 +34,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(AllCleanRule.class)
 public class TestJSON {
 
-	@Test
-	public void testFormatEnabled() throws IOException, PartInitException, CoreException {
-		File file = File.createTempFile("test", ".json");
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IEditorPart editor = IDE.openEditorOnFileStore(activePage, EFS.getStore(file.toURI()));
-		ICommandService service = activePage.getWorkbenchWindow().getService(ICommandService.class);
-		Command formatCommand = service.getCommand("org.eclipse.lsp4e.format");
-		assertNotNull(formatCommand, "Format command not found");
-		assertTrue(formatCommand.isDefined(), "Format command not defined");
+    @Test
+    public void testFormatEnabled() throws IOException, PartInitException, CoreException {
+        File file = File.createTempFile("test", ".json");
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorPart editor = IDE.openEditorOnFileStore(activePage, EFS.getStore(file.toURI()));
+        ICommandService service = activePage.getWorkbenchWindow().getService(ICommandService.class);
+        Command formatCommand = service.getCommand("org.eclipse.lsp4e.format");
+        assertNotNull(formatCommand, "Format command not found");
+        assertTrue(formatCommand.isDefined(), "Format command not defined");
 //		assertTrue(formatCommand.isEnabled(), "Format command not enabled");
-		new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return formatCommand.isEnabled();
-				} catch (Exception e) {
-					return false;
-				}
-			}
-		}.waitForCondition(editor.getSite().getShell().getDisplay(), 3000);
-		assertTrue(formatCommand.isHandled(), "Format command not handled");
-	}
+        DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 3000, () -> {
+            try {
+                return formatCommand.isEnabled();
+            } catch (Exception e) {
+                return false;
+            }
+        });
+        assertTrue(formatCommand.isHandled(), "Format command not handled");
+    }
 
 }

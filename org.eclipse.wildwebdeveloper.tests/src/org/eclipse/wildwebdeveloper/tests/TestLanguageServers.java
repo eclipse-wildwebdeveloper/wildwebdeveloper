@@ -67,16 +67,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -86,16 +83,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -105,16 +99,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("hello: '");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -124,16 +115,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("ERROR");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -145,16 +133,13 @@ public class TestLanguageServers {
         DisplayHelper.sleep(2000); // Give time for LS to initialize enough before making edit and sending a
                                    // didChange
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -164,16 +149,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -183,16 +165,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -203,34 +182,28 @@ public class TestLanguageServers {
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
 
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not published");
+        }), "Diagnostic not published");
 
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("const x = <></>;export default x;");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    IMarker[] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
-                    for (IMarker m : markers) {
-                        if (((String) m.getAttribute(IMarker.MESSAGE)).contains("React")) {
-                            return true;
-                        }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000, () -> {
+            try {
+                IMarker[] markers = file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+                for (IMarker m : markers) {
+                    if (((String) m.getAttribute(IMarker.MESSAGE)).contains("React")) {
+                        return true;
                     }
-                    return false;
-                } catch (CoreException e) {
-                    return false;
                 }
+                return false;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 15000), "Diagnostic not cleared");
+        }), "Diagnostic not cleared");
     }
 
     @Test
@@ -303,16 +276,13 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 
     @Test
@@ -322,15 +292,12 @@ public class TestLanguageServers {
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
-                } catch (CoreException e) {
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+            try {
+                return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
+            } catch (CoreException e) {
+                return false;
             }
-        }.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000), "Diagnostic not published");
+        }), "Diagnostic not published");
     }
 }
