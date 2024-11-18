@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2024 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -206,8 +205,7 @@ public class NodeJSManager {
         } else if (Platform.getOS().equals(Platform.OS_MACOSX)) {
             command = new String[] { getDefaultShellMacOS(), "-c", "-li", "which " + program };
         }
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+        try (BufferedReader reader = Runtime.getRuntime().exec(command).inputReader()) {
             res = reader.readLine();
         } catch (IOException e) {
             ILog.get().error(e.getMessage(), e);
@@ -297,8 +295,7 @@ public class NodeJSManager {
     private static String getDefaultShellMacOS() {
         String res = null;
         String[] command = { "/bin/bash", "-c", "-l", "dscl . -read ~/ UserShell" };
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream()));) {
+        try (BufferedReader reader = Runtime.getRuntime().exec(command).inputReader()) {
             res = reader.readLine();
             if (!res.startsWith(MACOS_DSCL_SHELL_PREFIX)) {
                 ILog.get().error("Cannot find default shell. Use '/bin/zsh' instead.");
@@ -323,8 +320,7 @@ public class NodeJSManager {
         String nodeVersion = null;
         String[] nodeVersionCommand = { nodeJsLocation.getAbsolutePath(), "-v" };
 
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Runtime.getRuntime().exec(nodeVersionCommand).getInputStream()));) {
+        try (BufferedReader reader = Runtime.getRuntime().exec(nodeVersionCommand).inputReader()) {
             nodeVersion = reader.readLine();
         } catch (IOException e) {
             ILog.get().error(e.getMessage(), e);
