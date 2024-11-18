@@ -461,7 +461,7 @@
       </content-type>
       <content-type
             base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="ts"
+            file-extensions="ts, cts, mts"
             id="org.eclipse.wildwebdeveloper.ts"
             name="TypeScript"
             priority="normal">
