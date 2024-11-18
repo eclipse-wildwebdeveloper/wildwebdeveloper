@@ -1,5 +1,5 @@
 {
-  "name": "HelloWorldTS",
+  "name": "hello_world_ts",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {

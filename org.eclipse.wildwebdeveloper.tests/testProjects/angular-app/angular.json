@@ -10,6 +10,5 @@
       "prefix": "app",
       "schematics": {}
     }
-  },
-  "defaultProject": "angular-app"
+  }
 }
