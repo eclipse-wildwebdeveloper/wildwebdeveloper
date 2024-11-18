@@ -90,30 +90,22 @@ public class TestVue {
         LanguageServerWrapper lsWrapper = LanguageServiceAccessor.getLSWrapper(project,
                 LanguageServersRegistry.getInstance().getDefinition("org.eclipse.wildwebdeveloper.vue"));
 
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return Arrays
-                            .stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-                                    IResource.DEPTH_ZERO))
-                            .anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("never read"));
-                } catch (CoreException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 30000, () -> {
+            try {
+                return Arrays
+                        .stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+                                IResource.DEPTH_ZERO))
+                        .anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("never read"));
+            } catch (CoreException e) {
+                e.printStackTrace();
+                return false;
             }
-        }.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
+        }),
                 "Diagnostic not published in standalone component file");
         IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-        assertTrue(new DisplayHelper() {
-
-            @Override
-            protected boolean condition() {
-                return lsWrapper.isActive() && lsWrapper.isConnectedTo(LSPEclipseUtils.toUri(document))
-                        && lsWrapper.canOperate(project) && lsWrapper.canOperate(document);
-            }
-        }.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
+        assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 30000,
+                () -> lsWrapper.isActive() && lsWrapper.isConnectedTo(LSPEclipseUtils.toUri(document))
+                        && lsWrapper.canOperate(project) && lsWrapper.canOperate(document)));
         LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
         ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
                 document.get().indexOf(" }}"));
@@ -142,30 +134,22 @@ public class TestVue {
         String tagName = "only-start";
         String tag = '<' + tagName + '>';
         document.set(document.get().replace(tag, tag + "<"));
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                IMarker[] markers;
-                try {
-                    markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
-                    return Arrays.stream(markers).anyMatch(
-                            marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("Element is missing end tag."));
-                } catch (CoreException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 30000, () -> {
+            IMarker[] markers;
+            try {
+                markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+                return Arrays.stream(markers).anyMatch(
+                        marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("Element is missing end tag."));
+            } catch (CoreException e) {
+                e.printStackTrace();
+                return false;
             }
-        }.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
+        }),
                 "No error found on erroneous HTML component file");
 
-        assertTrue(new DisplayHelper() {
-
-            @Override
-            protected boolean condition() {
-                return lsWrapper.isActive() && lsWrapper.isConnectedTo(LSPEclipseUtils.toUri(document))
-                        && lsWrapper.canOperate(project) && lsWrapper.canOperate(document);
-            }
-        }.waitForCondition(editor.getSite().getShell().getDisplay(), 30000));
+        assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 30000,
+                () -> lsWrapper.isActive() && lsWrapper.isConnectedTo(LSPEclipseUtils.toUri(document))
+                        && lsWrapper.canOperate(project) && lsWrapper.canOperate(document)));
 
         LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
 

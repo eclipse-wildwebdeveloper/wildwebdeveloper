@@ -37,62 +37,59 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(AllCleanRule.class)
 public class TestYaml {
 
-	@Test
-	public void testFalseDetectionAsKubernetes() throws Exception {
-		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject("p");
-		p.create(new NullProgressMonitor());
-		p.open(new NullProgressMonitor());
-		IFile file = p.getFile("blah.yaml");
-		file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
-		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		document.set("name: a\ndescrition: b");
-		boolean markerFound = new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
-				} catch (CoreException e) {
-					return false;
-				}
-			}
-		}.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(), 3000);
-		assertFalse(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
-				.map(Object::toString).collect(Collectors.joining("\n")));
-	}
+    @Test
+    public void testFalseDetectionAsKubernetes() throws Exception {
+        IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject("p");
+        p.create(new NullProgressMonitor());
+        p.open(new NullProgressMonitor());
+        IFile file = p.getFile("blah.yaml");
+        file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
+        IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+        document.set("name: a\ndescrition: b");
+        boolean markerFound = DisplayHelper.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(),
+                3000, () -> {
+                    try {
+                        return file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
+                    } catch (CoreException e) {
+                        return false;
+                    }
+                });
+        assertFalse(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
+                .map(Object::toString).collect(Collectors.joining("\n")));
+    }
 
-	private void testErrorFile(String name) throws Exception {
-		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject("p");
-		p.create(new NullProgressMonitor());
-		p.open(new NullProgressMonitor());
-		IFile file = p.getFile(name);
-		file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
-		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		document.set("{version: 1}");
-		boolean markerFound = new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
-				} catch (CoreException e) {
-					return false;
-				}
-			}
-		}.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(), 6000);
-		assertTrue(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
-				.map(Object::toString).collect(Collectors.joining("\n")));
-	}
+    private void testErrorFile(String name) throws Exception {
+        IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject("p");
+        p.create(new NullProgressMonitor());
+        p.open(new NullProgressMonitor());
+        IFile file = p.getFile(name);
+        file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
+        IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+        document.set("{version: 1}");
+        boolean markerFound = DisplayHelper.waitForCondition(activePage.getWorkbenchWindow().getShell().getDisplay(),
+                6000, () -> {
+                    try {
+                        return file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
+                    } catch (CoreException e) {
+                        return false;
+                    }
 
-	@Test
-	public void testSchemaExtensionPoint() throws Exception {
-		testErrorFile("dep.yml");
-	}
+                });
+        assertTrue(markerFound, Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
+                .map(Object::toString).collect(Collectors.joining("\n")));
+    }
 
-	@Test
-	public void testSchemaExtensionPointUsingPlatformURL() throws Exception {
-		testErrorFile("depp.yml");
-	}
+    @Test
+    public void testSchemaExtensionPoint() throws Exception {
+        testErrorFile("dep.yml");
+    }
+
+    @Test
+    public void testSchemaExtensionPointUsingPlatformURL() throws Exception {
+        testErrorFile("depp.yml");
+    }
 }

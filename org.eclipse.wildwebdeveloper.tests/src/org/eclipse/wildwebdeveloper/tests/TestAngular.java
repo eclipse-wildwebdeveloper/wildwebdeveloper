@@ -84,22 +84,18 @@ public class TestAngular {
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), appComponentFile);
         DisplayHelper.sleep(4000); // Give time for LS to initialize enough before making edit and sending a
                                    // didChange
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                try {
-                    return Arrays
-                            .stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
-                                    IResource.DEPTH_ZERO))
-                            .anyMatch(marker -> marker.getAttribute(IMarker.LINE_NUMBER, -1) == 5
-                                    && marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
-                } catch (CoreException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 30000, () -> {
+            try {
+                return Arrays
+                        .stream(appComponentFile.findMarkers("org.eclipse.lsp4e.diagnostic", true,
+                                IResource.DEPTH_ZERO))
+                        .anyMatch(marker -> marker.getAttribute(IMarker.LINE_NUMBER, -1) == 5
+                                && marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
+            } catch (CoreException e) {
+                e.printStackTrace();
+                return false;
             }
-        }.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
-                "Diagnostic not published in standalone component file");
+        }), "Diagnostic not published in standalone component file");
         editor.close(false);
     }
 
@@ -118,21 +114,17 @@ public class TestAngular {
         // then make an edit
         IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
         document.set(document.get() + "\n");
-        assertTrue(new DisplayHelper() {
-            @Override
-            protected boolean condition() {
-                IMarker[] markers;
-                try {
-                    markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
-                    return Arrays.stream(markers)
-                            .anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
-                } catch (CoreException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+        assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 30000, () -> {
+            IMarker[] markers;
+            try {
+                markers = appComponentHTML.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO);
+                return Arrays.stream(markers)
+                        .anyMatch(marker -> marker.getAttribute(IMarker.MESSAGE, "").contains("not exist"));
+            } catch (CoreException e) {
+                e.printStackTrace();
+                return false;
             }
-        }.waitForCondition(editor.getSite().getShell().getDisplay(), 30000),
-                "No error found on erroneous HTML component file");
+        }), "No error found on erroneous HTML component file");
         // test completion
         LSContentAssistProcessor contentAssistProcessor = new LSContentAssistProcessor();
         ICompletionProposal[] proposals = contentAssistProcessor.computeCompletionProposals(Utils.getViewer(editor),
