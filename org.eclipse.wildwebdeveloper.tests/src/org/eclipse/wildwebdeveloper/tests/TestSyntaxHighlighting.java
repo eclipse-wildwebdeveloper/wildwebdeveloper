@@ -14,7 +14,6 @@ package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
@@ -47,7 +46,7 @@ public class TestSyntaxHighlighting {
     @Test
     public void testJSXHighlighting() throws CoreException {
         IFile file = project.getFile("test.jsx");
-        file.create(new ByteArrayInputStream("var n = 4;\n".getBytes()), true, null);
+        file.create("var n = 4;\n".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         StyledText widget = (StyledText) editor.getAdapter(Control.class);

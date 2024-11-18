@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2023 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2024 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -13,8 +13,6 @@
 package org.eclipse.wildwebdeveloper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.ByteArrayInputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -42,7 +40,7 @@ public class TestHTML {
         project.create(null);
         project.open(null);
         final IFile file = project.getFile("blah.html");
-        file.create(new ByteArrayInputStream("FAIL".getBytes()), true, null);
+        file.create("FAIL".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<style\n<html><");
@@ -62,7 +60,7 @@ public class TestHTML {
         project.create(null);
         project.open(null);
         final IFile file = project.getFile("blah.html");
-        file.create(new ByteArrayInputStream("<html><body><a></a></body></html>".getBytes()), true, null);
+        file.create("<html><body><a></a></body></html>".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         editor.setFocus();
@@ -102,7 +100,7 @@ public class TestHTML {
         project.create(null);
         project.open(null);
         final IFile file = project.getFile("autoCloseTags.html");
-        file.create(new ByteArrayInputStream("<foo".getBytes()), true, null);
+        file.create("<foo".getBytes(), true, false, null);
         ITextEditor editor = (ITextEditor) IDE
                 .openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
         IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());

@@ -14,7 +14,6 @@ package org.eclipse.wildwebdeveloper.tests;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class TestYaml {
         p.create(new NullProgressMonitor());
         p.open(new NullProgressMonitor());
         IFile file = p.getFile("blah.yaml");
-        file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
+        file.create(new byte[0], true, false, new NullProgressMonitor());
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
         IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
@@ -65,7 +64,7 @@ public class TestYaml {
         p.create(new NullProgressMonitor());
         p.open(new NullProgressMonitor());
         IFile file = p.getFile(name);
-        file.create(new ByteArrayInputStream(new byte[0]), true, new NullProgressMonitor());
+        file.create(new byte[0], true, false, new NullProgressMonitor());
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         ITextEditor editor = (ITextEditor) IDE.openEditor(activePage, file, true);
         IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
