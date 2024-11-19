@@ -2,6 +2,15 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse Wild Web Developer.
 
+## 1.3.9
+
+* 📅 Release Date: November 19th, 2024
+* All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.8...1.3.9
+
+#### Editing improvements
+
+* Embed Node.js for Windows Aarch64
+
 ## 1.3.8
 
 * 📅 Release Date: November 18th, 2024
