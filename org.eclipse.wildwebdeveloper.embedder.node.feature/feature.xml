@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.wildwebdeveloper.embedder.node.feature"
       label="%name"
-      version="1.1.4.qualifier"
+      version="1.2.0.qualifier"
       provider-name="Eclipse Wild Web Developer project"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
@@ -56,8 +56,9 @@
          fragment="true"/>
 
    <plugin
-         id="org.eclipse.wildwebdeveloper.embedder.node.macos.aarch64"
-         os="macosx"
+         id="org.eclipse.wildwebdeveloper.embedder.node.win32.aarch64"
+         os="win32"
+         ws="win32"
          arch="aarch64"
          download-size="0"
          install-size="0"
@@ -68,6 +69,15 @@
          id="org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64"
          os="macosx"
          arch="x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
+   <plugin
+         id="org.eclipse.wildwebdeveloper.embedder.node.macos.aarch64"
+         os="macosx"
+         arch="aarch64"
          download-size="0"
          install-size="0"
          version="0.0.0"

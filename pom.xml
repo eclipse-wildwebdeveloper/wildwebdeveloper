@@ -20,6 +20,7 @@
 		<module>org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.macos.aarch64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node.win32.x86_64</module>
+		<module>org.eclipse.wildwebdeveloper.embedder.node.win32.aarch64</module>
 		<module>org.eclipse.wildwebdeveloper.embedder.node</module>
 		<module>org.eclipse.wildwebdeveloper</module>
 		<module>org.eclipse.wildwebdeveloper.xml</module>
@@ -160,6 +161,11 @@
 								<os>win32</os>
 								<ws>win32</ws>
 								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>aarch64</arch>
 							</environment>
 							<environment>
 								<os>linux</os>
