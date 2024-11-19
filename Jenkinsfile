@@ -71,10 +71,10 @@ spec:
 		stage('Build') {
 			steps {
 				container('container') {
-					withCredentials([file(credentialsId: 'secret-subkeys.asc', variable: 'KEYRING'), string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
+					withCredentials([file(credentialsId: 'secret-subkeys.asc', variable: 'KEYRING'), string(credentialsId: 'gpg-passphrase', variable: 'MAVEN_GPG_PASSPHRASE')]) {
 						withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
 							wrap([$class: 'Xvnc', useXauthority: true]) {
-								sh '''mvn clean verify -B -fae -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -Psign -Dmaven.repo.local=$WORKSPACE/.m2/repository -Dgithub.api.token="${GITHUB_API_TOKEN}" -Dgpg.passphrase="${KEYRING_PASSPHRASE}" -Dtycho.pgp.signer.bc.secretKeys="${KEYRING}" '''
+								sh '''mvn clean verify -B -fae -Ddownload.cache.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -Psign -Dmaven.repo.local=$WORKSPACE/.m2/repository -Dgithub.api.token="${GITHUB_API_TOKEN}" -Dtycho.pgp.signer.bc.secretKeys="${KEYRING}" '''
 							}
 						}
 					}
