@@ -14,10 +14,9 @@ kind: Pod
 spec:
   containers:
   - name: container
-    image: docker.io/akurtakov/fedora-gtk3-mutter-java-node:java-21-node-20
+    image: docker.io/akurtakov/fedora-gtk3-mutter-java-node:f41-node22
     imagePullPolicy: Always
     tty: true
-    command: [ "uid_entrypoint", "cat" ]
     resources:
       limits:
         memory: "4Gi"
