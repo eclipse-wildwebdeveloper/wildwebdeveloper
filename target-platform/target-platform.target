@@ -54,5 +54,22 @@
 			</dependency>
 		</dependencies>
 	</location>
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" label="LemMinX" missingManifest="error" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>org.eclipse.lemminx</groupId>
+				<artifactId>org.eclipse.lemminx</artifactId>
+				<version>0.29.0</version>
+				<type>jar</type>
+				<classifier>uber</classifier>
+			</dependency>
+		</dependencies>
+		<repositories>
+			<repository>
+				<id>lemminx-releases</id>
+				<url>https://repo.eclipse.org/content/repositories/lemminx-releases/</url>
+			</repository>
+		</repositories>
+	</location>
 </locations>
 </target>

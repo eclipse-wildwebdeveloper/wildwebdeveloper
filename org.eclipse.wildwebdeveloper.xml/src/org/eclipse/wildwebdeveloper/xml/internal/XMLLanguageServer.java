@@ -16,7 +16,6 @@ package org.eclipse.wildwebdeveloper.xml.internal;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,8 +41,12 @@ import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
 
 @SuppressWarnings("restriction")
 public class XMLLanguageServer extends ProcessStreamConnectionProvider {
@@ -103,19 +106,34 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add("-Duser.home=" + System.getProperty("user.home"));
 		commands.add("-classpath");
 		try {
-			URL url = FileLocator
-					.toFileURL(getClass().getResource("/language-servers/server/org.eclipse.lemminx-uber.jar"));
+			Bundle lemminxBundle = getLemminxBundle();
+			File file = FileLocator.getBundleFileLocation(lemminxBundle)
+					.orElseThrow(() -> new IllegalStateException("Can't determine lemminx file location"));
 			List<String> extensionJarPaths = getExtensionJarPaths();
-			String uberJarPath = new java.io.File(url.getPath()).getAbsolutePath();
+			String uberJarPath = file.getAbsolutePath();
 			jarPaths.add(uberJarPath);
 			jarPaths.addAll(extensionJarPaths);
 			commands.add(String.join(System.getProperty("path.separator"), jarPaths));
-			commands.add("org.eclipse.lemminx.XMLServerLauncher");
+			String mainClass = lemminxBundle.getHeaders().get("Main-Class");
+			commands.add(mainClass);
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
-		} catch (IOException e) {
+		} catch (RuntimeException e) {
 			ILog.get().error(e.getMessage(), e);
 		}
+	}
+
+	private Bundle getLemminxBundle() {
+		Bundle self = FrameworkUtil.getBundle(getClass());
+		BundleWiring wiring = self.adapt(BundleWiring.class);
+		List<BundleWire> wires = wiring.getRequiredWires("osgi.wiring.bundle");
+		for (BundleWire bundleWire : wires) {
+			Bundle bundle = bundleWire.getProvider().getBundle();
+			if (bundle.getSymbolicName().equals("org.eclipse.lemminx.uber-jar")) {
+				return bundle;
+			}
+		}
+		throw new IllegalStateException("can't find the lemminx bundle!");
 	}
 
 	private Collection<? extends String> getProxySettings() {

@@ -7,50 +7,10 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>1.3.6-SNAPSHOT</version>
+	<version>1.3.7-SNAPSHOT</version>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>language-servers/</directory>
-							<includes>*.tgz</includes>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.8.1</version>
-				<executions>
-					<execution>
-						<id>fetch-lemminx</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.eclipse.lemminx</groupId>
-									<artifactId>org.eclipse.lemminx</artifactId>
-									<!-- Bumping to version with API breakage needs to bump bundle version at least by +0.1.0 -->
-									<version>0.29.0</version>
-									<!-- classifier:uber includes all dependencies -->
-									<classifier>uber</classifier>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>language-servers/server</outputDirectory>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
@@ -62,17 +22,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>lemminx-releases</id>
-			<url>https://repo.eclipse.org/content/repositories/lemminx-releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
 </project>
