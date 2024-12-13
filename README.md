@@ -44,12 +44,6 @@ Supported 🦟🔫 debugging targets
 
 ## 📥 Get it Now!
 
-### As full IDE package
-
-Get an Eclipse IDE for JavaScript and Web developers: download from [https://download.eclipse.org/wildwebdeveloper/releases/latest/IDEs](https://download.eclipse.org/wildwebdeveloper/releases/latest/IDEs) , unpack and run.
-
-### As extension into an existing Eclipse IDE installation
-
 * With Eclipse Marketplace Client and https://marketplace.eclipse.org/content/wild-web-developer-html-css-javascript-typescript-nodejs-angular-json-yaml-kubernetes-xml, choose one of:
   * [Click here to install](https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirectToMarketplace.html?entryId=5578890)
   * *Help > Eclipse Marketplace*, search `Wild Web Developer` then click `Install` or
