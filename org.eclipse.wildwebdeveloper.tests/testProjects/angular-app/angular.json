@@ -10,5 +10,8 @@
       "prefix": "app",
       "schematics": {}
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
