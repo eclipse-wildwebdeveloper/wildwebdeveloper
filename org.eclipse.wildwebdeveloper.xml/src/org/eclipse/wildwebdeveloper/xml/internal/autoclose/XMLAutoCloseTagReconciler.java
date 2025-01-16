@@ -94,7 +94,7 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 			}
 			document.addDocumentListener(this);
 		}
-		
+
 		private void autoInsert(DocumentEvent event) {
 			if (!isEnabled()) {
 				return;
@@ -126,7 +126,7 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 								CompletableFuture.supplyAsync(() -> {
 									try {
 										TextDocumentPositionParams params = LSPEclipseUtils
-												.toTextDocumentPosistionParams(uri, offset, document);
+												.toTextDocumentPosistionParams(offset, document);
 										// consumes xml/closeTag from XML language server
 										info.closeTag(params).thenAccept(r -> {
 											if (r != null) {
