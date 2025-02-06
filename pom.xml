@@ -7,7 +7,7 @@
   <name>Eclipse Wild Web Developer - Parent</name>
   <description>Wild Web Developer provides simple but efficient Web development tools in the Eclipse IDE</description>
 	<properties>
-		<tycho-version>4.0.10</tycho-version>
+		<tycho-version>4.0.11</tycho-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
