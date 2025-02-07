@@ -19,6 +19,6 @@
     "eslint-server": "file:target/eslint-server-2.4.1.tgz"
   },
   "overrides": {
-    "vscode-languageserver-types": "3.17.6-next.5"
+    "vscode-languageserver-types": "3.17.6-next.6"
   }
 }
