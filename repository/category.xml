@@ -72,6 +72,9 @@
    <bundle id="org.apache.commons.lang3" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
+   <bundle id="org.eclipse.lemminx.uber-jar" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
    <bundle id="org.snakeyaml.engine">
       <category name="Dependencies"/>
    </bundle>
