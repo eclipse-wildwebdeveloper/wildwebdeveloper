@@ -1,0 +1,25 @@
+name: Target Platform Updates
+
+concurrency: 
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * *'
+  push:
+    branches:
+      - master
+    paths:
+      - '**.target'
+
+
+jobs:
+  update:
+    uses: eclipse-platform/eclipse.platform.releng.aggregator/.github/workflows/updateTarget.yml@master
+    with:
+      author: wildwebdeveloper-bot <wildwebdeveloper-bot@eclipse.org>
+      path: 'target-platform'
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
