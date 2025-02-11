@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Node.js for Windows AArch64
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.embedder.node.win32.aarch64
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: Eclipse Wild Web Developer
 Fragment-Host: org.eclipse.wildwebdeveloper.embedder.node;bundle-version="1.0.0"
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.embedder.node.win32.aarch64
