@@ -776,53 +776,13 @@
             singleton="true">
       </server>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.yaml"
+            contentType="org.eclipse.tm4e.language_pack.yaml"
             id="org.eclipse.wildwebdeveloper.yaml">
       </contentTypeMapping>
    </extension>
 
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="yaml,yml"
-            id="org.eclipse.wildwebdeveloper.yaml"
-            name="YAML"
-            priority="low">
-      </content-type>
-   </extension>
-      
-   <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/yaml/YAML.tmLanguage"
-            scopeName="source.yaml">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.yaml"
-            scopeName="source.yaml">
-      </scopeNameContentTypeBinding>
-   </extension>
-   
-   <extension
-         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.yaml"
-            path="language-configurations/yaml/language-configuration.json">
-      </languageConfiguration>
-   </extension>
-
    <extension point="org.eclipse.ui.genericeditor.icons">
-     <icon contentType="org.eclipse.wildwebdeveloper.yaml" icon="icons/yamlEditorIcon.png"/>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="TypeScript Sample"
-            path="snippets/yaml/sample.yaml"
-            scopeName="source.yaml">
-      </snippet>
+     <icon contentType="org.eclipse.tm4e.language_pack.yaml" icon="icons/yamlEditorIcon.png"/>
    </extension>
 
    <extension
