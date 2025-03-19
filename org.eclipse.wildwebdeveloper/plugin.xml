@@ -335,17 +335,6 @@
 
    <!-- HTML Language -->   
    <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="html,htm"
-            id="org.eclipse.wildwebdeveloper.html"
-            name="HTML"
-            priority="low">
-      </content-type>
-   </extension>
-   
-   <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.html.HTMLLanguageServer"
@@ -356,49 +345,20 @@
             singleton="true">
       </server>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.html"
+            contentType="org.eclipse.tm4e.language_pack.html"
             id="org.eclipse.wildwebdeveloper.html">
       </contentTypeMapping>
    </extension>
 
-   <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/html/html.json"
-            scopeName="text.html.basic">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.html"
-            scopeName="text.html.basic">
-      </scopeNameContentTypeBinding>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.html"
-            path="language-configurations/html/language-configuration.jsonc">
-      </languageConfiguration>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="HTML Sample"
-            path="snippets/html/sample.html"
-            scopeName="text.html.basic">
-      </snippet>
-   </extension>
-
    <extension point="org.eclipse.ui.genericeditor.icons">
-     <icon contentType="org.eclipse.wildwebdeveloper.html" icon="icons/htmlEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.html" icon="icons/htmlEditorIcon.png"/>
    </extension>
 
    <extension
          point="org.eclipse.ui.genericeditor.reconcilers">
       <reconciler
             class="org.eclipse.wildwebdeveloper.html.autoinsert.HTMLAutoInsertReconciler"
-            contentType="org.eclipse.wildwebdeveloper.html">
+            contentType="org.eclipse.tm4e.language_pack.html">
       </reconciler>
    </extension>
 
@@ -695,7 +655,7 @@
            id="org.eclipse.wildwebdeveloper.angular"
            label="Angular Language Server"/>
      <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.ts" id="org.eclipse.wildwebdeveloper.angular"/>
-     <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.html" id="org.eclipse.wildwebdeveloper.angular"/>
+     <contentTypeMapping contentType="org.eclipse.tm4e.language_pack.html" id="org.eclipse.wildwebdeveloper.angular"/>
    </extension>
    
    <!-- VUE -->
