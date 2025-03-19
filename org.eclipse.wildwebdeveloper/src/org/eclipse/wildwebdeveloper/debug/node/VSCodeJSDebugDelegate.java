@@ -88,8 +88,8 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 	public static final String RUNTIME_EXECUTABLE = "runtimeExecutable"; //$NON-NLS-1$
 
 	public static final String NODE_DEBUG_CMD = "/js-debug/src/dapDebugServer.js"; //$NON-NLS-1$
-	public static final String TYPESCRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.ts"; //$NON-NLS-1$
-	public static final String JAVACRIPT_CONTENT_TYPE = "org.eclipse.wildwebdeveloper.js"; //$NON-NLS-1$
+	public static final String TYPESCRIPT_CONTENT_TYPE = "org.eclipse.tm4e.language_pack.typescript"; //$NON-NLS-1$
+	public static final String JAVACRIPT_CONTENT_TYPE = "org.eclipse.tm4e.language_pack.javascript"; //$NON-NLS-1$
 
 	public static final String JAVACRIPT_DEBUGGABLE_PATTERNS = "__debuggablePatterns";
 	public static final String JAVACRIPT_DEBUGGABLE_PATTERNS_DEFAULT = "[\"*.js\",\"*.es6\",\"*.jsx\",\"*.mjs\".\"*.cjs\"]";
