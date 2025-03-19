@@ -23,7 +23,7 @@ import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
 	public NodeRunDebugLaunchShortcut() {
-		super(NodeRunDAPDebugDelegate.ID, new String[] {"org.eclipse.wildwebdeveloper.js", "org.eclipse.wildwebdeveloper.ts"}, true);
+		super(NodeRunDAPDebugDelegate.ID, new String[] {"org.eclipse.tm4e.language_pack.javascript", "org.eclipse.tm4e.language_pack.typescript"}, true);
 	}
 
 	@Override

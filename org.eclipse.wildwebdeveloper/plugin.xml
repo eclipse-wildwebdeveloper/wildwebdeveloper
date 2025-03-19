@@ -411,38 +411,6 @@
 
    <!-- JavaScript/TypeScript Language -->   
    <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="js, cjs, mjs"
-            id="org.eclipse.wildwebdeveloper.js"
-            name="JavaScript"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="ts, cts, mts"
-            id="org.eclipse.wildwebdeveloper.ts"
-            name="TypeScript"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="jsx"
-            id="org.eclipse.wildwebdeveloper.jsx"
-            name="JSX"
-            priority="normal">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
-            file-extensions="tsx"
-            id="org.eclipse.wildwebdeveloper.tsx"
-            name="TSX"
-            priority="normal">
-      </content-type>
-   </extension>
-   
-   <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageServer"
@@ -452,22 +420,22 @@
       </server>
       <contentTypeMapping
             languageId="javascript"
-            contentType="org.eclipse.wildwebdeveloper.js"
+            contentType="org.eclipse.tm4e.language_pack.javascript"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
             languageId="typescript"
-            contentType="org.eclipse.wildwebdeveloper.ts"
+            contentType="org.eclipse.tm4e.language_pack.typescript"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
             languageId="javascriptreact"
-            contentType="org.eclipse.wildwebdeveloper.jsx"
+            contentType="org.eclipse.tm4e.language_pack.javascriptreact"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
             languageId="typescriptreact"
-            contentType="org.eclipse.wildwebdeveloper.tsx"
+            contentType="org.eclipse.tm4e.language_pack.typescriptreact"
             id="org.eclipse.wildwebdeveloper.jsts">
       </contentTypeMapping>
       <contentTypeMapping
@@ -482,95 +450,27 @@
             clientImpl="org.eclipse.wildwebdeveloper.eslint.ESLintClientImpl"/>
       <contentTypeMapping
             languageId="javascript"
-            contentType="org.eclipse.wildwebdeveloper.js"
+            contentType="org.eclipse.tm4e.language_pack.javascript"
             id="org.eclipse.wildwebdeveloper.eslint"/>
       <contentTypeMapping
             languageId="typescript"
-            contentType="org.eclipse.wildwebdeveloper.ts"
+            contentType="org.eclipse.tm4e.language_pack.typescript"
             id="org.eclipse.wildwebdeveloper.eslint"/>
       <contentTypeMapping
             languageId="javascriptreact"
-            contentType="org.eclipse.wildwebdeveloper.jsx"
+            contentType="org.eclipse.tm4e.language_pack.javascriptreact"
             id="org.eclipse.wildwebdeveloper.eslint"/>
       <contentTypeMapping
             languageId="typescriptreact"
-            contentType="org.eclipse.wildwebdeveloper.tsx"
+            contentType="org.eclipse.tm4e.language_pack.typescriptreact"
             id="org.eclipse.wildwebdeveloper.eslint"/>
    </extension>
    
-   <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/javascript/JavaScript.tmLanguage.json"
-            scopeName="source.js"/>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.js"
-            scopeName="source.js"/>
-      <grammar
-            path="grammars/javascript/JavaScriptReact.tmLanguage.json"
-            scopeName="source.js.jsx"/>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.jsx"
-            scopeName="source.js.jsx"/>
-      <grammar
-            path="grammars/typescript/TypeScript.tmLanguage.json"
-            scopeName="source.ts"/>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.ts"
-            scopeName="source.ts"/>
-      <grammar
-            path="grammars/typescript/TypeScriptReact.tmLanguage.json"
-            scopeName="source.tsx"/>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.tsx"
-            scopeName="source.tsx">
-      </scopeNameContentTypeBinding>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.js"
-            path="language-configurations/javascript/javascript-language-configuration.jsonc">
-      </languageConfiguration>
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.ts"
-            path="language-configurations/typescript/language-configuration.jsonc">
-      </languageConfiguration>
-      <!-- TODO replace with more specific language configuration if we include some -->
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.jsx"
-            path="language-configurations/javascript/javascript-language-configuration.jsonc">
-      </languageConfiguration>
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.tsx"
-            path="language-configurations/typescript/language-configuration.jsonc">
-      </languageConfiguration>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="JavaScript Sample"
-            path="snippets/javascript/sample.js"
-            scopeName="source.js">
-      </snippet>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="TypeScript Sample"
-            path="snippets/typescript/sample.ts"
-            scopeName="source.ts">
-      </snippet>
-   </extension>
-
    <extension point="org.eclipse.ui.genericeditor.icons">
-     <icon contentType="org.eclipse.wildwebdeveloper.js" icon="icons/jsEditorIcon.png"/>
-     <icon contentType="org.eclipse.wildwebdeveloper.jsx" icon="icons/jsEditorIcon.png"/>
-     <icon contentType="org.eclipse.wildwebdeveloper.ts" icon="icons/tsEditorIcon.png"/>
-     <icon contentType="org.eclipse.wildwebdeveloper.tsx" icon="icons/tsEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.javascript" icon="icons/jsEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.javascriptreact" icon="icons/jsEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.typescript" icon="icons/tsEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.typescriptreact" icon="icons/tsEditorIcon.png"/>
    </extension>
 
    <extension
@@ -654,7 +554,7 @@
            clientImpl="org.eclipse.wildwebdeveloper.angular.AngularClientImpl"
            id="org.eclipse.wildwebdeveloper.angular"
            label="Angular Language Server"/>
-     <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.ts" id="org.eclipse.wildwebdeveloper.angular"/>
+     <contentTypeMapping contentType="org.eclipse.tm4e.language_pack.typescript" id="org.eclipse.wildwebdeveloper.angular"/>
      <contentTypeMapping contentType="org.eclipse.tm4e.language_pack.html" id="org.eclipse.wildwebdeveloper.angular"/>
    </extension>
    
