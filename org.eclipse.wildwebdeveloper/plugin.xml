@@ -188,15 +188,6 @@
       </contentTypeMapping>
    </extension>
    
-   <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="CSS Sample"
-            path="snippets/css/sample.css"
-            scopeName="source.css">
-      </snippet>
-   </extension>
-
   <extension point="org.eclipse.ui.genericeditor.icons">
     <icon contentType="org.eclipse.tm4e.language_pack.css" icon="icons/cssEditorIcon.png"/>
   </extension>
