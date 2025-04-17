@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/language-server": "19.2.3",
+    "@angular/language-server": "19.2.4",
     "firefox-debugadapter": "2.15.0",
     "typescript": "5.8.3",
     "typescript-language-server": "4.3.4",
