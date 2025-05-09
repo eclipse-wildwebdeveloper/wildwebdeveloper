@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Node.js for Windows x86_64
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.embedder.node.win32.x86_64
-Bundle-Version: 1.1.6.qualifier
+Bundle-Version: 1.1.7.qualifier
 Bundle-License: EPL-2.0;link="http://www.eclipse.org/legal/epl-2.0"
 Bundle-Vendor: Eclipse Wild Web Developer
 Fragment-Host: org.eclipse.wildwebdeveloper.embedder.node;bundle-version="1.0.0"
