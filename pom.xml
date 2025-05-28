@@ -208,6 +208,18 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<!-- This profile prevents local maven builds from failing if uncommitted changes are present -->
+			<id>local-dev</id>
+			<activation>
+				<property>
+					<name>!env.CI</name>
+				</property>
+			</activation>
+			<properties>
+				<jgit.dirtyWorkingTree>warning</jgit.dirtyWorkingTree>
+			</properties>
+		</profile>
 		<!-- Automatic profile for Mac-specific settings -->
 		<profile>
 			<id>macos</id>
