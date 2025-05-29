@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class VueLanguageServer extends ProcessStreamConnectionProvider {
 	@Override
 	public Object getInitializationOptions(URI rootUri) {
 		Map<String, Object> options = new HashMap<>();
-		setWorkingDirectory(rootUri.getRawPath());
+		setWorkingDirectory(Paths.get(rootUri).toString());
 		
 		options.put("typescript", Collections.singletonMap("tsdk", tsserverPath));
 		options.put("diagnosticModel", 0);
