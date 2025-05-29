@@ -35,7 +35,7 @@
          name="JSON ContentTypes"
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            base-type="org.eclipse.wildwebdeveloper.parent"
+            base-type="org.eclipse.tm4e.language_pack.json"
             file-extensions="json, jsonc, eslintrc, bowerrc"
             id="org.eclipse.wildwebdeveloper.json"
             name="JSON"
@@ -126,40 +126,11 @@
             singleton="true">
       </server>
       <contentTypeMapping
-            contentType="org.eclipse.wildwebdeveloper.json"
+            contentType="org.eclipse.tm4e.language_pack.json"
             id="org.eclipse.wildwebdeveloper.json">
       </contentTypeMapping>
    </extension>
-   
-   <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/json/JSON.tmLanguage"
-            scopeName="source.json">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.json"
-            scopeName="source.json">
-      </scopeNameContentTypeBinding>
-   </extension>
 
-   <extension
-         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-      <languageConfiguration
-            contentTypeId="org.eclipse.wildwebdeveloper.json"
-            path="language-configurations/json/language-configuration.json">
-      </languageConfiguration>
-   </extension>
-
-   <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="JSON Sample"
-            path="snippets/json/sample.json"
-            scopeName="source.json">
-      </snippet>
-   </extension>
-   
    <!-- CSS Language -->
       
    <extension
