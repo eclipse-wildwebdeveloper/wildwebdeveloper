@@ -541,33 +541,30 @@
             label="VUE Language Server"/>
       <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue"/>
     </extension>
-    <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-            path="grammars/vue/vue.tmLanguage.json"
-            scopeName="source.vue">
-      </grammar>
-      <scopeNameContentTypeBinding
-            contentTypeId="org.eclipse.wildwebdeveloper.vue"
-            scopeName="source.vue">
-      </scopeNameContentTypeBinding>
-      <grammar
-         
-            path="grammars/vue/markdown-vue.json"
-            scopeName="markdown.vue.codeblock">
-      </grammar>
-      <grammar
-            path="grammars/vue/vue-directives.json"
-            scopeName="vue.directives">
-      </grammar>
-      <grammar
-            path="grammars/vue/vue-interpolations.json"
-            scopeName="vue.interpolations">
-      </grammar>
-      <grammar
-            path="grammars/vue/vue-sfc-style-variable-injection.json"
-            scopeName="vue.sfc.style.variable.injection">
-      </grammar>
+    <extension point="org.eclipse.tm4e.registry.grammars">
+      <grammar path="grammars/vue/vue.tmLanguage.json" scopeName="source.vue" />
+      <scopeNameContentTypeBinding contentTypeId="org.eclipse.wildwebdeveloper.vue" scopeName="source.vue" />
+
+      <grammar path="grammars/vue/markdown-vue.json" scopeName="markdown.vue.codeblock" />
+      <injection scopeName="markdown.vue.codeblock" injectTo="text.html.markdown" />
+
+      <grammar path="grammars/vue/mdx-vue.json" scopeName="mdx.vue.codeblock" />
+      <injection scopeName="mdx.vue.codeblock" injectTo="source.mdx" />
+
+      <grammar path="grammars/vue/vue-directives.json" scopeName="vue.directives" />
+      <injection scopeName="vue.directives" injectTo="source.vue" />
+      <injection scopeName="vue.directives" injectTo="text.html.markdown" />
+      <injection scopeName="vue.directives" injectTo="text.html.derivative" />
+      <injection scopeName="vue.directives" injectTo="text.pug" />
+
+      <grammar path="grammars/vue/vue-interpolations.json" scopeName="vue.interpolations" />
+      <injection scopeName="vue.interpolations" injectTo="source.vue" />
+      <injection scopeName="vue.interpolations" injectTo="text.html.markdown" />
+      <injection scopeName="vue.interpolations" injectTo="text.html.derivative" />
+      <injection scopeName="vue.interpolations" injectTo="text.pug" />
+
+      <grammar path="grammars/vue/vue-sfc-style-variable-injection.json" scopeName="vue.sfc.style.variable.injection"/>
+      <injection scopeName="vue.sfc.style.variable.injection" injectTo="source.vue" />
    </extension>
 
    <extension
