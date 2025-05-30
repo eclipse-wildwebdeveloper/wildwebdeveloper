@@ -15,6 +15,17 @@ updates:
     interval: daily
   open-pull-requests-limit: 10
   groups:
+    astro:
+      patterns:
+      - "astro-*"
+      - "@astrojs/*"
+    babel:
+      patterns:
+      - "@babel/*"
+    volar:
+      patterns:
+      - "volar-*"
+      - "@volar/*"
     vue:
       patterns:
       - "@vue/*"
@@ -45,6 +56,29 @@ updates:
     typescript-eslint:
       patterns:
       - "@typescript-eslint/*"
+- package-ecosystem: npm
+  directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/astro-app"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  groups:
+    astro:
+      patterns:
+      - "astro-*"
+      - "@astrojs/*"
+    babel:
+      patterns:
+      - "@babel/*"
+    micromark:
+      patterns:
+      - "micromark*"
+    syntax-tree:
+      patterns:
+      - "mdast-*"
+      - "hast*"
+      - "unist*"
+      - "rehype"
+      - "remark"
 - package-ecosystem: npm
   directory: "/org.eclipse.wildwebdeveloper.tests/testProjects/vue-app"
   schedule:
