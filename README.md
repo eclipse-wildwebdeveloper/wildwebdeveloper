@@ -18,9 +18,10 @@ and
 
 * Kubernetes
 * Angular (Components & Templates, in TypeScript and HTML files)
-* React (JSX, TSX, embedded HTML)
+* [Astro](https://astro.build)
+* [React](https://react.dev/) (JSX, TSX, embedded HTML)
 * ESLint (for JavaScript and TypeScript)
-* Vue.js
+* [Vue.js](https://vuejs.org/)
 
 Supported features for edition are
 

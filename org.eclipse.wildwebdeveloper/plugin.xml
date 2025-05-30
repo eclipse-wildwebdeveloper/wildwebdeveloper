@@ -519,7 +519,38 @@
      <contentTypeMapping contentType="org.eclipse.tm4e.language_pack.typescript" id="org.eclipse.wildwebdeveloper.angular"/>
      <contentTypeMapping contentType="org.eclipse.tm4e.language_pack.html" id="org.eclipse.wildwebdeveloper.angular"/>
    </extension>
-   
+
+   <!-- Astro Language -->
+   <extension point="org.eclipse.core.contenttype.contentTypes">
+      <content-type id="org.eclipse.wildwebdeveloper.astro"
+            base-type="org.eclipse.wildwebdeveloper.parent"
+            file-extensions="astro"
+            name="Astro File"
+            priority="low">
+     </content-type>
+   </extension>
+   <extension point="org.eclipse.lsp4e.languageServer">
+      <server id="org.eclipse.wildwebdeveloper.astro"
+            class="org.eclipse.wildwebdeveloper.astro.AstroLanguageServer"
+            label="Astro Language Server" />
+      <contentTypeMapping id="org.eclipse.wildwebdeveloper.astro" contentType="org.eclipse.wildwebdeveloper.astro" />
+   </extension>
+   <extension point="org.eclipse.tm4e.registry.grammars">
+      <grammar path="node_modules/astro-vscode/syntaxes/astro.tmLanguage.json" scopeName="source.astro" />
+      <scopeNameContentTypeBinding contentTypeId="org.eclipse.wildwebdeveloper.astro" scopeName="source.astro" />
+
+      <grammar path="node_modules/astro-vscode/syntaxes/markdown.astro.tmLanguage.json" scopeName="text.html.markdown.astro" />
+      <injection scopeName="text.html.markdown.astro" injectTo="text.html.markdown" />
+      <injection scopeName="text.html.markdown.astro" injectTo="source.astro" />
+
+      <grammar path="node_modules/astro-vscode/syntaxes/mdx.astro.tmLanguage.json" scopeName="source.mdx.astro" />
+      <injection scopeName="source.mdx.astro" injectTo="source.mdx" />
+      <injection scopeName="source.mdx.astro" injectTo="source.astro" />
+   </extension>
+   <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration contentTypeId="org.eclipse.wildwebdeveloper.astro" path="node_modules/astro-vscode/languages/astro-language-configuration.json" />
+   </extension>
+
    <!-- VUE -->
    <extension
       point="org.eclipse.core.contenttype.contentTypes">
