@@ -64,7 +64,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 	public boolean canLaunch(File file) {
 		return file.exists() &&
 			Arrays.stream(contentTypeIds).map(Platform.getContentTypeManager()::getContentType)
-				.anyMatch(type -> type.isAssociatedWith(file.getName()));
+				.anyMatch(type -> type != null && type.isAssociatedWith(file.getName()));
 	}
 
 	public boolean canLaunchResource(IResource resource) {
