@@ -131,7 +131,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       if: always() && env.request-review
       with:
-        name: tools.wildwebdeveloper-license-vetting-summary-${{ github.run_id }}
+        name: tools.wildwebdeveloper-npm-license-vetting-summary
         path: |
           target/dash/npm-review-summary
           target/dash/summary
