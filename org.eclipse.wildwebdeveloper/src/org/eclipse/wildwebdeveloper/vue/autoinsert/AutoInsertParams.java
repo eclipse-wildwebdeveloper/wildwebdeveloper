@@ -28,9 +28,9 @@ public class AutoInsertParams {
 	/**
 	 * The position inside the text document.
 	 */
-	private Position position;
+	private Position selection;
 	
-	private AutoInsertOptions options;
+	private AutoInsertLastChange change;
 	
 
 	public TextDocumentIdentifier getTextDocument() {
@@ -41,20 +41,20 @@ public class AutoInsertParams {
 		this.textDocument = textDocument;
 	}
 
-	public Position getPosition() {
-		return position;
+	public Position getSelection() {
+		return selection;
 	}
 
-	public void setPosition(Position position) {
-		this.position = position;
+	public void setSelection(Position selection) {
+		this.selection = selection;
 	}
 	
-	public AutoInsertOptions getOptions() {
-		return options;
+	public AutoInsertLastChange getChange() {
+		return change;
 	}
 
-	public void setOptions(AutoInsertOptions options) {
-		this.options = options;
+	public void setChange(AutoInsertLastChange options) {
+		this.change = options;
 	}
 
 }
