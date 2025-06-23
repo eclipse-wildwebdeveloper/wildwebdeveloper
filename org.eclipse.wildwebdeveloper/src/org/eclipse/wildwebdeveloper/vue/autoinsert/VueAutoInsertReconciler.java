@@ -75,9 +75,8 @@ public class VueAutoInsertReconciler implements IReconciler {
 									
 									AutoInsertParams params = new AutoInsertParams();
 									params.setTextDocument(identifier);
-									params.setPosition(LSPEclipseUtils.toPosition(offset + event.getText().length(), document));
-									
-									AutoInsertOptions opts = new AutoInsertOptions();
+									params.setSelection(LSPEclipseUtils.toPosition(offset + event.getText().length(), document));
+									 
 									AutoInsertLastChange changeEvent = new AutoInsertLastChange();
 									final var range = new Range(LSPEclipseUtils.toPosition(offset, document),
 											LSPEclipseUtils.toPosition(offset + event.fLength, document));
@@ -85,8 +84,7 @@ public class VueAutoInsertReconciler implements IReconciler {
 									changeEvent.setText(event.getText());
 									changeEvent.setRangeLength(event.fLength);
 									changeEvent.setRangeOffset(offset);
-									opts.setLastChange(changeEvent);
-									params.setOptions(opts);
+									params.setChange(changeEvent);
 
 									// consumes String or AutoInsertResponse from Vue Server
 									info.autoInsert(params)
