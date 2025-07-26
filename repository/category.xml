@@ -6,15 +6,6 @@
    <feature id="org.eclipse.wildwebdeveloper.xml.feature" version="0.0.0">
       <category name="Wild Web Developer"/>
    </feature>
-   <feature id="org.eclipse.wildwebdeveloper.feature.source" version="0.0.0">
-      <category name="Sources"/>
-   </feature>
-   <feature id="org.eclipse.wildwebdeveloper.xml.feature.source" version="0.0.0">
-      <category name="Sources"/>
-   </feature>
-   <feature id="org.eclipse.wildwebdeveloper.embedder.node.feature.source" version="0.0.0">
-      <category name="Sources"/>
-   </feature>
    <feature id="org.eclipse.wildwebdeveloper.embedder.node.feature" version="0.0.0">
       <category name="Dependencies"/>
    </feature>
@@ -22,9 +13,6 @@
       <category name="Dependencies"/>
    </feature>
    <bundle id="org.eclipse.wildwebdeveloper.tests" version="0.0.0">
-      <category name="Sources"/>
-   </bundle>
-   <bundle id="org.eclipse.wildwebdeveloper.tests.source" version="0.0.0">
       <category name="Sources"/>
    </bundle>
    <bundle id="org.eclipse.ui.genericeditor" version="0.0.0">
