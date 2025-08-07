@@ -14,7 +14,7 @@ kind: Pod
 spec:
   containers:
   - name: container
-    image: docker.io/akurtakov/fedora-gtk3-mutter-java-node:f41-node22
+    image: docker.io/akurtakov/fedora-gtk3-mutter-java-node:f42-node22
     imagePullPolicy: Always
     tty: true
     resources:
