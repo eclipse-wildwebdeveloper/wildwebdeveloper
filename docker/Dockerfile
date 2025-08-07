@@ -4,7 +4,6 @@ FROM eclipsecbi/fedora-gtk3-mutter:42-gtk3.24
 USER 0
 RUN dnf -y update && dnf -y install \
 	java-21-openjdk-devel git
-RUN dnf -y install nodejs npm
 RUN dnf -y install xz
 RUN dnf -y install procps-ng
 

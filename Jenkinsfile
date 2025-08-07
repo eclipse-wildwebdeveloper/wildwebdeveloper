@@ -6,7 +6,7 @@ pipeline {
 	}
   agent {
     kubernetes {
-      label 'wildwebdeveloper-buildtest-pod'
+      inheritFrom 'wildwebdeveloper-buildtest-pod'
       defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
