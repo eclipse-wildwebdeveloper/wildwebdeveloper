@@ -28,7 +28,6 @@ import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.TextDocumentPositionParams;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
@@ -116,8 +115,7 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 			if (uri == null) {
 				return;
 			}
-
-			TextDocumentIdentifier identifier = new TextDocumentIdentifier(uri.toString());
+ 
 			LanguageServers.forDocument(document).collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
 					.thenAccept(lss -> lss.stream().filter(XMLLanguageServerAPI.class::isInstance)
 							.map(XMLLanguageServerAPI.class::cast).findAny().ifPresent(info -> {
