@@ -77,7 +77,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 //			plugins.add(new TypeScriptPlugin("@angular/language-service"));
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
-			plugins.add(new TypeScriptPlugin("@vue/typescript-plugin", new String[] {"vue"}));
+			plugins.add(new TypeScriptPlugin("@vue/typescript-plugin", "@vue/language-server", new String[] {"vue"}));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 			
 			// If the tsserver path is not explicitly specified, tsserver will use the local

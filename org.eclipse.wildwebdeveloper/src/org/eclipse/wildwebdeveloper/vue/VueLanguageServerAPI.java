@@ -15,6 +15,7 @@ package org.eclipse.wildwebdeveloper.vue;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.vue.autoinsert.AutoInsertParams;
@@ -37,6 +38,10 @@ public interface VueLanguageServerAPI extends LanguageServer {
 	 */
 	@JsonRequest("volar/client/autoInsert")
 	CompletableFuture<Either<String, AutoInsertResponse>> autoInsert(AutoInsertParams params);
+	
+	@JsonNotification("tsserver/response")
+	void tsserverResponse(Object any);
+	
 	
 
 }

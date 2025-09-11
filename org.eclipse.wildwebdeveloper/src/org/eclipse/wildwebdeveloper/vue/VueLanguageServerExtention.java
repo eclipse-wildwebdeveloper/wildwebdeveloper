@@ -26,4 +26,8 @@ public interface VueLanguageServerExtention {
 	
 	@JsonNotification(value = "vue/projectLanguageService")
 	public void projectLanguageService(Map<String,Object> data);
+	
+	
+	@JsonNotification(value = "tsserver/request")
+	public void tsserverRequest(Object[] params);
 }
