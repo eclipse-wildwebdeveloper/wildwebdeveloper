@@ -30,8 +30,12 @@ public class TypeScriptPlugin {
 	}
 	
 	public TypeScriptPlugin(String name, String[] languages) throws IOException {
+		this(name, name, null);
+	}
+	
+	public TypeScriptPlugin(String name, String locationName, String[] languages) throws IOException {
 		pluginName = name;
-		URL fileURL = FileLocator.toFileURL(getClass().getResource("/node_modules/" + name));
+		URL fileURL = FileLocator.toFileURL(getClass().getResource("/node_modules/" + locationName));
 		pluginProbeLocation = new File(fileURL.getPath()).getAbsolutePath();
 		pluginLanguages = languages;
 	}

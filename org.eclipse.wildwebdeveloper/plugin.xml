@@ -377,6 +377,7 @@
       <server
             class="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageServer"
             clientImpl="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageClientImpl"
+            serverInterface="org.eclipse.wildwebdeveloper.jsts.JSTSLanguageServerAPI"
             id="org.eclipse.wildwebdeveloper.jsts"
             label="JavaScript-TypeScript Language Server">
       </server>
@@ -568,7 +569,6 @@
             clientImpl="org.eclipse.wildwebdeveloper.vue.VueClientImpl"
             serverInterface="org.eclipse.wildwebdeveloper.vue.VueLanguageServerAPI"
             id="org.eclipse.wildwebdeveloper.vue"
-            singleton="true"
             label="VUE Language Server"/>
       <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue"/>
     </extension>
