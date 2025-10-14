@@ -22,7 +22,7 @@ jobs:
       uses: stCarolas/setup-maven@v5
       with:
         maven-version: 3.9.9
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
     - name: Build with Maven
