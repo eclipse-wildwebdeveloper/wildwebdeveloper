@@ -128,7 +128,7 @@ jobs:
         fi
         echo ""
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       if: always() && env.request-review
       with:
         name: tools.wildwebdeveloper-npm-license-vetting-summary
