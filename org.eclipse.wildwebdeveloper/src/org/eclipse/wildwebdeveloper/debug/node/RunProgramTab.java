@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
 import org.eclipse.wildwebdeveloper.debug.Messages;
+import org.eclipse.wildwebdeveloper.util.FileUtils;
 
 public class RunProgramTab extends AbstractLaunchConfigurationTab {
 
@@ -127,7 +128,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 		configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
 		configuration.setAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, this.workingDirectoryText.getText());
-		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
+		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(FileUtils.toUri(programPath)));
 	}
 
 	@Override

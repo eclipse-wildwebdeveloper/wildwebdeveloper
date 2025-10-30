@@ -56,9 +56,10 @@ import org.eclipse.ui.views.navigator.ResourceComparator;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDAPDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugLaunchShortcut;
+import org.eclipse.wildwebdeveloper.util.FileUtils;
 
 public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfigurationTab {
-	
+
 	private Text programPathText;
 	private Text argumentsText;
 	private Text workingDirectoryText;
@@ -82,8 +83,8 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 	public void createControl(Composite parent) {
 		resComposite = new Composite(parent, SWT.NONE);
 		resComposite.setLayout(new GridLayout(4, false));
-		
-		fileRadio = createRadioButton(resComposite, Messages.FirefoxDebugTab_File); 
+
+		fileRadio = createRadioButton(resComposite, Messages.FirefoxDebugTab_File);
 		fileRadio.setToolTipText(Messages.AbstractRunHTMLDebugTab_fileRadioToolTip);
 		fileRadio.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
 		fileRadio.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
@@ -96,7 +97,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			validateProgramPathAndURL();
 			updateLaunchConfigurationDialog();
 		}));
-		
+
 		this.programPathText = new Text(resComposite, SWT.BORDER);
 		this.programPathText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
 		fileDecoration = new ControlDecoration(programPathText, SWT.TOP | SWT.LEFT);
@@ -118,7 +119,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				programPathText.setText(path);
 			}
 		}));
-		
+
 		urlRadio = createRadioButton(resComposite, "URL: ");
 		urlRadio.setToolTipText(Messages.RunFirefoxDebugTab_URL_Note);
 		urlRadio.setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false));
@@ -142,7 +143,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			validateProgramPathAndURL();
 			updateLaunchConfigurationDialog();
 		});
-		
+
 		new Label(resComposite, SWT.NONE).setText(Messages.AbstractRunHTMLDebugTab_webRoot_folder);
 		webRootText = new Text(resComposite, SWT.BORDER);
 		webRootText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
@@ -232,7 +233,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 
 	private void validateProgramPathAndURL() {
 		setDirty(true);
-		
+
 		setErrorMessage(null);
 		fileDecoration.hide();
 		urlDecoration.hide();
@@ -252,23 +253,23 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 			} catch (CoreException ex) {
 				errorMessage = ex.getMessage();
 			}
-			
+
 			if (errorMessage != null) {
 				setErrorMessage(errorMessage);
 				fileDecoration.setDescriptionText(errorMessage);
 				fileDecoration.show();
 			}
-			
+
 		} else if (urlRadio.getSelection()) {
 			try {
 				new URL(urlText.getText());
 			} catch (MalformedURLException ex) {
 				errorMessage = MessageFormat.format(
-						Messages.RunProgramTab_error_malformedUR, 
+						Messages.RunProgramTab_error_malformedUR,
 						ex.getMessage());
 				urlDecoration.setDescriptionText(errorMessage);
 				urlDecoration.show();
-			}				
+			}
 			boolean showWebRootDecoration = false;
 			if(webRootText.getText().isBlank()) {
 				errorMessage = Messages.AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
@@ -338,9 +339,9 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 				webRootProjectSelectButton.setEnabled(true);
 				webRootFilesystemSelectButton.setEnabled(true);
 			}
-			
+
 			validateProgramPathAndURL();
-			
+
 		} catch (CoreException e) {
 			ILog.get().log(e.getStatus());
 		}
@@ -357,7 +358,7 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		String workingDirectory = this.workingDirectoryText.getText();
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
-		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
+		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(FileUtils.toUri(programPath)));
 	}
 
 	@Override

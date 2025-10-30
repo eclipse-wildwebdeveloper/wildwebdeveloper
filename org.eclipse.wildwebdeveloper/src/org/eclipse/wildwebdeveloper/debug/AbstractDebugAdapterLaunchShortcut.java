@@ -6,7 +6,7 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Pierre-Yves B. - Issue #309 Launch called from the wrong thread
  *******************************************************************************/
@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.wildwebdeveloper.util.FileUtils;
 
 public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShortcut2 {
 
@@ -156,7 +157,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 						DebugUITools.launch(configuration, mode);
 					} else {
 						if (DebugUIPlugin.openLaunchConfigurationEditDialog(Display.getCurrent().getActiveShell(), configuration, DebugUITools.getLaunchGroup(configuration, mode).getIdentifier(), null, true) == IDialogConstants.OK_ID) {
-							DebugUITools.launch(configuration, mode);	
+							DebugUITools.launch(configuration, mode);
 						}
 					}
 				});
@@ -202,7 +203,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 		String configName = launchManager.generateLaunchConfigurationName(file.getAbsolutePath());
 		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, configName);
 		wc.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, file.getParentFile().getAbsolutePath());
-		wc.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(file.toURI()));
+		wc.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(FileUtils.toUri(file)));
 		configureLaunchConfiguration(file, wc);
 		return wc;
 	}
@@ -210,7 +211,7 @@ public abstract class AbstractDebugAdapterLaunchShortcut implements ILaunchShort
 	/**
 	 * Takes a working copy of a launch configuration and sets the default
 	 * attributes according to provided file
-	 * 
+	 *
 	 * @param file
 	 * @param wc
 	 */
