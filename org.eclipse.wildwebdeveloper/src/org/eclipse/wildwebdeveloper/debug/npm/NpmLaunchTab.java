@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
+import org.eclipse.wildwebdeveloper.util.FileUtils;
 
 public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 
@@ -168,7 +169,7 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 		configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
 		configuration.setAttribute(AbstractHTMLDebugDelegate.ARGUMENTS, this.argumentsCombo.getText());
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDirectory);
-		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(programPath).toURI()));
+		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(FileUtils.toUri(programPath)));
 	}
 
 	@Override
