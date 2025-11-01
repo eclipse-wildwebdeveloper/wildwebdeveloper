@@ -51,7 +51,7 @@ public class ESLintClientImpl extends LanguageClientImpl implements ESLintLangua
 		// until the workspaceFolder which folder is best suited for its workingDirectoy (where the config files are in)
 		// also this workspaceFolder is also used to find the node models (eslint module)
 		// because we set the nodePath below to this same directory.
-		File highestPackageJsonDir = FileUtils.fromUri(configurationItem.getScopeUri()).getParentFile();
+		File highestPackageJsonDir = FileUtils.uriToFile(configurationItem.getScopeUri()).getParentFile();
 		File parentFile = highestPackageJsonDir;
 		while (parentFile != null) {
 			if (new File(parentFile, "package.json").exists()) highestPackageJsonDir = parentFile;
