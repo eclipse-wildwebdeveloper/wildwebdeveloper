@@ -115,7 +115,7 @@
             priority="low">
       </content-type>
    </extension>
-   
+
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
@@ -131,8 +131,39 @@
       </contentTypeMapping>
    </extension>
 
+   <!-- Markdown Language -->
+   <extension point="org.eclipse.lsp4e.languageServer">
+      <server id="org.eclipse.wildwebdeveloper.markdown"
+            class="org.eclipse.wildwebdeveloper.markdown.MarkdownLanguageServer"
+            clientImpl="org.eclipse.wildwebdeveloper.markdown.MarkdownLanguageClient"
+            serverInterface="org.eclipse.wildwebdeveloper.markdown.MarkdownLanguageServerAPI"
+            label="Markdown Language Server" />
+      <contentTypeMapping
+            contentType="org.eclipse.tm4e.language_pack.markdown"
+            id="org.eclipse.wildwebdeveloper.markdown"
+            languageId="markdown" />
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages">
+      <page id="org.eclipse.wildwebdeveloper.markdown.ui.preferences.MarkdownPreferencePage"
+            class="org.eclipse.wildwebdeveloper.markdown.ui.preferences.MarkdownPreferencePage"
+            name="%MarkdownPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.markdown" />
+      </page>
+   </extension>
+   <extension point="org.eclipse.core.runtime.preferences"
+         id="MarkdownPreferenceInitializer"
+         name="MarkdownPreferenceInitializer">
+      <initializer class="org.eclipse.wildwebdeveloper.markdown.ui.preferences.MarkdownPreferenceInitializer" />
+   </extension>
+
+   <extension id="org.eclipse.wildwebdeveloper.markdown.problem" name="%MarkdownProblem" point="org.eclipse.core.resources.markers">
+      <!-- Markdown problem marker type -->
+      <super type="org.eclipse.core.resources.problemmarker"/>
+      <persistent value="true"/>
+   </extension>
+
    <!-- CSS Language -->
-      
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
@@ -158,7 +189,7 @@
             languageId="less">
       </contentTypeMapping>
    </extension>
-   
+
   <extension point="org.eclipse.ui.genericeditor.icons">
     <icon contentType="org.eclipse.tm4e.language_pack.css" icon="icons/cssEditorIcon.png"/>
   </extension>
@@ -178,7 +209,7 @@
          name="%CSSCompletionPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.css" />
       </page>
-      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this CSS format preference page to benefit with CSS formatting 
+      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this CSS format preference page to benefit with CSS formatting
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSFormatPreferencePage"
@@ -192,7 +223,7 @@
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSHoverPreferencePage"
          name="%CSSHoverPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.css" />
-      </page>      
+      </page>
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.CSSValidationPreferencePage"
@@ -218,7 +249,7 @@
          name="%LESSCompletionPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.less" />
       </page>
-      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this LESS format preference page to benefit with LESS formatting 
+      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this LESS format preference page to benefit with LESS formatting
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSFormatPreferencePage"
@@ -232,7 +263,7 @@
          id="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSHoverPreferencePage"
          name="%LESSHoverPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.less" />
-      </page>      
+      </page>
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.less.LESSValidationPreferencePage"
@@ -260,7 +291,7 @@
             <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
             <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
       </page>
-      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this SCSS format preference page to benefit with SCSS formatting 
+      <!-- Once https://github.com/microsoft/vscode/issues/164772 will be fixed, please uncomment this SCSS format preference page to benefit with SCSS formatting
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSFormatPreferencePage"
@@ -275,7 +306,7 @@
          name="%SCSSHoverPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.scss" />
             <keywordReference id="org.eclipse.wildwebdeveloper.sass" />
-      </page>      
+      </page>
       <page
          category="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSPreferencePage"
          class="org.eclipse.wildwebdeveloper.css.ui.preferences.scss.SCSSValidationPreferencePage"
@@ -295,7 +326,7 @@
       </initializer>
    </extension>
 
-   <!-- HTML Language -->   
+   <!-- HTML Language -->
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
@@ -352,7 +383,7 @@
          id="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLHoverPreferencePage"
          name="%HTMLHoverPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.html" />
-      </page>      
+      </page>
       <page
          category="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLValidationPreferencePage"
@@ -371,7 +402,7 @@
       </initializer>
    </extension>
 
-   <!-- JavaScript/TypeScript Language -->   
+   <!-- JavaScript/TypeScript Language -->
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
@@ -428,7 +459,7 @@
             contentType="org.eclipse.tm4e.language_pack.typescriptreact"
             id="org.eclipse.wildwebdeveloper.eslint"/>
    </extension>
-   
+
    <extension point="org.eclipse.ui.genericeditor.icons">
      <icon contentType="org.eclipse.tm4e.language_pack.javascript" icon="icons/jsEditorIcon.png"/>
      <icon contentType="org.eclipse.tm4e.language_pack.javascriptreact" icon="icons/jsEditorIcon.png"/>
@@ -490,7 +521,7 @@
          name="%JavaScriptInlayHintPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.js" />
             <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
-      </page>      
+      </page>
       <!-- TypeScript -->
       <page
             category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferencePage"
@@ -572,6 +603,7 @@
             label="VUE Language Server"/>
       <contentTypeMapping contentType="org.eclipse.wildwebdeveloper.vue" languageId="vue" id="org.eclipse.wildwebdeveloper.vue"/>
     </extension>
+
     <extension point="org.eclipse.tm4e.registry.grammars">
       <grammar path="grammars/vue/vue.tmLanguage.json" scopeName="source.vue" />
       <scopeNameContentTypeBinding contentTypeId="org.eclipse.wildwebdeveloper.vue" scopeName="source.vue" />
@@ -604,9 +636,8 @@
             contentTypeId="org.eclipse.wildwebdeveloper.vue"
             path="language-configurations/vue/vue-language-configuration.json">
       </languageConfiguration>
-      
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.genericeditor.reconcilers">
       <reconciler
@@ -615,7 +646,7 @@
       </reconciler>
    </extension>
 
-   <!-- YAML Language -->   
+   <!-- YAML Language -->
    <extension
          point="org.eclipse.lsp4e.languageServer">
       <server
@@ -663,7 +694,7 @@
          id="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLHoverPreferencePage"
          name="%YAMLHoverPreferencePage.name">
          <keywordReference id="org.eclipse.wildwebdeveloper.yaml" />
-      </page>      
+      </page>
       <page
          category="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLPreferencePage"
          class="org.eclipse.wildwebdeveloper.yaml.ui.preferences.YAMLValidationPreferencePage"

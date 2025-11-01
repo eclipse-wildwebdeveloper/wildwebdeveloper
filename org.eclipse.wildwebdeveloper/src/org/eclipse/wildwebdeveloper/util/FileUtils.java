@@ -15,6 +15,7 @@ package org.eclipse.wildwebdeveloper.util;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.eclipse.core.runtime.IStatus;
@@ -22,13 +23,17 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.wildwebdeveloper.Activator;
 
 public class FileUtils {
-	private static final String FILE_SCHEME = "file"; //$NON-NLS-1$
+	public static final String FILE_SCHEME = "file"; //$NON-NLS-1$
 
-	public static File fromUri(String uri) {
+	public static File uriToFile(String uri) {
 		// not using `new File(new URI(uri))` here which does not support Windows UNC paths
 		// and instead throws IllegalArgumentException("URI has an authority component")
 		return Paths.get(URI.create(uri)).toFile();
 	}
+
+   public static Path uriToPath(String uri) {
+      return Paths.get(URI.create(uri));
+   }
 
 	public static URI toUri(String filePath) {
 		return toUri(new File(filePath));

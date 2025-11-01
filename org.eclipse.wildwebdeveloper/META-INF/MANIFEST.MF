@@ -37,4 +37,5 @@ Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
 Export-Package: org.eclipse.wildwebdeveloper.debug;x-internal:=true,
  org.eclipse.wildwebdeveloper.debug.node;x-internal:=true,
- org.eclipse.wildwebdeveloper.debug.npm;x-internal:=true
+ org.eclipse.wildwebdeveloper.debug.npm;x-internal:=true,
+ org.eclipse.wildwebdeveloper.markdown;x-friends:="org.eclipse.wildwebdeveloper.tests"
