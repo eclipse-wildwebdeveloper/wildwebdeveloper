@@ -29,7 +29,7 @@ import org.eclipse.wildwebdeveloper.css.ui.preferences.CSSPreferenceServerConsta
 import org.eclipse.wildwebdeveloper.html.ui.preferences.HTMLPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.ui.preferences.Settings;
 
-public class VueClientImpl extends DefaultLanguageClient implements VueLanguageServerExtention {
+public class VueClientImpl extends DefaultLanguageClient implements VueLanguageServerExtension {
 
 	@Override
 	public void projectLoadingFinish(Object object) {

@@ -83,7 +83,7 @@ Example `tsconfig.json`:
 1. Open the HTML file with the Generic Editor for edition.
 2. From the Edition context menu, the Project Explorer or other explorer, open this same HTML file with the Internal Web Browser.
 3. Drag the editor/browser to get them side by side or stacked one on top of the other in the IDE.
-4. In the Web Browser, click the arrow besides the refresh button, and select "Auto-refersh local changes"
+4. In the Web Browser, click the arrow beside the refresh button, and select "Auto-refresh local changes"
 
 ### Change the memory allocated to the JavaScript/TypeScript language server?
 

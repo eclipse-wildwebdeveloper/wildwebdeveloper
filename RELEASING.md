@@ -2,7 +2,7 @@
 
 # Committer status & ECA 
 
-In order to perform a release, you need to have a committer status on the project and have the Eclipse Contributor Agreement signed, using the e-mail used at Github.
+In order to perform a release, you need to have a committer status on the project and have the Eclipse Contributor Agreement signed, using the e-mail used at GitHub.
 See https://eclipse.org/legal/ECA.php for details
 
 # Steps to release

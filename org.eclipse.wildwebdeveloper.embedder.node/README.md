@@ -4,7 +4,7 @@ When a developer's system suits the supported OSs (Linux, MacOS and Win32) and a
 
 ## 📥 Integration of Node.js Embedder
 
-Developers may use the Node.js Embedder by adding the `org.eclipse.wildwebdeveloper.embedder.node.feature` into the dependencies, and calling the `getNodeJsLocation()` method of `NodeJSManager` class in order to automatic install (if it's not yet installed) and obtain the embedded version of Node.js in their products.
+Developers may use the Node.js Embedder by adding the `org.eclipse.wildwebdeveloper.embedder.node.feature` into the dependencies, and calling the `getNodeJsLocation()` method of the `NodeJSManager` class in order to automatically install (if it's not yet installed) and obtain the embedded version of Node.js in their products.
 
 ```java
 {
@@ -17,7 +17,7 @@ Developers may use the Node.js Embedder by adding the `org.eclipse.wildwebdevelo
 }
 ```
 
-After the first call to `getNodeJsLocation()` the subsequent calls to `which(String program)` method will start searching for the specified program firstly in the embedded Node.js installation directory. This allows to use the `node`, `npm` or `npx`utilities (if a utility name according to OS is provided as an argument) to be taken from the same embedded Node.js installation.
+After the first call to `getNodeJsLocation()`, subsequent calls to the `which(String program)` method will start searching for the specified program first in the embedded Node.js installation directory. This allows the `node`, `npm`, or `npx` utilities (if a utility name according to OS is provided as an argument) to be taken from the same embedded Node.js installation.
 
 ```java
 {
@@ -25,7 +25,7 @@ After the first call to `getNodeJsLocation()` the subsequent calls to `which(Str
   import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
   
   ...
-  // Another way to get the NodeJS executable on Linux (after embedded Node.js is installed.
+  // Another way to get the Node.js executable on Linux (after embedded Node.js is installed).
   File nodeJsRuntime = NodeJSManager.which("node");
   
   // Obtaining `npm` executable on Linux
@@ -44,7 +44,7 @@ After the first call to `getNodeJsLocation()` the subsequent calls to `which(Str
 
 Community support is currently available via [GitHub issues](https://github.com/eclipse/wildwebdeveloper/issues).
 
-Contribution of Code and Documentation are welcome as [GitHub Pull Request](https://github.com/eclipse/wildwebdeveloper/pulls).
+Contributions of code and documentation are welcome as [GitHub pull requests](https://github.com/eclipse/wildwebdeveloper/pulls).
 
 Continuous integration is available on https://jenkins.eclipse.org/wildwebdeveloper/
 
