@@ -275,10 +275,14 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 				if (roots != null && !roots.isEmpty()) {
 					for (String rootUri : roots) {
 						final var containers = ResourcesPlugin.getWorkspace().getRoot()
-								.findContainersForLocationURI(new java.net.URI(rootUri));
+								.findContainersForLocationURI(URI.create(rootUri));
 						if (containers != null && containers.length > 0) {
 							for (final var container : containers) {
+								if (container.isDerived() || container.isHidden())
+									continue;
 								container.accept((final IResource res) -> {
+									if (res.isDerived() || res.isHidden())
+										return false;
 									if (res.getType() == IResource.FILE) {
 										final String name = res.getName().toLowerCase();
 										if (name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown")) {
@@ -295,6 +299,8 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 					// Fallback: scan entire workspace
 					final IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 					wsRoot.accept((final IResource res) -> {
+						if (res.isDerived() || res.isHidden())
+							return false;
 						if (res.getType() == IResource.FILE) {
 							final String name = res.getName().toLowerCase();
 							if (name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown")) {
