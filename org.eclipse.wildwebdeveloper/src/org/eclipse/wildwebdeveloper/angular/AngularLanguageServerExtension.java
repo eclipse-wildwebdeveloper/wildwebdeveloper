@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 
-public interface AngularLanguageServerExtention {
+public interface AngularLanguageServerExtension {
 
 	@JsonNotification(value = "angular/projectLoadingStart")
 	public void projectLoadingStart(Object object);

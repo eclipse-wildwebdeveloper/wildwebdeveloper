@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 
-public interface VueLanguageServerExtention {
+public interface VueLanguageServerExtension {
 
 	@JsonNotification(value = "vue/projectLoadingStart")
 	public void projectLoadingStart(Object object);

@@ -35,4 +35,4 @@ podman push docker.io/USER_NAME/fedora-gtk3-mutter-java-node:TAG
 
 **Note:**
 
-USER_NAME in used in various Jenkins files and configs. If new image is published by another user this has to be changed in various existing Jenkins files and configs in order the correct image to be taken into account.
+`USER_NAME` is used in various Jenkins files and configs. If a new image is published by another user, this has to be changed in various existing Jenkins files and configs in order for the correct image to be taken into account.

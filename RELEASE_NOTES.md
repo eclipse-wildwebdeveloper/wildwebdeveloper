@@ -67,7 +67,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 1.3.5
 
-* 📅 Release Date: May 23th, 2024
+* 📅 Release Date: May 23rd, 2024
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.4...1.3.5
 
 #### Editing improvements
@@ -87,7 +87,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 1.3.4
 
-* 📅 Release Date: May 6t, 2024
+* 📅 Release Date: May 6th, 2024
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.3...1.3.4
 
 #### Editing improvements
@@ -111,7 +111,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 ## 1.3.3
 
-* 📅 Release Date: November 21th, 2023
+* 📅 Release Date: November 21st, 2023
 * All changes: https://github.com/eclipse/wildwebdeveloper/compare/1.3.2...1.3.3
 
 #### Editing improvements
@@ -133,7 +133,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 #### Dependencies update
 
-* Use the latest VSCode extensions v..1.84.0 for CSS/HTML/JSON editing
+* Use the latest VSCode extensions v.1.84.0 for CSS/HTML/JSON editing
 
 ## 1.3.1
 
@@ -143,7 +143,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Editing improvements
 
 * Bugfix for fsevents.node is not signed
-* Bugfix for "Chrome Debug Launch configuration
+* Bugfix for "Chrome Debug" Launch configuration
 * Bugfix for WebRoot folder validation in Launch configuration
 * Bugfix for allow using TypeScript version specified by project
 * Bugfix for Run HTML Debug configuration validation
@@ -165,7 +165,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 * Switched to use TM4E's own repository to use the most latest release
 * Added 'fsevents' NPM dependency for MacOS users
 * Use the latest Vue.js LS to v.1.8.22
-* Use the latest VSCode extensions v..1.83.0 for CSS/HTML/JSON editing
+* Use the latest VSCode extensions v.1.83.0 for CSS/HTML/JSON editing
 * Embed latest Node.js to v.18.18.2 LTS with the latest Security Fixes
 * Use the latest Firefox Debug adapter v.2.9.9
 * Use the latest TypeScript LS v.4.0.0
@@ -207,7 +207,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Dependencies update
 
 * Use the latest VSCode ESLint extension v.2.4.2
-* Use the latest VSCode extensions v..1.79.0 for CSS/HTML/JSON editing
+* Use the latest VSCode extensions v.1.79.0 for CSS/HTML/JSON editing
 * Use LemMinX 0.26.1 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
 * Embed latest Node.js (v.18.16.1) with the latest Security fixes
 
@@ -225,7 +225,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Dependencies update
 
 * Use the latest VSCode ESLint extension v.2.4.1
-* Use the latest VSCode extensions v..1.78.2 for CSS/HTML/JSON editing
+* Use the latest VSCode extensions v.1.78.2 for CSS/HTML/JSON editing
 * Use the latest YAML Language Server v.1.13.0
 
 ## 1.1.0
@@ -240,7 +240,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Dependencies update
 
 * Embed latest Node.js (v.18.16.0) with the latest Security fixes
-* Use the latest VSCode extensions v..1.78.0 for CSS/HTML/JSON editing
+* Use the latest VSCode extensions v.1.78.0 for CSS/HTML/JSON editing
 * Use LemMinX 0.25.0 ⚠️ Your lemminx extensions registered to Wild Web Developer may be incompatible if they were built against an older version of LemMinX ⚠️
  * Updated language servers
 
@@ -269,7 +269,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 #### Dependencies update
 
 * Embed latest Node.js (v.18.15.0) with the latest Security fixes
-* Use the latest VSCode extensions v..1.77.0 for CSS/HTML/JSON editing
+* Use the latest VSCode extensions v.1.77.0 for CSS/HTML/JSON editing
 
 ## 1.0.3
 
@@ -283,7 +283,7 @@ This page describes the noteworthy improvements provided by each release of Ecli
 
 #### Dependencies update
 
-* Use the latest VSCode extensions v..1.76.0 for CSS/HTML/JSON editing 
+* Use the latest VSCode extensions v.1.76.0 for CSS/HTML/JSON editing 
 * Use the latest YAML Language Server v.1.12.0
 
 ## 1.0.2

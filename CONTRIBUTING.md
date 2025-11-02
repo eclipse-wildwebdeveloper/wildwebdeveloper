@@ -20,12 +20,12 @@ For more information, please see the Eclipse Committer Handbook:
 
 ## 💬 Get in touch with the community
 
-Eclipse Wild Web Developer use mainly 2 channels for technical discussions:
+Eclipse Wild Web Developer uses mainly two channels for technical discussions:
 
-* 🐞 View and report issues through uses GitHub Issues at https://github.com/eclipse/wildwebdeveloper/issues.
+* 🐞 View and report issues through GitHub Issues at https://github.com/eclipse/wildwebdeveloper/issues.
 * 🗪 Technical discussions that are not yet qualified as issue are happening in GitHub Discussions at https://github.com/eclipse/wildwebdeveloper/discussions
 
-Project committers must 📧 join the m2e-dev@eclipse.org mailing-list which must be used (according the the Eclipse Development Process) for formal project development decision such as committers and project lead elections.
+Project committers must 📧 join the wildwebdeveloper-dev@eclipse.org mailing list, which must be used (according to the Eclipse Development Process) for formal project development decisions such as committer and project lead elections.
 
 ## 🆕 Trying latest builds
 
@@ -53,7 +53,7 @@ Java 21 and Maven 3.9.6 (only if you want to build from the command-line), or ne
 
 Simply `mvn clean verify`, this will run the tests (`-DskipTests` to skip them) and the resulting p2 repository and specific IDE applications will be available for further manual testing in `repository/target`.
 
-To full build and test use the following commands:
+To fully build and test, use the following commands:
 ```
 $ cd <WildWebDeveloper project root directory>
 $ mvn clean install   
@@ -77,7 +77,7 @@ Or you can run an individual JUnit test by using `-Dtest=...` argument, for exam
 $ mvn clean verify -Dtest=TestHTML   
 ```
 
-In case you need to work on tests only or repeatedly execute several tests, it's easier and faster to build everything then run only the tests:
+In case you need to work on tests only or repeatedly execute several tests, it's easier and faster to build everything than run only the tests:
 
 ```
 $ cd <WildWebDeveloper project root directory>
@@ -89,7 +89,7 @@ $ mvn clean install -DskipTests
 $ cd org.eclipse.wildwebdeveloper.tests/
 $ mvn clean verify -Dtest=TestHTML   
 
-#`Repeat running TestHTML or run any other tests, for example:
+# Repeat running TestHTML or run any other tests, for example:
 $ mvn clean verify -Dtest=TestJSON   
 ```
 

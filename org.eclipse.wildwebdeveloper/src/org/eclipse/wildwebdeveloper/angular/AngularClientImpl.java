@@ -6,7 +6,7 @@ import org.eclipse.lsp4e.LanguageClientImpl;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.MessageType;
 
-public class AngularClientImpl extends LanguageClientImpl implements AngularLanguageServerExtention {
+public class AngularClientImpl extends LanguageClientImpl implements AngularLanguageServerExtension {
 
 	@Override
 	public void projectLoadingFinish(Object object) {
