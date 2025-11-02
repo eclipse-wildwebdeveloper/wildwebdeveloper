@@ -31,6 +31,14 @@
 //             server's `URI.toString()` form. This guarantees the server tracks the open document under
 //             the key it uses during diagnostics, enabling `computeDiagnostics()` and `markdown/fs/*` requests.
 //
+// 3) Windows path suggestions (client→server) producing incorrect absolute drive paths:
+//    Problem: When resolving workspace header/path completions, the current document URI and target
+//             document URIs sometimes differ in Windows drive case/encoding (e.g., `file:///D:/...` vs
+//             `file:///d%3A/...`). This causes relative path computation to fall back to odd absolute
+//             paths such as `../../../../d:/...`.
+//    Fix:     Normalize the document URI in `textDocument/completion` requests so that the server sees a
+//             consistent Windows-encoded form and computes clean relative paths (e.g., `GUIDE.md#...`).
+//
 //    Note: On non-Windows URIs, normalization is a no-op; messages are forwarded unchanged.
 
 const { spawn } = require('child_process');
@@ -45,7 +53,8 @@ const serverArgs = process.argv.slice(3);
 // Launch the wrapped language server; we proxy its stdio
 const child = spawn(process.execPath, [serverMain, ...serverArgs], { stdio: ['pipe', 'pipe', 'inherit'] });
 
-// Client → Server (Problem 2): normalize Windows URIs and mirror lifecycle notifications
+// Client → Server (Problem 2 & 3): normalize Windows URIs, mirror lifecycle notifications,
+// and normalize completion requests
 let inBuffer = Buffer.alloc(0);
 process.stdin.on('data', chunk => {
   inBuffer = Buffer.concat([inBuffer, chunk]);
@@ -123,15 +132,14 @@ function processInboundBuffer() {
   }
 }
 
-// Duplicate lifecycle notifications with a normalized URI so diagnostics can run (Problem 2)
+// Client → Server normalization (Problem 2 & 3)
 function transformInbound(bodyBuf) {
   try {
     const text = bodyBuf.toString('utf8');
     const msg = JSON.parse(text);
     const method = msg && msg.method;
 
-    // For text document lifecycle events, also send a duplicate event
-    // with a normalized file URI so the server's URI.toString() lookups match.
+    // Duplicate lifecycle notifications with a normalized URI (Problem 2)
     if ((method === 'textDocument/didOpen' || method === 'textDocument/didChange' || method === 'textDocument/didClose' || method === 'textDocument/willSave' || method === 'textDocument/didSave') && msg.params && msg.params.textDocument) {
       const origUri = msg.params.textDocument.uri;
       const normUri = normalizeFileUriForServer(origUri);
@@ -142,22 +150,35 @@ function transformInbound(bodyBuf) {
         return [Buffer.from(JSON.stringify(msg), 'utf8'), Buffer.from(JSON.stringify(dup), 'utf8')];
       }
     }
+
+    // Normalize completion requests so relative path suggestions are correct on Windows (Problem 3)
+    if (method === 'textDocument/completion' && msg.params && msg.params.textDocument) {
+      const origUri = msg.params.textDocument.uri;
+      const normUri = normalizeFileUriForServer(origUri);
+      if (normUri && normUri !== origUri) {
+        const req = structuredClone(msg);
+        req.params.textDocument.uri = normUri;
+        return [Buffer.from(JSON.stringify(req), 'utf8')];
+      }
+    }
+
   } catch { }
   return [bodyBuf];
 }
 
 // Normalize Windows file URIs to match vscode-uri’s URI.toString() (Problem 2)
 function normalizeFileUriForServer(uri) {
-  if (typeof uri !== 'string' || !uri.startsWith('file:///'))
-    return undefined;
-
-  // Normalize Windows drive letter and encode colon to match vscode-uri toString()
-  // Example: file:///D:/path -> file:///d%3A/path
-  const after = uri.slice('file:///'.length);
+  if (typeof uri !== 'string' || !uri.startsWith('file:')) return undefined;
+  // Strip scheme and leading slashes to get to drive letter
+  let after = uri.slice('file:'.length);
+  while (after.startsWith('/')) after = after.slice(1);
+  // Example accepted forms: D:/path or d:/path
   if (/^[A-Za-z]:/.test(after)) {
     const drive = after[0].toLowerCase();
-    const rest = after.slice(2); // drop ":"
-    return 'file:///' + drive + '%3A' + rest;
+    const rest = after.slice(2); // drop ':'
+    // Ensure a leading slash for the path segment
+    const pathPart = rest.startsWith('/') ? rest : '/' + rest;
+    return 'file:///' + drive + '%3A' + pathPart;
   }
   return undefined;
 }

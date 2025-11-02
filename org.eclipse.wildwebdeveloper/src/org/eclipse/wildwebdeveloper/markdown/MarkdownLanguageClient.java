@@ -140,7 +140,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 					// Notify server of the file system event for this resource
 					final var payload = new HashMap<String, Object>();
 					payload.put("id", Integer.valueOf(id));
-					payload.put("uri", uri.toString());
+					payload.put("uri", normalizeFileUriForLanguageServer(uri));
 					payload.put("kind", kind);
 					server.fsWatcherOnChange(payload);
 					return true;
@@ -282,7 +282,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 									if (res.getType() == IResource.FILE) {
 										final String name = res.getName().toLowerCase();
 										if (name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown")) {
-											uris.add(res.getLocationURI().toString());
+											uris.add(normalizeFileUriForLanguageServer(res.getLocationURI()));
 										}
 										return false; // no children
 									}
@@ -298,7 +298,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 						if (res.getType() == IResource.FILE) {
 							final String name = res.getName().toLowerCase();
 							if (name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown")) {
-								uris.add(res.getLocationURI().toString());
+								uris.add(normalizeFileUriForLanguageServer(res.getLocationURI()));
 							}
 							return false; // no children
 						}
@@ -438,5 +438,36 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 			}
 			return null;
 		});
+	}
+
+	/**
+	 * Normalize Windows file URIs to match vscode-uri's URI.toString() form used by the server.
+	 * <br>
+	 * Examples:
+	 * <li>file:/D:/path -> file:///d%3A/path
+	 * <li>file:///D:/path -> file:///d%3A/path
+	 */
+	private static String normalizeFileUriForLanguageServer(final URI uri) {
+		if (uri == null)
+			return null;
+		if (!FileUtils.FILE_SCHEME.equalsIgnoreCase(uri.getScheme()))
+			return uri.toString();
+		final String uriAsString = uri.toString();
+
+		// Ensure triple slash prefix
+		String withoutScheme = uriAsString.substring("file:".length()); // could be :/, :///
+		while (withoutScheme.startsWith("/")) {
+			withoutScheme = withoutScheme.substring(1);
+		}
+
+		// Expect leading like D:/ or d:/ on Windows
+		if (withoutScheme.length() >= 2 && Character.isLetter(withoutScheme.charAt(0)) && withoutScheme.charAt(1) == ':') {
+			final char drive = Character.toLowerCase(withoutScheme.charAt(0));
+			final String rest = withoutScheme.substring(2); // drop ':'
+			return "file:///" + drive + "%3A" + (rest.startsWith("/") ? rest : "/" + rest);
+		}
+
+		// Already in a normalized or UNC form; fall back to original
+		return uriAsString;
 	}
 }
