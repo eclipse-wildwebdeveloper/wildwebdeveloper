@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -27,13 +28,17 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServerWrapper;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
+import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
+import org.eclipse.wildwebdeveloper.Activator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -122,5 +127,62 @@ class TestMarkdown {
 		});
 
 		assertTrue(markerTests.isEmpty(), "The following markers were not found: " + markerTests);
+	}
+
+	@Test
+	void workspaceHeaderCompletionsRespectExcludeGlobs() throws Exception {
+		var project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + ".hdr" + System.nanoTime());
+		project.create(null);
+		project.open(null);
+
+		// Configure exclusion: exclude docs/generated/** from workspace header completions
+		Activator.getDefault().getPreferenceStore().setValue("markdown.suggest.paths.excludeGlobs", "docs/generated/**");
+
+		// Create markdown files with unique headers
+		// Ensure folders exist
+		var docsFolder = project.getFolder("docs");
+		if (!docsFolder.exists())
+			docsFolder.create(true, true, null);
+		var genFolder = docsFolder.getFolder("generated");
+		if (!genFolder.exists())
+			genFolder.create(true, true, null);
+
+		IFile excluded = project.getFile("docs/generated/excluded.md");
+		excluded.create("# Excluded Only\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		IFile included = project.getFile("docs/included.md");
+		included.create("# Included Only\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		// File where we'll trigger completions (double hash to respect default preference)
+		IFile index = project.getFile("index.md");
+		index.create("[](##)\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		var editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), index);
+		var display = editor.getSite().getShell().getDisplay();
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+
+		// Ensure Markdown Language Server is started and connected
+		var markdownLS = new AtomicReference<LanguageServerWrapper>();
+		assertTrue(DisplayHelper.waitForCondition(display, 10_000, () -> {
+			markdownLS.set(LanguageServiceAccessor.getStartedWrappers(document, null, false).stream() //
+					.filter(w -> "org.eclipse.wildwebdeveloper.markdown".equals(w.serverDefinition.id)) //
+					.findFirst().orElse(null));
+			return markdownLS.get() != null //
+					&& markdownLS.get().isActive() //
+					&& markdownLS.get().isConnectedTo(LSPEclipseUtils.toUri(document));
+		}), "Markdown LS did not start");
+
+		// Trigger content assist at the end of '##'
+		int offset = document.get().indexOf("##") + 2;
+		var cap = new LSContentAssistProcessor();
+
+		assertTrue(DisplayHelper.waitForCondition(display, 15_000, () -> {
+			ICompletionProposal[] proposals = cap.computeCompletionProposals(Utils.getViewer(editor), offset);
+			if (proposals == null || proposals.length == 0)
+				return false;
+			boolean hasIncluded = Arrays.stream(proposals).anyMatch(p -> "#included-only".equals(p.getDisplayString()));
+			boolean hasExcluded = Arrays.stream(proposals).anyMatch(p -> "#excluded-only".equals(p.getDisplayString()));
+			return hasIncluded && !hasExcluded;
+		}), "Workspace header completions did not respect exclude globs");
 	}
 }

@@ -41,6 +41,7 @@ public final class MarkdownPreferenceInitializer extends AbstractPreferenceIniti
 		store.setDefault(MD_PREFERRED_MD_PATH_EXTENSION_STYLE, PreferredMdPathExtensionStyle.auto.value);
 		store.setDefault(MD_SUGGEST_PATHS_ENABLED, true);
 		store.setDefault(MD_SUGGEST_PATHS_INCLUDE_WKS_HEADER_COMPLETIONS, IncludeWorkspaceHeaderCompletions.onDoubleHash.value);
+		store.setDefault(MD_SUGGEST_PATHS_EXCLUDE_GLOBS, "**/node_modules/**");
 
 		/*
 		 * Validation

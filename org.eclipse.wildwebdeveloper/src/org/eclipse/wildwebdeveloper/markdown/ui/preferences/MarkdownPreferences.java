@@ -113,6 +113,11 @@ public final class MarkdownPreferences {
 	static final String MD_SUGGEST_PATHS_INCLUDE_WKS_HEADER_COMPLETIONS = MD_SECTION
 			+ ".suggest.paths.includeWorkspaceHeaderCompletions"; // IncludeWorkspaceHeaderCompletions
 
+
+	// Note: MD_SUGGEST_PATHS_EXCLUDE_GLOBS is a client-only preference used for
+	// filtering path suggestions on the Eclipse side and is not sent to the server.
+	static final String MD_SUGGEST_PATHS_EXCLUDE_GLOBS = MD_SECTION + ".suggest.paths.excludeGlobs"; // comma list
+
 	/*
 	 * Validation
 	 */
@@ -164,6 +169,22 @@ public final class MarkdownPreferences {
 		settings.fillAsString(MD_VALIDATE_UNUSED_LINK_DEFS_ENABLED);
 		settings.fillAsString(MD_VALIDATE_DUPLICATE_LINK_DEFS_ENABLED);
 		return settings;
+	}
+
+	/**
+	 * Returns comma-separated glob patterns from preferences for excluding files from
+	 * Markdown path suggestions. Empty or blank entries are filtered out.
+	 */
+	public static String[] getSuggestPathsExcludeGlobs() {
+		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final String raw = store.getString(MD_SUGGEST_PATHS_EXCLUDE_GLOBS);
+		if (raw == null || raw.trim().isEmpty()) {
+			return new String[0];
+		}
+		return Arrays.stream(raw.split(","))
+				.map(String::trim)
+				.filter(s -> !s.isEmpty())
+				.toArray(String[]::new);
 	}
 
 	public static boolean isMatchMarkdownSection(final String section) {
