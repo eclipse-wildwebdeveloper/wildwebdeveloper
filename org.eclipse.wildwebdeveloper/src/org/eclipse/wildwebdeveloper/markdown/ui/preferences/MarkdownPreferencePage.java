@@ -108,6 +108,22 @@ public final class MarkdownPreferencePage extends FieldEditorPreferencePage impl
 				toLabelValueArray(IncludeWorkspaceHeaderCompletions.class),
 				suggestionsGroup));
 
+		final var excludeGlobs = new StringFieldEditor(
+				MD_SUGGEST_PATHS_EXCLUDE_GLOBS,
+				"Excluded path suggestion globs (comma-separated)",
+				suggestionsGroup);
+		addField(excludeGlobs);
+		final String excludeTooltip = """
+			Glob patterns to exclude Markdown files from path suggestions.
+			Matched against project-relative paths, for example:
+			• **/node_modules/**
+			• docs/generated/**
+			• **/drafts/**
+			• **/*.tmp.md
+			""";
+		excludeGlobs.getLabelControl(suggestionsGroup).setToolTipText(excludeTooltip);
+		excludeGlobs.getTextControl(suggestionsGroup).setToolTipText(excludeTooltip);
+
 		// Validation
 		validateEnabledEditor = new BooleanFieldEditor(MD_VALIDATE_ENABLED, "Enable validation", pageParent);
 		addField(validateEnabledEditor);

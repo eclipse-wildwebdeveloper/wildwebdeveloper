@@ -18,11 +18,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.client.DefaultLanguageClient;
 import org.eclipse.lsp4j.ConfigurationItem;
@@ -212,7 +214,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 					}
 				}
 				if (!hasText && uriPath == null) {
-					return Collections.emptyList();
+					return List.of();
 				}
 				final String argPath;
 				if (hasText) {
@@ -229,7 +231,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 				if (exit != 0) {
 					final var err = new String(proc.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
 					ILog.get().warn("markdown-it parser failed (" + exit + "): " + err, null);
-					return Collections.emptyList();
+					return List.of();
 				}
 				final var gson = new Gson();
 				final List<Map<String, Object>> tokens = gson.fromJson(out, List.class);
@@ -242,7 +244,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 					}
 				} catch (final Exception ignore) {
 				}
-				return tokens != null ? tokens : Collections.emptyList();
+				return tokens != null ? tokens : List.of();
 			} catch (final InterruptedException ex) {
 				ILog.get().warn(ex.getMessage(), ex);
 				/* Clean up whatever needs to be handled before interrupting  */
@@ -256,7 +258,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 					} catch (final Exception ignore) {
 					}
 			}
-			return Collections.emptyList();
+			return List.of();
 		});
 	}
 
@@ -270,6 +272,9 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 	public CompletableFuture<List<String>> findMarkdownFilesInWorkspace(final Object unused) {
 		return CompletableFuture.supplyAsync(() -> {
 			final var uris = new ArrayList<String>();
+			// Compile exclude globs from preferences once per request
+			final String[] excludeGlobs = MarkdownPreferences.getSuggestPathsExcludeGlobs();
+			final List<PathMatcher> excludeMatchers = compileGlobMatchers(excludeGlobs);
 			try {
 				final var roots = MarkdownLanguageServer.getServerRoots();
 				if (roots != null && !roots.isEmpty()) {
@@ -285,7 +290,8 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 										return false;
 									if (res.getType() == IResource.FILE) {
 										final String name = res.getName().toLowerCase();
-										if (name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown")) {
+										if ((name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown"))
+												&& !isExcludedByGlobs(res, excludeMatchers)) {
 											uris.add(normalizeFileUriForLanguageServer(res.getLocationURI()));
 										}
 										return false; // no children
@@ -303,7 +309,8 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 							return false;
 						if (res.getType() == IResource.FILE) {
 							final String name = res.getName().toLowerCase();
-							if (name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown")) {
+							if ((name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".mdown"))
+									&& !isExcludedByGlobs(res, excludeMatchers)) {
 								uris.add(normalizeFileUriForLanguageServer(res.getLocationURI()));
 							}
 							return false; // no children
@@ -316,6 +323,48 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 			}
 			return uris;
 		});
+	}
+
+	private static List<PathMatcher> compileGlobMatchers(String... globs) {
+		if (globs == null || globs.length == 0)
+			return List.of();
+
+		var fs = FileSystems.getDefault();
+		var matchers = new ArrayList<PathMatcher>();
+
+		for (String glob : globs) {
+			if (glob == null || (glob = glob.trim()).isEmpty())
+				continue;
+
+			// If pattern starts with "**/", also add a root-level variant without it.
+			// This makes "**/node_modules/**" also match "node_modules/**".
+			List<String> patterns = glob.startsWith("**/") && glob.length() > 3
+					? List.of(glob, glob.substring(3))
+					: List.of(glob);
+
+			for (String pattern : patterns) {
+				try {
+					matchers.add(fs.getPathMatcher("glob:" + pattern));
+				} catch (Exception ex) {
+					ILog.get().warn(ex.getMessage(), ex);
+				}
+			}
+		}
+		return matchers;
+	}
+
+	private static boolean isExcludedByGlobs(final IResource res, final List<PathMatcher> matchers) {
+		if (matchers == null || matchers.isEmpty())
+			return false;
+		final IPath pr = res.getProjectRelativePath();
+		if (pr == null)
+			return false;
+		final Path p = pr.toPath();
+		for (final PathMatcher m : matchers) {
+			if (m.matches(p))
+				return true;
+		}
+		return false;
 	}
 
 	/**
@@ -415,10 +464,10 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 			@SuppressWarnings("unchecked")
 			final Map<String, Object> options = params.get("options") instanceof Map //
 					? (Map<String, Object>) params.get("options")
-					: Collections.emptyMap();
-			final var watcher = new Watcher((MarkdownLanguageServerAPI) getLanguageServer(), id, path,
+					: Map.of();
+			final var watcher = new Watcher((MarkdownLanguageServerAPI) getLanguageServer(), id, path, //
 					Boolean.TRUE.equals(options.get("ignoreCreate")), //
-					Boolean.TRUE.equals(options.get("ignoreChange")),
+					Boolean.TRUE.equals(options.get("ignoreChange")), //
 					Boolean.TRUE.equals(options.get("ignoreDelete")));
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(watcher, IResourceChangeEvent.POST_CHANGE);
 			watchersById.put(Integer.valueOf(id), watcher);
