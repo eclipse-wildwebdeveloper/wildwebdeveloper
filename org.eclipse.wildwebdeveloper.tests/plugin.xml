@@ -5,7 +5,7 @@
          point="org.eclipse.wildwebdeveloper.json.schema">
       <schema
             pattern="dep.yml"
-            url="https://json.schemastore.org/dependabot">
+            url="https://www.schemastore.org/dependabot">
       </schema>
       <schema
             pattern="depp.yml"
