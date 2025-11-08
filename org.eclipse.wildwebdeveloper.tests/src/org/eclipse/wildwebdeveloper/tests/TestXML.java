@@ -12,10 +12,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +21,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.stream.Collectors;
@@ -242,8 +241,8 @@ public class TestXML {
         // Find system.catalog in well known location from plugin
         File systemCatalog = plugin.getStateLocation().append("system-catalog.xml").toFile();
         // Parse system-catalog to check it
-        Document systemCatalogDom = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder()
-                .parse(systemCatalog);
+        Document systemCatalogDom = runWithLocalCatalogOnlyForTestXMLCatalog(
+                () -> DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(systemCatalog));
 
         // root
         Node catalogNode = systemCatalogDom.getLastChild();
@@ -275,5 +274,48 @@ public class TestXML {
 
         // Uninstall bundle once again
         catalogBundle.uninstall();
+    }
+
+    /**
+     * Workaround for erratic runtime exceptions because of catalog.dtd temporarily not being available online:
+     * <pre>{@code
+     *   java.io.FileNotFoundException: http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd
+     *       at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:2010)
+     *       at ...
+     *       at java.xml/javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:206)
+     *       at org.eclipse.wildwebdeveloper.tests.TestXML.testXMLCatalog(TestXML.java:246)
+     *       at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+     *       at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+     *       at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+     * }</pre>
+     */
+    private <T> T runWithLocalCatalogOnlyForTestXMLCatalog(Callable<T> callable) throws Exception {
+        var origSysProps = new HashMap<String, String>();
+        List.of( //
+            "javax.xml.useCatalog", //
+            "javax.xml.catalog.files", //
+            "javax.xml.catalog.prefer", //
+            "javax.xml.catalog.resolve"
+        ).forEach(k -> origSysProps.put(k, System.getProperty(k)));
+
+        var catalogRedirect = Path.of("src/org/eclipse/wildwebdeveloper/tests/catalog/oasis-catalog-redirect.xml");
+        assertTrue(Files.exists(catalogRedirect));
+        // enforce usage of local catalog.dtd file
+        System.setProperty("javax.xml.useCatalog", "true");
+        System.setProperty("javax.xml.catalog.files", catalogRedirect.toUri().toString());
+        System.setProperty("javax.xml.catalog.prefer", "system");
+        System.setProperty("javax.xml.catalog.resolve", "strict");
+        try {
+        	return callable.call();
+        } finally {
+            // restore previous behaviour
+            for (var e : origSysProps.entrySet()) {
+                if (e.getValue() == null) {
+                    System.clearProperty(e.getKey());
+                } else {
+                    System.setProperty(e.getKey(), e.getValue());
+                }
+            }
+        }
     }
 }
