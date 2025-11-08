@@ -230,10 +230,11 @@ public class XMLCatalogs {
 	 * @return <code>true</code> if supported, otherwise <code>false</code>
 	 */
 	private static boolean isSchemeSupportedInCatalog(URI uri) {
-		// are some other scheme supported directly by LemMinX ?
-		// LemminX-Issue for supported protocols:
-		// https://github.com/eclipse/lemminx/issues/1477
-		return "file".equals(uri.getScheme()) || "jar".equals(uri.getScheme());
+		// LemMinX supports resolving remote schemas; allow http/https here
+		// in addition to local schemes, so contributed catalog entries are
+		// preserved and not dropped (see issue #1892).
+		final String scheme = uri.getScheme();
+		return "file".equals(scheme) || "jar".equals(scheme) || "http".equals(scheme) || "https".equals(scheme);
 	}
 
 	public static void storeUserCatalogs(IPreferenceStore store, Set<File> catalogs) {
