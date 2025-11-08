@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD XML Catalogs V1.0//EN" "catalog-1.0.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+   <!-- Map legacy and current systemIds to the bundled local DTD -->
+   <system systemId="http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd" uri="catalog-1.0.dtd" />
+   <system systemId="https://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd" uri="catalog-1.0.dtd" />
+   <system systemId="https://docs.oasis-open.org/entity/release/1.0/catalog-1.0.dtd" uri="catalog-1.0.dtd" />
+</catalog>
