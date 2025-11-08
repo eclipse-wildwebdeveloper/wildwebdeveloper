@@ -1,5 +1,9 @@
 # Eclipse Wild Web Developer : 🌐 Web dev in Eclipse IDE 🌘
 
+[![GitHub Actions](https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper/actions/workflows/build.yml/badge.svg)](https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper/actions/workflows/build.yml)
+[![Jenkins tests](https://img.shields.io/jenkins/tests?jobUrl=https%3A%2F%2Fci.eclipse.org%2Fwildwebdeveloper%2Fjob%2FWildwebdeveloper%2Fjob%2Fmaster%2F&logo=jenkins&logoColor=white)](https://ci.eclipse.org/wildwebdeveloper/job/Wildwebdeveloper/)
+[![License](https://img.shields.io/github/license/eclipse-wildwebdeveloper/wildwebdeveloper.svg?color=blue)](LICENSE)
+
 🖊️ **Edit** of HTML, CSS, JavaScript, TypeScript, JSON+schema, XML+schema, YAML+schema+Kubernetes and 🦟🔫 **debug** Node.js and HTML+JS web-apps simply and efficiently in the 🌘 Eclipse IDE.
 
 To see it in action, open the desired file with the Generic Editor that's included by default in the Eclipse IDE.
