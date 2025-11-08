@@ -1,0 +1,246 @@
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+name: Build
+
+on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
+  push:
+    branches-ignore:  # build all branches except:
+    - 'dependabot/**'  # prevent GHA triggered twice (once for commit to the branch and once for opening/syncing the PR)
+    tags-ignore:  # don't build tags
+    - '**'
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+    - '.github/workflows/codeql.yml'
+    - '.github/workflows/licensecheck.yml'
+    - '.github/workflows/updateTarget.yml'
+    - '**/.project'
+    - '**/.settings/*.prefs'
+    - '.gitignore'
+    - '.actrc'
+    - 'Jenkinsfile'
+  pull_request:
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+    - '.github/workflows/codeql.yml'
+    - '.github/workflows/licensecheck.yml'
+    - '.github/workflows/updateTarget.yml'
+    - '**/.project'
+    - '**/.settings/*.prefs'
+    - '.gitignore'
+    - '.actrc'
+    - 'Jenkinsfile'
+  workflow_dispatch:
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch
+    inputs:
+      additional_maven_args:
+        description: 'Additional Maven Args'
+        required: false
+        default: ''
+      debug-with-ssh:
+        description: "When to open an SSH session for post-build debugging:"
+        default: never
+        type: choice
+        options: [ always, on_failure, on_failure_or_cancelled, never ]
+      debug-with-ssh-only-for-actor:
+        description: "Restrict SSH debug session access to the GitHub user who triggered the workflow"
+        default: true
+        type: boolean
+
+
+defaults:
+  run:
+    shell: bash
+
+
+env:
+  JAVA_VERSION: 21
+
+
+jobs:
+
+  ###########################################################
+  build:
+  ###########################################################
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:  # https://github.com/actions/runner-images#available-images
+        - ubuntu-latest
+        - macos-15-intel  # Intel
+        - macos-latest  # ARM
+        - windows-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+
+
+    steps:
+    - name: "Show: GitHub context"
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: printf '%s' "$GITHUB_CONTEXT" | python -m json.tool
+
+
+    - name: "Show: environment variables"
+      run: env | sort
+
+
+    - name: Git Checkout
+      uses: actions/checkout@v5  # https://github.com/actions/checkout
+      with:
+        fetch-depth: 0  # required to prevent tycho-p2-extras-plugin:compare-version-with-baseline potentially failing the build
+
+
+    - name: Configure fast APT repository mirror
+      if: runner.os == 'Linux'
+      uses: vegardit/fast-apt-mirror.sh@v1
+
+
+    - name: "Install: Linux packages 📦"
+      if: runner.os == 'Linux'
+      run: |
+        set -eux
+        sudo apt-get install --no-install-recommends -y xvfb
+
+        # prevents: "Failed to execute child process “dbus-launch” (No such file or directory)"
+        sudo apt-get install --no-install-recommends -y dbus-x11
+
+        # prevents: "dbind-WARNING **: 20:17:55.046: AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files"
+        # see https://gist.github.com/jeffcogswell/62395900725acef1c0a5a608f7eb7a05
+        sudo apt-get install --no-install-recommends -y at-spi2-core
+
+        # prevents:
+        #  java.lang.UnsatisfiedLinkError: Could not load SWT library. Reasons:
+        #    no swt-pi4-gtk-4956r13 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+        #    no swt-pi4-gtk in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+        #    no swt-pi4 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+        sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
+
+        # prevents: 
+        #   java.io.IOException: Cannot run program "xdg-mime": error=2, No such file or directory
+        #     at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1143)
+        #     at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1073)
+        #     at org.eclipse.urischeme.internal.registration.ProcessExecutor.execute(ProcessExecutor.java:36)
+        #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.getRegisteredDesktopFileForScheme(RegistrationLinux.java:144)
+        #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.determineHandlerLocation(RegistrationLinux.java:86)
+        #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.getSchemesInformation(RegistrationLinux.java:75)
+        #     at org.eclipse.urischeme.AutoRegisterSchemeHandlersJob.run(AutoRegisterSchemeHandlersJob.java:85)
+        sudo apt-get install --no-install-recommends -y xdg-utils
+
+
+    - name: "Install: JDK ${{ env.JAVA_VERSION }} ☕"
+      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      with:
+        distribution: temurin
+        java-version: ${{ env.JAVA_VERSION }}
+
+
+    - name: "Install: Node 22 🍵"
+      uses: actions/setup-node@v6
+      with:
+        node-version: 22
+
+
+    - name: "Cache: Local Maven Repository"
+      uses: actions/cache@v4
+      with:
+        # Excluded sub directory not working https://github.com/actions/toolkit/issues/713
+        path: |
+          ~/.m2/repository/*
+          !~/.m2/repository/.cache/tycho
+          !~/.m2/repository/.meta/p2-artifacts.properties
+          !~/.m2/repository/p2
+          !~/.m2/repository/*SNAPSHOT*
+        key: ${{ runner.os }}-${{ runner.arch }}-repo-mvn-${{ hashFiles('**/pom.xml') }}
+
+
+    - name: "Cache: Local Tycho Repository"
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.m2/repository/.cache/tycho
+          ~/.m2/repository/.meta/p2-artifacts.properties
+          ~/.m2/repository/p2
+        key: ${{ runner.os }}-${{ runner.arch }}-repo-tycho-${{ hashFiles('target-platform/target-platform.target') }}
+
+
+    - name: "Build with Maven 🔨"
+      run: |
+        set -euo pipefail
+
+        MAVEN_OPTS="${MAVEN_OPTS:-}"
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          MAVEN_OPTS+=" -Djava.security.egd=file:/dev/urandom" # https://www.baeldung.com/java-security-egd#bd-testing-the-effect-of-javasecurityegd
+        else
+          MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
+        fi
+        MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
+        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.3,TLSv1.2"
+        export MAVEN_OPTS
+        echo "MAVEN_OPTS: $MAVEN_OPTS"
+
+        if [[ ${ACT:-} == "true" ]]; then # when running locally using nektos/act
+          maven_args="-Djgit.dirtyWorkingTree=warning"
+        else
+          maven_args="--no-transfer-progress"
+        fi
+
+        # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]" on Linux
+        ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum --server-args="-screen 0 1600x900x24" \' || '' }}
+        ./mvnw \
+          --errors \
+          --update-snapshots \
+          --batch-mode \
+          --show-version \
+          -Declipse.p2.mirrors=false \
+          -Dsurefire.rerunFailingTestsCount=3 \
+          $maven_args \
+          ${{ github.event.inputs.additional_maven_args }} \
+          clean verify || (
+            rc=$?
+            if [[ ${ACT:-} != "true" ]]; then
+              find . -path "*/target/work/data/.metadata/.log" | while IFS= read -r file; do
+                echo "::group::$file"
+                  cat "$file"
+                echo "::endgroup::"
+              done
+            fi
+            exit $rc
+          )
+
+
+    - name: "Upload: Repository Zip"
+      uses: actions/upload-artifact@v5
+      if: runner.os == 'Linux'
+      with:
+        name: org.eclipse.wildwebdeveloper.repository-${{ github.sha }}
+        path: repository/target/repository-*.zip
+        retention-days: 14
+
+
+    ##################################################
+    # Setup SSH debug session
+    ##################################################
+    - name: "SSH session for debugging: check"
+      id: DEBUG_SSH_SESSSION_CHECK
+      if: always()
+      run: |
+        set -eu
+
+        when="${{ inputs.debug-with-ssh }}"
+
+        if [[ $when == "always" ]] || case "${{ job.status }}" in
+          success)   [[ $when == "always" ]] ;;
+          cancelled) [[ $when == "on_failure_or_cancelled" ]] ;;
+          failure)   [[ $when == "on_failure"* ]] ;;
+        esac; then
+          echo "start_ssh_session=true" | tee -a "$GITHUB_OUTPUT"
+        fi
+
+
+    - name: "SSH session for debugging: start"
+      uses: mxschmitt/action-tmate@v3  # https://github.com/mxschmitt/action-tmate
+      if: always() && steps.DEBUG_SSH_SESSSION_CHECK.outputs.start_ssh_session
+      with:
+        limit-access-to-actor: ${{ inputs.debug-with-ssh-only-for-actor }}
