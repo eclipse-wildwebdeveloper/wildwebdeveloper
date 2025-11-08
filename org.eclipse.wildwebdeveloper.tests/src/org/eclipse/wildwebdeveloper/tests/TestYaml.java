@@ -84,11 +84,13 @@ public class TestYaml {
 
     @Test
     public void testSchemaExtensionPoint() throws Exception {
+        // loads remote file https://www.schemastore.org/dependabot as configured in plugin.xml
         testErrorFile("dep.yml");
     }
 
     @Test
     public void testSchemaExtensionPointUsingPlatformURL() throws Exception {
+        // loads local file platform:/plugin/org.eclipse.wildwebdeveloper.tests/resources/dependabot.json as configured in plugin.xml
         testErrorFile("depp.yml");
     }
 }
