@@ -516,9 +516,25 @@
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptCodeLensPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptCodeLensPreferencePage"
+         name="%JSTSCodeLensPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.js" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
          class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptInlayHintPreferencePage"
          id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptInlayHintPreferencePage"
-         name="%JavaScriptInlayHintPreferencePage.name">
+         name="%JSTSInlayHintPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.js" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptFormatterPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptFormatterPreferencePage"
+         name="%JSTSFormatterPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.js" />
             <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
       </page>
@@ -533,9 +549,25 @@
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptCodeLensPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptCodeLensPreferencePage"
+         name="%JSTSCodeLensPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
          class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptInlayHintPreferencePage"
          id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptInlayHintPreferencePage"
-         name="%TypeScriptInlayHintPreferencePage.name">
+         name="%JSTSInlayHintPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
+            <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
+      </page>
+      <page
+         category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptFormatterPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptFormatterPreferencePage"
+         name="%JSTSFormatterPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
             <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
       </page>

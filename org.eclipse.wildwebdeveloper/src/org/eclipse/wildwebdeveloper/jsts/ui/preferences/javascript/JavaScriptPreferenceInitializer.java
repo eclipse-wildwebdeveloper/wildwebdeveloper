@@ -7,21 +7,21 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Angelo ZERR (Red Hat Inc.) - initial implementation
+ * Angelo ZERR (Red Hat Inc.) - initial implementation
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSLanguagePreferences;
 
 /**
  * JavaScript preference initializer.
- *
  */
 public class JavaScriptPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		JavaScriptPreferenceServerConstants.initializeDefaultPreferences();
+		JSTSLanguagePreferences.JS.initializeDefaultPreferences();
 	}
 
 }

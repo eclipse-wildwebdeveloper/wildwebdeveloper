@@ -14,8 +14,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts;
 
-import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT;
-import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.getTypeScriptVersion;
+import static org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +34,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
-import org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferenceServerConstants;
-import org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSLanguagePreferences;
 import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
 
 public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPreference {
@@ -107,9 +105,9 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 	protected Object createSettings() {
 		Map<String, Object> settings = new HashMap<>();
 		// javascript
-		settings.putAll(JavaScriptPreferenceServerConstants.getGlobalSettings());
+		settings.putAll(JSTSLanguagePreferences.JS.getGlobalSettings());
 		// typescript
-		settings.putAll(TypeScriptPreferenceServerConstants.getGlobalSettings());
+		settings.putAll(JSTSLanguagePreferences.TS.getGlobalSettings());
 		return settings;
 	}
 
