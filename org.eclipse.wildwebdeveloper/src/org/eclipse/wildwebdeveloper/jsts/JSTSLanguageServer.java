@@ -39,12 +39,12 @@ import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProvid
 
 public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPreference {
 
-	private static final String JSTS_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.jsts";
+	public static final String JSTS_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.jsts";
 
 	private static final String[] SUPPORTED_SECTIONS = { "typescript", "javascript" };
 
 	private static String tsserverPath;
-	
+
 	public JSTSLanguageServer() {
 		super(JSTS_LANGUAGE_SERVER_ID, Activator.getDefault().getPreferenceStore(), SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
@@ -77,7 +77,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
 			plugins.add(new TypeScriptPlugin("@vue/typescript-plugin", "@vue/language-server", new String[] {"vue"}));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
-			
+
 			// If the tsserver path is not explicitly specified, tsserver will use the local
 			// TypeScript version installed as part of the project's dependencies, if found.
 			if (!TYPESCRIPT_PREFERENCES_TSSERVER_TYPESCRIPT_VERSION_PROJECT.equals(getTypeScriptVersion())) {
@@ -93,11 +93,11 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 		if (maxTsServerMemory != null) {
 			options.put("maxTsServerMemory", maxTsServerMemory);
 		}
-		
+
 		options.put("disableAutomaticTypingAcquisition", true);  // not working on mac/linux
 		options.put("hostInfo", "Eclipse");
 		options.put("watchOptions", new HashMap<>());
-		
+
 		return options;
 	}
 
