@@ -9,20 +9,24 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.npm;
 
-import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
-import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
-import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.*;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.debug.ui.StringVariableSelectionDialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -36,6 +40,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.ui.model.WorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.eclipse.ui.views.navigator.ResourceComparator;
+import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 import org.eclipse.wildwebdeveloper.debug.AbstractHTMLDebugDelegate;
 import org.eclipse.wildwebdeveloper.debug.LaunchConstants;
@@ -72,9 +81,15 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 			updateLaunchConfigurationDialog();
 		});
 
-		new Label(resComposite, SWT.NONE).setText(Messages.NPMLaunchTab_programPathLabel);
+		var pkgLabel = new Label(resComposite, SWT.NONE);
+		pkgLabel.setText(Messages.NPMLaunchTab_programPathLabel);
+		var pkgLabelGD = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
+		pkgLabel.setLayoutData(pkgLabelGD);
 		Composite filePathComposite = new Composite(resComposite, SWT.NONE);
-		filePathComposite.setLayout(new GridLayout(2, false));
+		var filePathGL = new GridLayout(1, false);
+		filePathGL.marginHeight = 0;
+		filePathGL.marginWidth = 0;
+		filePathComposite.setLayout(filePathGL);
 		filePathComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		this.programPathText = new Text(filePathComposite, SWT.BORDER);
 		this.programPathText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
@@ -85,7 +100,8 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 		this.programPathText.addModifyListener(event -> {
 			setDirty(true);
 			try {
-				File file = new File(VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(programPathText.getText()));
+				File file = new File(VariablesPlugin.getDefault().getStringVariableManager() //
+						.performStringSubstitution(programPathText.getText()));
 				if (!file.isFile()) {
 					String errorMessage = org.eclipse.wildwebdeveloper.debug.Messages.RunProgramTab_error_unknownFile;
 					setErrorMessage(errorMessage);
@@ -113,7 +129,49 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 			updateLaunchConfigurationDialog();
 		});
 
-		Button filePath = new Button(filePathComposite, SWT.PUSH);
+		var buttonsBar = new Composite(filePathComposite, SWT.NONE);
+		var buttonsGL = new GridLayout(3, false);
+		buttonsGL.marginHeight = 0;
+		buttonsGL.marginWidth = 0;
+		buttonsBar.setLayout(buttonsGL);
+		var buttonsBarGD = new GridData(SWT.END, SWT.CENTER, true, false);
+		buttonsBar.setLayoutData(buttonsBarGD);
+
+		var workspaceButton = new Button(buttonsBar, SWT.PUSH);
+		workspaceButton.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
+		workspaceButton.setText(org.eclipse.wildwebdeveloper.debug.Messages.AbstractRunHTMLDebugTab_browse_workspace);
+		workspaceButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			var dialog = new ElementTreeSelectionDialog(resComposite.getShell(), new WorkbenchLabelProvider(),
+					new WorkbenchContentProvider());
+			dialog.setTitle(Messages.NPMLaunchTab_selectPackageJSON);
+			dialog.setMessage(Messages.NPMLaunchTab_selectPackageJSON);
+			dialog.setValidator(selection -> {
+				if (selection.length == 0) {
+					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, ""); //$NON-NLS-1$
+				}
+				for (Object f : selection) {
+					if (!(f instanceof IFile)) {
+						return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Must select a file"); //$NON-NLS-1$
+					}
+				}
+				return new Status(IStatus.OK, Activator.PLUGIN_ID, ""); //$NON-NLS-1$
+			});
+			dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
+			dialog.setComparator(new ResourceComparator(ResourceComparator.NAME));
+			if (dialog.open() == IDialogConstants.OK_ID) {
+				var resource = (IResource) dialog.getFirstResult();
+				if (resource != null) {
+					String arg = resource.getFullPath().toString();
+					String fileLoc = VariablesPlugin.getDefault().getStringVariableManager() //
+							.generateVariableExpression("workspace_loc", arg); //$NON-NLS-1$
+					programPathText.setText(fileLoc);
+					setDirty(true);
+					updateLaunchConfigurationDialog();
+				}
+			}
+		}));
+
+		var filePath = new Button(buttonsBar, SWT.PUSH);
 		filePath.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
 		filePath.setText(org.eclipse.wildwebdeveloper.debug.Messages.AbstractRunHTMLDebugTab_browse);
 		filePath.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
@@ -126,6 +184,21 @@ public class NpmLaunchTab extends AbstractLaunchConfigurationTab {
 				programPathText.setText(packageJSONFile.getAbsolutePath());
 				setDirty(true);
 				updateLaunchConfigurationDialog();
+			}
+		}));
+
+		var variablesButton = new Button(buttonsBar, SWT.PUSH);
+		variablesButton.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
+		variablesButton.setText(org.eclipse.wildwebdeveloper.debug.Messages.AbstractRunHTMLDebugTab_variables);
+		variablesButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			var dialog = new StringVariableSelectionDialog(resComposite.getShell());
+			if (dialog.open() == IDialogConstants.OK_ID) {
+				String expr = dialog.getVariableExpression();
+				if (expr != null) {
+					programPathText.insert(expr);
+					setDirty(true);
+					updateLaunchConfigurationDialog();
+				}
 			}
 		}));
 
