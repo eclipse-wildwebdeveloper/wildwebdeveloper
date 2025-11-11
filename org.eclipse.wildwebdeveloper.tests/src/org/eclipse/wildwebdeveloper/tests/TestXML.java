@@ -383,9 +383,11 @@ public class TestXML {
 			dialog.getShell().open();
 			dialog.getShell().close();
 
-			// Find system-catalog and parse it
+			// Find system.catalog in well known location from plugin
 			File systemCatalog = plugin.getStateLocation().append("system-catalog.xml").toFile();
-			Document systemCatalogDom = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(systemCatalog);
+			// Parse system-catalog to check it
+			Document systemCatalogDom = runWithLocalCatalogOnlyForTestXMLCatalog(
+					() -> DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(systemCatalog));
 
 			// root element
 			Node catalogNode = systemCatalogDom.getLastChild();
