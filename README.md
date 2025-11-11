@@ -12,6 +12,7 @@ Rich 🖊️edition for:
 
 * HTML
 * CSS, SCSS, SASS, LESS
+* Markdown
 * JavaScript / ECMAScript
 * TypeScript
 * JSON (including schema support)
