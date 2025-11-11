@@ -1,0 +1,105 @@
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+name: CodeQL
+
+on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
+  schedule:
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
+    - cron: "30 18 * * 1"   # Mondays 18:30 UTC
+  push:
+    branches: [ "master" ]
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+    - '**/.project'
+    - '**/.settings/*.prefs'
+    - '.gitignore'
+    - '.actrc'
+    - 'Jenkinsfile'
+  pull_request:
+    branches: [ "master" ]
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+    - '**/.project'
+    - '**/.settings/*.prefs'
+    - '.gitignore'
+    - '.actrc'
+    - 'Jenkinsfile'
+  workflow_dispatch:
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch
+
+
+jobs:
+
+  ###########################################################
+  analyze:
+  ###########################################################
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        # build-mode: https://github.com/github/codeql-action#build-modes
+        - language: actions
+          build-mode: none
+        - language: java-kotlin
+          build-mode: none
+        - language: javascript-typescript
+          build-mode: none
+        #- language: python
+        #  build-mode: none
+
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # required to fetch internal or private CodeQL packs
+      packages: read
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    timeout-minutes: 15
+
+    steps:
+    - name: "Show: GitHub context"
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo $GITHUB_CONTEXT
+
+
+    - name: "Show: environment variables"
+      run: env | sort
+
+
+    - name: Git Checkout
+      uses: actions/checkout@v5  # https://github.com/actions/checkout
+
+
+    # CodeQL executes https://github.com/ferstl/depgraph-maven-plugin
+    - name: "Install: JDK 25 for Maven/Tycho ☕"
+      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      if: matrix.language == 'java'
+      with:
+        distribution: temurin
+        java-version: 25
+
+
+    # https://docs.github.com/en/code-security/code-scanning
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4  # https://github.com/github/codeql-action
+      with:
+        languages: ${{ matrix.language }}
+        # https://github.com/github/codeql-action#build-modes
+        build-mode: ${{ matrix.build-mode }}
+        # https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning#using-queries-in-ql-packs
+        queries: +security-and-quality
+
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v4  # https://github.com/github/codeql-action
+      with:
+        category: "/language:${{matrix.language}}"
