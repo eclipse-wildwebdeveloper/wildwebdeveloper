@@ -516,9 +516,9 @@
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptPreferencePage"
-         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptCodeLensPreferencePage"
-         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptCodeLensPreferencePage"
-         name="%JSTSCodeLensPreferencePage.name">
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptCodeMiningsPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript.JavaScriptCodeMiningsPreferencePage"
+         name="%JSTSCodeMiningsPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.js" />
             <keywordReference id="org.eclipse.wildwebdeveloper.javascript" />
       </page>
@@ -549,9 +549,9 @@
       </page>
       <page
          category="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptPreferencePage"
-         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptCodeLensPreferencePage"
-         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptCodeLensPreferencePage"
-         name="%JSTSCodeLensPreferencePage.name">
+         class="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptCodeMiningsPreferencePage"
+         id="org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript.TypeScriptCodeMiningsPreferencePage"
+         name="%JSTSCodeMiningsPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.ts" />
             <keywordReference id="org.eclipse.wildwebdeveloper.typescript" />
       </page>

@@ -10,7 +10,7 @@
  * Angelo ZERR (Red Hat Inc.) - initial implementation
  * Pierre-Yves Bigourdan - Allow using TypeScript version specified by project
  * Pierre-Yves Bigourdan - Allow configuring directory of ESLint package
- * Sebastian Thomschke (Vegard IT GmbH) - add CodeLensPreferencePage, FormatterPreferencePage keys
+ * Sebastian Thomschke (Vegard IT GmbH) - add CodeMiningsPreferencePage, FormatterPreferencePage keys
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.jsts.ui;
 
@@ -42,10 +42,10 @@ public class Messages extends NLS {
 	public static String InlayHintPreferencePage_includeInlayVariableTypeHintsWhenTypeMatchesName;
 
 	// JavaScript / TypeScript Code Lens preference page
-	public static String CodeLensPreferencePage_showCodeLensFor_label;
-	public static String CodeLensPreferencePage_implementationsCodeLens_enabled;
-	public static String CodeLensPreferencePage_referencesCodeLens_enabled;
-	public static String CodeLensPreferencePage_referencesCodeLens_showOnAllFunctions;
+	public static String CodeMiningsPreferencePage_showCodeMiningsFor_label;
+	public static String CodeMiningsPreferencePage_implementationsCodeMinings_enabled;
+	public static String CodeMiningsPreferencePage_referencesCodeMinings_enabled;
+	public static String CodeMiningsPreferencePage_referencesCodeMinings_showOnAllFunctions;
 
 	public static String FormatterPreferencePage_baseIndentSize;
 	public static String FormatterPreferencePage_convertTabsToSpaces;

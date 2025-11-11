@@ -25,11 +25,11 @@ import org.eclipse.wildwebdeveloper.jsts.ui.Messages;
 /**
  * JavaScript / TypeScript Code Lens preference page.
  */
-public abstract class JSTSCodeLensPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public abstract class JSTSCodeMiningsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	private final JSTSLanguagePreferences prefs;
 
-	protected JSTSCodeLensPreferencePage(JSTSLanguagePreferences prefs) {
+	protected JSTSCodeMiningsPreferencePage(JSTSLanguagePreferences prefs) {
 		super(GRID);
 		this.prefs = prefs;
 	}
@@ -38,14 +38,14 @@ public abstract class JSTSCodeLensPreferencePage extends FieldEditorPreferencePa
 	public void createFieldEditors() {
 		Composite parent = getFieldEditorParent();
 		Label label = new Label(parent, SWT.NONE);
-		label.setText(Messages.CodeLensPreferencePage_showCodeLensFor_label);
+		label.setText(Messages.CodeMiningsPreferencePage_showCodeMiningsFor_label);
 
 		addField(new BooleanFieldEditor(prefs.implementationsCodeLens_enabled,
-				Messages.CodeLensPreferencePage_implementationsCodeLens_enabled, parent));
+				Messages.CodeMiningsPreferencePage_implementationsCodeMinings_enabled, parent));
 		addField(new BooleanFieldEditor(prefs.referencesCodeLens_enabled,
-				Messages.CodeLensPreferencePage_referencesCodeLens_enabled, parent));
+				Messages.CodeMiningsPreferencePage_referencesCodeMinings_enabled, parent));
 		addField(new BooleanFieldEditor(prefs.referencesCodeLens_showOnAllFunctions,
-				Messages.CodeLensPreferencePage_referencesCodeLens_showOnAllFunctions, parent));
+				Messages.CodeMiningsPreferencePage_referencesCodeMinings_showOnAllFunctions, parent));
 	}
 
 	@Override

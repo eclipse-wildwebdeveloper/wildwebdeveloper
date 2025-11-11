@@ -8,19 +8,19 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Sebastian Thomschke (Vegard IT GmbH) - initial implementation
+ *   Sebastian Thomschke (Vegard IT GmbH) - initial implementation
  *******************************************************************************/
-package org.eclipse.wildwebdeveloper.jsts.ui.preferences.typescript;
+package org.eclipse.wildwebdeveloper.jsts.ui.preferences.javascript;
 
-import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSCodeLensPreferencePage;
+import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSCodeMiningsPreferencePage;
 import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSLanguagePreferences;
 
 /**
- * TypeScript Code Lens preference page.
+ * JavaScript Code Minings preference page.
  */
-public final class TypeScriptCodeLensPreferencePage extends JSTSCodeLensPreferencePage {
+public final class JavaScriptCodeMiningsPreferencePage extends JSTSCodeMiningsPreferencePage {
 
-	public TypeScriptCodeLensPreferencePage() {
-		super(JSTSLanguagePreferences.TS);
+	public JavaScriptCodeMiningsPreferencePage() {
+		super(JSTSLanguagePreferences.JS);
 	}
 }
