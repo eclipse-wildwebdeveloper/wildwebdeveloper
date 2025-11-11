@@ -33,7 +33,7 @@ public class XMLPreferenceServerConstants {
 		public final String preferenceId;
 		/**
 		 * without the "xml" prefix
-		 * 
+		 *
 		 * @see https://github.com/redhat-developer/vscode-xml#supported-vs-code-settings
 		 */
 		public final String lemminxOptionPath;
@@ -74,8 +74,8 @@ public class XMLPreferenceServerConstants {
 	// Catalog settings
 	public static final LemminxPreference XML_PREFERENCES_CATAGLOGS = new LemminxPreference("catalogs");
 
-	// CodeLens settings
-	public static final LemminxPreference XML_PREFERENCES_CODELENS_ENABLED = new LemminxPreference("codeLens/enabled");
+	// Code Minings (CodeLens) settings
+	public static final LemminxPreference XML_PREFERENCES_CODEMININGS_ENABLED = new LemminxPreference("codeLens/enabled");
 
 	// Folding settings
 	public static final LemminxPreference XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD = new LemminxPreference(
@@ -148,7 +148,7 @@ public class XMLPreferenceServerConstants {
 	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = { //
 			XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES, //
 			XML_PREFERENCES_CATAGLOGS, //
-			XML_PREFERENCES_CODELENS_ENABLED, //
+			XML_PREFERENCES_CODEMININGS_ENABLED, //
 			XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD, //
 			XML_PREFERENCES_FORMAT_MAX_LINE_WIDTH, //
 			XML_PREFERENCES_FORMAT_GRAMMAR_AWARE_FORMATTING, //
@@ -192,8 +192,8 @@ public class XMLPreferenceServerConstants {
 		XML_PREFERENCES_CATAGLOGS.storeToLemminxOptions(
 				XMLCatalogs.getAllCatalogs(store).stream().map(File::getAbsolutePath).toArray(String[]::new), xmlOpts);
 
-		// CodeLens settings
-		setAsBoolean(XML_PREFERENCES_CODELENS_ENABLED, store, xmlOpts);
+		// Code Minings settings
+		setAsBoolean(XML_PREFERENCES_CODEMININGS_ENABLED, store, xmlOpts);
 
 		// Folding settings
 		setAsBoolean(XML_PREFERENCES_FOLDING_INCLUDE_CLOSING_TAG_IN_FOLD, store, xmlOpts);
@@ -232,10 +232,10 @@ public class XMLPreferenceServerConstants {
 	}
 
 	private static void setAsArrayString(LemminxPreference preference, IPreferenceStore store, Map<String, Object> xmlOpts) {
-		String value = store.getString(preference.preferenceId);		
+		String value = store.getString(preference.preferenceId);
 		preference.storeToLemminxOptions(value.split(","), xmlOpts);
 	}
-	
+
 	private static void setAsBoolean(LemminxPreference preference, IPreferenceStore store,
 			Map<String, Object> xmlOpts) {
 		preference.storeToLemminxOptions(store.getBoolean(preference.preferenceId), xmlOpts);
