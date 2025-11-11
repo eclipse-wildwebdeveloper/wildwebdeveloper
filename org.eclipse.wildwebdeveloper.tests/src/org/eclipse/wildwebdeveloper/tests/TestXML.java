@@ -223,49 +223,55 @@ public class TestXML {
 		Plugin plugin = org.eclipse.wildwebdeveloper.xml.internal.Activator.getDefault();
 		BundleContext bundleContext = plugin.getBundle().getBundleContext();
 		URL bundleUrl = bundlePath.toUri().toURL();
-		Bundle catalogBundle = bundleContext.installBundle(bundleUrl.toExternalForm(), bundleUrl.openStream());
-		catalogBundle.start();
+		Bundle catalogBundle;
+		try (var is = bundleUrl.openStream()) {
+			catalogBundle = bundleContext.installBundle(bundleUrl.toExternalForm(), is);
+		}
+		try {
+			catalogBundle.start();
 
-		// Open preferences dialog to trigger the refresh of the system catalog
-		PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				"org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage", null, null);
-		dialog.getShell().open();
-		dialog.getShell().close();
+			// Open preferences dialog to trigger the refresh of the system catalog
+			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage", null, null);
+			dialog.getShell().open();
+			dialog.getShell().close();
 
-		// Find system.catalog in well known location from plugin
-		File systemCatalog = plugin.getStateLocation().append("system-catalog.xml").toFile();
-		// Parse system-catalog to check it
-		Document systemCatalogDom = runWithLocalCatalogOnlyForTestXMLCatalog(() -> DocumentBuilderFactory.newDefaultInstance()
-				.newDocumentBuilder().parse(systemCatalog));
+			// Find system.catalog in well known location from plugin
+			File systemCatalog = plugin.getStateLocation().append("system-catalog.xml").toFile();
+			// Parse system-catalog to check it
+			Document systemCatalogDom = runWithLocalCatalogOnlyForTestXMLCatalog(() -> DocumentBuilderFactory.newDefaultInstance()
+					.newDocumentBuilder().parse(systemCatalog));
 
-		// root
-		Node catalogNode = systemCatalogDom.getLastChild();
-		assertEquals(Node.ELEMENT_NODE, catalogNode.getNodeType());
-		assertEquals("catalog", catalogNode.getNodeName());
+			// root
+			Node catalogNode = systemCatalogDom.getLastChild();
+			assertEquals(Node.ELEMENT_NODE, catalogNode.getNodeType());
+			assertEquals("catalog", catalogNode.getNodeName());
 
-		// find URI-entries
-		NodeList catalogEntries = catalogNode.getChildNodes();
-		List<Node> uriNodes = IntStream.range(0, catalogEntries.getLength()).mapToObj(catalogEntries::item).filter(n -> n
-				.getNodeType() == Node.ELEMENT_NODE).filter(n -> "uri".equals(n.getNodeName())).collect(Collectors.toList());
-		assertFalse(uriNodes.isEmpty(), "uri-nodes expected");
+			// find URI-entries
+			NodeList catalogEntries = catalogNode.getChildNodes();
+			List<Node> uriNodes = IntStream.range(0, catalogEntries.getLength()).mapToObj(catalogEntries::item).filter(n -> n
+					.getNodeType() == Node.ELEMENT_NODE).filter(n -> "uri".equals(n.getNodeName())).collect(Collectors.toList());
+			assertFalse(uriNodes.isEmpty(), "uri-nodes expected");
 
-		// find expected entry
-		List<Node> expectedNodes = uriNodes.stream().filter(n -> "http://eclipse.org/wildwebdeveloper/test".equals(n.getAttributes()
-				.getNamedItem("name").getNodeValue())).collect(Collectors.toList());
-		assertEquals(1, expectedNodes.size(), "one uri-node with the used name expected");
-		Node uriNode = expectedNodes.get(0);
+			// find expected entry
+			List<Node> expectedNodes = uriNodes.stream().filter(n -> "http://eclipse.org/wildwebdeveloper/test".equals(n.getAttributes()
+					.getNamedItem("name").getNodeValue())).collect(Collectors.toList());
+			assertEquals(1, expectedNodes.size(), "one uri-node with the used name expected");
+			Node uriNode = expectedNodes.get(0);
 
-		// value of uri
-		assertNotNull(uriNode.getAttributes().getNamedItem("uri"), "uri-attribute expected");
-		String uri = uriNode.getAttributes().getNamedItem("uri").getNodeValue();
-		assertNotNull(uri, "value fro uri expected");
-		// use of jar-uri - file is not cached in local filesystem. This enables
-		// relative includes in schemas
-		assertTrue(uri.startsWith("jar:file:/"), "jar-uri expected: " + uri);
-		assertTrue(uri.endsWith("/org/eclipse/wildwebdeveloper/test/schema.xsd"), "relative path of schema in uri expected: " + uri);
-
-		// Uninstall bundle once again
-		catalogBundle.uninstall();
+			// value of uri
+			assertNotNull(uriNode.getAttributes().getNamedItem("uri"), "uri-attribute expected");
+			String uri = uriNode.getAttributes().getNamedItem("uri").getNodeValue();
+			assertNotNull(uri, "value fro uri expected");
+			// use of jar-uri - file is not cached in local filesystem. This enables
+			// relative includes in schemas
+			assertTrue(uri.startsWith("jar:file:/"), "jar-uri expected: " + uri);
+			assertTrue(uri.endsWith("/org/eclipse/wildwebdeveloper/test/schema.xsd"), "relative path of schema in uri expected: " + uri);
+		} finally {
+			// Uninstall bundle once again
+			catalogBundle.uninstall();
+		}
 	}
 
 	/**
@@ -367,42 +373,45 @@ public class TestXML {
 		Bundle catalogBundle;
 		try (var is = bundleUrl.openStream()) {
 			catalogBundle = bundleContext.installBundle(bundleUrl.toExternalForm(), is);
-			catalogBundle.start();
 		}
+		try {
+			catalogBundle.start();
+			// Open preferences dialog to trigger the refresh of the system catalog
+			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage", null, null);
+			dialog.getShell().open();
+			dialog.getShell().close();
 
-		// Open preferences dialog to trigger the refresh of the system catalog
-		PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				"org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLCatalogPreferencePage", null, null);
-		dialog.getShell().open();
-		dialog.getShell().close();
+			// Find system-catalog and parse it
+			File systemCatalog = plugin.getStateLocation().append("system-catalog.xml").toFile();
+			Document systemCatalogDom = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(systemCatalog);
 
-		// Find system-catalog and parse it
-		File systemCatalog = plugin.getStateLocation().append("system-catalog.xml").toFile();
-		Document systemCatalogDom = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(systemCatalog);
+			// root element
+			Node catalogNode = systemCatalogDom.getLastChild();
+			assertEquals(Node.ELEMENT_NODE, catalogNode.getNodeType());
+			assertEquals("catalog", catalogNode.getNodeName());
 
-		// root element
-		Node catalogNode = systemCatalogDom.getLastChild();
-		assertEquals(Node.ELEMENT_NODE, catalogNode.getNodeType());
-		assertEquals("catalog", catalogNode.getNodeName());
+			// collect <uri> entries
+			NodeList catalogEntries = catalogNode.getChildNodes();
+			List<Node> uriNodes = IntStream.range(0, catalogEntries.getLength()).mapToObj(catalogEntries::item).filter(n -> n
+					.getNodeType() == Node.ELEMENT_NODE).filter(n -> "uri".equals(n.getNodeName())).toList();
+			assertFalse(uriNodes.isEmpty(), "uri-nodes expected");
 
-		// collect <uri> entries
-		NodeList catalogEntries = catalogNode.getChildNodes();
-		List<Node> uriNodes = IntStream.range(0, catalogEntries.getLength()).mapToObj(catalogEntries::item).filter(n -> n
-				.getNodeType() == Node.ELEMENT_NODE).filter(n -> "uri".equals(n.getNodeName())).toList();
-		assertFalse(uriNodes.isEmpty(), "uri-nodes expected");
+			// find contributed HTTPS entry
+			List<Node> expectedNodes = uriNodes.stream()
+					.filter(n -> HTTPS_NAME.equals(n.getAttributes().getNamedItem("name").getNodeValue()))
+					.toList();
+			assertEquals(1, expectedNodes.size(), "one https uri-node with the used name expected");
+			Node uriNode = expectedNodes.get(0);
 
-		// find contributed HTTPS entry
-		List<Node> expectedNodes = uriNodes.stream().filter(n -> HTTPS_NAME.equals(n.getAttributes().getNamedItem("name").getNodeValue()))
-				.toList();
-		assertEquals(1, expectedNodes.size(), "one https uri-node with the used name expected");
-		Node uriNode = expectedNodes.get(0);
-
-		// ensure the https URI is preserved
-		assertNotNull(uriNode.getAttributes().getNamedItem("uri"), "uri-attribute expected");
-		String uri = uriNode.getAttributes().getNamedItem("uri").getNodeValue();
-		assertEquals(HTTPS_URI, uri, "https uri value should be preserved in catalog");
-
-		// cleanup
-		catalogBundle.uninstall();
+			// ensure the https URI is preserved
+			assertNotNull(uriNode.getAttributes().getNamedItem("uri"), "uri-attribute expected");
+			String uri = uriNode.getAttributes().getNamedItem("uri").getNodeValue();
+			assertEquals(HTTPS_URI, uri, "https uri value should be preserved in catalog");
+		} finally {
+			// cleanup
+			catalogBundle.uninstall();
+		}
 	}
 }
