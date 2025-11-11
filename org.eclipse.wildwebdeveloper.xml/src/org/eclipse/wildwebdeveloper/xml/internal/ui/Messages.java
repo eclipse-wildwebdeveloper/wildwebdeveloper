@@ -27,8 +27,8 @@ public class Messages extends NLS {
 	public static String XMLCatalogPreferencePage_OpenInEditorMessage;
 	public static String XMLCatalogPreferencePage_OpenInEditorApplyAndEdit;
 
-	// --------- XML CodeLens preference page
-	public static String XMLCodelensPreferencePage_codelens_enabled;
+	// --------- XML CodeMinings preference page
+	public static String XMLCodeMiningsPreferencePage_codeminings_enabled;
 
 	// --------- XML Formatting preference page
 	public static String XMLFormattingPreferencePage_format_maxLineWidth;
@@ -56,7 +56,7 @@ public class Messages extends NLS {
 	public static String XMLFormattingPreferencePage_format_preserveSpace;
 	public static String XMLFormattingPreferencePage_format_joinCommentLines;
 	public static String XMLFormattingPreferencePage_format_joinCDATALines;
-	
+
 	public static String PreserveSpaceFieldEditor_inputDialog_description;
 	public static String PreserveSpaceFieldEditor_inputDialog_title;
 
@@ -72,7 +72,7 @@ public class Messages extends NLS {
 	public static String XMLValidationPreferencePage_validation_namespace_option_onNamespaceEncountered;
 	public static String XMLValidationPreferencePage_validation_schema_option_onValidSchema;
 	public static String XMLValidationPreferencePage_validation_noGrammar_option_hint;
-  
+
 	// --------- Associate Grammar Dialog
 	public static String AssociateGrammarDialog_title;
 	public static String AssociateGrammarDialog_grammar_field;
@@ -86,7 +86,7 @@ public class Messages extends NLS {
 	public static String Add_button;
 	public static String Remove_button;
 	public static String Browse_button;
-	
+
 	static {
 		NLS.initializeMessages("org.eclipse.wildwebdeveloper.xml.internal.ui.messages", Messages.class); //$NON-NLS-1$
 	}

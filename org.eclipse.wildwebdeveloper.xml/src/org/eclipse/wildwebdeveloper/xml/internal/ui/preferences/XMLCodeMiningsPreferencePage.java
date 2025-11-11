@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 
-import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_CODELENS_ENABLED;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_CODEMININGS_ENABLED;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -25,16 +25,16 @@ import org.eclipse.wildwebdeveloper.xml.internal.ui.Messages;
  * XML code lens preference page.
  *
  */
-public class XMLCodeLensPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class XMLCodeMiningsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public XMLCodeLensPreferencePage() {
+	public XMLCodeMiningsPreferencePage() {
 		super(GRID);
 	}
 
 	@Override
 	public void createFieldEditors() {
-		addField(new BooleanFieldEditor(XML_PREFERENCES_CODELENS_ENABLED.preferenceId,
-				Messages.XMLCodelensPreferencePage_codelens_enabled, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(XML_PREFERENCES_CODEMININGS_ENABLED.preferenceId,
+				Messages.XMLCodeMiningsPreferencePage_codeminings_enabled, getFieldEditorParent()));
 	}
 
 	@Override
