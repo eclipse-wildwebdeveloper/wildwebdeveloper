@@ -145,8 +145,10 @@ public class TestXML {
 		editor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
 		LSContentAssistProcessor processor = new LSContentAssistProcessor();
 		proposals = processor.computeCompletionProposals(Utils.getViewer(editor), offset);
-		DisplayHelper.sleep(editor.getSite().getShell().getDisplay(), 2000);
-		assertTrue(proposals.length > 1);
+		assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 10_000, () -> {
+			proposals = processor.computeCompletionProposals(Utils.getViewer(editor), offset);
+			return proposals != null && proposals.length > 1;
+		}), "Expected at least 2 XML completion proposals");
 	}
 
 	@Test
