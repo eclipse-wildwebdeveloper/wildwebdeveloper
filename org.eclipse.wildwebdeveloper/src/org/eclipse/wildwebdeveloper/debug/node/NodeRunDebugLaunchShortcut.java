@@ -18,12 +18,13 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.wildwebdeveloper.IsNodeProjectPropertyTester;
 import org.eclipse.wildwebdeveloper.debug.AbstractDebugAdapterLaunchShortcut;
 
 public class NodeRunDebugLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
 	public NodeRunDebugLaunchShortcut() {
-		super(NodeRunDAPDebugDelegate.ID, new String[] {"org.eclipse.tm4e.language_pack.javascript", "org.eclipse.tm4e.language_pack.typescript"}, true);
+		super(NodeRunDAPDebugDelegate.ID, new String[] {IsNodeProjectPropertyTester.JAVASCRIPT_CONTENT_TYPE, IsNodeProjectPropertyTester.TYPESCRIPT_CONTENT_TYPE}, true);
 	}
 
 	@Override
