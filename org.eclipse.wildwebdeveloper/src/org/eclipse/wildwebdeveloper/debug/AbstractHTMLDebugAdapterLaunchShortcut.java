@@ -13,11 +13,12 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.wildwebdeveloper.html.HTMLLanguageServer;
 
 public abstract class AbstractHTMLDebugAdapterLaunchShortcut extends AbstractDebugAdapterLaunchShortcut {
 
 	public AbstractHTMLDebugAdapterLaunchShortcut(String launchConfigTypeId) {
-		super(launchConfigTypeId, "org.eclipse.wildwebdeveloper.html", true);
+		super(launchConfigTypeId, HTMLLanguageServer.HTML_LANGUAGE_SERVER_ID, true);
 	}
 
 	@Override

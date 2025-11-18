@@ -33,7 +33,7 @@ import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProvid
  */
 public class HTMLLanguageServer extends ProcessStreamConnectionProviderWithPreference {
 
-	private static final String HTML_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.html";
+	public static final String HTML_LANGUAGE_SERVER_ID = "org.eclipse.tm4e.language_pack.html";
 
 	private static final String[] SUPPORTED_SECTIONS = { "html", "css", "javascript" };
 

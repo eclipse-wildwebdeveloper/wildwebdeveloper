@@ -26,6 +26,9 @@ import org.eclipse.core.runtime.content.IContentTypeManager;
 
 public class IsNodeProjectPropertyTester extends PropertyTester {
 
+	public static final String JAVASCRIPT_CONTENT_TYPE = "org.eclipse.tm4e.language_pack.javascript";
+	public static final String TYPESCRIPT_CONTENT_TYPE = "org.eclipse.tm4e.language_pack.typescript";
+
 	private static final String IS_NODE_RESOURCE_PROPERTY = "isNodeResource"; //$NON-NLS-1$
 
 	@Override public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
@@ -36,8 +39,8 @@ public class IsNodeProjectPropertyTester extends PropertyTester {
 			}
 			if (resource instanceof IFile file) {
 				IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
-				IContentType jsContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.js");
-				IContentType tsContentType = contentTypeManager.getContentType("org.eclipse.wildwebdeveloper.ts");
+				IContentType jsContentType = contentTypeManager.getContentType(JAVASCRIPT_CONTENT_TYPE);
+				IContentType tsContentType = contentTypeManager.getContentType(TYPESCRIPT_CONTENT_TYPE);
 				try (
 					InputStream content = file.getContents();
 				) {
