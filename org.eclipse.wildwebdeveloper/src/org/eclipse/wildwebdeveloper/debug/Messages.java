@@ -20,6 +20,7 @@ public class Messages extends NLS {
 	public static String AbstractRunHTMLDebugTab_fileRadioToolTip;
 	public static String AbstractRunHTMLDebugTab_webRoot_folder;
 	public static String AbstractRunHTMLDebugTab_browse_workspace;
+	public static String AbstractRunHTMLDebugTab_variables;
 	public static String AbstractRunHTMLDebugTab_select_webroot;
 	public static String AbstractRunHTMLDebugTab_cannot_debug_without_webroot;
 	public static String AbstractRunHTMLDebugTab_cannot_access_webroot_folder;
