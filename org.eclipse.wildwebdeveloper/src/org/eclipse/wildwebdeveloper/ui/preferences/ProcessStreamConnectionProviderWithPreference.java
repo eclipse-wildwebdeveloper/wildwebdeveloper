@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Angelo ZERR (Red Hat Inc.) - initial implementation
+ * Angelo ZERR (Red Hat Inc.) - initial implementation
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.ui.preferences;
 
@@ -18,24 +18,36 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.LanguageServersRegistry;
 import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
+import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * This class extends {@link ProcessStreamConnectionProvider} to manage
  * {@link IPreferenceStore} and call
  * {@link WorkspaceService#didChangeConfiguration(DidChangeConfigurationParams)}
  * when the preference store changes.
- * 
+ *
  */
 public abstract class ProcessStreamConnectionProviderWithPreference extends ProcessStreamConnectionProvider
 		implements IPropertyChangeListener {
@@ -158,13 +170,74 @@ public abstract class ProcessStreamConnectionProviderWithPreference extends Proc
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		if (isAffected(event)) {
-			LanguageServerDefinition languageServerDefinition = getLanguageServerDefinition();
+		   LanguageServerDefinition languageServerDefinition = getLanguageServerDefinition();
 			@SuppressWarnings("rawtypes")
 			DidChangeConfigurationParams params = new DidChangeConfigurationParams(createSettings());
 
+			/*
+			 * Fan-out strategy and rationale
+			 * --------------------------------
+			 * We must deliver didChangeConfiguration to every running instance of the
+			 * language server for this provider's id, regardless of how LSP4E can find it.
+			 * LSP4E discovery varies by scope, so we notify in 3 passes and de-duplicate:
+			 * 1) Workspace-wide (null project): catches singleton or workspace-folder-aware servers.
+			 * 2) Per-project: picks up per-project servers that don't expose workspace folders (eg JSTS).
+			 * 3) Per-document (open editors): covers files outside the workspace or not yet tied to a project.
+			 *
+			 * Note: withPreferredServer(...) only reorders candidates; it does not filter.
+			 * We therefore compare wrapper.serverDefinition for equality and track already
+			 * notified LanguageServer proxies to avoid duplicate notifications across scopes.
+			 * excludeInactive() is intentional to avoid starting servers as a side-effect
+			 * of a preference change.
+			 */
+
+			final Set<LanguageServer> notifiedServers = ConcurrentHashMap.newKeySet();
+
+			// 1) Workspace-wide: singleton or workspace-folder-aware servers
 			LanguageServers.forProject(null).withPreferredServer(languageServerDefinition).excludeInactive()
-					.collectAll((w, ls) -> CompletableFuture.completedFuture(ls)).thenAccept(
-							lss -> lss.stream().forEach(ls -> ls.getWorkspaceService().didChangeConfiguration(params)));
+					.collectAll((wrapper, server) -> {
+						if (languageServerDefinition.equals(wrapper.serverDefinition) && notifiedServers.add(server)) {
+							server.getWorkspaceService().didChangeConfiguration(params);
+						}
+						return CompletableFuture.completedFuture(null);
+					});
+
+			// 2) Per-project: include servers that don't support workspace folders (they won't be returned by forProject(null))
+			for (final IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+				if (!project.isOpen())
+					continue;
+
+				LanguageServers.forProject(project).withPreferredServer(languageServerDefinition).excludeInactive()
+						.collectAll((wrapper, server) -> {
+							if (languageServerDefinition.equals(wrapper.serverDefinition) && notifiedServers.add(server)) {
+								server.getWorkspaceService().didChangeConfiguration(params);
+							}
+							return CompletableFuture.completedFuture(null);
+						});
+			}
+
+			// 3) Per-document: open editors (covers external files or untied docs)
+			for (final IWorkbenchWindow win : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+				for (final IWorkbenchPage page : win.getPages()) {
+					for (final IEditorReference ref : page.getEditorReferences()) {
+					   final IEditorPart editor = ref.getEditor(false); // do not restore unopened editors
+						if (editor == null)
+							continue;
+
+						final IDocument doc = LSPEclipseUtils.getDocument(editor.getEditorInput());
+						if (doc == null)
+							continue;
+
+						LanguageServers.forDocument(doc).withPreferredServer(languageServerDefinition)
+								.collectAll((wrapper, server) -> {
+									if (languageServerDefinition.equals(wrapper.serverDefinition) && notifiedServers.add(server)) {
+										server.getWorkspaceService().didChangeConfiguration(params);
+									}
+									return CompletableFuture.completedFuture(null);
+								});
+					}
+				}
+			}
 		}
 	}
 
