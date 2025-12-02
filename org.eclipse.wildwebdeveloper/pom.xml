@@ -7,7 +7,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<packaging>eclipse-plugin</packaging>
-	<version>1.2.7-SNAPSHOT</version>
+	<version>1.2.8-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -179,7 +179,7 @@
 								<arg>--ignore-scripts</arg>
 								<arg>--install-strategy=hoisted</arg>
 								<arg>--force</arg>
-<!-- The actual verions for the LS and other dependency NPM Modules are to be set in  './package.json file',  
+<!-- The actual verions for the LS and other dependency NPM Modules are to be set in  './package.json file',
 	which is used to install the dependencies -->
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>

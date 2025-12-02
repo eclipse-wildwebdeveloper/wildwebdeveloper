@@ -5,7 +5,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper;singleton:=true
 Automatic-Module-Name: org.eclipse.wildwebdeveloper
-Bundle-Version: 1.2.7.qualifier
+Bundle-Version: 1.2.8.qualifier
 Bundle-License: EPL-2.0;link="http://www.eclipse.org/legal/epl-2.0"
 Bundle-Activator: org.eclipse.wildwebdeveloper.Activator
 Require-Bundle: org.eclipse.ui,
