@@ -459,7 +459,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 			final var uri = params.get("uri");
 			if (uri == null)
 				return null;
-			final var path = uri == null ? null : FileUtils.uriToPath(uri.toString());
+			final var path = FileUtils.uriToPath(uri.toString());
 
 			@SuppressWarnings("unchecked")
 			final Map<String, Object> options = params.get("options") instanceof Map //

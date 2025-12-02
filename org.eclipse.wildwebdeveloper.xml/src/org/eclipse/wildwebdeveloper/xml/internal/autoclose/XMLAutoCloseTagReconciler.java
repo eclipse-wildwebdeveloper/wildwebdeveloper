@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2022, 2025 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -102,7 +102,7 @@ public class XMLAutoCloseTagReconciler implements IReconciler {
 				return;
 			}
 			IDocument document = event.getDocument();
-			if (document == null || event == null || event.getLength() != 0 || event.getText().length() != 1) {
+			if (document == null || event.getLength() != 0 || event.getText().length() != 1) {
 				return;
 			}
 
