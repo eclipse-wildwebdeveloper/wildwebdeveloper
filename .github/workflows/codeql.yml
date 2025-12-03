@@ -80,12 +80,12 @@ jobs:
 
 
     # CodeQL executes https://github.com/ferstl/depgraph-maven-plugin
-    - name: "Install: JDK 25 for Maven/Tycho ☕"
+    - name: "Install: JDK 21 for Maven/Tycho ☕"
       uses: actions/setup-java@v5  # https://github.com/actions/setup-java
       if: matrix.language == 'java'
       with:
         distribution: temurin
-        java-version: 25
+        java-version: 21
 
 
     # https://docs.github.com/en/code-security/code-scanning
