@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Red Hat Inc. and others.
+ * Copyright (c) 2021, 2025 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -226,7 +226,7 @@ public class XMLCatalogs {
 	/**
 	 * Check whether the provided scheme is supported for the XML-catalog
 	 * 
-	 * @param scheme scheme to test
+	 * @param uri scheme to test
 	 * @return <code>true</code> if supported, otherwise <code>false</code>
 	 */
 	private static boolean isSchemeSupportedInCatalog(URI uri) {
