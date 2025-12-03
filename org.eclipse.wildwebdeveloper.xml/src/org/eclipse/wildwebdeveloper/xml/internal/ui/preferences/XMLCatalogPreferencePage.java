@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2025 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -187,7 +187,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		return fileName == null || fileName.trim().length() == 0 ? null : new File(fileName);
 	}
 	
-	class EntriesContentProvider implements ITreeContentProvider {
+	static class EntriesContentProvider implements ITreeContentProvider {
 		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof Set<?> set) {
@@ -220,7 +220,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		}
 	}
 	
-	class EntriesLabelProvider extends LabelProvider {
+	static class EntriesLabelProvider extends LabelProvider {
 		private Image image;
 
 		public EntriesLabelProvider() {
