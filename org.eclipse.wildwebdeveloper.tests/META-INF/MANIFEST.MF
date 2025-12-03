@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests for WildWebDeveloper
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.tests;singleton:=true
-Bundle-Version: 1.0.17.qualifier
+Bundle-Version: 1.0.18.qualifier
 Bundle-License: EPL-2.0;link="http://www.eclipse.org/legal/epl-2.0"
 Bundle-Vendor: Eclipse Wild Web Developer
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.tests
