@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/language-server": "21.0.2",
+    "@angular/language-server": "21.0.3",
     "astro-vscode": "2.16.4",
     "firefox-debugadapter": "2.15.0",
     "typescript": "5.9.3",
