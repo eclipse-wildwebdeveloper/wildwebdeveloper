@@ -183,7 +183,8 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 	// Acknowledge diagnostic refresh requests and trigger a diagnostic pull
 	@Override
 	public CompletableFuture<Void> refreshDiagnostics() {
-		return CompletableFuture.runAsync(() -> MarkdownDiagnosticsManager.refreshAllOpenMarkdownFiles(getLanguageServer()));
+		MarkdownDiagnosticsManager.refreshAllOpenMarkdownFiles(getLanguageServer());
+		return CompletableFuture.completedFuture(null);
 	}
 
 	/**
@@ -240,7 +241,7 @@ public final class MarkdownLanguageClient extends DefaultLanguageClient {
 					final var uri = URI.create((String) params.get("uri"));
 					final var res = LSPEclipseUtils.findResourceFor(uri);
 					if (res instanceof final IFile file) {
-						CompletableFuture.runAsync(() -> MarkdownDiagnosticsManager.refreshFile(file));
+						MarkdownDiagnosticsManager.refreshFile(file);
 					}
 				} catch (final Exception ignore) {
 				}
