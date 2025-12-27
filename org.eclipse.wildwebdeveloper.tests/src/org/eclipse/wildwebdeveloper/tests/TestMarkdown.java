@@ -16,13 +16,20 @@ import static org.eclipse.core.resources.IMarker.*;
 import static org.eclipse.wildwebdeveloper.markdown.MarkdownDiagnosticsManager.MARKDOWN_MARKER_TYPE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -34,11 +41,15 @@ import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServerWrapper;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
+import org.eclipse.lsp4j.DocumentDiagnosticParams;
+import org.eclipse.lsp4j.DocumentDiagnosticReport;
+import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 import org.eclipse.wildwebdeveloper.Activator;
+import org.eclipse.wildwebdeveloper.markdown.MarkdownDiagnosticsManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -47,6 +58,105 @@ record MarkdownTest(String markdown, String messagePattern, int severity) {
 
 @ExtendWith(AllCleanRule.class)
 class TestMarkdown {
+
+	private record DiagnosticSpy(AtomicInteger calls,
+			AtomicReference<CompletableFuture<DocumentDiagnosticReport>> lastFuture, LanguageServer server) {
+	}
+
+	private static DiagnosticSpy newDiagnosticSpy() {
+		final var calls = new AtomicInteger();
+		final var lastFuture = new AtomicReference<CompletableFuture<DocumentDiagnosticReport>>();
+
+		final Object textDocumentService = Proxy.newProxyInstance(TestMarkdown.class.getClassLoader(),
+				new Class[] { org.eclipse.lsp4j.services.TextDocumentService.class }, (proxy, method, args) -> {
+					if ("diagnostic".equals(method.getName()) && args != null && args.length == 1
+							&& args[0] instanceof DocumentDiagnosticParams) {
+						calls.incrementAndGet();
+						final var fut = new CompletableFuture<DocumentDiagnosticReport>();
+						lastFuture.set(fut);
+						return fut;
+					}
+					if (CompletableFuture.class.isAssignableFrom(method.getReturnType())) {
+						return CompletableFuture.completedFuture(null);
+					}
+					return null;
+				});
+
+		final InvocationHandler serverHandler = (proxy, method, args) -> (switch (method.getName()) {
+		case "getTextDocumentService" -> textDocumentService;
+		case "getWorkspaceService" -> null;
+		case "initialize", "shutdown" -> CompletableFuture.completedFuture(null);
+		case "exit" -> null;
+		default -> null;
+		});
+
+		final var server = (LanguageServer) Proxy.newProxyInstance(TestMarkdown.class.getClassLoader(),
+				new Class[] { LanguageServer.class }, serverHandler);
+		return new DiagnosticSpy(calls, lastFuture, server);
+	}
+
+	private static boolean waitUpTo(final long timeoutMs, final BooleanSupplier condition)
+			throws InterruptedException {
+		final long deadline = System.currentTimeMillis() + timeoutMs;
+		while (System.currentTimeMillis() < deadline) {
+			if (condition.getAsBoolean())
+				return true;
+			Thread.sleep(20);
+		}
+		return condition.getAsBoolean();
+	}
+
+	@Test
+	void refreshDiagnosticsDoesNothingWhenNoMarkdownBuffersOpen() throws Exception {
+		final var project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(getClass().getName() + ".nobuf." + System.nanoTime());
+		project.create(null);
+		project.open(null);
+
+		final IFile file = project.getFile("doc.md");
+		file.create("# Title\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		final var spy = newDiagnosticSpy();
+		MarkdownDiagnosticsManager.refreshAllOpenMarkdownFiles(spy.server());
+
+		// Wait for debounce window + execution time; should still do nothing since no
+		// Markdown buffer is open.
+		assertTrue(waitUpTo(2_000, () -> spy.calls().get() == 0),
+				"Diagnostic requests should not be made when no Markdown buffers are open");
+	}
+
+	@Test
+	void refreshDiagnosticsIsDedupedWhileInFlight() throws Exception {
+		final var project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(getClass().getName() + ".dedupe." + System.nanoTime());
+		project.create(null);
+		project.open(null);
+
+		final IFile file = project.getFile("open.md");
+		file.create("# Title\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		final var mgr = FileBuffers.getTextFileBufferManager();
+		mgr.connect(file.getFullPath(), LocationKind.IFILE, null);
+		try {
+			final var spy = newDiagnosticSpy();
+
+			MarkdownDiagnosticsManager.refreshAllOpenMarkdownFiles(spy.server());
+			assertTrue(waitUpTo(2_000, () -> spy.calls().get() == 1),
+					"Expected exactly one diagnostic request for the open Markdown buffer");
+
+			// Trigger another refresh while the first diagnostic is still in-flight; should
+			// not start a second diagnostic.
+			MarkdownDiagnosticsManager.refreshAllOpenMarkdownFiles(spy.server());
+			assertTrue(waitUpTo(2_000, () -> spy.calls().get() == 1), "Expected in-flight refresh to be de-duplicated");
+
+			final var fut = spy.lastFuture().get();
+			if (fut != null && !fut.isDone()) {
+				fut.complete(null);
+			}
+		} finally {
+			mgr.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+		}
+	}
 
 	@Test
 	void diagnosticsCoverTypicalMarkdownIssues() throws Exception {
