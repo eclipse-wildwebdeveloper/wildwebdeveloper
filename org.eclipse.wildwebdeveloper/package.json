@@ -10,7 +10,7 @@
     "yaml-language-server": "1.19.2",
     "vscode-css-languageservice": "6.3.9",
     "vscode-html-languageservice": "5.6.1",
-    "vscode-json-languageservice": "5.6.4",
+    "vscode-json-languageservice": "5.7.1",
     "vscode-markdown-languageserver": "^0.5.0-alpha.12",
     "markdown-it": "14.1.0",
     "@vue/language-server": "3.2.2",
