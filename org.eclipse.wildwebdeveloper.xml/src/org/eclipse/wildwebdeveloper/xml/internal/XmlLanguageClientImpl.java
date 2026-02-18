@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2923 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -15,13 +15,13 @@ package org.eclipse.wildwebdeveloper.xml.internal;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.lsp4e.LanguageClientImpl;
+import org.eclipse.lsp4e.client.DefaultLanguageClient;
 import org.eclipse.lsp4e.command.CommandExecutor;
 import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.ExecuteCommandParams;
 
 @SuppressWarnings("restriction")
-public class XmlLanguageClientImpl extends LanguageClientImpl implements XMLLanguageClient{
+public class XmlLanguageClientImpl extends DefaultLanguageClient implements XMLLanguageClient{
 		
 	@Override
 	public CompletableFuture<Object> executeClientCommand(ExecuteCommandParams params) {

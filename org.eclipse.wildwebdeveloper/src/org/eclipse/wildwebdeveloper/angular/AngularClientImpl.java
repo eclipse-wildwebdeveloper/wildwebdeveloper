@@ -2,11 +2,11 @@ package org.eclipse.wildwebdeveloper.angular;
 
 import java.util.Map;
 
-import org.eclipse.lsp4e.LanguageClientImpl;
+import org.eclipse.lsp4e.client.DefaultLanguageClient;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.MessageType;
 
-public class AngularClientImpl extends LanguageClientImpl implements AngularLanguageServerExtension {
+public class AngularClientImpl extends DefaultLanguageClient implements AngularLanguageServerExtension {
 
 	@Override
 	public void projectLoadingFinish(Object object) {

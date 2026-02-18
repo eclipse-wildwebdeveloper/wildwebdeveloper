@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.runtime.ILog;
-import org.eclipse.lsp4e.LanguageClientImpl;
+import org.eclipse.lsp4e.client.DefaultLanguageClient;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
 import org.eclipse.lsp4j.MessageParams;
@@ -32,7 +32,7 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wildwebdeveloper.jsts.ui.preferences.JSTSPreferenceServerConstants;
 import org.eclipse.wildwebdeveloper.util.FileUtils;
 
-public class ESLintClientImpl extends LanguageClientImpl implements ESLintLanguageServerExtension {
+public class ESLintClientImpl extends DefaultLanguageClient implements ESLintLanguageServerExtension {
 
 	@Override
 	public CompletableFuture<Integer> confirmESLintExecution(Object param) {
