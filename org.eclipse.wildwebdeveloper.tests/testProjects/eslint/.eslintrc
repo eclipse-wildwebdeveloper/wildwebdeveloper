@@ -7,6 +7,6 @@
   ],
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/indent": "error"
+    "indent": "error"
   }
 }
