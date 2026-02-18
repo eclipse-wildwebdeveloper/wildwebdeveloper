@@ -30,6 +30,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
+					<providerHint>junit6</providerHint>
 					<argLine>${ui.test.vmargs}</argLine>
 					<useUIThread>true</useUIThread>
 					<useUIHarness>true</useUIHarness>
