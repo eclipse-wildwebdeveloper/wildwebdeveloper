@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.tests;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
+
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IFile;
@@ -23,12 +23,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.link.LinkedModeModel;
-import org.eclipse.jface.text.link.LinkedPosition;
-import org.eclipse.jface.text.link.LinkedPositionGroup;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.text.link.LinkedModeModel;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -89,9 +85,8 @@ public class TestJsTs {
 		file.create(content.getBytes(), true, false, null);
 
 		AbstractTextEditor editor = (AbstractTextEditor) IDE.openEditor(
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
-			"org.eclipse.ui.genericeditor.GenericEditor"
-		);
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
+				"org.eclipse.ui.genericeditor.GenericEditor");
 
 		editor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
 		editor.setFocus();
@@ -116,63 +111,19 @@ public class TestJsTs {
 		command.executeWithChecks(executionEvent);
 
 		assertTrue(
-			DisplayHelper.waitForCondition(display, 5000, () -> LinkedModeModel.getModel(document, offset) != null),
-			"Linked rename mode did not start"
-		);
+				DisplayHelper.waitForCondition(display, 5000, () -> LinkedModeModel.getModel(document, offset) != null),
+				"Linked rename mode did not start");
 
-		LinkedModeModel model = LinkedModeModel.getModel(document, offset);
-
-		display.syncExec(() -> {
+		display.asyncExec(() -> {
 			try {
-				for (LinkedPositionGroup group : getLinkedPositionGroups(model)) {
-					for (LinkedPosition pos : group.getPositions()) {
-						document.replace(pos.getOffset(), pos.getLength(), newName);
-					}
-				}
+				document.replace(offset, oldName.length(), newName);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		});
 
-		display.syncExec(() -> {
-			ITextViewer viewer = editor.getAdapter(ITextViewer.class);
-			Event enter = new Event();
-			enter.type = SWT.KeyDown;
-			enter.character = SWT.CR;
-			enter.keyCode = SWT.CR;
-			viewer.getTextWidget().notifyListeners(SWT.KeyDown, enter);
-		});
-
 		assertTrue(DisplayHelper.waitForCondition(display, 5000, () -> expectedContent.equals(document.get())),
-			"Rename not applied to document"
-		);
+				"Rename not applied to document");
 	}
 
-	// LinkedModeModel has no public API to access position groups at this JFace Text level, so tests must use reflection.
-	@SuppressWarnings("unchecked")
-	private static LinkedPositionGroup[] getLinkedPositionGroups(LinkedModeModel model) {
-		try {
-			for (String fieldName : new String[] { "fGroups", "fPositionGroups" }) {
-				try {
-					var field = LinkedModeModel.class.getDeclaredField(fieldName);
-					field.setAccessible(true);
-					Object value = field.get(model);
-
-					if (value instanceof LinkedPositionGroup[]) {
-						return (LinkedPositionGroup[]) value;
-					}
-					if (value instanceof java.util.List<?>) {
-						return ((java.util.List<LinkedPositionGroup>) value)
-							.toArray(new LinkedPositionGroup[0]);
-					}
-				} catch (NoSuchFieldException e) {
-					// try next name
-				}
-			}
-			throw new IllegalStateException("No linked position groups found in LinkedModeModel");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
-
