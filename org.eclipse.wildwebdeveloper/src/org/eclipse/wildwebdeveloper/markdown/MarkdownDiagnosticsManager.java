@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Vegard IT GmbH and others.
+ * Copyright (c) 2025, 2026 Vegard IT GmbH and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -52,6 +52,7 @@ import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.eclipse.lsp4j.DocumentDiagnosticParams;
 import org.eclipse.lsp4j.DocumentDiagnosticReport;
 import org.eclipse.lsp4j.FullDocumentDiagnosticReport;
+import org.eclipse.lsp4j.MarkupContent;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.RelatedFullDocumentDiagnosticReport;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
@@ -248,7 +249,7 @@ public final class MarkdownDiagnosticsManager {
 			}
 
 			for (final Diagnostic d : diagnostics) {
-				final String msg = d.getMessage();
+				final String msg = getMessageString(d);
 				final int severity = toIMarkerSeverity(d.getSeverity());
 				final int line = d.getRange() != null ? d.getRange().getStart().getLine() + 1 : 1;
 				int charStart = -1, charEnd = -1;
@@ -288,6 +289,15 @@ public final class MarkdownDiagnosticsManager {
 			}
 		} catch (final Exception ex) {
 			ILog.get().warn(ex.getMessage(), ex);
+		}
+	}
+
+	private static String getMessageString(final Diagnostic d) {
+		Either<String, MarkupContent> message = d.getMessage();
+		if (message.isLeft()) {
+			return message.getLeft();
+		} else {
+			return message.getRight().getValue();
 		}
 	}
 
