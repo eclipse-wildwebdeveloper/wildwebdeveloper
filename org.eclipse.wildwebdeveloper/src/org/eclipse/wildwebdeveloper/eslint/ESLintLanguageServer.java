@@ -26,9 +26,10 @@ public class ESLintLanguageServer extends ProcessStreamConnectionProvider {
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		//commands.add("--inspect-brk"); // for local debug
 		try {
+			URL proxyUrl = FileLocator.toFileURL(getClass().getResource("eslint-lsp-proxy.js"));
+			commands.add(new java.io.File(proxyUrl.getPath()).getAbsolutePath());
 			URL url = FileLocator.toFileURL(getClass().getResource("/node_modules/eslint-server/out/eslintServer.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
-			// commands.add("/home/mistria/git/vscode-eslint/server/out/eslintServer.js"); // to use and debug against local sources
 			commands.add("--stdio");
 			setCommands(commands);
 			setWorkingDirectory(System.getProperty("user.dir"));
