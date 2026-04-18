@@ -12,14 +12,12 @@
     "vue": "^3.2.13"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/eslint-parser": "^7.25.9",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^10.2.1",
-	"@eslint/js": "^9.17.0",
-    "eslint-plugin-vue": "^10.0.0"
+	"@eslint/js": "^10.0.1",
+    "eslint-plugin-vue": "^10.8.0"
   },
   "browserslist": [
     "> 1%",
