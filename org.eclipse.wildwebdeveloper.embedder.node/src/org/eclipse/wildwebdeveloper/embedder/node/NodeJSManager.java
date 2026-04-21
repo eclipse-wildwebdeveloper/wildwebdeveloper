@@ -31,16 +31,19 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class NodeJSManager {
     public static final String NODE_ROOT_DIRECTORY = ".node";
 
     private static final String MACOS_DSCL_SHELL_PREFIX = "UserShell: ";
+    private static final String ALREADY_WARNED_NODEJS_MISSING = "alreadyWarnedNodeJsMissing";
 
-    private static boolean alreadyWarned;
     private static Properties cachedNodeJsInfoProperties;
     private static final Object EXPAND_LOCK = new Object();
 
@@ -100,10 +103,9 @@ public class NodeJSManager {
         if (res != null) {
             validateNodeVersion(res);
             return res;
-        } else if (!alreadyWarned) {
-            warnNodeJSMissing();
-            alreadyWarned = true;
         }
+        warnNodeJSMissing();
+        
         return null;
     }
 
@@ -332,20 +334,34 @@ public class NodeJSManager {
     }
 
     private static void warnNodeJSMissing() {
-        if (!alreadyWarned) {
+        if (!hasAlreadyWarnedNodeJsMissing()) {
             Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
                     "Missing node.js", "Could not find node.js. This will result in editors missing key features.\n"
                             + "Please make sure node.js is installed and that your PATH environment variable contains the location to the `node` executable."));
+            setAlreadyWarnedNodeJsMissing();
         }
-        alreadyWarned = true;
     }
 
     private static void warnNodeJSVersionCouldNotBeDetermined() {
-        if (!alreadyWarned) {
+        if (!hasAlreadyWarnedNodeJsMissing()) {
             Display.getDefault().asyncExec(() -> MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
                     "Node.js version could not be determined",
                     "Node.js version could not be determined. Please make sure a recent version of node.js is installed, editors may be missing key features otherwise.\n"));
+            setAlreadyWarnedNodeJsMissing();
         }
-        alreadyWarned = true;
+    }
+    
+    private static boolean hasAlreadyWarnedNodeJsMissing() {
+    	return Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, ALREADY_WARNED_NODEJS_MISSING, false, null);
+    }
+    
+    private static void setAlreadyWarnedNodeJsMissing() {
+    	try {
+    		IEclipsePreferences workspacePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+    		workspacePreferences.putBoolean(ALREADY_WARNED_NODEJS_MISSING, true);
+    		workspacePreferences.flush();
+    	} catch (BackingStoreException e) {
+    		ILog.get().error(e.getMessage(), e);
+    	}
     }
 }
