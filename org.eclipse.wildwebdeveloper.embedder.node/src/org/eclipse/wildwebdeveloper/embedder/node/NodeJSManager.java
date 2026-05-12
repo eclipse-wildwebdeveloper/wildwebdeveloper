@@ -352,16 +352,16 @@ public class NodeJSManager {
     }
     
     private static boolean hasAlreadyWarnedNodeJsMissing() {
-    	return Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, ALREADY_WARNED_NODEJS_MISSING, false, null);
+        return Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, ALREADY_WARNED_NODEJS_MISSING, false, null);
     }
     
     private static void setAlreadyWarnedNodeJsMissing() {
-    	try {
-    		IEclipsePreferences workspacePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
-    		workspacePreferences.putBoolean(ALREADY_WARNED_NODEJS_MISSING, true);
-    		workspacePreferences.flush();
-    	} catch (BackingStoreException e) {
-    		ILog.get().error(e.getMessage(), e);
-    	}
+        try {
+            IEclipsePreferences workspacePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+            workspacePreferences.putBoolean(ALREADY_WARNED_NODEJS_MISSING, true);
+            workspacePreferences.flush();
+        } catch (BackingStoreException e) {
+            ILog.get().error(e.getMessage(), e);
+        }
     }
 }
