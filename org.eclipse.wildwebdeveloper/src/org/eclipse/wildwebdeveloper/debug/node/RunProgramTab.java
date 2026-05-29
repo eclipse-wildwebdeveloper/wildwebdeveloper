@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.node;
 
-import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.*;
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedFile;
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.getSelectedProject;
+import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.pathOrEmpty;
 
 import java.io.File;
 
@@ -283,7 +285,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 		try {
 			String defaultSelectedFile = pathOrEmpty(getSelectedFile(shortcut::canLaunch));
 			this.programPathText.setText(configuration.getAttribute(LaunchConstants.PROGRAM, defaultSelectedFile)); //$NON-NLS-1$
-			this.argumentsText.setText(configuration.getAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
+			this.argumentsText.setText(configuration.getAttribute(VSCodeJSDebugDelegate.ARGUMENTS, "")); //$NON-NLS-1$
 			this.workingDirectoryText
 					.setText(configuration.getAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, pathOrEmpty(getSelectedProject()))); //$NON-NLS-1$
 		} catch (CoreException e) {
@@ -295,7 +297,7 @@ public class RunProgramTab extends AbstractLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		String programPath = this.programPathText.getText();
 		configuration.setAttribute(LaunchConstants.PROGRAM, programPath);
-		configuration.setAttribute(NodeRunDAPDebugDelegate.ARGUMENTS, this.argumentsText.getText());
+		configuration.setAttribute(VSCodeJSDebugDelegate.ARGUMENTS, this.argumentsText.getText());
 		configuration.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, this.workingDirectoryText.getText());
 		configuration.setMappedResources(ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(FileUtils.toUri(programPath)));
 	}
