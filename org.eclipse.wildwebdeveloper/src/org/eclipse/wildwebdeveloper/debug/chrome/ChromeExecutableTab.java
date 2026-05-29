@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat Inc. and others.
+ * Copyright (c) 2020, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -112,7 +112,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			String browserLocation = configuration.getAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, "");
+			String browserLocation = configuration.getAttribute(VSCodeJSDebugDelegate.RUNTIME_EXECUTABLE, "");
 			if (browserLocation.isEmpty()) {
 				browserToUse.setSelection(new StructuredSelection(browserLocation));
 			} else {
@@ -140,9 +140,9 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		Object selectedBrowser = ((IStructuredSelection)browserToUse.getSelection()).getFirstElement();
 		if (selectedBrowser instanceof IBrowserDescriptor desc) {
-			configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, desc.getLocation());
+			configuration.setAttribute(VSCodeJSDebugDelegate.RUNTIME_EXECUTABLE, desc.getLocation());
 		} else if (selectedBrowser instanceof String) {
-			configuration.setAttribute(ChromeRunDAPDebugDelegate.RUNTIME_EXECUTABLE, selectedBrowser);
+			configuration.setAttribute(VSCodeJSDebugDelegate.RUNTIME_EXECUTABLE, selectedBrowser);
 		}
 	}
 

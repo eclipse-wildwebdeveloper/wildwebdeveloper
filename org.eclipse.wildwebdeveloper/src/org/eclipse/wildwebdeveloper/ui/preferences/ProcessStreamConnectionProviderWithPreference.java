@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2022, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -171,7 +171,6 @@ public abstract class ProcessStreamConnectionProviderWithPreference extends Proc
 	public void propertyChange(PropertyChangeEvent event) {
 		if (isAffected(event)) {
 		   LanguageServerDefinition languageServerDefinition = getLanguageServerDefinition();
-			@SuppressWarnings("rawtypes")
 			DidChangeConfigurationParams params = new DidChangeConfigurationParams(createSettings());
 
 			/*
