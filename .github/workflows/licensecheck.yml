@@ -107,10 +107,11 @@ jobs:
         dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/1.1.0/org.eclipse.dash.licenses-*.jar | tail -n 1)
         npmArgs=" --no-bin-links --ignore-scripts"
         dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-review-summary"
-        exitStatus=0
-        if [ ${{ env.request-review }} ]; then 
-          # Add "-project <Project Name> -token <Token>" here when a review is required
-          dashArgs="$dashArgs -review -project $projectId -token $gitlabAPIToken" 
+        reviewArgs="-review -project $projectId -token $gitlabAPIToken"
+        requestReview="${{ env.request-review }}"
+        # When a review was requested explicitly (e.g. '/request-license-review' comment), ask for it right away.
+        if [ "$requestReview" ]; then
+          dashArgs="$dashArgs $reviewArgs"
         fi
         #
         # Check NPM dependency licenses in main WildWebDeveloper project 
@@ -118,28 +119,30 @@ jobs:
         echo ""
         echo "------ Checking project [org.eclipse.wildwebdeveloper] ------"
         java -jar $dashLicenseToolJar $dashArgs org.eclipse.wildwebdeveloper/package-lock.json
-        currentStatus=$?
-        if [[ $currentStatus != 0 ]]; then
-          exitStatus=$(($exitStatus + $currentStatus)) # Save for future
-        fi
+        exitStatus=$?
         cd $savePWD
-        
+
+        # If unvetted content was found and no review was requested yet, request one automatically,
+        # i.e. re-run the check with '-review' as if a committer had commented '/request-license-review'.
+        if [[ $exitStatus != 0 && -z "$requestReview" ]]; then
+          echo ""
+          echo "Some contents are not vetted - automatically requesting a license review"
+          requestReview=1
+          echo "request-review=1" >> $GITHUB_ENV
+          java -jar $dashLicenseToolJar $dashArgs $reviewArgs org.eclipse.wildwebdeveloper/package-lock.json
+          cd $savePWD
+        fi
+
         echo ""
         if [[ $exitStatus == 0 ]]; then # All licenses are vetted
-          # echo "::set-output name=build-succeeded::$(echo 1)"
           echo "build-succeeded=1" >> $GITHUB_OUTPUT
           echo "All licenses are vetted"
         else
-          # echo "::set-output name=build-succeeded::$(echo 0)"
           echo "build-succeeded=0" >> $GITHUB_OUTPUT
-          if [ ${{ env.request-review }} ]; then 
-            echo "Some contents requires a review"
-            echo ""
-            echo "The NPM dependency License Check review summary is saved in 'target/dash/npm-review-summary'" 
-          else
-            echo "Committers can request a review by commenting '/request-license-review'"
-            exit 1
-          fi
+          echo "Some contents requires a review"
+          echo "The NPM dependency License Check review summary is saved in 'target/dash/npm-review-summary'"
+          # Fail the check so the PR is not merged while reviews are pending; re-run once the reviews have concluded.
+          exit 1
         fi
         echo ""
 
