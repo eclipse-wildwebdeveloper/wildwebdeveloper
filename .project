@@ -14,4 +14,15 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1781858003249</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-org.eclipse.wildwebdeveloper/target/vscode-eslint-ls-package-json/extension/.git</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

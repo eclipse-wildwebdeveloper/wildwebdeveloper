@@ -45,6 +45,7 @@
 							<scmVersion>release/3.0.24</scmVersion>
 							<basedir>${project.build.directory}</basedir>
 							<checkoutDirectory>${project.build.directory}/vscode-eslint-ls-package-json/extension</checkoutDirectory>
+							<skipCheckoutIfExists>true</skipCheckoutIfExists>
 						</configuration>
 					</execution>
 				</executions>

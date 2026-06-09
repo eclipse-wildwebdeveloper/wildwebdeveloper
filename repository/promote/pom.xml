@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>promote</artifactId>
+
+	<parent>
+		<groupId>org.eclipse.wildwebdeveloper</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<packaging>pom</packaging>
+
+	<properties>
+		<eclipse.repo>https://download.eclipse.org/releases/latest</eclipse.repo>
+		<justj.tools.repo>https://download.eclipse.org/justj/tools/updates/nightly/latest</justj.tools.repo>
+		<org.eclipse.storage.user>genie.wildwebdeveloper</org.eclipse.storage.user>
+		<org.eclipse.justj.p2.manager.target>wildwebdeveloper</org.eclipse.justj.p2.manager.target>
+		<org.eclipse.justj.p2.manager.relative>updates</org.eclipse.justj.p2.manager.relative>
+		<org.eclipse.justj.p2.manager.args>-remote ${org.eclipse.storage.user}@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/${org.eclipse.justj.p2.manager.target}</org.eclipse.justj.p2.manager.args>
+		<org.eclipse.justj.p2.manager.extra.args></org.eclipse.justj.p2.manager.extra.args>
+		<org.eclipse.justj.p2.manager.logo.title>https://raw.githubusercontent.com/eclipse-wildwebdeveloper/.github/refs/heads/main/assets/artwork/svg/WWD_Black.svg</org.eclipse.justj.p2.manager.logo.title>
+		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+		<org.eclipse.justj.p2.manager.build.url>http://www.example.com/</org.eclipse.justj.p2.manager.build.url>
+		<build.type>nightly</build.type>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>promote</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-eclipse-plugin</artifactId>
+						<version>${tycho-version}</version>
+						<configuration>
+							<executionEnvironment>JavaSE-21</executionEnvironment>
+							<dependencies>
+								<dependency>
+									<artifactId>org.eclipse.justj.p2</artifactId>
+									<type>eclipse-plugin</type>
+								</dependency>
+								<dependency>
+									<artifactId>org.apache.felix.scr</artifactId>
+									<type>eclipse-plugin</type>
+								</dependency>
+							</dependencies>
+							<repositories>
+								<repository>
+									<id>eclipse.repo</id>
+									<layout>p2</layout>
+									<url>${eclipse.repo}</url>
+								</repository>
+								<repository>
+									<id>justj.tools.repo</id>
+									<layout>p2</layout>
+									<url>${justj.tools.repo}</url>
+								</repository>
+							</repositories>
+						</configuration>
+						<executions>
+							<execution>
+								<id>promote</id>
+								<goals>
+									<goal>eclipse-run</goal>
+								</goals>
+								<phase>package</phase>
+								<configuration>
+									<argLine></argLine>
+									<appArgLine>
+                                      <![CDATA[
+                                        -consoleLog
+                                        -application org.eclipse.justj.p2.manager
+                                        -data @None
+                                        -nosplash
+                                        ${org.eclipse.justj.p2.manager.args}
+                                        -retain 5
+                                        -label "Wild Web Developer"
+                                        -build-url ${org.eclipse.justj.p2.manager.build.url}
+                                        -root ${project.build.directory}/wwd-sync
+                                        -relative ${org.eclipse.justj.p2.manager.relative}
+                                        -version-iu org.eclipse.wildwebdeveloper.feature.
+                                        -iu-filter-pattern org.eclipse.wildwebdeveloper.*
+                                        -commit https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper/commit/${git.commit}
+                                        -target-url https://download.eclipse.org/wildwebdeveloper
+                                        -promote ${project.basedir}/../target/repository
+                                        -timestamp ${build.timestamp}
+                                        -type ${build.type}
+                                        -favicon https://eclipseide.org/favicon.ico
+                                        -title-image ${org.eclipse.justj.p2.manager.logo.title}
+                                        -breadcrumb "Wild&nbsp;Web&nbsp;Developer https://projects.eclipse.org/projects/tools.wildwebdeveloper/"
+                                        -mapping wildwebdeveloper->Wild&nbsp;Web&nbsp;Developer
+                                        ${org.eclipse.justj.p2.manager.extra.args}
+                                    ]]>
+                                  </appArgLine>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

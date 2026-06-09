@@ -1,3 +1,4 @@
 # Maven
 target/
 .polyglot.META-INF
+build.log

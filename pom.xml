@@ -139,6 +139,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>3.5.0</version>
+					<configuration>
+						<force>true</force>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>io.github.download-maven-plugin</groupId>
@@ -231,6 +234,12 @@
 			<properties>
 				<ui.test.vmargs>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -Djava.awt.headless=false</ui.test.vmargs>
 			</properties>
+		</profile>
+		<profile>
+			<id>promote</id>
+			<modules>
+				<module>repository/promote</module>
+			</modules>
 		</profile>
 	</profiles>
 
