@@ -3,7 +3,7 @@
       id="org.eclipse.wildwebdeveloper.embedder.node.feature"
       label="%name"
       version="1.2.6.qualifier"
-      provider-name="Eclipse Wild Web Developer project"
+      provider-name="Eclipse Wild Web Developer"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
 

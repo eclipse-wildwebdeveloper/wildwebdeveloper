@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>repository</artifactId>
 	<parent>
@@ -8,6 +10,10 @@
 	</parent>
 	<packaging>eclipse-repository</packaging>
 	<version>1.4.0-SNAPSHOT</version>
+
+	<properties>
+		<gpg-keyname>9BC06FC97ED4ED26</gpg-keyname>
+	</properties>
 
 	<build>
 		<plugins>
@@ -42,6 +48,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>sign</id>
@@ -59,7 +66,7 @@
 								</goals>
 								<configuration>
 									<signer>bc</signer>
-									<keyname>9BC06FC97ED4ED26</keyname>
+									<keyname>${gpg-keyname}</keyname>
 									<skipIfJarsigned>true</skipIfJarsigned>
 								</configuration>
 							</execution>
