@@ -60,7 +60,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://vscode.download.prss.microsoft.com/dbazure/download/stable/6a49527b96e326fe62fbdb56f60e16877c9aa724/code-stable-x64-1779917441.tar.gz</url>
+							<url>https://vscode.download.prss.microsoft.com/dbazure/download/stable/3c631b164c239e7aeaaae7c626b46c527b361af2/code-stable-x64-1781044293.tar.gz</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/vscode</outputDirectory>
 						</configuration>
