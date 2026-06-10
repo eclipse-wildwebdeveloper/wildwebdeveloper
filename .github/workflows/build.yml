@@ -68,7 +68,7 @@ jobs:
       matrix:
         os:  # https://github.com/actions/runner-images#available-images
         - ubuntu-latest
-        - macos-15-intel  # Intel
+        - macos-26-intel  # Intel
         - macos-latest  # ARM
         - windows-latest
     runs-on: ${{ matrix.os }}
