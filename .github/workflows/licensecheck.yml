@@ -90,10 +90,9 @@ jobs:
         mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.1.0 -DremoteRepositories="https://repo.eclipse.org/content/repositories/dash-licenses"
         mkdir -p target/dash         # Make directory for dash-license review summary 
     - name: Set request review parameters
-      if: github.event_name == 'issue_comment'
       run: |
         echo "request-review=1" >> $GITHUB_ENV
-      # Run only for comments on PRs that have a corresponding body.
+      # Always request a review so unvetted licenses are submitted automatically.
     - name:  NPM Deps License check
       shell: bash {0}
       run: |
