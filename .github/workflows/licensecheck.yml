@@ -123,8 +123,11 @@ jobs:
         #
         echo ""
         echo "------ Checking project [org.eclipse.wildwebdeveloper] ------"
-        java -jar $dashLicenseToolJar $dashArgs org.eclipse.wildwebdeveloper/package-lock.json
-        currentStatus=$?
+        # Tee the output to a log so the reporting step can extract the URLs of
+        # the review requests that dash-licenses creates (they are logged to the
+        # console but are not part of the -summary CSV file).
+        java -jar $dashLicenseToolJar $dashArgs org.eclipse.wildwebdeveloper/package-lock.json 2>&1 | tee "$savePWD/target/dash/npm-review-log"
+        currentStatus=${PIPESTATUS[0]}
         if [[ $currentStatus != 0 ]]; then
           exitStatus=$(($exitStatus + $currentStatus)) # Save for future
         fi
@@ -175,9 +178,39 @@ jobs:
             core.setFailed('The NPM license check failed but no restricted dependencies were found in the review summary.');
             return;
           }
+          // dash-licenses creates a review request (an IP Lab GitLab issue) for
+          // each unvetted dependency and logs its URL to the console. Parse the
+          // captured log to associate each dependency id with its review URL.
+          const reviewUrls = {};
+          try {
+            const log = fs.readFileSync('target/dash/npm-review-log', 'utf8');
+            let currentId = null;
+            for (const line of log.split('\n')) {
+              const required = line.match(/A review is required for (.+?)\.\s*$/);
+              if (required) {
+                currentId = required[1].trim();
+                continue;
+              }
+              const url = line.match(/A review request (?:was created|already exists)\s+(\S+)/);
+              if (url && currentId) {
+                reviewUrls[currentId] = url[1];
+                currentId = null;
+              }
+            }
+          } catch (err) {
+            core.info(`No review log found to extract review request URLs: ${err}`);
+          }
           const list = needsReview
-            .map(fields => `- \`${fields[0]}\` (license: ${fields[1] || 'unknown'}, source: ${fields[3] || 'none'})`)
+            .map(fields => {
+              const url = reviewUrls[fields[0]];
+              const link = url ? ` — [review request](${url})` : '';
+              return `- \`${fields[0]}\` (license: ${fields[1] || 'unknown'}, source: ${fields[3] || 'none'})${link}`;
+            })
             .join('\n');
+          const anyReviewCreated = Object.keys(reviewUrls).length > 0;
+          const footer = anyReviewCreated
+            ? 'A review request has been submitted to the Eclipse IP team for each dependency listed above (see the linked issues). These dependencies must be approved before this change can be merged.'
+            : 'No review request could be created automatically (this happens for fork pull requests, where the GitLab token is unavailable). A committer can submit the review requests by commenting `/request-license-review` on this pull request. These dependencies must be approved before this change can be merged.';
           const body = [
             '## :warning: NPM dependency license review required',
             '',
@@ -185,7 +218,7 @@ jobs:
             '',
             list,
             '',
-            'A review request has been submitted automatically to the Eclipse IP team. These dependencies must be approved before this change can be merged.',
+            footer,
           ].join('\n');
           core.summary.addRaw(body).write();
           const prNumber = context.issue && context.issue.number;
@@ -215,4 +248,5 @@ jobs:
         name: tools.wildwebdeveloper-npm-license-vetting-summary
         path: |
           target/dash/npm-review-summary
+          target/dash/npm-review-log
           target/dash/summary
