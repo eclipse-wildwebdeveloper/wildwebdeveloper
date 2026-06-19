@@ -14,6 +14,7 @@
     "vscode-markdown-languageserver": "^0.5.0-alpha.12",
     "markdown-it": "14.2.0",
     "nano-spawn": "2.1.0",
+    "tinyexec": "1.2.4",
     "@vue/language-server": "3.3.5",
     "@vue/typescript-plugin": "3.3.5",
     "vscode-css-languageserver": "file:target/vscode-css-languageserver-10.0.0.tgz",
