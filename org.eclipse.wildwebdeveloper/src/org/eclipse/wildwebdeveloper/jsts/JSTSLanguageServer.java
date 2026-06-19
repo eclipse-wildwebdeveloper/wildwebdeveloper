@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016-2023 Red Hat Inc. and others.
+ * Copyright (c) 2016, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -74,7 +74,7 @@ public class JSTSLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 		try {
 //			plugins.add(new TypeScriptPlugin("@angular/language-service"));
 			plugins.add(new TypeScriptPlugin("typescript-plugin-css-modules"));
-			plugins.add(new TypeScriptPlugin("typescript-lit-html-plugin"));
+			plugins.add(new TypeScriptPlugin("ts-lit-plugin"));
 			plugins.add(new TypeScriptPlugin("@vue/typescript-plugin", "@vue/language-server", new String[] {"vue"}));
 			options.put("plugins", plugins.stream().map(TypeScriptPlugin::toMap).toArray());
 
