@@ -192,12 +192,20 @@ jobs:
           core.summary.addRaw(body).write();
           const prNumber = context.issue && context.issue.number;
           if (prNumber) {
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body,
-            });
+            // Posting a comment requires a token with write access. For pull
+            // requests opened from forks the GITHUB_TOKEN is read-only, so the
+            // comment can't be posted there; the '/request-license-review'
+            // issue_comment flow runs in the base repo and can comment instead.
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            } catch (err) {
+              core.warning(`Could not post review comment (likely a fork pull request with a read-only token): ${err}`);
+            }
           } else {
             core.info('No pull request context available; skipping PR comment.');
           }
