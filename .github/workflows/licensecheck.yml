@@ -111,9 +111,12 @@ jobs:
         npmArgs=" --no-bin-links --ignore-scripts"
         dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-review-summary"
         exitStatus=0
-        if [ ${{ env.request-review }} ]; then 
-          # Add "-project <Project Name> -token <Token>" here when a review is required
-          dashArgs="$dashArgs -review -project $projectId -token $gitlabAPIToken" 
+        if [ -n "$gitlabAPIToken" ]; then
+          # A GitLab token is available (e.g. on branches/PRs that can access
+          # repository secrets), so request a review automatically. Dependabot
+          # and fork pull requests don't get the secret; in that case we skip
+          # the review request and still produce the summary of unvetted deps.
+          dashArgs="$dashArgs -review -project $projectId -token $gitlabAPIToken"
         fi
         #
         # Check NPM dependency licenses in main WildWebDeveloper project 
