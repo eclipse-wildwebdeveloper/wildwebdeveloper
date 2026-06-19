@@ -42,6 +42,9 @@ jobs:
     if: github.event_name != 'issue_comment' || ( github.event.issue.pull_request != '' && (github.event.comment.body == '/request-license-review') )
     # Run on all non-comment events specified by the calling workflow and for comments on PRs that have a corresponding body.
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
     - uses: actions/checkout@v7
       if: github.event_name == 'push' || github.event_name == 'pull_request'   
@@ -94,6 +97,7 @@ jobs:
         echo "request-review=1" >> $GITHUB_ENV
       # Always request a review so unvetted licenses are submitted automatically.
     - name:  NPM Deps License check
+      id: license-check
       shell: bash {0}
       run: |
         set +x
@@ -141,6 +145,58 @@ jobs:
           fi
         fi
         echo ""
+
+    - name: Report required license reviews and fail
+      if: always() && steps.license-check.outputs.build-succeeded == '0'
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          const summaryPath = 'target/dash/npm-review-summary';
+          let summary = '';
+          try {
+            summary = fs.readFileSync(summaryPath, 'utf8');
+          } catch (err) {
+            core.setFailed(`Could not read NPM review summary at '${summaryPath}': ${err}`);
+            return;
+          }
+          // The summary is a CSV produced by dash-licenses: "id, license, status, source".
+          // Dependencies whose status is "restricted" still require a license review.
+          const needsReview = summary
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0)
+            .map(line => line.split(',').map(field => field.trim()))
+            .filter(fields => fields[2] === 'restricted');
+          if (needsReview.length === 0) {
+            core.setFailed('The NPM license check failed but no restricted dependencies were found in the review summary.');
+            return;
+          }
+          const list = needsReview
+            .map(fields => `- \`${fields[0]}\` (license: ${fields[1] || 'unknown'}, source: ${fields[3] || 'none'})`)
+            .join('\n');
+          const body = [
+            '## :warning: NPM dependency license review required',
+            '',
+            'The following NPM dependencies have licenses that are not yet vetted and require a review before they can be used:',
+            '',
+            list,
+            '',
+            'A review request has been submitted automatically to the Eclipse IP team. These dependencies must be approved before this change can be merged.',
+          ].join('\n');
+          core.summary.addRaw(body).write();
+          const prNumber = context.issue && context.issue.number;
+          if (prNumber) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body,
+            });
+          } else {
+            core.info('No pull request context available; skipping PR comment.');
+          }
+          core.setFailed('Some NPM dependencies require a license review.');
 
     - uses: actions/upload-artifact@v7
       if: always() && env.request-review
