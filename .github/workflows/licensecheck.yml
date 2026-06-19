@@ -10,6 +10,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     - '**/package-lock.json'
     - '**/pom.xml'
     - '**/*.target'
+    - '.github/workflows/licensecheck.yml'
   pull_request:
     branches: 
      - 'master'
@@ -18,6 +19,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     - '**/package-lock.json'
     - '**/pom.xml'
     - '**/*.target'
+    - '.github/workflows/licensecheck.yml'
   issue_comment:
     types: [created]
   workflow_dispatch:
