@@ -378,7 +378,7 @@
     <setupTask
         xsi:type="setup:EclipseIniTask"
         option="-Doomph.redirection.wildwebdeveloper"
-        value="=https://raw.githubusercontent.com/eclipse-wildwebdeveloper/wildwebdeveloper/master/setup/WWD.setup->${github.clone.wildwebdeveloper|uri}/setup/WWD.setup"
+        value="=https://raw.githubusercontent.com/eclipse-wildwebdeveloper/wildwebdeveloper/master/setup/WWD.setup->${github.clone.wildwebdeveloper.location|uri}/setup/WWD.setup"
         vm="true">
       <description>Set an Oomph redirection system property to redirect the logical location of this setup to its physical location in the Git clone.</description>
     </setupTask>
