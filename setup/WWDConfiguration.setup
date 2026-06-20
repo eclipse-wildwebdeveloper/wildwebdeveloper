@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Configuration
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    label="Wild Web Develope Development Environment">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <detail
+        key="imageURI">
+      <value>https://github.com/eclipse-wildwebdeveloper/.github/raw/main/assets/artwork/svg/WWD_Black.svg</value>
+    </detail>
+  </annotation>
+  <installation
+      name="wildwebdeveloper.development.environment.installation"
+      label="Wild Web Developer Development Environment Installation">
+    <productVersion
+        href="index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.committers']/@versions[name='latest']"/>
+    <description>The Wild Web Developer Development Environment installation provides a full development environment for working on Wild Web Developer.</description>
+  </installation>
+  <workspace
+      name="wildwebdeveloper.development.environment.workspace"
+      label="Wild Web Developer Development Environment Workspace">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.target.platform"
+        value="${eclipse.target.platform.latest}"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='wildwebdeveloper']/@streams[name='master']"/>
+    <description>The Wild Web Developer Development Environment workspace contains all features and plugins from the Wild Web Developer Git repository.</description>
+  </workspace>
+  <description>
+    &lt;p>
+    The &lt;a href=&quot;https://projects.eclipse.org/projects/tools.wildwebdeveloper&quot;/>Wild Web Developer&lt;/a> Development Environment configuration provisions a dedicated development environment 
+    for the complete set of source projects used by &lt;a href=&quot;https://ci.eclipse.org/wildwebdeveloper/&quot;>Wild Web Developer's build server&lt;/a> 
+    to produce &lt;a href=&quot;https://download.eclipse.org/wildwebdeveloper/updates/?d&quot;>Wild Web Developer's update sites&lt;/a>.
+    &lt;/p>
+    &lt;p>
+    All the source projects from &lt;a href=&quot;https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper.git&quot;>Wild Web Developer's Git Repository&lt;/a>
+    are available, organized into working sets, and ready for contribution.
+    &lt;/p>
+    &lt;/p>
+    Please &lt;a href=&quot;https://eclipse.dev/oomph/?file=Eclipse_Platform_SDK_Provisioning.md&quot;>read the analogous tutorial instructions&lt;/a> for the Eclipse Platform SDK's configuration for more details.
+    &lt;/p>
+  </description>
+</setup:Configuration>
