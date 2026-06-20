@@ -91,11 +91,11 @@ spec:
           }
 
           def description = """
-BRANCH_NAME=${env.BRANCH_NAME}
-BUILD_TIMESTAMP=${env.BUILD_TIMESTAMP}
 BUILD_TYPE=${env.BUILD_TYPE}
+PROMOTE=${env.PROMOTE}
+BUILD_TIMESTAMP=${env.BUILD_TIMESTAMP}
 MAVEN_PROFILES=${env.MAVEN_PROFILES}
-WITH_CREDENTIALS=${env.WITH_CREDENTIALS}
+BRANCH_NAME=${env.BRANCH_NAME}
 """.trim()
           echo description
           currentBuild.description = description.replace("\n", "<br/>")
@@ -158,7 +158,6 @@ WITH_CREDENTIALS=${env.WITH_CREDENTIALS}
       steps {
         unstash 'container-stash'
         sshagent (['projects-storage.eclipse.org-bot-ssh']) {
-          sh 'ls -sailR'
           promote();
         }
       }
