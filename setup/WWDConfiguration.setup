@@ -11,6 +11,10 @@
         key="imageURI">
       <value>https://github.com/eclipse-wildwebdeveloper/.github/raw/main/assets/artwork/svg/WWD_Black.svg</value>
     </detail>
+    <detail
+        key="badgeLabel">
+      <value>Wild Web Developer</value>
+    </detail>
   </annotation>
   <installation
       name="wildwebdeveloper.development.environment.installation"
