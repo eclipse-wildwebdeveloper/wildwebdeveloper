@@ -1101,6 +1101,7 @@
       <keyword label="%preferenceKeywords.sass" id="org.eclipse.wildwebdeveloper.sass" />
       <keyword label="%preferenceKeywords.scss" id="org.eclipse.wildwebdeveloper.scss" />
       <keyword label="%preferenceKeywords.html" id="org.eclipse.wildwebdeveloper.html" />
+      <keyword label="%preferenceKeywords.markdown" id="org.eclipse.wildwebdeveloper.markdown" />
    </extension>
 
 </plugin>
