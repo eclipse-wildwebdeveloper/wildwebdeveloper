@@ -57,7 +57,7 @@ Supported 🦟🔫 debugging targets
 
 or
 
-* With [Help > Install New Software...](https://help.eclipse.org/latest/topic/org.eclipse.platform.doc.user/tasks/tasks-124.htm) with p2 repo https://download.eclipse.org/wildwebdeveloper/snapshots
+* With [Help > Install New Software...](https://help.eclipse.org/latest/topic/org.eclipse.platform.doc.user/tasks/tasks-124.htm) with p2 repo https://download.eclipse.org/wildwebdeveloper/updates/nightly/latest
 
 ## 🎬 Media Library
 

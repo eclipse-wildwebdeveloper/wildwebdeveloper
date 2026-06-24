@@ -42,7 +42,7 @@
 					<filterProvided>true</filterProvided>
 					<includeAllSources>true</includeAllSources>
 					<extraArtifactRepositoryProperties>
-						<p2.statsURI>http://download.eclipse.org/stats/wildwebdeveloper/</p2.statsURI>
+						<p2.statsURI>https://download.eclipse.org/stats/wildwebdeveloper/</p2.statsURI>
 					</extraArtifactRepositoryProperties>
 				</configuration>
 			</plugin>

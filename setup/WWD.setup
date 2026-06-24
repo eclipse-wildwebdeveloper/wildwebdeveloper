@@ -39,6 +39,14 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
+        name="org.eclipse.pde">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.pde/compilers.incompatible-environment"
+          value="2"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
         name="org.eclipse.wildwebdeveloper.xml">
       <setupTask
           xsi:type="setup:PreferenceTask"
@@ -212,7 +220,7 @@
           locateNestedProjects="true"/>
       <repositoryList>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
         <repository
             url="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
         <repository
@@ -322,15 +330,12 @@
               &lt;listEntry value=&quot;org.eclipse.justj.p2.manager.args=-remote localhost:$${project_loc:/repository}/wildwebdeveloper&quot;/>
           &lt;/listAttribute>
           &lt;stringAttribute key=&quot;M2_RUNTIME&quot; value=&quot;EMBEDDED&quot;/>
-          &lt;booleanAttribute key=&quot;M2_SKIP_TESTS&quot; value=&quot;true&quot;/>
+          &lt;booleanAttribute key=&quot;M2_SKIP_TESTS&quot; value=&quot;false&quot;/>
           &lt;intAttribute key=&quot;M2_THREADS&quot; value=&quot;1&quot;/>
           &lt;booleanAttribute key=&quot;M2_UPDATE_SNAPSHOTS&quot; value=&quot;false&quot;/>
           &lt;stringAttribute key=&quot;M2_USER_SETTINGS&quot; value=&quot;&quot;/>
           &lt;booleanAttribute key=&quot;M2_WORKSPACE_RESOLUTION&quot; value=&quot;false&quot;/>
           &lt;booleanAttribute key=&quot;org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING&quot; value=&quot;false&quot;/>
-          &lt;mapAttribute key=&quot;org.eclipse.debug.core.environmentVariables&quot;>
-              &lt;mapEntry key=&quot;PATHx&quot; value=&quot;$${maven.bash.home}$${system_property:path.separator}$${env_var:PATH}&quot;/>
-          &lt;/mapAttribute>
           &lt;stringAttribute key=&quot;org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE&quot; value=&quot;$${workspace_loc:/wildwebdeveloper}/build.log&quot;/>
           &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE&quot; value=&quot;false&quot;/>
           &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES&quot; value=&quot;true&quot;/>
@@ -365,9 +370,6 @@
           &lt;stringAttribute key=&quot;M2_USER_SETTINGS&quot; value=&quot;&quot;/>
           &lt;booleanAttribute key=&quot;M2_WORKSPACE_RESOLUTION&quot; value=&quot;false&quot;/>
           &lt;booleanAttribute key=&quot;org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING&quot; value=&quot;false&quot;/>
-          &lt;mapAttribute key=&quot;org.eclipse.debug.core.environmentVariables&quot;>
-              &lt;mapEntry key=&quot;PATHx&quot; value=&quot;$${maven.bash.home}$${system_property:path.separator}$${env_var:PATH}&quot;/>
-          &lt;/mapAttribute>
           &lt;stringAttribute key=&quot;org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE&quot; value=&quot;$${workspace_loc:/wildwebdeveloper}/build.log&quot;/>
           &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE&quot; value=&quot;false&quot;/>
           &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES&quot; value=&quot;true&quot;/>
