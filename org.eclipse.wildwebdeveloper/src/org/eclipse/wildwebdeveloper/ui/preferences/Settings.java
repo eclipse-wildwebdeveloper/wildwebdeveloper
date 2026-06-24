@@ -74,13 +74,13 @@ public class Settings extends HashMap<String, Object> {
 	}
 
 	public Object findSettings(String[] sections) {
-		Map<String, Object> current = this;
+		Map<?, ?> current = this;
 		for (String section : sections) {
 			Object result = current.get(section);
 			if (result == null || !(result instanceof Map)) {
 				return null;
 			}
-			current = (Map<String, Object>) result;
+			current = (Map<?, ?>) result;
 		}
 		return current;
 	}
