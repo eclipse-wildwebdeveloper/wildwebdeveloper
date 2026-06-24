@@ -35,7 +35,13 @@ Latest builds, for testing, can usually be found at `https://download.eclipse.or
 
 ### Prerequisites
 
-Java 21 and Maven 3.9.6 (only if you want to build from the command-line), or newer.
+Java 21 and Maven 3.9.12 (only if you want to build from the command-line), or newer.
+
+### 🧙 Setting up the Development Environment Automatically
+
+You can set up a pre-configured IDE for contribution to Eclipse Wild Web Developer using the following link:
+
+[![Create Eclipse Development Environment for the Eclipse SDK](https://download.eclipse.org/oomph/www/setups/svg/Wild_Web_Developer.svg)](https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-wildwebdeveloper/wildwebdeveloper/master/setup/WWDConfiguration.setup&show=true "Click to open Eclipse-Installer Auto Launch or drag onto your running installer's title area")
 
 ### ⌨️ Setting up the Development Environment manually
 
