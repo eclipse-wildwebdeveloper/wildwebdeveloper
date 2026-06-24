@@ -379,7 +379,8 @@
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
-      filter="(osgi.os=win32)">
+      filter="(osgi.os=win32)"
+      name="Create wwwd.sh for WIndows">
     <setupTask
         xsi:type="setup:VariableTask"
         type="FOLDER"
@@ -398,7 +399,7 @@
     </setupTask>
     <setupTask
         xsi:type="setup:ResourceCreationTask"
-        targetURL="${installation.location|uri}/${installation.relativeProductFolder}/wwd2.sh">
+        targetURL="${installation.location|uri}/${installation.relativeProductFolder}/wwd.sh">
       <content>
         #!/bin/bash
         export PATH=&quot;${node.location|cygpath}/:${git.location|cygpath}/mingw64/bin:${git.location|cygpath}/usr/bin:$PATH&quot;
