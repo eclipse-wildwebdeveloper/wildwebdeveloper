@@ -89,7 +89,7 @@
 						</goals>
 						<configuration>
 							<baselines>
-								<url>http://download.eclipse.org/wildwebdeveloper/releases/latest</url>
+								<url>https://download.eclipse.org/wildwebdeveloper/updates/release/latest</url>
 							</baselines>
 							<comparator>zip</comparator>
 						</configuration>
@@ -126,7 +126,7 @@
 						<generateDownloadStatsProperty>true</generateDownloadStatsProperty>
 						<baselineRepositories>
 							<repository>
-								<url>https://download.eclipse.org/wildwebdeveloper/snapshots/</url>
+								<url>https://download.eclipse.org/wildwebdeveloper/updates/nightly/latest</url>
 							</repository>
 						</baselineRepositories>
 						<ignoredPatterns>
