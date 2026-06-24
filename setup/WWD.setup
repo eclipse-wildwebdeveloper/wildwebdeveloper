@@ -377,6 +377,35 @@
 
     </content>
   </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      filter="(osgi.os=win32)">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="FOLDER"
+        name="node.location"
+        label="Node.js Installation Location"
+        link="https://nodejs.org/en/download">
+      <description>The location of the Node.js installation on this device.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="git.location"
+        defaultValue="C:\Program Files\Git"
+        label="Git Installation Location"
+        link="https://git-scm.com/install/windows">
+      <description>The location of Git installation on this device.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:ResourceCreationTask"
+        targetURL="${installation.location|uri}/${installation.relativeProductFolder}/wwd2.sh">
+      <content>
+        #!/bin/bash
+        export PATH=&quot;${node.location|cygpath}/:${git.location|cygpath}/mingw64/bin:${git.location|cygpath}/usr/bin:$PATH&quot;
+        ./eclipse.exe $*
+      </content>
+    </setupTask>
+  </setupTask>
   <stream name="master"
       label="Master">
     <setupTask
