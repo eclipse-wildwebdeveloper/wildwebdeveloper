@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -245,8 +246,8 @@ public class NodeJSManager {
         if (directory == null) {
             return false;
         }
-        if (directory.exists() && directory.isDirectory()
-                && directory.canWrite() && directory.canExecute()) {
+        java.nio.file.Path path = directory.toPath();
+        if (Files.isDirectory(path) && Files.isWritable(path) && Files.isExecutable(path)) {
             return true;
         }
         return probeDirectoryForInstallation(directory.getParentFile());
