@@ -211,7 +211,7 @@
               xsi:type="predicates:NotPredicate">
             <operand
                 xsi:type="predicates:NamePredicate"
-                pattern="eslint"/>
+                pattern="eslint|blah|.*tests\.Test.*|p|test.*"/>
           </operand>
         </predicate>
       </sourceLocator>
