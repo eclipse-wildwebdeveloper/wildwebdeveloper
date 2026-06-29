@@ -29,7 +29,7 @@ Project committers must 📧 join the wildwebdeveloper-dev@eclipse.org mailing l
 
 ## 🆕 Trying latest builds
 
-Latest builds, for testing, can be found at `https://download.eclipse.org/wildwebdeveloper/updates/nightly/latest/`.
+Latest builds, for testing, can be found at [`https://download.eclipse.org/wildwebdeveloper/updates/nightly/latest/`](https://download.eclipse.org/wildwebdeveloper/updates/nightly/latest/).
 
 ## 🧑‍💻 Developer resources
 
