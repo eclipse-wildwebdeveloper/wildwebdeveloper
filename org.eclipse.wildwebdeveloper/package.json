@@ -12,7 +12,7 @@
     "vscode-html-languageservice": "5.6.2",
     "vscode-json-languageservice": "5.7.2",
     "vscode-markdown-languageserver": "^0.5.0-alpha.12",
-    "markdown-it": "14.2.0",
+    "markdown-it": "14.3.0",
     "@vue/language-server": "3.3.5",
     "@vue/typescript-plugin": "3.3.5",
     "vscode-css-languageserver": "file:target/vscode-css-languageserver-10.0.0.tgz",
