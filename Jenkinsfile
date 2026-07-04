@@ -146,7 +146,7 @@ BRANCH_NAME=${env.BRANCH_NAME}
         environment name: 'PROMOTE', value: 'true'
       }
       agent {
-        label 'ubuntu-latest'
+        label 'centos-latest'
       }
       tools {
         maven 'apache-maven-latest'
@@ -161,6 +161,21 @@ BRANCH_NAME=${env.BRANCH_NAME}
           promote();
         }
       }
+    }
+  }
+
+  post {
+    failure {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[WildWebDeveloper CI] Build Failure ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br>Build Number: ${env.BUILD_NUMBER}<br>Build URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a><br>Console: <a href='${env.BUILD_URL}/console'>${env.BUILD_URL}/console</a>"
+    }
+    fixed {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[WildWebDeveloper CI] Back to normal ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br>Build Number: ${env.BUILD_NUMBER}<br>Build URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a><br>Console: <a href='${env.BUILD_URL}/console'>${env.BUILD_URL}/console</a>"
     }
   }
 }
