@@ -3,7 +3,7 @@
     "@angular/language-server": "22.0.6",
     "astro-vscode": "2.16.17",
     "firefox-debugadapter": "2.15.0",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-language-server": "5.3.0",
     "ts-lit-plugin": "2.0.2",
     "typescript-plugin-css-modules": "5.2.0",
