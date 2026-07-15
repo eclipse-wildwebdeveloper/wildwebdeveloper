@@ -143,6 +143,7 @@ BRANCH_NAME=${env.BRANCH_NAME}
 
     stage('Deploy') {
       when {
+        beforeAgent true
         environment name: 'PROMOTE', value: 'true'
       }
       agent any
