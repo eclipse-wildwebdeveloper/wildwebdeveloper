@@ -145,9 +145,7 @@ BRANCH_NAME=${env.BRANCH_NAME}
       when {
         environment name: 'PROMOTE', value: 'true'
       }
-      agent {
-        label 'centos-latest'
-      }
+      agent any
       tools {
         maven 'apache-maven-latest'
         jdk 'temurin-jdk21-latest'
