@@ -81,7 +81,7 @@ jobs:
 
     # CodeQL executes https://github.com/ferstl/depgraph-maven-plugin
     - name: "Install: JDK 21 for Maven/Tycho ☕"
-      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      uses: actions/setup-java@v5.6.0  # https://github.com/actions/setup-java
       if: matrix.language == 'java'
       with:
         distribution: temurin
