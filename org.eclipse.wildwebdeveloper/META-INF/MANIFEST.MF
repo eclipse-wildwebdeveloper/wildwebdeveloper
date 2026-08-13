@@ -41,4 +41,6 @@ Export-Package: org.eclipse.wildwebdeveloper;x-friends:="org.eclipse.wildwebdeve
  org.eclipse.wildwebdeveloper.debug.npm;x-internal:=true,
  org.eclipse.wildwebdeveloper.markdown;x-friends:="org.eclipse.wildwebdeveloper.tests",
  org.eclipse.wildwebdeveloper.jsts;x-friends:="org.eclipse.wildwebdeveloper.tests",
- org.eclipse.wildwebdeveloper.jsts.ui.preferences;x-friends:="org.eclipse.wildwebdeveloper.tests"
+ org.eclipse.wildwebdeveloper.jsts.ui.preferences;x-friends:="org.eclipse.wildwebdeveloper.tests",
+ org.eclipse.wildwebdeveloper.json;x-friends:="org.eclipse.wildwebdeveloper.tests",
+ org.eclipse.wildwebdeveloper.json.ui.preferences;x-friends:="org.eclipse.wildwebdeveloper.tests"
