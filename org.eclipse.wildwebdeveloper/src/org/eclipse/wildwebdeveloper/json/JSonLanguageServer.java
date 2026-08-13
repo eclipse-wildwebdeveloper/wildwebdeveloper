@@ -37,7 +37,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.LanguageServersRegistry;
 import org.eclipse.lsp4e.LanguageServersRegistry.LanguageServerDefinition;
-import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
+import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
 import org.eclipse.lsp4j.jsonrpc.messages.ResponseMessage;
@@ -46,20 +46,26 @@ import org.eclipse.wildwebdeveloper.Activator;
 import org.eclipse.wildwebdeveloper.SchemaAssociationRegistry;
 import org.eclipse.wildwebdeveloper.SchemaAssociationsPreferenceInitializer;
 import org.eclipse.wildwebdeveloper.embedder.node.NodeJSManager;
+import org.eclipse.wildwebdeveloper.json.ui.preferences.JSonPreferenceServerConstants;
+import org.eclipse.wildwebdeveloper.ui.preferences.ProcessStreamConnectionProviderWithPreference;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 @SuppressWarnings("restriction")
-public class JSonLanguageServer extends ProcessStreamConnectionProvider {
+public class JSonLanguageServer extends ProcessStreamConnectionProviderWithPreference {
 	
 	public final static String SCHEMA_EXT = "org.eclipse.wildwebdeveloper.json.schema"; //$NON-NLS-1$
 	public final static String PATTERN_ATTR = "pattern"; //$NON-NLS-1$
 	public final static String URL_ATTR = "url"; //$NON-NLS-1$
 
+	public static final String JSON_LANGUAGE_SERVER_ID = "org.eclipse.wildwebdeveloper.json"; //$NON-NLS-1$
+
+	private static final String[] SUPPORTED_SECTIONS = { "json" }; //$NON-NLS-1$
+
 	private static final IPreferenceStore PREFERENCE_STORE = Activator.getDefault().getPreferenceStore();
 	private static final LanguageServerDefinition JSON_LS_DEFINITION = LanguageServersRegistry.getInstance()
-			.getDefinition("org.eclipse.wildwebdeveloper.json");
+			.getDefinition(JSON_LANGUAGE_SERVER_ID);
 	private static final IPropertyChangeListener PROPERTY_CHANGE_LISTENER = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
@@ -74,6 +80,7 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 	};
 
 	public JSonLanguageServer() {
+		super(JSON_LANGUAGE_SERVER_ID, PREFERENCE_STORE, SUPPORTED_SECTIONS);
 		List<String> commands = new ArrayList<>();
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
@@ -96,10 +103,16 @@ public class JSonLanguageServer extends ProcessStreamConnectionProvider {
 				// Language server side.
 				JSonLanguageServerInterface server = (JSonLanguageServerInterface) languageServer;
 				server.sendJSonchemaAssociations(getSchemaAssociations());
+				server.getWorkspaceService().didChangeConfiguration(new DidChangeConfigurationParams(createSettings()));
 			}
 		}
 	}
 	
+	@Override
+	protected Object createSettings() {
+		return JSonPreferenceServerConstants.getGlobalSettings();
+	}
+
 	private static Map<String, List<String>> getSchemaAssociations() {
 		Map<String, List<String>> associations = new HashMap<>();
 		fillSchemaAssociationsFromPreferenceStore(associations);
