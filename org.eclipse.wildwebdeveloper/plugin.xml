@@ -131,6 +131,19 @@
       </contentTypeMapping>
    </extension>
 
+   <extension point="org.eclipse.ui.preferencePages">
+      <page class="org.eclipse.wildwebdeveloper.json.ui.preferences.JSonPreferencePage"
+            id="org.eclipse.wildwebdeveloper.json.ui.preferences.JSonPreferencePage"
+            name="%JSonPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.json" />
+      </page>
+   </extension>
+   <extension point="org.eclipse.core.runtime.preferences"
+         id="JSonPreferenceInitializer"
+         name="JSonPreferenceInitializer">
+      <initializer class="org.eclipse.wildwebdeveloper.json.ui.preferences.JSonPreferenceInitializer" />
+   </extension>
+
    <!-- Markdown Language -->
    <extension point="org.eclipse.lsp4e.languageServer">
       <server id="org.eclipse.wildwebdeveloper.markdown"
@@ -1092,6 +1105,7 @@
    </extension>
    <extension point="org.eclipse.ui.keywords">
       <keyword label="%preferenceKeywords.yaml" id="org.eclipse.wildwebdeveloper.yaml"  />
+      <keyword label="%preferenceKeywords.json" id="org.eclipse.wildwebdeveloper.json" />
       <keyword label="%preferenceKeywords.js" id="org.eclipse.wildwebdeveloper.js" />
       <keyword label="%preferenceKeywords.ts" id="org.eclipse.wildwebdeveloper.ts" />
       <keyword label="%preferenceKeywords.javascript" id="org.eclipse.wildwebdeveloper.javascript" />
