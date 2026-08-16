@@ -4,7 +4,7 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
-    label="Wild Web Develope Development Environment">
+    label="Wild Web Developer Development Environment">
   <annotation
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
