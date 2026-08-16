@@ -16,7 +16,7 @@ spec:
   containers:
   - name: container
     image: docker.io/akurtakov/fedora-gtk3-mutter-java-node:f42-node24
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     tty: true
     resources:
       limits:
