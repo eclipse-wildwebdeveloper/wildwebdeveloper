@@ -2,13 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: WWD Tests
 Bundle-SymbolicName: org.eclipse.wildwebdeveloper.tests;singleton:=true
-Bundle-Version: 1.0.18.qualifier
+Bundle-Version: 1.0.19.qualifier
 Bundle-License: EPL-2.0;link="http://www.eclipse.org/legal/epl-2.0"
 Bundle-Vendor: Eclipse Wild Web Developer
 Automatic-Module-Name: org.eclipse.wildwebdeveloper.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.wildwebdeveloper;bundle-version="1.0.0",
  junit-jupiter-api;bundle-version="[6.0.0,7.0.0)",
+ junit-platform-engine;bundle-version="[6.0.0,7.0.0)",
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,

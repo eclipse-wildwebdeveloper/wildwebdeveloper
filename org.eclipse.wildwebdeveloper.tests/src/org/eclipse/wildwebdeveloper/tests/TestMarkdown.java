@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Vegard IT GmbH and others.
+ * Copyright (c) 2025, 2026 Vegard IT GmbH and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -14,6 +14,7 @@ package org.eclipse.wildwebdeveloper.tests;
 
 import static org.eclipse.core.resources.IMarker.*;
 import static org.eclipse.wildwebdeveloper.markdown.MarkdownDiagnosticsManager.MARKDOWN_MARKER_TYPE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationHandler;
@@ -22,27 +23,39 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServerWrapper;
 import org.eclipse.lsp4e.LanguageServiceAccessor;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
+import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.eclipse.lsp4j.DocumentDiagnosticParams;
 import org.eclipse.lsp4j.DocumentDiagnosticReport;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
+import org.eclipse.lsp4j.RelatedFullDocumentDiagnosticReport;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -56,6 +69,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 record MarkdownTest(String markdown, String messagePattern, int severity) {
 }
 
+/**
+ * Verifies Markdown language features and the lifecycle of their workspace problem markers.
+ */
 @ExtendWith(AllCleanRule.class)
 class TestMarkdown {
 
@@ -83,11 +99,11 @@ class TestMarkdown {
 				});
 
 		final InvocationHandler serverHandler = (proxy, method, args) -> (switch (method.getName()) {
-		case "getTextDocumentService" -> textDocumentService;
-		case "getWorkspaceService" -> null;
-		case "initialize", "shutdown" -> CompletableFuture.completedFuture(null);
-		case "exit" -> null;
-		default -> null;
+			case "getTextDocumentService" -> textDocumentService;
+			case "getWorkspaceService" -> null;
+			case "initialize", "shutdown" -> CompletableFuture.completedFuture(null);
+			case "exit" -> null;
+			default -> null;
 		});
 
 		final var server = (LanguageServer) Proxy.newProxyInstance(TestMarkdown.class.getClassLoader(),
@@ -104,6 +120,301 @@ class TestMarkdown {
 			Thread.sleep(20);
 		}
 		return condition.getAsBoolean();
+	}
+
+	private IFile createDiagnosticFile() throws Exception {
+		// Register the buffer listener before opening a buffer, without starting a real language server.
+		Class.forName(MarkdownDiagnosticsManager.class.getName());
+		final var project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(getClass().getName() + ".lifecycle." + System.nanoTime());
+		project.create(null);
+		project.open(null);
+		final var file = project.getFile("doc.md");
+		file.create("# Title\nBody\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+		return file;
+	}
+
+	private static CompletableFuture<?> requestDiagnostics(final IFile file, final DiagnosticSpy spy) throws Exception {
+		// Inject a controllable server at the existing request boundary; no production test API is needed.
+		final var method = MarkdownDiagnosticsManager.class.getDeclaredMethod("refreshFile", IFile.class,
+				LanguageServer.class, ITextFileBuffer.class, boolean.class);
+		method.setAccessible(true);
+		return (CompletableFuture<?>) method.invoke(null, file, spy.server(),
+				FileBuffers.getTextFileBufferManager().getTextFileBuffer(file.getFullPath(), LocationKind.IFILE), false);
+	}
+
+	private static DocumentDiagnosticReport diagnosticReport(final String... messages) {
+		final var diagnostics = new ArrayList<Diagnostic>();
+		for (final String message : messages) {
+			final var diagnostic = new Diagnostic();
+			diagnostic.setMessage(message);
+			diagnostic.setSeverity(DiagnosticSeverity.Warning);
+			diagnostic.setRange(new Range(new Position(1, 0), new Position(1, 4)));
+			diagnostics.add(diagnostic);
+		}
+		final var report = new RelatedFullDocumentDiagnosticReport();
+		report.setItems(diagnostics);
+		return new DocumentDiagnosticReport(report);
+	}
+
+	private static void awaitDiagnosticMarkers() {
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5_000,
+				() -> Job.getJobManager().find(MarkdownDiagnosticsManager.class).length == 0),
+				"Markdown marker jobs did not finish");
+	}
+
+	private static void awaitDiagnosticRefresh(final CompletableFuture<?> refresh) {
+		// Jobs leave the manager before their done listeners complete the refresh future.
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5_000, refresh::isDone),
+				"Markdown diagnostic refresh did not finish");
+		refresh.join();
+	}
+
+	private static List<String> diagnosticMessages(final IFile file) throws CoreException {
+		final var messages = new ArrayList<String>();
+		for (final var marker : file.findMarkers(MARKDOWN_MARKER_TYPE, true, IResource.DEPTH_ZERO)) {
+			messages.add(marker.getAttribute(IMarker.MESSAGE, ""));
+		}
+		Collections.sort(messages);
+		return messages;
+	}
+
+	@Test
+	void disposingMarkdownBufferDoesNotWaitForWorkspaceNotification() throws Exception {
+		final var file = createDiagnosticFile();
+		final var workspace = ResourcesPlugin.getWorkspace();
+		final var manager = FileBuffers.getTextFileBufferManager();
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		// Two viewers may share the file; only the last disconnect disposes its buffer.
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		final var markdownMarker = file.createMarker(MARKDOWN_MARKER_TYPE);
+		final var otherMarker = file.createMarker(IMarker.PROBLEM);
+		final var notificationEntered = new CountDownLatch(1);
+		final var releaseNotification = new CountDownLatch(1);
+		final var disposalReturned = new CountDownLatch(1);
+		final IResourceChangeListener listener = event -> {
+			if (event.getDelta() == null || event.getDelta().findMember(file.getFullPath()) == null)
+				return;
+			notificationEntered.countDown();
+			try {
+				releaseNotification.await(10, TimeUnit.SECONDS);
+			} catch (final InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+		};
+		workspace.addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
+		final var notificationJob = Job.create("Hold a resource change notification", monitor -> {
+			otherMarker.setAttribute(IMarker.MESSAGE, "Trigger POST_CHANGE");
+		});
+		try {
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			assertTrue(markdownMarker.exists(), "A remaining buffer consumer must retain Markdown markers");
+			notificationJob.schedule();
+			assertTrue(notificationEntered.await(5, TimeUnit.SECONDS), "Resource notification did not start");
+			// Release the workspace independently even when the old implementation blocks the UI thread.
+			// The assertion checks ordering, rather than relying on how long disconnect normally takes.
+			final var returnedBeforeRelease = CompletableFuture.supplyAsync(() -> {
+				try {
+					return disposalReturned.await(5, TimeUnit.SECONDS);
+				} catch (final InterruptedException ex) {
+					Thread.currentThread().interrupt();
+					return false;
+				} finally {
+					releaseNotification.countDown();
+				}
+			});
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			disposalReturned.countDown();
+			assertTrue(returnedBeforeRelease.get(10, TimeUnit.SECONDS),
+					"Buffer disposal waited for workspace access on the UI thread");
+			awaitDiagnosticMarkers();
+			assertTrue(!markdownMarker.exists(), "Closing the buffer must eventually remove Markdown markers");
+			assertTrue(otherMarker.exists(), "Cleanup must preserve other marker types");
+		} finally {
+			releaseNotification.countDown();
+			workspace.removeResourceChangeListener(listener);
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5_000,
+					() -> notificationJob.getState() == Job.NONE), "Resource notification did not finish");
+		}
+	}
+
+	@Test
+	void reopeningMarkdownBufferPreservesMarkersFromItsNewSession() throws Exception {
+		final var file = createDiagnosticFile();
+		final var manager = FileBuffers.getTextFileBufferManager();
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		final var jobs = Job.getJobManager();
+		try {
+			// Queue close cleanup but reopen before it can run, as compare-editor input replacement can do.
+			jobs.suspend();
+			try {
+				manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+				manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+				file.createMarker(MARKDOWN_MARKER_TYPE).setAttribute(IMarker.MESSAGE, "fresh");
+			} finally {
+				jobs.resume();
+			}
+			awaitDiagnosticMarkers();
+			assertEquals(List.of("fresh"), diagnosticMessages(file));
+		} finally {
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			awaitDiagnosticMarkers();
+		}
+	}
+
+	@Test
+	void lateMarkdownDiagnosticsDoNotRestoreMarkersAfterClose() throws Exception {
+		final var file = createDiagnosticFile();
+		final var manager = FileBuffers.getTextFileBufferManager();
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		final var spy = newDiagnosticSpy();
+		try {
+			requestDiagnostics(file, spy);
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			awaitDiagnosticMarkers();
+			spy.lastFuture().get().complete(diagnosticReport("stale"));
+			awaitDiagnosticMarkers();
+			assertEquals(List.of(), diagnosticMessages(file));
+		} finally {
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+		}
+	}
+
+	@Test
+	void reopeningMarkdownBufferStartsFreshDiagnosticsWhileOldRequestIsPending() throws Exception {
+		final var file = createDiagnosticFile();
+		final var manager = FileBuffers.getTextFileBufferManager();
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		final var spy = newDiagnosticSpy();
+		CompletableFuture<DocumentDiagnosticReport> oldRequest = null;
+		try {
+			requestDiagnostics(file, spy);
+			oldRequest = spy.lastFuture().get();
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+			requestDiagnostics(file, spy);
+			assertEquals(2, spy.calls().get(), "An old session must not suppress a new session's diagnostic request");
+			spy.lastFuture().get().complete(diagnosticReport("fresh"));
+			awaitDiagnosticMarkers();
+			oldRequest.complete(diagnosticReport("stale"));
+			awaitDiagnosticMarkers();
+			assertEquals(List.of("fresh"), diagnosticMessages(file));
+		} finally {
+			if (oldRequest != null)
+				oldRequest.complete(null);
+			if (spy.lastFuture().get() != null)
+				spy.lastFuture().get().complete(null);
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			awaitDiagnosticMarkers();
+		}
+	}
+
+	@Test
+	void markdownDiagnosticsForClosedFilesKeepAllMarkers() throws Exception {
+		final var file = createDiagnosticFile();
+		final var spy = newDiagnosticSpy();
+		requestDiagnostics(file, spy);
+		// Each range used to open and dispose a shared buffer, deleting markers from earlier ranges.
+		spy.lastFuture().get().complete(diagnosticReport("first", "second"));
+		awaitDiagnosticMarkers();
+		assertEquals(List.of("first", "second"), diagnosticMessages(file));
+		assertEquals(null, FileBuffers.getTextFileBufferManager().getTextFileBuffer(file.getFullPath(), LocationKind.IFILE));
+	}
+
+	@Test
+	void markdownRefreshStaysInFlightUntilMarkersAreApplied() throws Exception {
+		final var file = createDiagnosticFile();
+		final var spy = newDiagnosticSpy();
+		final var jobs = Job.getJobManager();
+		final CompletableFuture<?> refresh;
+		// A completed LS response must still suppress duplicate pulls while its marker write is queued.
+		jobs.suspend();
+		try {
+			refresh = requestDiagnostics(file, spy);
+			spy.lastFuture().get().complete(diagnosticReport("queued"));
+			requestDiagnostics(file, spy);
+			assertEquals(1, spy.calls().get());
+		} finally {
+			jobs.resume();
+		}
+		awaitDiagnosticRefresh(refresh);
+		assertEquals(List.of("queued"), diagnosticMessages(file));
+		requestDiagnostics(file, spy);
+		assertEquals(2, spy.calls().get(), "A completed marker write must allow the next refresh");
+		spy.lastFuture().get().complete(null);
+	}
+
+	@Test
+	void serverRefreshDuringQueuedMarkdownMarkersRunsAgain() throws Exception {
+		final var file = createDiagnosticFile();
+		final var manager = FileBuffers.getTextFileBufferManager();
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		final var spy = newDiagnosticSpy();
+		final var jobs = Job.getJobManager();
+		Job markerJob = null;
+		try {
+			jobs.suspend();
+			try {
+				requestDiagnostics(file, spy);
+				spy.lastFuture().get().complete(diagnosticReport("stale"));
+				final var markerJobs = jobs.find(MarkdownDiagnosticsManager.class);
+				assertEquals(1, markerJobs.length);
+				markerJob = markerJobs[0];
+				// Hold only marker application so the server's debounced refresh can still run.
+				assertTrue(markerJob.sleep(), "Marker application must remain queued");
+			} finally {
+				jobs.resume();
+			}
+			for (int refresh = 0; refresh < 3; refresh++) {
+				MarkdownDiagnosticsManager.refreshAllOpenMarkdownFiles(spy.server());
+				final var field = MarkdownDiagnosticsManager.class.getDeclaredField("REFRESH_JOB");
+				field.setAccessible(true);
+				// Await consumption of each invalidation, not merely expiration of its debounce delay.
+				((Job) field.get(null)).join();
+			}
+			assertEquals(1, spy.calls().get(), "Server invalidations must not overlap the active refresh");
+			final var firstResponse = spy.lastFuture().get();
+			markerJob.wakeUp();
+			assertTrue(waitUpTo(5_000, () -> spy.lastFuture().get() != firstResponse),
+					"A server invalidation received during marker application must trigger a follow-up pull");
+			assertEquals(2, spy.calls().get(), "Pending server invalidations must coalesce into one follow-up pull");
+			// Observe the active follow-up through the same boundary used by opportunistic parser pulls.
+			// This also ensures its response handler is attached before the test completes that response.
+			final var followUp = requestDiagnostics(file, spy);
+			spy.lastFuture().get().complete(diagnosticReport("fresh"));
+			awaitDiagnosticRefresh(followUp);
+			assertEquals(2, spy.calls().get(), "An opportunistic pull must not request another follow-up");
+			assertEquals(List.of("fresh"), diagnosticMessages(file));
+		} finally {
+			if (markerJob != null)
+				markerJob.wakeUp();
+			if (spy.lastFuture().get() != null)
+				spy.lastFuture().get().complete(null);
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			awaitDiagnosticMarkers();
+		}
+	}
+
+	@Test
+	void markdownDiagnosticOffsetsUseUnsavedEditorContent() throws Exception {
+		final var file = createDiagnosticFile();
+		final var manager = FileBuffers.getTextFileBufferManager();
+		manager.connect(file.getFullPath(), LocationKind.IFILE, null);
+		try {
+			final var document = manager.getTextFileBuffer(file.getFullPath(), LocationKind.IFILE).getDocument();
+			document.set("# A longer unsaved title\nBody\n");
+			final var spy = newDiagnosticSpy();
+			requestDiagnostics(file, spy);
+			spy.lastFuture().get().complete(diagnosticReport("unsaved"));
+			awaitDiagnosticMarkers();
+			final var markers = file.findMarkers(MARKDOWN_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+			assertEquals(1, markers.length);
+			assertEquals(document.getLineOffset(1), markers[0].getAttribute(IMarker.CHAR_START, -1));
+		} finally {
+			manager.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+			awaitDiagnosticMarkers();
+		}
 	}
 
 	@Test
@@ -159,6 +470,7 @@ class TestMarkdown {
 	}
 
 	@Test
+	@SuppressWarnings("restriction")
 	void diagnosticsCoverTypicalMarkdownIssues() throws Exception {
 		var project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.nanoTime());
 		project.create(null);
@@ -240,6 +552,7 @@ class TestMarkdown {
 	}
 
 	@Test
+	@SuppressWarnings("restriction")
 	void workspaceHeaderCompletionsRespectExcludeGlobs() throws Exception {
 		var project = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + ".hdr" + System.nanoTime());
 		project.create(null);
