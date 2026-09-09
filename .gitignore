@@ -1,4 +1,29 @@
+# Local work folders that are not checked in
+/_*/
+
+# Ignore dotfiles/directories by default
+.*
+
+# Repository-level dotfiles that should be tracked
+!.git*
+
+# Eclipse
+/bin/
+/*/bin/
+!**/.classpath
+!**/.project
+!**/.settings/
+!**/.settings/**
+
 # Maven
+!**/.mvn/
 target/
-.polyglot.META-INF
 build.log
+
+# Vim
+*.swo
+*.swp
+
+# Patch/reject files
+*.orig
+*.rej
