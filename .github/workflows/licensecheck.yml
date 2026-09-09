@@ -1,3 +1,4 @@
+# Checks Maven and NPM dependency licenses and reports content requiring review.
 # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 name: License check
 
@@ -10,6 +11,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     - '**/package-lock.json'
     - '**/pom.xml'
     - '**/*.target'
+    - '.github/workflows/licensecheck.yml'
   pull_request:
     branches: 
      - 'master'
@@ -18,6 +20,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     - '**/package-lock.json'
     - '**/pom.xml'
     - '**/*.target'
+    - '.github/workflows/licensecheck.yml'
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -109,8 +112,11 @@ jobs:
         gitlabAPIToken="${{ secrets.GITLAB_API_TOKEN }}"
         dashLicenseToolJar=$(ls ~/.m2/repository/org/eclipse/dash/org.eclipse.dash.licenses/1.1.0/org.eclipse.dash.licenses-*.jar | tail -n 1)
         npmArgs=" --no-bin-links --ignore-scripts"
-        dashArgs="-excludeSources local -summary $savePWD/target/dash/npm-review-summary"
-        exitStatus=0
+
+        # NOTE: Smaller batches may avoid ClearlyDefined timeouts (eclipse-dash/dash-licenses#603).
+        # Revisit after upstream timeout handling is released and validated in this workflow.
+        dashArgs="-batch 20 -excludeSources local -summary $savePWD/target/dash/npm-review-summary"
+
         if [ -n "$gitlabAPIToken" ]; then
           # A GitLab token is available (e.g. on branches/PRs that can access
           # repository secrets), so request a review automatically. Dependabot
@@ -127,12 +133,19 @@ jobs:
         # the review requests that dash-licenses creates (they are logged to the
         # console but are not part of the -summary CSV file).
         java -jar $dashLicenseToolJar $dashArgs org.eclipse.wildwebdeveloper/package-lock.json 2>&1 | tee "$savePWD/target/dash/npm-review-log"
-        currentStatus=${PIPESTATUS[0]}
-        if [[ $currentStatus != 0 ]]; then
-          exitStatus=$(($exitStatus + $currentStatus)) # Save for future
+
+        # Capture Dash's status immediately; the pipeline's status belongs to tee.
+        exitStatus=${PIPESTATUS[0]}
+        echo "Dash exit code: $exitStatus"
+
+        # Dash 1.1.0 reserves 1-126 for completed checks with unvetted content.
+        # Leave build-succeeded unset on execution errors so review reporting is skipped.
+        if (( exitStatus >= 127 )); then
+          echo "::error::Dash could not complete the NPM license check (exit $exitStatus). See the npm-review-log artifact."
+          exit "$exitStatus"
         fi
         cd $savePWD
-        
+
         echo ""
         if [[ $exitStatus == 0 ]]; then # All licenses are vetted
           # echo "::set-output name=build-succeeded::$(echo 1)"
