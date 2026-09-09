@@ -22,16 +22,20 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.IFileBuffer;
 import org.eclipse.core.filebuffers.IFileBufferListener;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,6 +47,7 @@ import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.lsp4e.LanguageServers;
@@ -62,6 +67,7 @@ import org.eclipse.lsp4j.services.LanguageServer;
 
 /**
  * Pulls diagnostics from the Markdown language server and maps them to Eclipse problem markers.
+ * Marker writes run in background workspace jobs so buffer disposal does not wait for workspace access.
  */
 public final class MarkdownDiagnosticsManager {
 
@@ -73,8 +79,25 @@ public final class MarkdownDiagnosticsManager {
 
 	private static final Set<IFile> OPEN_MARKDOWN_FILES = ConcurrentHashMap.newKeySet();
 
-	/** De-dupes diagnostic pulls so repeated refresh requests do not start overlapping diagnostics for the same file/server */
-	private static final ConcurrentHashMap<String, CompletableFuture<Void>> IN_FLIGHT_REFRESHES = new ConcurrentHashMap<>();
+	/** Tracks a buffer's refresh through marker writes and coalesces later server invalidations. */
+	private record DiagnosticRefresh(ITextFileBuffer buffer, CompletableFuture<Void> completion, AtomicBoolean invalidated) {
+	}
+
+	/** De-dupes diagnostic pulls for the same file/server without suppressing a reopened buffer's first request. */
+	private static final ConcurrentHashMap<String, DiagnosticRefresh> IN_FLIGHT_REFRESHES = new ConcurrentHashMap<>();
+
+	/**
+	 * Prevents diagnostic updates and marker deletion after buffer disposal
+	 * from running concurrently, even when the workspace marker rule is null.
+	 */
+	private static final JobGroup MARKER_JOBS = new JobGroup("Wild Web Developer Markdown markers", 1, 0) {
+		@Override
+		protected boolean shouldCancel(final IStatus lastCompletedJobResult, final int numberOfFailedJobs,
+				final int numberOfCanceledJobs) {
+			// A failure for one file must not cancel pending marker work for other files.
+			return false;
+		}
+	};
 
 	/** Servers that requested a refresh since the last debounce run (identity-based: some LS proxies do not implement hashCode()) */
 	private static final Set<LanguageServer> PENDING_REFRESH_SERVERS = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -176,10 +199,16 @@ public final class MarkdownDiagnosticsManager {
 
 					OPEN_MARKDOWN_FILES.remove(file);
 
-					/*
-					 * remove all problem markers on editor close
-					 */
-					clearMarkers(file);
+					// Compare-editor input replacement can dispose buffers on the UI thread while a
+					// resource notification owns the workspace. Never wait for marker writes here.
+					scheduleMarkerUpdate(file, "Clear Markdown diagnostics", monitor -> {
+						// A delayed close must not erase markers belonging to a reopened buffer.
+						if (file.isAccessible() && getSharedBuffer(file) == null)
+							clearMarkers(file);
+					}).exceptionally(ex -> {
+						ILog.get().warn(ex.getMessage(), ex);
+						return null;
+					});
 				} catch (Exception ex) {
 					ILog.get().warn(ex.getMessage(), ex);
 				}
@@ -241,7 +270,7 @@ public final class MarkdownDiagnosticsManager {
 		return markerKey(message, severity, charStart, charEnd);
 	}
 
-	private static synchronized void applyMarkers(final IFile file, final List<Diagnostic> diagnostics) {
+	private static void applyMarkers(final IFile file, final List<Diagnostic> diagnostics) {
 		try {
 			final var markdownMarkers = new HashMap<String, IMarker>();
 			for (final IMarker m : file.findMarkers(MARKDOWN_MARKER_TYPE, true, IResource.DEPTH_ZERO)) {
@@ -326,18 +355,57 @@ public final class MarkdownDiagnosticsManager {
 		return out;
 	}
 
-	private static void handleDiagnosticReport(final IFile file, final DocumentDiagnosticReport report) {
-		if (file == null || !file.exists() || report == null)
-			return;
+	private static CompletableFuture<Void> scheduleMarkerUpdate(final IFile file, final String name,
+			final ICoreRunnable update) {
+		final var completion = new CompletableFuture<Void>();
+		final var job = new WorkspaceJob(name) {
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+				update.run(monitor);
+				return Status.OK_STATUS;
+			}
 
-		if (report.isRight()) {
-			// Unchanged for the main document: do not touch markers
-			return;
-		}
+			@Override
+			public boolean belongsTo(final Object family) {
+				return family == MarkdownDiagnosticsManager.class;
+			}
+		};
+		job.setRule(ResourcesPlugin.getWorkspace().getRuleFactory().markerRule(file));
+		job.setJobGroup(MARKER_JOBS);
+		job.setSystem(true);
+		job.addJobChangeListener(new JobChangeAdapter() {
+			@Override
+			public void done(final IJobChangeEvent event) {
+				// Finish the request after the workspace job, including cancellation or
+				// failure.
+				if (event.getResult().isOK())
+					completion.complete(null);
+				else
+					completion.completeExceptionally(new CoreException(event.getResult()));
+			}
+		});
+		job.schedule();
+		return completion;
+	}
 
-		if (report.isLeft()) {
-			applyMarkers(file, extractDiagnostics(report.getLeft()));
-		}
+	private static ITextFileBuffer getSharedBuffer(final IFile file) {
+		return FileBuffers.getTextFileBufferManager().getTextFileBuffer(file.getFullPath(), LocationKind.IFILE);
+	}
+
+	private static CompletableFuture<Void> handleDiagnosticReport(final IFile file, final ITextFileBuffer requestBuffer,
+			final DocumentDiagnosticReport report) {
+		// An unchanged report retains the current markers.
+		if (report == null || !report.isLeft())
+			return CompletableFuture.completedFuture(null);
+
+		return scheduleMarkerUpdate(file, "Update Markdown diagnostics", monitor -> {
+			// Check at execution time: a queued response must not outlive its buffer
+			// session.
+			// Null still permits explicit pulls for unopened files without creating an
+			// editor buffer.
+			if (file.isAccessible() && getSharedBuffer(file) == requestBuffer)
+				applyMarkers(file, extractDiagnostics(report.getLeft()));
+		});
 	}
 
 	private static void scheduleRefreshAllOpenMarkdownFiles(final LanguageServer languageServer) {
@@ -371,7 +439,11 @@ public final class MarkdownDiagnosticsManager {
 							for (final IFile file : openFiles) {
 								if (monitor.isCanceled())
 									break;
-								refreshFile(file, ls);
+								final var buffer = getSharedBuffer(file);
+								// A file closed since the snapshot is not an explicit unopened-file pull.
+								if (buffer != null) {
+									refreshFile(file, ls, buffer, true);
+								}
 							}
 						}
 						return Status.OK_STATUS;
@@ -404,8 +476,10 @@ public final class MarkdownDiagnosticsManager {
 
 			// Debounce: keep only the latest refresh request.
 			//
-			// Avoid (re-)scheduling while RUNNING; schedule() would throw IllegalStateException.
-			// Instead, mark pending and let the JobChangeListener reschedule once it completes.
+			// Avoid (re-)scheduling while RUNNING; schedule() would throw
+			// IllegalStateException.
+			// Instead, mark pending and let the JobChangeListener reschedule once it
+			// completes.
 			if (REFRESH_JOB.getState() == Job.RUNNING) {
 				REFRESH_RESCHEDULE_REQUESTED = true;
 				return;
@@ -429,42 +503,64 @@ public final class MarkdownDiagnosticsManager {
 			if (file == null || !file.exists())
 				return;
 
+			// Keep the original session even if server discovery completes after close/reopen.
+			final var buffer = getSharedBuffer(file);
+
 			LanguageServers.forProject(file.getProject())
 					.withPreferredServer(
 							LanguageServersRegistry.getInstance().getDefinition(MarkdownLanguageServer.MARKDOWN_LANGUAGE_SERVER_ID))
 					.excludeInactive()
 					.collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
-					.thenAccept(lss -> lss.forEach(ls -> refreshFile(file, ls)));
+					.thenAccept(lss -> lss.forEach(ls -> refreshFile(file, ls, buffer, false)));
 		} catch (final Exception ex) {
 			ILog.get().warn(ex.getMessage(), ex);
 		}
 	}
 
-	private static void refreshFile(final IFile file, final LanguageServer languageServer) {
+	private static CompletableFuture<Void> refreshFile(final IFile file, final LanguageServer languageServer,
+			final ITextFileBuffer requestBuffer, final boolean serverInvalidation) {
 		if (file == null || !file.exists() || languageServer == null)
-			return;
+			return CompletableFuture.completedFuture(null);
+		if (getSharedBuffer(file) != requestBuffer)
+			return CompletableFuture.completedFuture(null);
 
 		// Include language server identity so de-duping does not hide refreshes across different server instances.
 		final String key = file.getFullPath().toString() + "@" + System.identityHashCode(languageServer);
-		IN_FLIGHT_REFRESHES.compute(key, (k, existing) -> {
-			if (existing != null && !existing.isDone())
+		final var refresh = IN_FLIGHT_REFRESHES.compute(key, (k, existing) -> {
+			// Reopening must bypass an old session's request even while that request is pending.
+			if (existing != null && existing.buffer() == requestBuffer && !existing.completion().isDone()) {
+				// A server invalidation needs fresh diagnostics after the current request. Parser calls can
+				// be caused by that request itself, so retrying those would create a diagnostic loop.
+				if (serverInvalidation)
+					existing.invalidated().set(true);
 				return existing;
+			}
 
 			final String uri = toLspFileUri(file);
 			final var params = new DocumentDiagnosticParams();
 			params.setTextDocument(new TextDocumentIdentifier(uri));
 
-			final CompletableFuture<Void> started = languageServer.getTextDocumentService()
-					.diagnostic(params)
+			final CompletableFuture<Void> started = languageServer.getTextDocumentService().diagnostic(params)
 					.orTimeout(DIAGNOSTICS_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-					.thenAccept(report -> handleDiagnosticReport(file, report))
-					.exceptionally(ex -> {
+					// Keep de-duplication active while marker work is queued, not just during the LS call.
+					.thenCompose(report -> handleDiagnosticReport(file, requestBuffer, report)).exceptionally(ex -> {
 						ILog.get().warn(ex.getMessage(), ex);
 						return null;
 					});
 
-			started.whenComplete((v, ex) -> IN_FLIGHT_REFRESHES.remove(k, started));
-			return started;
+			return new DiagnosticRefresh(requestBuffer, started, new AtomicBoolean());
+		});
+		// Register outside compute: an already-completed response must not recursively update the map.
+		// Conditional removal protects newer sessions and lets only one caller start the coalesced follow-up.
+		return refresh.completion().whenComplete((v, ex) -> {
+			if (IN_FLIGHT_REFRESHES.remove(key, refresh) && refresh.invalidated().get()) {
+				// Reuse the captured buffer so the entry check discards invalidations after close/reopen.
+				refreshFile(file, languageServer, requestBuffer, false);
+			}
+		}).exceptionally(ex -> {
+			// Starting the follow-up can throw before a response future is returned.
+			ILog.get().warn(ex.getMessage(), ex);
+			return null;
 		});
 	}
 
@@ -489,28 +585,36 @@ public final class MarkdownDiagnosticsManager {
 	}
 
 	private static int[] toOffsets(final IFile file, final Range range) throws CoreException, BadLocationException {
-		// Connect ensures a document is available even if no editor is open
-		final var mgr = FileBuffers.getTextFileBufferManager();
+		// Use the live document so offsets include unsaved editor changes, without taking ownership.
+		final var sharedBuffer = getSharedBuffer(file);
+		if (sharedBuffer != null)
+			return toOffsets(sharedBuffer.getDocument(), range);
+
+		// Temporary reads must not fire shared-buffer lifecycle events and schedule cleanup of
+		// the markers being applied. A private manager still preserves file encoding handling.
+		final var mgr = FileBuffers.createTextFileBufferManager();
 		final var path = file.getFullPath();
 		mgr.connect(path, LocationKind.IFILE, null);
 		try {
 			final var buf = mgr.getTextFileBuffer(path, LocationKind.IFILE);
-			final IDocument doc = buf != null ? buf.getDocument() : null;
-			if (doc == null) {
-				return new int[] { 0, 0 };
-			}
-			final int startLine = Math.max(0, range.getStart().getLine());
-			final int startCol = Math.max(0, range.getStart().getCharacter());
-			final int endLine = Math.max(0, range.getEnd().getLine());
-			final int endCol = Math.max(0, range.getEnd().getCharacter());
-			int start = Math.min(doc.getLength(), doc.getLineOffset(startLine) + startCol);
-			int end = Math.min(doc.getLength(), doc.getLineOffset(endLine) + endCol);
-			if (end < start)
-				end = start;
-			return new int[] { start, end };
+			return toOffsets(buf != null ? buf.getDocument() : null, range);
 		} finally {
 			mgr.disconnect(path, LocationKind.IFILE, null);
 		}
+	}
+
+	private static int[] toOffsets(final IDocument doc, final Range range) throws BadLocationException {
+		if (doc == null)
+			return new int[] { 0, 0 };
+		final int startLine = Math.max(0, range.getStart().getLine());
+		final int startCol = Math.max(0, range.getStart().getCharacter());
+		final int endLine = Math.max(0, range.getEnd().getLine());
+		final int endCol = Math.max(0, range.getEnd().getCharacter());
+		int start = Math.min(doc.getLength(), doc.getLineOffset(startLine) + startCol);
+		int end = Math.min(doc.getLength(), doc.getLineOffset(endLine) + endCol);
+		if (end < start)
+			end = start;
+		return new int[] { start, end };
 	}
 
 	private MarkdownDiagnosticsManager() {
