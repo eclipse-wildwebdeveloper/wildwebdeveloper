@@ -4,7 +4,7 @@
     "astro-vscode": "2.16.20",
     "firefox-debugadapter": "2.15.0",
     "typescript": "6.0.3",
-    "typescript-language-server": "5.3.0",
+    "typescript-language-server": "6.0.0",
     "ts-lit-plugin": "2.0.2",
     "typescript-plugin-css-modules": "5.2.0",
     "yaml-language-server": "1.24.0",
