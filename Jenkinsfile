@@ -149,7 +149,7 @@ BRANCH_NAME=${env.BRANCH_NAME}
       agent any
       tools {
         maven 'apache-maven-latest'
-        jdk 'temurin-jdk21-latest'
+        jdk 'temurin-jdk25-latest'
       }
       options {
         skipDefaultCheckout true
