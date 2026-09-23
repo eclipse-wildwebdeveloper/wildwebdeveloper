@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   update:
-    uses: eclipse-platform/eclipse.platform.releng.aggregator/.github/workflows/updateTarget.yml@f1e57c36f35096552708c817f1f9880c931bb5cf # master
+    uses: eclipse-platform/eclipse.platform.releng.aggregator/.github/workflows/updateTarget.yml@master
     with:
       author: wildwebdeveloper-bot <wildwebdeveloper-bot@eclipse.org>
       path: 'target-platform'
