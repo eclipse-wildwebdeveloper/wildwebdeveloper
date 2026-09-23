@@ -239,7 +239,7 @@ jobs:
 
 
     - name: "SSH session for debugging: start"
-      uses: mxschmitt/action-tmate@v3  # https://github.com/mxschmitt/action-tmate
+      uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24 - https://github.com/mxschmitt/action-tmate
       if: always() && steps.DEBUG_SSH_SESSSION_CHECK.outputs.start_ssh_session
       with:
         limit-access-to-actor: ${{ inputs.debug-with-ssh-only-for-actor }}
