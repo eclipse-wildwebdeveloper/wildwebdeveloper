@@ -6,5 +6,5 @@ Bundle-Version: 1.1.10.qualifier
 Bundle-License: EPL-2.0;link="http://www.eclipse.org/legal/epl-2.0"
 Bundle-Vendor: Eclipse Wild Web Developer
 Fragment-Host: org.eclipse.wildwebdeveloper.embedder.node;bundle-version="1.0.0"
-Automatic-Module-Name: org.eclipse.wildwebdeveloper.embedder.node.macos
+Automatic-Module-Name: org.eclipse.wildwebdeveloper.embedder.node.macos.x86_64
 Eclipse-PlatformFilter: (& (osgi.os=macosx) (osgi.arch=x86_64))
