@@ -86,7 +86,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://github.com/microsoft/vscode-js-debug/releases/download/v1.83.0/js-debug-dap-v1.83.0.tar.gz</url>
+							<url>https://github.com/microsoft/vscode-js-debug/releases/download/v1.117.0/js-debug-dap-v1.117.0.tar.gz</url>
 							<outputFileName>js-debug.tar.gz</outputFileName>
 							<unpack>true</unpack>
 							<outputDirectory>${project.basedir}</outputDirectory>
