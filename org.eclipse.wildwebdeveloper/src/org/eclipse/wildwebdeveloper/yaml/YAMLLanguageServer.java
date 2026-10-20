@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -45,7 +45,7 @@ public class YAMLLanguageServer extends ProcessStreamConnectionProviderWithPrefe
 		commands.add(NodeJSManager.getNodeJsLocation().getAbsolutePath());
 		try {
 			URL url = FileLocator
-					.toFileURL(getClass().getResource("/node_modules/yaml-language-server/out/server/src/server.js"));
+					.toFileURL(getClass().getResource("/node_modules/yaml-language-server/out/src/server.js"));
 			commands.add(new java.io.File(url.getPath()).getAbsolutePath());
 			commands.add("--stdio");
 			setCommands(commands);
