@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -134,8 +135,17 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 				param.put(ARGUMENTS, args);
 			}
 		}
-		Map<String, String> env = configuration.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES,
-				Collections.emptyMap());
+		Map<String, String> env = new HashMap<>(configuration.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES,
+				Collections.emptyMap()));
+		// The debug adapter builds the debuggee's environment solely from the "env"
+		// launch parameter - the debuggee does not inherit the debug adapter's (or
+		// Eclipse's) environment. Variables the debuggee's runtime depends on, such
+		// as LD_LIBRARY_PATH needed by the embedded Node.js on some systems, must
+		// therefore be passed explicitly.
+		String ldLibraryPath = System.getenv("LD_LIBRARY_PATH"); //$NON-NLS-1$
+		if (ldLibraryPath != null && !ldLibraryPath.isBlank()) {
+			env.putIfAbsent("LD_LIBRARY_PATH", ldLibraryPath); //$NON-NLS-1$
+		}
 		if (!env.isEmpty()) {
 			JsonObject envJson = new JsonObject();
 			for (Entry<String, String> entry : env.entrySet()) {
@@ -173,35 +183,109 @@ public abstract class VSCodeJSDebugDelegate extends DSPLaunchDelegate {
 			File cwdFile = cwd == null || cwd.isBlank() ? new File(System.getProperty("user.dir")) : new File(cwd); //$NON-NLS-1$
 			Map<String, String> processEnv = new HashMap<>(System.getenv());
 			processEnv.put("DA_TEST_DISABLE_TELEMETRY", Boolean.TRUE.toString());
-			Process vscodeJsDebugExec = DebugPlugin.exec(new String[] { NodeJSManager.getNodeJsLocation().getAbsolutePath(), file.getAbsolutePath(), Integer.toString(port) }, cwdFile, processEnv.entrySet().stream().map(entry -> entry.getKey() + '=' + entry.getValue()).toArray(String[]::new), false);
+			// The debug server binds the host given as argv[2] (default: "localhost").
+			// "localhost" may resolve to ::1 on some systems (e.g. certain CI agents),
+			// while the adapter's internal servers bind 127.0.0.1 explicitly, which
+			// breaks the debuggee's internal connections to the adapter and hangs
+			// debug launches. Bind 127.0.0.1 explicitly to keep everything IPv4.
+			Process vscodeJsDebugExec = DebugPlugin.exec(new String[] { NodeJSManager.getNodeJsLocation().getAbsolutePath(), file.getAbsolutePath(), Integer.toString(port), "127.0.0.1" }, cwdFile, processEnv.entrySet().stream().map(entry -> entry.getKey() + '=' + entry.getValue()).toArray(String[]::new), false);
 			IProcess vscodeJsDebugIProcess = DebugPlugin.newProcess(launch, vscodeJsDebugExec, "debug adapter");
 			AtomicReference<String> host = new AtomicReference<>(); // sometimes ::1, sometimes 127.0.0.1...
 			String portSuffix = ":" + port;
+			// The "listening <host>:<port>" announcement may be delivered split across
+			// several stream monitor callbacks, so the output is accumulated and the
+			// whole buffer is parsed on every callback instead of each chunk alone.
+			StringBuilder adapterOutput = new StringBuilder();
 			vscodeJsDebugIProcess.getStreamsProxy().getOutputStreamMonitor().addListener((text, mon) -> {
-				if (text.toLowerCase().contains("listening")) {
-					for (String word : text.split(" ")) {
-						word = word.trim();
-						if (word.endsWith(portSuffix)) {
-							host.set(word.substring(0, word.length() - portSuffix.length()));
-							return;
+				if (text == null || text.isEmpty()) {
+					return;
+				}
+				synchronized (adapterOutput) {
+					adapterOutput.append(text);
+					if (host.get() == null) {
+						int listeningIndex = adapterOutput.indexOf("listening"); //$NON-NLS-1$
+						if (listeningIndex >= 0) {
+							for (String word : adapterOutput.substring(listeningIndex).split("\\s+")) { //$NON-NLS-1$
+								if (word.endsWith(portSuffix)) {
+									host.set(word.substring(0, word.length() - portSuffix.length()));
+									break;
+								}
+							}
 						}
 					}
 				}
 			});
-			Instant request = Instant.now();
-			while (host.get() == null && Duration.between(request, Instant.now()).compareTo(Duration.ofSeconds(3)) < 3) {
+			// Surface the debug adapter's stderr in the error log: it is otherwise only
+			// visible in the consoles and makes remote/troubleshooted launches hard to diagnose.
+			vscodeJsDebugIProcess.getStreamsProxy().getErrorStreamMonitor().addListener((text, mon) -> {
+				if (text != null && !text.isEmpty()) {
+					ILog.get().warn("Debug adapter (stderr): " + text.trim()); //$NON-NLS-1$
+					System.err.println("Debug adapter (stderr): " + text.trim()); //$NON-NLS-1$
+				}
+			});
+			Instant deadline = Instant.now().plus(Duration.ofSeconds(10));
+			while (host.get() == null && Instant.now().isBefore(deadline)) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					break;
 				}
 			}
+			if (host.get() == null) {
+				String outputSoFar;
+				synchronized (adapterOutput) {
+					outputSoFar = adapterOutput.toString();
+				}
+				// Attaching with a null host falls back to the loopback address
+				ILog.get().warn("Debug adapter did not report a listening port in time, falling back to the loopback address. Adapter output so far: '" //$NON-NLS-1$
+						+ outputSoFar + "'"); //$NON-NLS-1$
+			}
 
+			// The DSP attach + DAP handshake (LSP4E DSPDebugTarget.initialize) waits for
+			// the adapter's responses without any timeout of its own and only aborts
+			// when the progress monitor is canceled. Bound it with a watchdog so a
+			// non-answering debug adapter fails the launch visibly (with a thread dump
+			// and adapter state for diagnosis) instead of hanging the launch forever.
+			SubMonitor launchMonitor = SubMonitor.convert(monitor);
+			Thread watchdog = new Thread(() -> {
+				try {
+					Thread.sleep(Duration.ofMinutes(2).toMillis());
+				} catch (InterruptedException ex) {
+					return; // launch completed in time
+				}
+				if (!launchMonitor.isCanceled()) {
+					String outputSoFar;
+					synchronized (adapterOutput) {
+						outputSoFar = adapterOutput.toString();
+					}
+					StringBuilder dump = new StringBuilder("Debug adapter launch did not complete within 2 minutes, canceling." //$NON-NLS-1$
+							+ " Debug adapter process alive: " + vscodeJsDebugExec.isAlive() //$NON-NLS-1$
+							+ ", output so far: '" + outputSoFar + "'.\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					Thread.getAllStackTraces().forEach((thread, stack) -> {
+						dump.append('"').append(thread.getName()).append('"') //
+								.append(" state=").append(thread.getState()).append('\n'); //$NON-NLS-1$
+						for (StackTraceElement element : stack) {
+							dump.append("    at ").append(element).append('\n'); //$NON-NLS-1$
+						}
+					});
+					ILog.get().error(dump.toString());
+					System.err.println(dump);
+					launchMonitor.setCanceled(true);
+				}
+			}, "WWD debug launch watchdog"); //$NON-NLS-1$
+			watchdog.setDaemon(true);
+			watchdog.start();
 			DSPLaunchDelegateLaunchBuilder builder = new DSPLaunchDelegateLaunchBuilder(configuration, mode, launch,
-					monitor);
+					launchMonitor);
 			builder.setAttachDebugAdapter(host.get(), port);
 			builder.setMonitorDebugAdapter(configuration.getAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false));
 			builder.setDspParameters(param);
-			super.launch(builder);
+			try {
+				super.launch(builder);
+			} finally {
+				watchdog.interrupt();
+			}
 			IDebugEventSetListener shutdownParentOnCompletion = new IDebugEventSetListener() {
 				@Override
 				public void handleDebugEvents(DebugEvent[] events) {
