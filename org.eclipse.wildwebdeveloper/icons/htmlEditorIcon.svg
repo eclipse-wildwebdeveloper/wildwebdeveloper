@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <linearGradient id="page" x1="0" y1="2" x2="0" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f9fafc" />
+      <stop offset="1" stop-color="#dce7f7" />
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="1" x2="0" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bfb688" />
+      <stop offset="1" stop-color="#8392b0" />
+    </linearGradient>
+    <linearGradient id="fold" x1="8" y1="5" x2="10" y2="3" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e0c88f" />
+      <stop offset="1" stop-color="#d5b269" />
+    </linearGradient>
+  </defs>
+  <path d="M2 2H8.3L11 4.8V14H2Z" fill="url(#page)" />
+  <path d="M8 1.1V5H12Z" fill="url(#fold)" />
+  <path d="M1.5 1.5H8.4L11.5 4.5V14.5H1.5Z" fill="none" stroke="url(#edge)" />
+  <path d="m 2.88,10.98 -1.6,0.55 1.6,0.55 v 0.42 L 0.75,11.73 V 11.34 L 2.88,10.57 Z m 0.67,-0.86 h 0.64 v 0.94 H 5.14 V 10.12 H 5.78 V 12.6 H 5.14 V 11.55 H 4.19 V 12.6 H 3.55 Z m 2.55,0 h 2.28 v 0.48 H 7.57 V 12.6 H 6.93 V 10.6 H 6.1 Z m 2.61,0 h 0.81 l 0.56,1.33 0.57,-1.33 h 0.81 V 12.6 h -0.6 v -1.81 l -0.57,1.34 H 9.9 L 9.33,10.79 V 12.6 h -0.61 z m 3.38,0 h 0.64 v 2 h 1.12 V 12.6 H 12.1 Z m 2.21,0.86 v -0.42 l 2.13,0.77 v 0.39 l -2.13,0.77 v -0.42 l 1.6,-0.55 z" fill="#d65e00" />
+</svg>
