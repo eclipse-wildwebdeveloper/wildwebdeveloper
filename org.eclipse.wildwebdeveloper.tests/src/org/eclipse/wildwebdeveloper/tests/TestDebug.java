@@ -18,11 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -120,9 +122,9 @@ public class TestDebug {
         launchConfig.setAttribute(LaunchManager.ATTR_ENVIRONMENT_VARIABLES, Map.of("ECLIPSE_HOME", "${eclipse_home}"));
         launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
         ILaunch launch = launchConfig.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
-        while (!launch.isTerminated()) {
-            DisplayHelper.sleep(Display.getDefault(), 50);
-        }
+        assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 120_000, launch::isTerminated),
+                "Launch did not terminate. Console output:\n" + consoleContents() + "\nNode processes:\n"
+                        + nodeProcesses());
         // ensure last UI events are processed and console is visible and populated.
         assertFalse(
                 DisplayHelper.waitForCondition(Display.getDefault(), 1000,
@@ -145,9 +147,9 @@ public class TestDebug {
         launchConfig.setAttribute(LaunchConstants.PROGRAM, "${workspace_loc:" + f.getFullPath() + '}');
         launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
         ILaunch launch = launchConfig.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
-        while (!launch.isTerminated()) {
-            DisplayHelper.sleep(Display.getDefault(), 50);
-        }
+        assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 120_000, launch::isTerminated),
+                "Launch did not terminate. Console output:\n" + consoleContents() + "\nNode processes:\n"
+                        + nodeProcesses());
         // ensure last UI events are processed and console is visible and populated.
         assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 1000,
                 () -> Arrays.stream(ConsolePlugin.getDefault().getConsoleManager().getConsoles()) //
@@ -182,7 +184,8 @@ public class TestDebug {
                 e.printStackTrace();
                 return false;
             }
-        }), "Debug Target shows no threads");
+        }), "Debug Target shows no threads. Console output:\n" + consoleContents() + "\nNode processes:\n"
+                + nodeProcesses());
         IDebugTarget target = debugTargetWithThreads(before);
         assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 3000, () -> {
             try {
@@ -213,6 +216,53 @@ public class TestDebug {
             }
         }).findAny().get();
         assertEquals("1605", nVariable.getValue().getValueString());
+    }
+
+    private static String consoleContents() {
+        return Arrays.stream(ConsolePlugin.getDefault().getConsoleManager().getConsoles()) //
+                .filter(IOConsole.class::isInstance) //
+                .map(IOConsole.class::cast) //
+                .map(IOConsole::getDocument) //
+                .map(IDocument::get) //
+                .collect(Collectors.joining("\n---\n")); //$NON-NLS-1$
+    }
+
+    /**
+     * Dumps the command line, state and selected environment of the running node
+     * processes, to diagnose debuggee/debug adapter issues on remote agents.
+     */
+    private static String nodeProcesses() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            for (ProcessHandle process : ProcessHandle.allProcesses().toList()) {
+                String commandLine = process.info().commandLine().orElse(""); //$NON-NLS-1$
+                if (!commandLine.contains("node") && !commandLine.contains("dapDebugServer") //$NON-NLS-1$ //$NON-NLS-2$
+                        && !commandLine.contains("bootloader")) { //$NON-NLS-1$
+                    continue;
+                }
+                sb.append("PID ").append(process.pid()); //$NON-NLS-1$
+                process.info().command().ifPresent(c -> sb.append(" alive=").append(process.isAlive())); //$NON-NLS-1$
+                sb.append(": ").append(commandLine).append('\n'); //$NON-NLS-1$
+                try {
+                    String environ = Files.readString(Path.of("/proc/" + process.pid() + "/environ")); //$NON-NLS-1$ //$NON-NLS-2$
+                    String selected = Arrays.stream(environ.split("\0")) //$NON-NLS-1$
+                            .filter(line -> line.startsWith("LD_LIBRARY") || line.startsWith("NODE_OPTIONS") //$NON-NLS-1$ //$NON-NLS-2$
+                                    || line.startsWith("VSCODE_") || line.startsWith("TMPDIR") //$NON-NLS-1$ //$NON-NLS-2$
+                                    || line.startsWith("PATH=")) //$NON-NLS-1$
+                            .collect(Collectors.joining(" | ")); //$NON-NLS-1$
+                    sb.append("    env: ").append(selected).append('\n'); //$NON-NLS-1$
+                    String status = Arrays.stream(Files.readString(Path.of("/proc/" + process.pid() + "/status")).split("\n")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                            .filter(line -> line.startsWith("State:") || line.startsWith("Threads:")) //$NON-NLS-1$ //$NON-NLS-2$
+                            .map(String::trim).collect(Collectors.joining(", ")); //$NON-NLS-1$
+                    sb.append("    status: ").append(status).append('\n'); //$NON-NLS-1$
+                } catch (Exception ignored) {
+                    // /proc not readable (non-linux or different user) - command line is all we have
+                }
+            }
+        } catch (Throwable t) {
+            sb.append("Failed to list processes: ").append(t); //$NON-NLS-1$
+        }
+        return sb.toString();
     }
 
     private IDebugTarget debugTargetWithThreads(Collection<IDebugTarget> toExclude) throws DebugException {
@@ -247,7 +297,8 @@ public class TestDebug {
                 e.printStackTrace();
                 return false;
             }
-        }), "Debug Target shows no threads");
+        }), "Debug Target shows no threads. Console output:\n" + consoleContents() + "\nNode processes:\n"
+                + nodeProcesses());
         IDebugTarget target = debugTargetWithThreads(before);
         assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 3000, () -> {
             try {
