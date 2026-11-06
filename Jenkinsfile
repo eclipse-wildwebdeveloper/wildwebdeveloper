@@ -15,7 +15,7 @@ kind: Pod
 spec:
   containers:
   - name: container
-    image: docker.io/akurtakov/fedora-gtk3-mutter-java-node:f42-node24
+    image: docker.io/vrubezhny/fedora-gtk3-mutter-java-node:f42-node24-libatomic
     imagePullPolicy: IfNotPresent
     tty: true
     resources:

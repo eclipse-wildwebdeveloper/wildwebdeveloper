@@ -4,9 +4,10 @@ FROM eclipsecbi/fedora-gtk3-mutter:42-gtk3.24
 USER 0
 RUN dnf -y update && dnf -y install \
 	java-21-openjdk-devel git \
-    gdk-pixbuf2-modules-extra procps-ng
+    gdk-pixbuf2-modules-extra procps-ng \
+    libatomic
 
-RUN curl -L https://dlcdn.apache.org/maven/maven-3/3.9.14/binaries/apache-maven-3.9.14-bin.tar.gz | tar -xz 
+RUN curl -L https://archive.apache.org/dist/maven/maven-3/3.9.14/binaries/apache-maven-3.9.14-bin.tar.gz | tar -xz 
 
 RUN curl -L https://nodejs.org/dist/v24.14.0/node-v24.14.0-linux-x64.tar.xz | tar -xJ
 
