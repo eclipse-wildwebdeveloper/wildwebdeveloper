@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -607,5 +608,29 @@ class TestMarkdown {
 			boolean hasExcluded = Arrays.stream(proposals).anyMatch(p -> "#excluded-only".equals(p.getDisplayString()));
 			return hasIncluded && !hasExcluded;
 		}), "Workspace header completions did not respect exclude globs");
+	}
+
+	@Test
+	@SuppressWarnings("restriction")
+	void languageServerStartsInProjectWithAccentAndSpaceInPath() throws Exception {
+		String name = Charset.forName(System.getProperty("sun.jnu.encoding", "UTF-8")).newEncoder().canEncode("É") ? "Événements " : "Events ";
+		var project = ResourcesPlugin.getWorkspace().getRoot().getProject(name + System.nanoTime());
+		project.create(null);
+		project.open(null);
+		IFile file = project.getFile("index.md");
+		file.create("# Title\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		var editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		var display = editor.getSite().getShell().getDisplay();
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+
+		assertTrue(DisplayHelper.waitForCondition(display, 10_000, () -> {
+			LanguageServerWrapper wrapper = LanguageServiceAccessor.getStartedWrappers(document, null, false).stream() //
+					.filter(w -> "org.eclipse.wildwebdeveloper.markdown".equals(w.serverDefinition.id)) //
+					.findFirst().orElse(null);
+			return wrapper != null //
+					&& wrapper.isActive() //
+					&& wrapper.isConnectedTo(LSPEclipseUtils.toUri(document));
+		}), "Markdown LS did not start in a project whose path contains an accent and a space");
 	}
 }

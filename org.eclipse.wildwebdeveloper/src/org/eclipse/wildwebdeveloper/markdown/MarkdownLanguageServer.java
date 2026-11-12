@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.jsonrpc.messages.Message;
@@ -93,7 +94,13 @@ public final class MarkdownLanguageServer extends ProcessStreamConnectionProvide
 		final Map<String, Object> options = new HashMap<>();
 
 		if (projectRootUri != null) {
-			setWorkingDirectory(projectRootUri.getRawPath());
+			if ("file".equals(projectRootUri.getScheme())) {
+				try {
+					setWorkingDirectory(Paths.get(projectRootUri).toString());
+				} catch (IllegalArgumentException ex) {
+					ILog.get().warn("Cannot start the Markdown language server in " + projectRootUri, ex);
+				}
+			}
 
 			// Remember this root for scoping client-side workspace queries
 			instanceRootUri = projectRootUri.toString();
