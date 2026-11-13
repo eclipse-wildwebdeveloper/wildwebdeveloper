@@ -150,7 +150,7 @@
          point="org.eclipse.ui.genericeditor.icons">
       <icon
             contentType="org.eclipse.core.runtime.xml"
-            icon="icons/xmlEditorIcon.png">
+            icon="icons/xmlEditorIcon.svg">
       </icon>
    </extension>
 

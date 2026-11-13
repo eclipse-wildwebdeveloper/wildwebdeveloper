@@ -15,8 +15,6 @@ package org.eclipse.wildwebdeveloper.xml.internal.ui.preferences;
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Set;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -25,6 +23,7 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -41,7 +40,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
@@ -224,11 +222,7 @@ public class XMLCatalogPreferencePage extends PreferencePage implements IWorkben
 		private Image image;
 
 		public EntriesLabelProvider() {
-			try (InputStream imageResource = getClass().getResourceAsStream("/icons/xmlEditorIcon.png")) {
-				image = new Image(Display.getDefault(), imageResource);
-			} catch (IOException e) {
-				ILog.get().error(e.getMessage(), e);
-			}
+			image = ImageDescriptor.createFromFile(getClass(), "/icons/xmlEditorIcon.svg").createImage();
 		}
 		
 		@Override

@@ -204,7 +204,7 @@
    </extension>
 
   <extension point="org.eclipse.ui.genericeditor.icons">
-    <icon contentType="org.eclipse.tm4e.language_pack.css" icon="icons/cssEditorIcon.png"/>
+    <icon contentType="org.eclipse.tm4e.language_pack.css" icon="icons/cssEditorIcon.svg"/>
   </extension>
 
    <extension
@@ -357,7 +357,7 @@
    </extension>
 
    <extension point="org.eclipse.ui.genericeditor.icons">
-     <icon contentType="org.eclipse.tm4e.language_pack.html" icon="icons/htmlEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.html" icon="icons/htmlEditorIcon.svg"/>
    </extension>
 
    <extension
@@ -474,10 +474,10 @@
    </extension>
 
    <extension point="org.eclipse.ui.genericeditor.icons">
-     <icon contentType="org.eclipse.tm4e.language_pack.javascript" icon="icons/jsEditorIcon.png"/>
-     <icon contentType="org.eclipse.tm4e.language_pack.javascriptreact" icon="icons/jsEditorIcon.png"/>
-     <icon contentType="org.eclipse.tm4e.language_pack.typescript" icon="icons/tsEditorIcon.png"/>
-     <icon contentType="org.eclipse.tm4e.language_pack.typescriptreact" icon="icons/tsEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.javascript" icon="icons/jsEditorIcon.svg"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.javascriptreact" icon="icons/jsEditorIcon.svg"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.typescript" icon="icons/tsEditorIcon.svg"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.typescriptreact" icon="icons/tsEditorIcon.svg"/>
    </extension>
 
    <extension
@@ -708,7 +708,7 @@
    </extension>
 
    <extension point="org.eclipse.ui.genericeditor.icons">
-     <icon contentType="org.eclipse.tm4e.language_pack.yaml" icon="icons/yamlEditorIcon.png"/>
+     <icon contentType="org.eclipse.tm4e.language_pack.yaml" icon="icons/yamlEditorIcon.svg"/>
    </extension>
 
    <extension
@@ -854,7 +854,7 @@
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             class="org.eclipse.wildwebdeveloper.debug.node.NodeRunDebugLaunchShortcut"
-            icon="icons/node_16.png"
+            icon="icons/node_16.svg"
             id="org.eclipse.wildwebdeveloper.nodeRunShortcut"
             label="Node program"
             modes="run,debug">
@@ -879,7 +879,7 @@
       </shortcut>
       <shortcut
             class="org.eclipse.wildwebdeveloper.debug.firefox.FirefoxRunDebugLaunchShortcut"
-            icon="icons/firefoxIconSmall.png"
+            icon="icons/firefoxIconSmall.svg"
             id="org.eclipse.wildwebdeveloper.firefoxRunShortcut"
             label="Firefox"
             modes="debug">
@@ -907,7 +907,7 @@
       </shortcut>
       <shortcut
             class="org.eclipse.wildwebdeveloper.debug.chrome.ChromeRunDebugLaunchShortcut"
-            icon="icons/ChromeIcon.png"
+            icon="icons/ChromeIcon.svg"
             id="org.eclipse.wildwebdeveloper.chromeRunShortcut"
             label="Chrome Debug "
             modes="debug">
@@ -935,7 +935,7 @@
       </shortcut>
       <shortcut
             class="org.eclipse.wildwebdeveloper.debug.npm.NpmLaunchShortcut"
-            icon="icons/npmiconSmall.png"
+            icon="icons/npmiconSmall.svg"
             id="org.eclipse.wildwebdeveloper.npmLaunchShortcut"
             label="NPM..."
             modes="run">
@@ -1008,37 +1008,37 @@
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebug"
-            icon="icons/node_16.png"
+            icon="icons/node_16.svg"
             id="org.eclipse.wildwebdeveloper.nodeImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.nodeDebugAttach"
-            icon="icons/node_16.png"
+            icon="icons/node_16.svg"
             id="org.eclipse.wildwebdeveloper.nodeImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.runFirefoxDebug"
-            icon="icons/firefoxIconSmall.png"
+            icon="icons/firefoxIconSmall.svg"
             id="org.eclipse.wildwebdeveloper.firefoxImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.firefoxDebug"
-            icon="icons/firefoxIconSmall.png"
+            icon="icons/firefoxIconSmall.svg"
             id="org.eclipse.wildwebdeveloper.firefoxImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.chromeRunDebug"
-            icon="icons/ChromeIcon.png"
+            icon="icons/ChromeIcon.svg"
             id="org.eclipse.wildwebdeveloper.chromeImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.chromeAttachDebug"
-            icon="icons/ChromeIcon.png"
+            icon="icons/ChromeIcon.svg"
             id="org.eclipse.wildwebdeveloper.chromeImage">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             configTypeID="org.eclipse.wildwebdeveloper.launchConfiguration.NPMLaunch"
-            icon="icons/npmiconSmall.png"
+            icon="icons/npmiconSmall.svg"
             id="org.eclipse.wildwebdeveloper.npmImage">
       </launchConfigurationTypeImage>
    </extension>

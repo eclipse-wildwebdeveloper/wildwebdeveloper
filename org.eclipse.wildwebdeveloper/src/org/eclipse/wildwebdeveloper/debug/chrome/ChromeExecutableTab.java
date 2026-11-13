@@ -9,8 +9,6 @@
  *******************************************************************************/
 package org.eclipse.wildwebdeveloper.debug.chrome;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +19,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -32,7 +31,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.dialogs.PreferencesUtil;
@@ -48,11 +46,7 @@ public class ChromeExecutableTab extends AbstractLaunchConfigurationTab {
 	private List<Object> proposals;
 
 	public ChromeExecutableTab() {
-		try (InputStream imageResource = getClass().getResourceAsStream("/icons/ChromeIcon.png")) {
-			image = new Image(Display.getDefault(), imageResource);
-		} catch (IOException e) {
-			ILog.get().error(e.getMessage(), e);
-		}
+		image = ImageDescriptor.createFromFile(getClass(), "/icons/ChromeIcon.svg").createImage();
 	}
 
 	@Override
