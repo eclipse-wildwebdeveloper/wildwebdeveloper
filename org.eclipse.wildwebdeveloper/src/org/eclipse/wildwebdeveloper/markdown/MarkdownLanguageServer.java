@@ -93,7 +93,9 @@ public final class MarkdownLanguageServer extends ProcessStreamConnectionProvide
 		final Map<String, Object> options = new HashMap<>();
 
 		if (projectRootUri != null) {
-			setWorkingDirectory(projectRootUri.getRawPath());
+			if ("file".equals(projectRootUri.getScheme())) {
+				setWorkingDirectory(Paths.get(projectRootUri).toString());
+			}
 
 			// Remember this root for scoping client-side workspace queries
 			instanceRootUri = projectRootUri.toString();

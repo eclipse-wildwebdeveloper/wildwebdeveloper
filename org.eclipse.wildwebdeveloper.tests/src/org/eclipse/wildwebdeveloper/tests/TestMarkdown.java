@@ -608,4 +608,27 @@ class TestMarkdown {
 			return hasIncluded && !hasExcluded;
 		}), "Workspace header completions did not respect exclude globs");
 	}
+
+	@Test
+	@SuppressWarnings("restriction")
+	void languageServerStartsInProjectWithAccentAndSpaceInPath() throws Exception {
+		var project = ResourcesPlugin.getWorkspace().getRoot().getProject("Événements " + System.nanoTime());
+		project.create(null);
+		project.open(null);
+		IFile file = project.getFile("index.md");
+		file.create("# Title\n".getBytes(StandardCharsets.UTF_8), true, false, null);
+
+		var editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+		var display = editor.getSite().getShell().getDisplay();
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+
+		assertTrue(DisplayHelper.waitForCondition(display, 10_000, () -> {
+			LanguageServerWrapper wrapper = LanguageServiceAccessor.getStartedWrappers(document, null, false).stream() //
+					.filter(w -> "org.eclipse.wildwebdeveloper.markdown".equals(w.serverDefinition.id)) //
+					.findFirst().orElse(null);
+			return wrapper != null //
+					&& wrapper.isActive() //
+					&& wrapper.isConnectedTo(LSPEclipseUtils.toUri(document));
+		}), "Markdown LS did not start in a project whose path contains an accent and a space");
+	}
 }
