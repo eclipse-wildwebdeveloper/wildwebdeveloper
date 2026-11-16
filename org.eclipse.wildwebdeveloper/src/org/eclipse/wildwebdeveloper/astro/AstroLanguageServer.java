@@ -69,7 +69,13 @@ public final class AstroLanguageServer extends ProcessStreamConnectionProvider {
    @Override
    public Map<String, Object> getInitializationOptions(final URI projectRootUri) {
       final Map<String, Object> options = new HashMap<>();
-      setWorkingDirectory(projectRootUri.getRawPath());
+      if (projectRootUri != null && "file".equals(projectRootUri.getScheme())) {
+         try {
+            setWorkingDirectory(Paths.get(projectRootUri).toString());
+         } catch (IllegalArgumentException ex) {
+            ILog.get().warn("Cannot start the Astro language server in " + projectRootUri, ex);
+         }
+      }
 
       // see https://github.com/withastro/language-tools/blob/main/packages/vscode/src/client.ts
       // see https://github.com/withastro/language-tools/blob/main/packages/language-server/src/nodeServer.ts
