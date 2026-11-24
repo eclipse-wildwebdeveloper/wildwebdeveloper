@@ -5,43 +5,220 @@
     "dtd"
   ],
   "patterns": [
-    {
-      "begin": "(<!)(ELEMENT|ATTLIST|ENTITY|NOTATION)",
-      "captures": {
-        "1": {
-          "name": "punctuation.definition.tag.dtd"
-        },
-        "2": {
-          "name": "entity.name.tag.dtd"
-        }
+    { "include": "#comment" },
+    { "include": "#processing-instruction" },
+    { "include": "#conditional-section" },
+    { "include": "#element-declaration" },
+    { "include": "#attlist-declaration" },
+    { "include": "#entity-declaration" },
+    { "include": "#notation-declaration" },
+    { "include": "#parameter-entity-ref" }
+  ],
+  "repository": {
+    "comment": {
+      "begin": "<!--",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.comment.begin.dtd" }
       },
-      "end": "\\s*(>)",
-      "name": "meta.tag.type.dtd",
+      "end": "-->",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.comment.end.dtd" }
+      },
+      "name": "comment.block.dtd"
+    },
+    "processing-instruction": {
+      "begin": "<\\?",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.processing-instruction.begin.dtd" }
+      },
+      "end": "\\?>",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.processing-instruction.end.dtd" }
+      },
+      "name": "meta.processing-instruction.dtd",
       "patterns": [
         {
-          "match": "\\s+(CDATA|IDREFS|IDREF|ID|NMTOKENS|NMTOKEN|ENTITY|ENTITIES|NOTATION|SYSTEM|NDATA)",
-          "name": "keyword.other.data-type.dtd"
-        },
-        {
-          "match": "(#[A-Z]+)|(ANY)|(EMPTY)",
-          "name": "constant.language.dtd"
-        },
-        {
-          "begin": "'|\"",
-          "end": "'|\"",
-          "name": "string.quoted.double.dtd"
-        },
-        {
-          "begin": "(%[a-zA-Z][a-zA-Z0-9_-])",
-          "end": ";",
-          "name": "variable.language.dtd"
+          "match": "\\G[a-zA-Z_][a-zA-Z0-9._-]*",
+          "name": "entity.name.processing-instruction.dtd"
         }
       ]
     },
-    {
-      "begin": "(<!--)",
-      "end": "(-->)",
-      "name": "comment.block.dtd"
+    "conditional-section": {
+      "patterns": [
+        {
+          "begin": "<!\\[\\s*(INCLUDE)\\s*\\[",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.dtd" }
+          },
+          "end": "\\]\\]>",
+          "name": "meta.conditional.include.dtd",
+          "patterns": [{ "include": "$self" }]
+        },
+        {
+          "begin": "<!\\[\\s*(IGNORE)\\s*\\[",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.dtd" }
+          },
+          "end": "\\]\\]>",
+          "name": "meta.conditional.ignore.dtd",
+          "contentName": "comment.block.ignored.dtd"
+        }
+      ]
+    },
+    "parameter-entity-ref": {
+      "match": "%[a-zA-Z_][a-zA-Z0-9._-]*;",
+      "name": "variable.other.parameter-entity.dtd"
+    },
+    "entity-ref": {
+      "patterns": [
+        {
+          "match": "&#x[0-9a-fA-F]+;",
+          "name": "constant.character.entity.hexadecimal.dtd"
+        },
+        {
+          "match": "&#[0-9]+;",
+          "name": "constant.character.entity.decimal.dtd"
+        },
+        {
+          "match": "&[a-zA-Z_][a-zA-Z0-9._-]*;",
+          "name": "constant.character.entity.named.dtd"
+        }
+      ]
+    },
+    "string-double": {
+      "begin": "\"",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.dtd" }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.dtd" }
+      },
+      "name": "string.quoted.double.dtd",
+      "patterns": [
+        { "include": "#entity-ref" },
+        { "include": "#parameter-entity-ref" }
+      ]
+    },
+    "string-single": {
+      "begin": "'",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.dtd" }
+      },
+      "end": "'",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.dtd" }
+      },
+      "name": "string.quoted.single.dtd",
+      "patterns": [
+        { "include": "#entity-ref" },
+        { "include": "#parameter-entity-ref" }
+      ]
+    },
+    "string": {
+      "patterns": [
+        { "include": "#string-double" },
+        { "include": "#string-single" }
+      ]
+    },
+    "element-declaration": {
+      "begin": "(<!)(ELEMENT)\\s+(%[a-zA-Z_][a-zA-Z0-9._-]*;|[a-zA-Z_][a-zA-Z0-9._-]*)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" },
+        "2": { "name": "storage.type.dtd" },
+        "3": { "name": "entity.name.tag.dtd" }
+      },
+      "end": "(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" }
+      },
+      "name": "meta.declaration.element.dtd",
+      "patterns": [
+        {
+          "match": "#PCDATA|\\b(ANY|EMPTY)\\b",
+          "name": "constant.language.dtd"
+        },
+        {
+          "match": "[|,?*+()]",
+          "name": "keyword.operator.dtd"
+        },
+        { "include": "#parameter-entity-ref" },
+        {
+          "match": "[a-zA-Z_][a-zA-Z0-9._-]*",
+          "name": "entity.name.element.ref.dtd"
+        }
+      ]
+    },
+    "attlist-declaration": {
+      "begin": "(<!)(ATTLIST)\\s+(%[a-zA-Z_][a-zA-Z0-9._-]*;|[a-zA-Z_][a-zA-Z0-9._-]*)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" },
+        "2": { "name": "storage.type.dtd" },
+        "3": { "name": "entity.name.element.dtd" }
+      },
+      "end": "(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" }
+      },
+      "name": "meta.declaration.attlist.dtd",
+      "patterns": [
+        {
+          "match": "\\b(CDATA|IDREFS|IDREF|ID|NMTOKENS|NMTOKEN|ENTITIES|ENTITY|NOTATION)\\b",
+          "name": "keyword.other.data-type.dtd"
+        },
+        {
+          "match": "#REQUIRED|#IMPLIED|#FIXED",
+          "name": "constant.language.dtd"
+        },
+        { "include": "#string" },
+        { "include": "#parameter-entity-ref" },
+        {
+          "match": "[a-zA-Z_][a-zA-Z0-9._-]*",
+          "name": "variable.other.attribute-name.dtd"
+        }
+      ]
+    },
+    "entity-declaration": {
+      "begin": "(<!)(ENTITY)(\\s+%)?\\s+([a-zA-Z_][a-zA-Z0-9._-]*)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" },
+        "2": { "name": "storage.type.dtd" },
+        "3": { "name": "punctuation.definition.entity.dtd" },
+        "4": { "name": "entity.name.entity.dtd" }
+      },
+      "end": "(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" }
+      },
+      "name": "meta.declaration.entity.dtd",
+      "patterns": [
+        {
+          "match": "\\b(SYSTEM|PUBLIC|NDATA)\\b",
+          "name": "keyword.other.dtd"
+        },
+        { "include": "#string" },
+        { "include": "#parameter-entity-ref" }
+      ]
+    },
+    "notation-declaration": {
+      "begin": "(<!)(NOTATION)\\s+([a-zA-Z_][a-zA-Z0-9._-]*)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" },
+        "2": { "name": "storage.type.dtd" },
+        "3": { "name": "entity.name.notation.dtd" }
+      },
+      "end": "(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.dtd" }
+      },
+      "name": "meta.declaration.notation.dtd",
+      "patterns": [
+        {
+          "match": "\\b(SYSTEM|PUBLIC)\\b",
+          "name": "keyword.other.dtd"
+        },
+        { "include": "#string" }
+      ]
     }
-  ]
+  }
 }
