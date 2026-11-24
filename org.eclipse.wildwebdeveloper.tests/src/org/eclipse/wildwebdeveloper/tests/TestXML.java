@@ -88,7 +88,7 @@ public class TestXML {
 	@Test
 	public void testXSLFile() throws Exception {
 		final IFile file = project.getFile("blah.xsl");
-		file.create("FAIL".getBytes(), true, false, null);
+		file.create(new byte[0], true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
@@ -103,7 +103,7 @@ public class TestXML {
 	@Test
 	public void testXSDFile() throws Exception {
 		final IFile file = project.getFile("blah.xsd");
-		file.create("FAIL".getBytes(), true, false, null);
+		file.create(new byte[0], true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
