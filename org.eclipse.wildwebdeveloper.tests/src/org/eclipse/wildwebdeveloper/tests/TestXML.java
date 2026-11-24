@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Red Hat Inc. and others.
+ * Copyright (c) 2019, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -211,7 +211,6 @@ public class TestXML {
 			fileOut.println("Bundle-Name: XML-Catalog-Test");
 			fileOut.println("Bundle-SymbolicName: org.eclipse.wildwebdeveloper.test.xmlcatalog;singleton:=true");
 			fileOut.println("Bundle-Version: 0.0.1");
-			fileOut.println("Require-Bundle: org.eclipse.wst.xml.core");
 
 			// plugin.xml
 			bundleJarOut.putNextEntry(new JarEntry("plugin.xml"));
@@ -373,7 +372,6 @@ public class TestXML {
 				Bundle-Name: XML-Catalog-HTTPS-Test
 				Bundle-SymbolicName: org.eclipse.wildwebdeveloper.test.xmlcatalog.https;singleton:=true
 				Bundle-Version: 0.0.1
-				Require-Bundle: org.eclipse.wst.xml.core
 				""".getBytes(StandardCharsets.UTF_8));
 			bundleJarOut.closeEntry();
 
