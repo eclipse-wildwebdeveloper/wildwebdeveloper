@@ -141,6 +141,11 @@
    <extension
          point="org.eclipse.tm4e.ui.samples">
       <sample
+            name="RelaxNG Compact Syntax Sample"
+            path="snippets/rnc/sample.rnc"
+            scopeName="source.rnc">
+      </sample>
+      <sample
             name="XML Sample"
             path="snippets/xml/sample.xml"
             scopeName="text.xml">
