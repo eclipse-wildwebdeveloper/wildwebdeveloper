@@ -24,9 +24,6 @@
    <bundle id="org.jcodings" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.objectweb.asm" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
    <bundle id="org.eclipse.lsp4e" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
@@ -40,9 +37,6 @@
       <category name="Dependencies"/>
    </bundle>
    <bundle id="com.google.guava" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.xtext.xbase.lib" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
    <bundle id="org.eclipse.lsp4e.debug" version="0.0.0">
