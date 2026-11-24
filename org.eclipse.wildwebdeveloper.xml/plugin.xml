@@ -51,7 +51,7 @@
             file-extensions="dtd"
             id="org.eclipse.wildwebdeveloper.dtd"
             name="DTD"
-            priority="low">
+            priority="medium"> <!-- Here, "medium" is used to take precedence over "org.eclipse.tm4e.language_pack.xml," which does not define an advanced TextMate DTD. -->
       </content-type>
       <!-- RelaxNG -->
       <content-type
@@ -140,6 +140,11 @@
 
    <extension
          point="org.eclipse.tm4e.ui.samples">
+      <sample
+            name="DTD Sample"
+            path="snippets/dtd/sample.dtd"
+            scopeName="text.xml.dtd">
+      </sample>
       <sample
             name="RelaxNG Compact Syntax Sample"
             path="snippets/rnc/sample.rnc"
