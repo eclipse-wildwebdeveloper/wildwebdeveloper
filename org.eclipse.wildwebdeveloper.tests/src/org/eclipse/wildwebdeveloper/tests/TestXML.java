@@ -24,6 +24,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.stream.Collectors;
@@ -41,7 +43,9 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
+import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.ide.IDE;
@@ -70,12 +74,20 @@ public class TestXML {
 		project.open(null);
 	}
 
+	private static void waitForLanguageServer(IDocument document) throws Exception {
+		List<LanguageServer> servers = LanguageServers.forDocument(document)
+				.collectAll(ls -> CompletableFuture.completedFuture(ls)).get(5, TimeUnit.SECONDS);
+		assertFalse(servers.isEmpty(), "No language server started for the document");
+	}
+
 	@Test
 	public void testXMLFile() throws Exception {
 		final IFile file = project.getFile("blah.xml");
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<plugin></");
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		waitForLanguageServer(document);
+		document.set("<plugin></");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
@@ -90,7 +102,9 @@ public class TestXML {
 		final IFile file = project.getFile("blah.xsl");
 		file.create(new byte[0], true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		waitForLanguageServer(document);
+		document.set("FAIL");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
@@ -105,7 +119,9 @@ public class TestXML {
 		final IFile file = project.getFile("blah.xsd");
 		file.create(new byte[0], true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		waitForLanguageServer(document);
+		document.set("a<");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
@@ -120,7 +136,9 @@ public class TestXML {
 		final IFile file = project.getFile("blah.dtd");
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!--<!-- -->");
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		waitForLanguageServer(document);
+		document.set("<!--<!-- -->");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
