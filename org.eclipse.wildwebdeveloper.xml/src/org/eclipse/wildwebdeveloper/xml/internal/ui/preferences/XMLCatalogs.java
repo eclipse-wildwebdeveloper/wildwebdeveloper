@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2025 Red Hat Inc. and others.
+ * Copyright (c) 2021, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -23,8 +23,10 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.core.runtime.ContributorFactoryOSGi;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
@@ -33,6 +35,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 
 public class XMLCatalogs {
+
+	private static final String WTP_CATALOG_CONTRIBUTIONS = "org.eclipse.wst.xml.core.catalogContributions";
 
 	private static final Comparator<File> FILE_CASE_INSENSITIVE_ORDER = Comparator.comparing(File::getAbsolutePath, String.CASE_INSENSITIVE_ORDER);
 	private static final File SYSTEM_CATALOG = Activator.getDefault().getStateLocation().append("system-catalog.xml").toFile();
@@ -61,8 +65,14 @@ public class XMLCatalogs {
 			<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 			<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
 			""");
-		Arrays.stream(Platform.getExtensionRegistry()
-				.getConfigurationElementsFor("org.eclipse.wst.xml.core.catalogContributions"))
+		// Look the extensions up by contributor and not by extension point, as the
+		// extension point is only declared when WTP is installed. Extensions to an
+		// undeclared extension point are only returned when queried by contributor.
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		Arrays.stream(Activator.getDefault().getBundle().getBundleContext().getBundles())
+				.flatMap(bundle -> Arrays.stream(registry.getExtensions(ContributorFactoryOSGi.createContributor(bundle))))
+				.filter(extension -> WTP_CATALOG_CONTRIBUTIONS.equals(extension.getExtensionPointUniqueIdentifier()))
+				.flatMap(extension -> Arrays.stream(extension.getConfigurationElements()))
 				.filter(element -> "catalogContribution".equals(element.getName()))
 				.flatMap(element -> Arrays.stream(element.getChildren())).forEach(element -> {
 					switch (element.getName()) {
