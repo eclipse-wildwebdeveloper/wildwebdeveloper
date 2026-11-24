@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -160,9 +159,13 @@ public class TestXML {
 	@Test
 	public void testComplexXML() throws Exception {
 		final IFile file = project.getFile("blah.xml");
-		String content = "<layout:BlockLayoutCell\n" + "	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"	\n"
-				+ "    xsi:schemaLocation=\"sap.ui.layout https://openui5.hana.ondemand.com/downloads/schemas/sap.ui.layout.xsd\"\n"
-				+ "	xmlns:layout=\"sap.ui.layout\">\n" + "    |\n" + "</layout:BlockLayoutCell>";
+		String content = """
+				<layout:BlockLayoutCell
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				    xsi:schemaLocation="sap.ui.layout https://openui5.hana.ondemand.com/downloads/schemas/sap.ui.layout.xsd"
+					xmlns:layout="sap.ui.layout">
+				    |
+				</layout:BlockLayoutCell>""";
 		int offset = content.indexOf('|');
 		content = content.replace("|", "");
 		file.create(content.getBytes(), true, false, null);
@@ -205,43 +208,46 @@ public class TestXML {
 
 			// Manifest
 			bundleJarOut.putNextEntry(new JarEntry("META-INF/MANIFEST.MF"));
-			PrintWriter fileOut = new PrintWriter(bundleJarOut, true, StandardCharsets.UTF_8);
-			fileOut.println("Manifest-Version: 1.0");
-			fileOut.println("Bundle-ManifestVersion: 2");
-			fileOut.println("Bundle-Name: XML-Catalog-Test");
-			fileOut.println("Bundle-SymbolicName: org.eclipse.wildwebdeveloper.test.xmlcatalog;singleton:=true");
-			fileOut.println("Bundle-Version: 0.0.1");
+			bundleJarOut.write("""
+				Manifest-Version: 1.0
+				Bundle-ManifestVersion: 2
+				Bundle-Name: XML-Catalog-Test
+				Bundle-SymbolicName: org.eclipse.wildwebdeveloper.test.xmlcatalog;singleton:=true
+				Bundle-Version: 0.0.1
+				""".getBytes(StandardCharsets.UTF_8));
+			bundleJarOut.closeEntry();
 
 			// plugin.xml
 			bundleJarOut.putNextEntry(new JarEntry("plugin.xml"));
-			fileOut = new PrintWriter(bundleJarOut, true, StandardCharsets.UTF_8);
-			fileOut.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			fileOut.println("<?eclipse version=\"3.0\"?>");
-			fileOut.println("<plugin>");
-			fileOut.println("<extension point=\"org.eclipse.wst.xml.core.catalogContributions\">");
-			fileOut.println("<catalogContribution id=\"Test\">");
-			fileOut.println("<uri name=\"http://eclipse.org/wildwebdeveloper/test\" ");
-			fileOut.println("uri=\"/org/eclipse/wildwebdeveloper/test/schema.xsd\"/>");
-			fileOut.println("</catalogContribution>");
-			fileOut.println("</extension>");
-			fileOut.println("</plugin>");
+			bundleJarOut.write("""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<?eclipse version="3.0"?>
+				<plugin>
+				  <extension point="org.eclipse.wst.xml.core.catalogContributions">
+				    <catalogContribution id="Test">
+				      <uri name="http://eclipse.org/wildwebdeveloper/test"
+				           uri="/org/eclipse/wildwebdeveloper/test/schema.xsd"/>
+				    </catalogContribution>
+				  </extension>
+				</plugin>
+				""".getBytes(StandardCharsets.UTF_8));
+			bundleJarOut.closeEntry();
 
 			// Schema in Jar
 			bundleJarOut.putNextEntry(new JarEntry("org/eclipse/wildwebdeveloper/test/schema.xsd"));
-			fileOut = new PrintWriter(bundleJarOut, true, StandardCharsets.UTF_8);
-			fileOut.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			fileOut.println(
-					"<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://eclipse.org/wildwebdeveloper/test\" xmlns:com=\"http://acme.com/order\">");
-			fileOut.println("<xs:element name=\"order\" type=\"com:ordertype\" />");
-			fileOut.println("<xs:complexType name=\"ordertype\">");
-			fileOut.println("<xs:sequence>");
-			fileOut.println("<xs:element name=\"person\" type=\"xs:string\" />");
-			fileOut.println("<xs:element name=\"item\" maxOccurs=\"unbounded\" type=\"xs:string\" />");
-			fileOut.println("</xs:sequence>");
-			fileOut.println("<xs:attribute name=\"orderid\" type=\"xs:string\" use=\"required\" />");
-			fileOut.println("</xs:complexType>");
-			fileOut.println("</xs:schema>");
-
+			bundleJarOut.write("""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://eclipse.org/wildwebdeveloper/test" xmlns:com="http://acme.com/order">
+				<xs:element name="order" type="com:ordertype" />
+				<xs:complexType name="ordertype">
+				<xs:sequence>
+				<xs:element name="person" type="xs:string" />
+				<xs:element name="item" maxOccurs="unbounded" type="xs:string" />
+				</xs:sequence>
+				<xs:attribute name="orderid" type="xs:string" use="required" />
+				</xs:complexType>
+				</xs:schema>
+				""".getBytes(StandardCharsets.UTF_8));
 			bundleJarOut.closeEntry();
 		}
 

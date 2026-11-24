@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -160,7 +160,13 @@ public class TestLanguageServers {
 	@Test
 	public void testJSXFile() throws Exception {
 		final IFile jsconfig = project.getFile("jsconfig.json");
-		jsconfig.create("{\"compilerOptions\":{\"jsx\":\"react\"}}".getBytes(), true, false, null);
+		jsconfig.create("""
+				{
+				  "compilerOptions": {
+				    "jsx": "react"
+				  }
+				}
+				""".getBytes(), true, false, null);
 		final IFile file = project.getFile("blah.jsx");
 		file.create("ERROR".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE
@@ -178,7 +184,13 @@ public class TestLanguageServers {
 	@Test
 	public void testTSXFile() throws Exception {
 		final IFile jsconfig = project.getFile("jsconfig.json");
-		jsconfig.create("{\"compilerOptions\":{\"jsx\":\"react\"}}".getBytes(), true, false, null);
+		jsconfig.create("""
+				{
+				  "compilerOptions": {
+				    "jsx": "react"
+				  }
+				}
+				""".getBytes(), true, false, null);
 		final IFile file = project.getFile("blah.tsx");
 		file.create("ERROR".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE

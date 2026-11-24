@@ -52,30 +52,33 @@ public class TestJsTs {
 		project.open(null);
 	}
 
+	private static final String RENAME_CONTENT = """
+		function testVar(test) {
+			if ("truetrue" == "true" + test ) {
+				return true;
+			}
+			return false;
+		}
+		print("Testing var with true argument == " + testVar(true));
+		print("Testing var with false argument == " + testVar(false));
+		""";
+
 	@Test
 	@Timeout(value = 60, unit = TimeUnit.SECONDS)
 	public void testRefactoringRenameInTypeScript() throws Exception {
 		final IFile file = project.getFile("TestJsTs.ts");
-		String content = "function testVar(test) {\n	if (\"truetrue\" == \"true\" + test ) {\n"
-				+ "		return true;\n	}\n	return false;\n}\n"
-				+ "print(\"Testing var with true argument == \" + testVar(true));\n"
-				+ "print(\"Testing var with false argument == \" + testVar(false));\n";
 		final String oldName = "testVar";
 		final String newName = "newName";
-		internalTestRename(file, content, oldName, newName);
+		internalTestRename(file, RENAME_CONTENT, oldName, newName);
 	}
 
 	@Test
 	@Timeout(value = 60, unit = TimeUnit.SECONDS)
 	public void testRefactoringRenameInJavaScript() throws Exception {
 		final IFile file = project.getFile("TestJsTs.js");
-		String content = "function testVar(test) {\n	if (\"truetrue\" == \"true\" + test ) {\n"
-				+ "		return true;\n	}\n	return false;\n}\n"
-				+ "print(\"Testing var with true argument == \" + testVar(true));\n"
-				+ "print(\"Testing var with false argument == \" + testVar(false));\n";
 		final String oldName = "testVar";
 		final String newName = "newName";
-		internalTestRename(file, content, oldName, newName);
+		internalTestRename(file, RENAME_CONTENT, oldName, newName);
 	}
 
 	private void internalTestRename(IFile file, String content, String oldName, String newName) throws Exception {
