@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -43,9 +42,12 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.lsp4e.LSPEclipseUtils;
 import org.eclipse.lsp4e.LanguageServers;
 import org.eclipse.lsp4e.operations.completion.LSContentAssistProcessor;
-import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.lsp4j.DocumentSymbolParams;
+import org.eclipse.lsp4j.ServerCapabilities;
+import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.ide.IDE;
@@ -74,10 +76,17 @@ public class TestXML {
 		project.open(null);
 	}
 
-	private static void waitForLanguageServer(IDocument document) throws Exception {
-		List<LanguageServer> servers = LanguageServers.forDocument(document)
-				.collectAll(ls -> CompletableFuture.completedFuture(ls)).get(5, TimeUnit.SECONDS);
-		assertFalse(servers.isEmpty(), "No language server started for the document");
+	/**
+	 * Waits until the language server has parsed the document as opened, so that
+	 * a following edit does not race with the parse triggered by didOpen (which
+	 * can leave LemMinX with a stale model and no diagnostics for the edit).
+	 */
+	private static void waitForDocumentParsed(IDocument document) throws Exception {
+		assertFalse(LanguageServers.forDocument(document) //
+				.withCapability(ServerCapabilities::getDocumentSymbolProvider) //
+				.collectAll(ls -> ls.getTextDocumentService().documentSymbol(new DocumentSymbolParams(
+						new TextDocumentIdentifier(LSPEclipseUtils.toUri(document).toString())))) //
+				.get(5, TimeUnit.SECONDS).isEmpty(), "No language server answered for the document");
 	}
 
 	@Test
@@ -86,7 +95,7 @@ public class TestXML {
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		waitForLanguageServer(document);
+		waitForDocumentParsed(document);
 		document.set("<plugin></");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
@@ -103,7 +112,7 @@ public class TestXML {
 		file.create(new byte[0], true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		waitForLanguageServer(document);
+		waitForDocumentParsed(document);
 		document.set("FAIL");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
@@ -120,7 +129,7 @@ public class TestXML {
 		file.create(new byte[0], true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		waitForLanguageServer(document);
+		waitForDocumentParsed(document);
 		document.set("a<");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
@@ -137,7 +146,7 @@ public class TestXML {
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		waitForLanguageServer(document);
+		waitForDocumentParsed(document);
 		document.set("<!--<!-- -->");
 		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
 			try {
