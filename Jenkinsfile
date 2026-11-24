@@ -186,6 +186,7 @@ def void mvn() {
       clean \
       verify \
       -B \
+      -ntp \
       -fae \
       $MAVEN_PROFILES \
       -Ddownload.cache.skip=true \
@@ -203,6 +204,7 @@ def void promote() {
     mvn \
     verify \
     -B \
+    -ntp \
     -pl :promote \
     -Ppromote \
     -Dbuild.type=$BUILD_TYPE \

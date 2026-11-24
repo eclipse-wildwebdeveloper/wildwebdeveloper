@@ -90,10 +90,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Prepare NPM deps
-      run: mvn -DskipTests -pl org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
+      run: mvn -ntp -DskipTests -pl org.eclipse.wildwebdeveloper.embedder.node,org.eclipse.wildwebdeveloper package
     - name: Get Dash license tool
       run: |
-        mvn -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.1.0 -DremoteRepositories="https://repo.eclipse.org/content/repositories/dash-licenses"
+        mvn -ntp -U dependency:get -Dartifact=org.eclipse.dash:org.eclipse.dash.licenses:1.1.0 -DremoteRepositories="https://repo.eclipse.org/content/repositories/dash-licenses"
         mkdir -p target/dash         # Make directory for dash-license review summary 
     - name: Set request review parameters
       run: |
