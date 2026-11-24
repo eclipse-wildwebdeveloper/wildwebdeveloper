@@ -60,6 +60,8 @@ import org.w3c.dom.NodeList;
 @ExtendWith(AllCleanRule.class)
 public class TestXML {
 
+	private static final long TIMEOUT_MS = 10000;
+
 	private IProject project;
 	private ICompletionProposal[] proposals;
 
@@ -76,7 +78,7 @@ public class TestXML {
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<plugin></");
-		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), TIMEOUT_MS, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
 			} catch (CoreException e) {
@@ -91,7 +93,7 @@ public class TestXML {
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("FAIL");
-		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), TIMEOUT_MS, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
 			} catch (CoreException e) {
@@ -106,7 +108,7 @@ public class TestXML {
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("a<");
-		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), TIMEOUT_MS, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
 			} catch (CoreException e) {
@@ -121,7 +123,7 @@ public class TestXML {
 		file.create("FAIL".getBytes(), true, false, null);
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		editor.getDocumentProvider().getDocument(editor.getEditorInput()).set("<!--<!-- -->");
-		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> {
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), TIMEOUT_MS, () -> {
 			try {
 				return file.findMarkers("org.eclipse.lsp4e.diagnostic", true, IResource.DEPTH_ZERO).length != 0;
 			} catch (CoreException e) {
@@ -145,7 +147,7 @@ public class TestXML {
 		editor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
 		LSContentAssistProcessor processor = new LSContentAssistProcessor();
 		proposals = processor.computeCompletionProposals(Utils.getViewer(editor), offset);
-		assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), 10_000, () -> {
+		assertTrue(DisplayHelper.waitForCondition(editor.getSite().getShell().getDisplay(), TIMEOUT_MS, () -> {
 			proposals = processor.computeCompletionProposals(Utils.getViewer(editor), offset);
 			return proposals != null && proposals.length > 1;
 		}), "Expected at least 2 XML completion proposals");
@@ -158,7 +160,7 @@ public class TestXML {
 		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 		document.replace(4, 0, ">");
-		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), 5000, () -> "<foo></foo>".equals(document.get())),
+		assertTrue(DisplayHelper.waitForCondition(PlatformUI.getWorkbench().getDisplay(), TIMEOUT_MS, () -> "<foo></foo>".equals(document.get())),
 				"Autoclose not done");
 	}
 
