@@ -1,0 +1,80 @@
+default namespace = "http://relaxng.org/ns/structure/1.0"
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
+start = pattern | grammar
+
+grammar = element grammar {
+  attribute datatypeLibrary { xsd:anyURI }?,
+  attribute ns { text }?,
+  grammarContent*
+}
+
+grammarContent =
+  startElement
+  | define
+  | element div { grammarContent* }
+  | element include {
+      attribute href { xsd:anyURI },
+      attribute ns { text }?,
+      includeContent*
+    }
+
+includeContent = startElement | define | element div { includeContent* }
+
+startElement = element start {
+  attribute combine { "choice" | "interleave" }?,
+  pattern
+}
+
+define = element define {
+  attribute name { xsd:NCName },
+  attribute combine { "choice" | "interleave" }?,
+  pattern+
+}
+
+pattern =
+  element element {
+    (attribute name { xsd:QName } | nameClass),
+    pattern+
+  }
+  | element attribute {
+      (attribute name { xsd:QName } | nameClass),
+      pattern?
+    }
+  | element group { pattern+ }
+  | element interleave { pattern+ }
+  | element choice { pattern+ }
+  | element optional { pattern+ }
+  | element zeroOrMore { pattern+ }
+  | element oneOrMore { pattern+ }
+  | element list { pattern+ }
+  | element mixed { pattern+ }
+  | element ref { attribute name { xsd:NCName } }
+  | element parentRef { attribute name { xsd:NCName } }
+  | element empty { empty }
+  | element text { empty }
+  | element value {
+      attribute type { xsd:NCName }?,
+      attribute datatypeLibrary { xsd:anyURI }?,
+      text
+    }
+  | element data {
+      attribute type { xsd:NCName },
+      attribute datatypeLibrary { xsd:anyURI }?,
+      param*,
+      exceptPattern?
+    }
+  | element notAllowed { empty }
+  | element externalRef { attribute href { xsd:anyURI } }
+  | grammar
+
+param = element param { attribute name { xsd:NCName }, text }
+exceptPattern = element except { pattern+ }
+
+nameClass =
+  element name { xsd:QName }
+  | element anyName { exceptNameClass? }
+  | element nsName { attribute ns { text }?, exceptNameClass? }
+  | element choice { nameClass+ }
+
+exceptNameClass = element except { nameClass+ }
