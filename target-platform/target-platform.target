@@ -11,11 +11,9 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<repository location="https://download.eclipse.org/releases/latest/"/>
-	<unit id="org.eclipse.xtend.lib" version="0.0.0"/>
 	<unit id="org.eclipse.platform.ide" version="0.0.0"/>
 	<unit id="org.eclipse.ui.genericeditor" version="0.0.0"/>
 	<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
-	<unit id="org.objectweb.asm" version="0.0.0"/>
 	<unit id="org.hamcrest.core" version="0.0.0"/>
 	<unit id="junit-jupiter-api" version="0.0.0"/>
 	<unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
