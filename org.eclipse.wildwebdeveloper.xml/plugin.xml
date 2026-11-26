@@ -51,7 +51,7 @@
             file-extensions="dtd"
             id="org.eclipse.wildwebdeveloper.dtd"
             name="DTD"
-            priority="medium"> <!-- Here, "medium" is used to take precedence over "org.eclipse.tm4e.language_pack.xml," which does not define an advanced TextMate DTD. -->
+            priority="normal"> <!-- Here, "normal" is used to take precedence over "org.eclipse.tm4e.language_pack.xml" (priority "low"), which does not define an advanced TextMate DTD. -->
       </content-type>
       <!-- RelaxNG -->
       <content-type
