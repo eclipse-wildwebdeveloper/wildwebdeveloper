@@ -230,5 +230,13 @@
             class="org.eclipse.wildwebdeveloper.xml.internal.commands.AssociateGrammarHandler"
             commandId="xml.open.binding.wizard">
       </handler>
+      <handler
+            class="org.eclipse.wildwebdeveloper.xml.internal.commands.OpenUriHandler"
+            commandId="xml.open.uri">
+      </handler>
+      <handler
+            class="org.eclipse.wildwebdeveloper.xml.internal.commands.ShowReferencesHandler"
+            commandId="xml.show.references">
+      </handler>
    </extension>
 </plugin>

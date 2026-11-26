@@ -64,7 +64,23 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 	private static final String BINDING_WIZARD_SUPPORT_KEY = "bindingWizardSupport";
 	
 	private static enum CodeLensKind {
-		association;
+		association, 
+		references,
+		openUri("open.uri");
+		
+		private final String name;
+		
+		private CodeLensKind() {
+			this(null);
+		}
+		
+		private CodeLensKind(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name != null ? name : name();
+		}
 	}
 	
 	private static final XMLExtensionRegistry extensionJarRegistry = new XMLExtensionRegistry();
@@ -208,12 +224,16 @@ public class XMLLanguageServer extends ProcessStreamConnectionProvider {
 
 	private static Object createExtendedClientCapabilities() {
 		Map<String, Object> extendedClientCapabilities = new HashMap<>();
+		// XML Command for CodeLens support
 		Map<String, Object> codeLens = new HashMap<>();
 		extendedClientCapabilities.put(CODE_LENS_KEY, codeLens);
 		Map<String, Object> codeLensKind = new HashMap<>();
 		codeLens.put(CODE_LENS_KIND_KEY, codeLensKind);
-		List<String> valueSet = Arrays.asList(CodeLensKind.association.name());
+		List<String> valueSet = Arrays.asList(CodeLensKind.association.getName(), //
+				CodeLensKind.references.getName(), //
+				CodeLensKind.openUri.getName());
 		codeLensKind.put(VALUE_SET_KEY, valueSet);
+		// Binding wizard support
 		extendedClientCapabilities.put(BINDING_WIZARD_SUPPORT_KEY, Boolean.TRUE);
 		return extendedClientCapabilities;
 	}
