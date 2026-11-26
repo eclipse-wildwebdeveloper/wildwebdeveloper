@@ -40,6 +40,11 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_VALIDATION_NO_GRAMMAR;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES;
 import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_WORKSPACE_INDEX_ENABLED;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_WORKSPACE_INDEX_EXCLUDE_DIRECTORIES;
+import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceServerConstants.XML_PREFERENCES_WORKSPACE_INDEX_HEAD_LIMITS;
+
+import org.eclipse.wildwebdeveloper.xml.internal.startup.XMLWorkspaceIndexDetector;
 
 import java.util.Arrays;
 import java.util.List;
@@ -109,6 +114,13 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES.preferenceId, false);
 		STORE.setDefault(XML_PREFERENCES_VALIDATION_NO_GRAMMAR.preferenceId, "hint");
+
+		// Workspace Index settings
+		STORE.setDefault(XML_PREFERENCES_WORKSPACE_INDEX_ENABLED.preferenceId, false);
+		STORE.setDefault(XML_PREFERENCES_WORKSPACE_INDEX_EXCLUDE_DIRECTORIES.preferenceId,
+				".git,.hg,.svn,node_modules,target,build,.gradle,out,dist,bin");
+		STORE.setDefault(XML_PREFERENCES_WORKSPACE_INDEX_HEAD_LIMITS.preferenceId, "");
+		STORE.setDefault(XMLWorkspaceIndexDetector.PREF_WORKSPACE_INDEX_DETECTION_IGNORE, false);
 	}
 
 }

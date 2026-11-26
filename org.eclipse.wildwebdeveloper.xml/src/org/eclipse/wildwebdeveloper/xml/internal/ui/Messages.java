@@ -90,6 +90,19 @@ public class Messages extends NLS {
 	public static String AssociateGrammarDialog_download_prompt_message;
 	public static String AssociateGrammarDialog_download_prompt_toggle;
 
+	// --------- XML Workspace Index preference page
+	public static String XMLWorkspaceIndexPreferencePage_description;
+	public static String XMLWorkspaceIndexPreferencePage_enabled;
+	public static String XMLWorkspaceIndexPreferencePage_excludeDirectories;
+	public static String XMLWorkspaceIndexPreferencePage_excludeDirectories_inputTitle;
+	public static String XMLWorkspaceIndexPreferencePage_excludeDirectories_inputMessage;
+	public static String XMLWorkspaceIndexPreferencePage_headLimits;
+
+	// --------- XML Workspace Index Detector
+	public static String XMLWorkspaceIndexDetector_promptTitle;
+	public static String XMLWorkspaceIndexDetector_promptMessage;
+	public static String XMLWorkspaceIndexDetector_promptToggle;
+
 	// --------- Buttons
 	public static String Add_button;
 	public static String Remove_button;
