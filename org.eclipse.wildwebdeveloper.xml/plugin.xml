@@ -58,14 +58,14 @@
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="rng"
             id="org.eclipse.wildwebdeveloper.rng"
-            name="RNG"
+            name="RelaxNG"
             priority="low">
       </content-type>
       <content-type
             base-type="org.eclipse.core.runtime.text"
             file-extensions="rnc"
             id="org.eclipse.wildwebdeveloper.rnc"
-            name="RNC"
+            name="RelaxNG Compact Syntax"
             priority="low">
       </content-type>
    </extension>
@@ -98,6 +98,10 @@
       </contentTypeMapping>
       <contentTypeMapping
             contentType="org.eclipse.wildwebdeveloper.rng"
+            id="org.eclipse.wildwebdeveloper.xml">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="org.eclipse.wildwebdeveloper.rnc"
             id="org.eclipse.wildwebdeveloper.xml">
       </contentTypeMapping>
    </extension>
