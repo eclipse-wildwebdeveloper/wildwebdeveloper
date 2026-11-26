@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.tm4e.registry;bundle-version="0.3.0",
  org.eclipse.jface.text;bundle-version="3.20.100",
  com.google.gson,
  org.eclipse.tm4e.language_pack,
- org.eclipse.lemminx.uber-jar;bundle-version="[0.29.0,1.0.0)"
+ org.eclipse.lemminx.uber-jar;bundle-version="[0.29.0,1.0.0)",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.20.200"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.wildwebdeveloper.xml.internal.Activator
 Export-Package: org.eclipse.wildwebdeveloper.xml;x-friends:="org.eclipse.m2e.editor.lemminx",

@@ -10,6 +10,7 @@
 package org.eclipse.wildwebdeveloper.debug;
 
 import java.io.File;
+import java.net.URI;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IFile;
@@ -117,9 +118,12 @@ public class SelectionUtils {
 			}
 		}
 		if (editorInput instanceof IURIEditorInput input) {
-			File file = new File(input.getURI());
-			if (condition == null || condition.test(file)) {
-				return file;
+			URI uri = input.getURI();
+			if ("file".equals(uri.getScheme())) {
+				File file = new File(uri);
+				if (condition == null || condition.test(file)) {
+					return file;
+				}
 			}
 		}
 		// see also https://bugs.eclipse.org/bugs/show_bug.cgi?id=550804
