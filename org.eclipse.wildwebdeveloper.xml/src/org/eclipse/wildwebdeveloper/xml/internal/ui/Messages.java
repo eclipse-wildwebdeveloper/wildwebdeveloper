@@ -75,12 +75,20 @@ public class Messages extends NLS {
 
 	// --------- Associate Grammar Dialog
 	public static String AssociateGrammarDialog_title;
-	public static String AssociateGrammarDialog_grammar_field;
-	public static String AssociateGrammarDialog_bindingType_field;
+	public static String AssociateGrammarDialog_description;
+	public static String AssociateGrammarDialog_grammar_section;
+	public static String AssociateGrammarDialog_association_section;
+	public static String AssociateGrammarDialog_type_local;
+	public static String AssociateGrammarDialog_type_remote;
 	public static String AssociateGrammarDialog_validation_grammar_file_required;
 	public static String AssociateGrammarDialog_validation_grammar_file_notExists;
 	public static String AssociateGrammarDialog_validation_grammar_file_invalid_fileExtension;
-	public static String AssociateGrammarDialog_validation_grammar_file_invalid_association_for_relaxng;
+	public static String AssociateGrammarDialog_validation_grammar_url_required;
+	public static String AssociateGrammarDialog_validation_grammar_url_invalid;
+	public static String AssociateGrammarDialog_validation_download_external_disabled;
+	public static String AssociateGrammarDialog_download_prompt_title;
+	public static String AssociateGrammarDialog_download_prompt_message;
+	public static String AssociateGrammarDialog_download_prompt_toggle;
 
 	// --------- Buttons
 	public static String Add_button;

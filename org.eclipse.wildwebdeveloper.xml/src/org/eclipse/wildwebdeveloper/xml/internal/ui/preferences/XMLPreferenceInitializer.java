@@ -46,8 +46,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
+import org.eclipse.wildwebdeveloper.xml.internal.commands.AssociateGrammarDialog;
 
 /**
  * XML preference initializer.
@@ -72,6 +74,7 @@ public class XMLPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		// Client settings
 		STORE.setDefault(XML_PREFERENCES_COMPLETION_AUTO_CLOSE_TAGS, true);
+		STORE.setDefault(AssociateGrammarDialog.PREF_ENABLE_DOWNLOAD_PROMPT, MessageDialogWithToggle.PROMPT);
 
 		// Server settings
 		STORE.setDefault(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES.preferenceId, false);
