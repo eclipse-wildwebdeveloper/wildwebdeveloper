@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -17,7 +17,8 @@ import static org.eclipse.wildwebdeveloper.debug.SelectionUtils.*;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
@@ -423,8 +424,8 @@ public abstract class AbstractRunHTMLDebugTab extends AbstractLaunchConfiguratio
 
 		} else if (urlRadio.getSelection()) {
 			try {
-				new URL(urlText.getText());
-			} catch (MalformedURLException ex) {
+				new URI(urlText.getText()).toURL();
+			} catch (MalformedURLException | URISyntaxException | IllegalArgumentException ex) {
 				errorMessage = MessageFormat.format(
 						Messages.RunProgramTab_error_malformedUR,
 						ex.getMessage());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Red Hat Inc. and others.
+ * Copyright (c) 2021, 2026 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -10,7 +10,7 @@
 package org.eclipse.wildwebdeveloper;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 
 import org.eclipse.core.runtime.FileLocator;
 
@@ -20,8 +20,8 @@ public class SchemaAssociationRegistry {
 	
 	public static String translate(String url) {
 		try {
-			return FileLocator.toFileURL(new URL(url)).toString();
-		} catch (IOException e) {
+			return FileLocator.toFileURL(URI.create(url).toURL()).toString();
+		} catch (IOException | IllegalArgumentException e) {
 			return url;
 		}
 	}

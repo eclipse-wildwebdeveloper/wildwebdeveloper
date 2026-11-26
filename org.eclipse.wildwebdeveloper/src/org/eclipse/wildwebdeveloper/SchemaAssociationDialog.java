@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 EclipseSource and others.
+ * Copyright (c) 2020, 2026 EclipseSource and others.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,8 +11,8 @@ package org.eclipse.wildwebdeveloper;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -200,10 +200,13 @@ public class SchemaAssociationDialog extends TitleAreaDialog {
 		}
 
 		String schemaLocation;
+		String location = schemaLocationData.getText();
 		try {
-			URL locationURL = new URL(schemaLocationData.getText());
-			if (locationURL.getProtocol().equals("file")) {
-				File file = new File(locationURL.getPath());
+			if (location.regionMatches(true, 0, "file:", 0, "file:".length())) {
+				// Browse fills in "file://" followed by the plain absolute path, which may
+				// contain characters that are not valid in a URI (e.g. spaces), so the path
+				// is taken as is instead of being parsed as URI.
+				File file = new File(location.substring("file:".length()).replaceFirst("^//", ""));
 				if (file.exists()) {
 					schemaLocation = "file://" + file.getAbsolutePath();
 				} else {
@@ -211,9 +214,12 @@ public class SchemaAssociationDialog extends TitleAreaDialog {
 					return updateOkButton(false);
 				}
 			} else {
-				schemaLocation = locationURL.toURI().toString();
+				URI locationURI = new URI(location);
+				// Check that the URI is absolute and its scheme is supported
+				locationURI.toURL();
+				schemaLocation = locationURI.toString();
 			}
-		} catch (MalformedURLException | URISyntaxException | NullPointerException e) {
+		} catch (MalformedURLException | URISyntaxException | IllegalArgumentException e) {
 			setErrorMessage(SchemaAssociationsMessages.SchemaAssociationDialog_Error_SchemaLocation_invalid);
 			return updateOkButton(false);
 		}
