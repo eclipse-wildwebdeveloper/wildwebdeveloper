@@ -13,7 +13,6 @@ import static org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPrefer
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -152,7 +151,7 @@ public class XMLCatalogs {
 					ILog.get().warn("A URL object was not found for the given URI " + uri + " from " + contributorName);
 					return null;
 				}
-			} catch (InvalidRegistryObjectException | URISyntaxException | MalformedURLException e) {
+			} catch (InvalidRegistryObjectException | URISyntaxException e) {
 				ILog.get().error(e.getMessage(), e);
 				return null;
 			}
@@ -199,9 +198,9 @@ public class XMLCatalogs {
 	 * 
 	 * @param url URL to convert
 	 * @return converted URI
-	 * @throws MalformedURLException Error creating a
+	 * @throws URISyntaxException if the URL can't be converted to a URI
 	 */
-	private static URI convertToURI(URL url) throws URISyntaxException, MalformedURLException {
+	private static URI convertToURI(URL url) throws URISyntaxException {
 		if ("file".equals(url.getProtocol())) {
 			return new URI(url.getProtocol(), url.getAuthority(), url.getPath(), null, null);
 		}
@@ -222,9 +221,10 @@ public class XMLCatalogs {
 				jarURLString = jarURLString.substring(0, startEntry);
 			}
 
-			// convert JAR-URL
-			URL jarURL = new URL(jarURLString);
-			URI jarURI = convertToURI(jarURL);
+			// convert JAR-URL, quoting the characters that are not valid in a URI
+			URI jarURI = jarURLString.startsWith("file:")
+					? new URI("file", null, jarURLString.substring("file:".length()), null)
+					: new URI(jarURLString);
 
 			// build URI with valid JAR-URL by replacing the URL of the JAR with the valid
 			// one

@@ -13,7 +13,7 @@
 package org.eclipse.wildwebdeveloper.eslint;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +118,7 @@ public class ESLintClientImpl extends DefaultLanguageClient implements ESLintLan
 			Display.getDefault().asyncExec(() -> {
 				IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
 				try {
-					browserSupport.createBrowser("openDoc").openURL(new URL(data.get("url")));
+					browserSupport.createBrowser("openDoc").openURL(URI.create(data.get("url")).toURL());
 				} catch (Exception e) {
 					ILog.get().error(e.getMessage(), e);
 				}
