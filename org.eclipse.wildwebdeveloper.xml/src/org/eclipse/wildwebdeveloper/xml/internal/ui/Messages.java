@@ -80,13 +80,19 @@ public class Messages extends NLS {
 	public static String AssociateGrammarDialog_association_section;
 	public static String AssociateGrammarDialog_type_local;
 	public static String AssociateGrammarDialog_type_remote;
+	public static String AssociateGrammarDialog_type_catalog;
 	public static String AssociateGrammarDialog_validation_grammar_file_required;
 	public static String AssociateGrammarDialog_validation_grammar_file_notExists;
 	public static String AssociateGrammarDialog_validation_grammar_file_invalid_fileExtension;
 	public static String AssociateGrammarDialog_validation_grammar_url_required;
 	public static String AssociateGrammarDialog_validation_grammar_url_invalid;
 	public static String AssociateGrammarDialog_validation_download_external_disabled;
+	public static String AssociateGrammarDialog_catalog_no_selection;
+	public static String AssociateGrammarDialog_validation_no_catalog_entries;
+	public static String AssociateGrammarDialog_validation_catalog_entry_required;
 	public static String AssociateGrammarDialog_download_prompt_title;
+	public static String CatalogEntrySelectionDialog_title;
+	public static String CatalogEntrySelectionDialog_loadError;
 	public static String AssociateGrammarDialog_download_prompt_message;
 	public static String AssociateGrammarDialog_download_prompt_toggle;
 

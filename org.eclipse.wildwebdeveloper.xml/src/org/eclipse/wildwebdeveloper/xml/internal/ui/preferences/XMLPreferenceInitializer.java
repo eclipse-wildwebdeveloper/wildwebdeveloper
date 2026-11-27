@@ -49,7 +49,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
-import org.eclipse.wildwebdeveloper.xml.internal.commands.AssociateGrammarDialog;
+import org.eclipse.wildwebdeveloper.xml.internal.commands.associate.AssociateGrammarDialog;
 
 /**
  * XML preference initializer.
