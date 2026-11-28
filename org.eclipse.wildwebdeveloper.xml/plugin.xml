@@ -199,6 +199,13 @@
             name="%XMLValidationPreferencePage.name">
             <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlvalidation"/>
          </page>
+         <page
+            category="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferencePage"
+            class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLWorkspaceIndexPreferencePage"
+            id="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLWorkspaceIndexPreferencePage"
+            name="%XMLWorkspaceIndexPreferencePage.name">
+            <keywordReference id="org.eclipse.wildwebdeveloper.xml.ui.xmlworkspaceindex"/>
+         </page>
 	</extension>
 
 	<!-- Keywords for preference and properties pages -->
@@ -215,6 +222,9 @@
 		<keyword
 			label="%XMLValidationPreferencesPage.preferenceKeywords.xmlvalidation"
 			id="org.eclipse.wildwebdeveloper.xml.ui.xmlvalidation"/>
+		<keyword
+			label="%XMLWorkspaceIndexPreferencesPage.preferenceKeywords.xmlworkspaceindex"
+			id="org.eclipse.wildwebdeveloper.xml.ui.xmlworkspaceindex"/>
     </extension>
 
 	<extension
@@ -222,6 +232,17 @@
          <initializer
             class="org.eclipse.wildwebdeveloper.xml.internal.ui.preferences.XMLPreferenceInitializer">
         </initializer>
+   </extension>
+
+   <extension point="org.eclipse.ui.startup">
+      <startup class="org.eclipse.wildwebdeveloper.xml.internal.startup.XMLWorkspaceIndexDetector"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.wildwebdeveloper.xml.findReferences"
+            name="%command.xmlFindReferences.name">
+      </command>
    </extension>
 
    <extension
@@ -238,5 +259,37 @@
             class="org.eclipse.wildwebdeveloper.xml.internal.commands.ShowReferencesHandler"
             commandId="xml.show.references">
       </handler>
+      <handler
+            class="org.eclipse.wildwebdeveloper.xml.internal.commands.XMLFindReferencesInExplorerHandler"
+            commandId="org.eclipse.wildwebdeveloper.xml.findReferences">
+      </handler>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="org.eclipse.wildwebdeveloper.xml.findReferences"
+               label="%command.xmlFindReferences.name"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <with variable="selection">
+                  <count value="1"/>
+                  <iterate>
+                     <and>
+                        <instanceof value="org.eclipse.core.resources.IFile"/>
+                        <or>
+                           <test property="org.eclipse.core.resources.name" value="*.xsd"/>
+                           <test property="org.eclipse.core.resources.name" value="*.dtd"/>
+                           <test property="org.eclipse.core.resources.name" value="*.rng"/>
+                           <test property="org.eclipse.core.resources.name" value="*.rnc"/>
+                        </or>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
 </plugin>

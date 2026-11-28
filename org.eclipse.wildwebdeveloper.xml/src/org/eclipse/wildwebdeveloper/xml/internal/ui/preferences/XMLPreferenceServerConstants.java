@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.google.gson.Gson;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.wildwebdeveloper.xml.internal.Activator;
@@ -145,6 +147,14 @@ public class XMLPreferenceServerConstants {
 	public static final LemminxPreference XML_PREFERENCES_VALIDATION_NO_GRAMMAR = new LemminxPreference(
 			"validation/noGrammar");
 
+	// Workspace Index settings
+	public static final LemminxPreference XML_PREFERENCES_WORKSPACE_INDEX_ENABLED = new LemminxPreference(
+			"workspaceIndex/enabled");
+	public static final LemminxPreference XML_PREFERENCES_WORKSPACE_INDEX_EXCLUDE_DIRECTORIES = new LemminxPreference(
+			"workspaceIndex/excludeDirectories");
+	public static final LemminxPreference XML_PREFERENCES_WORKSPACE_INDEX_HEAD_LIMITS = new LemminxPreference(
+			"workspaceIndex/headLimits");
+
 	private static final LemminxPreference[] ALL_LEMMINX_PREFERENCES = { //
 			XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES, //
 			XML_PREFERENCES_CATAGLOGS, //
@@ -173,7 +183,10 @@ public class XMLPreferenceServerConstants {
 			XML_PREFERENCES_VALIDATION_SCHEMA_ENABLED, //
 			XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, //
 			XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, //
-			XML_PREFERENCES_VALIDATION_NO_GRAMMAR };
+			XML_PREFERENCES_VALIDATION_NO_GRAMMAR, //
+			XML_PREFERENCES_WORKSPACE_INDEX_ENABLED, //
+			XML_PREFERENCES_WORKSPACE_INDEX_EXCLUDE_DIRECTORIES, //
+			XML_PREFERENCES_WORKSPACE_INDEX_HEAD_LIMITS };
 
 	public static Optional<LemminxPreference> getLemminxPreference(PropertyChangeEvent event) {
 		return Arrays.stream(ALL_LEMMINX_PREFERENCES)
@@ -225,6 +238,22 @@ public class XMLPreferenceServerConstants {
 		setAsBoolean(XML_PREFERENCES_VALIDATION_DISALLOW_DOCTYPE_DECL, store, xmlOpts);
 		setAsBoolean(XML_PREFERENCES_VALIDATION_RESOLVE_EXTERNAL_ENTITIES, store, xmlOpts);
 		setAsString(XML_PREFERENCES_VALIDATION_NO_GRAMMAR, store, xmlOpts);
+
+		// Workspace Index settings
+		setAsBoolean(XML_PREFERENCES_WORKSPACE_INDEX_ENABLED, store, xmlOpts);
+		setAsArrayString(XML_PREFERENCES_WORKSPACE_INDEX_EXCLUDE_DIRECTORIES, store, xmlOpts);
+		String headLimitsJson = store.getString(XML_PREFERENCES_WORKSPACE_INDEX_HEAD_LIMITS.preferenceId);
+		if (!headLimitsJson.isBlank()) {
+			try {
+				@SuppressWarnings("unchecked")
+				Map<String, String> map = new Gson().fromJson(headLimitsJson, Map.class);
+				if (map != null && !map.isEmpty()) {
+					XML_PREFERENCES_WORKSPACE_INDEX_HEAD_LIMITS.storeToLemminxOptions(map, xmlOpts);
+				}
+			} catch (Exception e) {
+				// ignore invalid JSON
+			}
+		}
 	}
 
 	private static void setAsString(LemminxPreference preference, IPreferenceStore store, Map<String, Object> xmlOpts) {
