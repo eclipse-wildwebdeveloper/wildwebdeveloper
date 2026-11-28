@@ -31,8 +31,6 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import com.google.gson.Gson;
-
 /**
  * Handles the {@code xml.show.references} command sent by LemMinX via a code
  * lens, triggering a "Find References" search at the given position in the
@@ -55,12 +53,10 @@ public class ShowReferencesHandler extends LSPCommandHandler {
 
 	private static final String FIND_REFERENCES_COMMAND = "org.eclipse.ui.genericeditor.findReferences";
 
-	private static final Gson GSON = new Gson();
-
 	@Override
 	public Object execute(ExecutionEvent event, Command command, IPath path) throws ExecutionException {
-		String uri = (String) command.getArguments().get(0);
-		Position position = GSON.fromJson(GSON.toJsonTree(command.getArguments().get(1)), Position.class);
+		String uri = ArgumentsUtils.getArgAt(command, 0, String.class);
+		Position position = ArgumentsUtils.getArgAt(command, 1, Position.class);
 		try {
 			IFileStore fileStore = EFS.getStore(URI.create(uri));
 			PlatformUI.getWorkbench().getDisplay().asyncExec(() -> {

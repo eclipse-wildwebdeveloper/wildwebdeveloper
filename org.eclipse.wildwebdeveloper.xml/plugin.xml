@@ -238,5 +238,9 @@
             class="org.eclipse.wildwebdeveloper.xml.internal.commands.ShowReferencesHandler"
             commandId="xml.show.references">
       </handler>
+      <handler
+            class="org.eclipse.wildwebdeveloper.xml.internal.commands.UpdateConfigurationHandler"
+            commandId="xml.update.configuration">
+      </handler>
    </extension>
 </plugin>
