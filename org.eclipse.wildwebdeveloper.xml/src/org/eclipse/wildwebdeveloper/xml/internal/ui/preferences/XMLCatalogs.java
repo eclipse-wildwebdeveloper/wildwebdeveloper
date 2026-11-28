@@ -81,6 +81,12 @@ public class XMLCatalogs {
 						if (publicId != null && uri != null) {
 							catalogFile.append("<public publicId=\"").append(publicId).append("\" uri=\"").append(uri)
 									.append("\"/>\n");
+							// If public entry has webURL, also create a system entry for it
+							String webURL = element.getAttribute("webURL");
+							if (webURL != null && !webURL.isEmpty()) {
+								catalogFile.append("<system systemId=\"").append(webURL).append("\" uri=\"").append(uri)
+										.append("\"/>\n");
+							}
 						}
 						break;
 					}
