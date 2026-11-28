@@ -51,7 +51,7 @@ public class OpenUriHandler extends LSPCommandHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event, Command command, IPath path) throws ExecutionException {
-		String uri = (String) command.getArguments().get(0);
+		String uri = ArgumentsUtils.getArgAt(command, 0, String.class);
 		if (uri == null) {
 			return null;
 		}

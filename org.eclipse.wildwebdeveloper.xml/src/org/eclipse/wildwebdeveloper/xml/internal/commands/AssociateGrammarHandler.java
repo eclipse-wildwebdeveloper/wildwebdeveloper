@@ -59,7 +59,7 @@ public class AssociateGrammarHandler extends LSPCommandHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event, Command command, IPath path) throws ExecutionException {
-		String uri = (String) command.getArguments().get(0);
+		String uri = ArgumentsUtils.getArgAt(command, 0, String.class);
 		// Open the association grammar dialog.
 		AssociateGrammarDialog dialog = new AssociateGrammarDialog(HandlerUtil.getActiveShell(event), path);
 		if (dialog.open() == IDialogConstants.OK_ID) {
@@ -88,11 +88,11 @@ public class AssociateGrammarHandler extends LSPCommandHandler {
 	private static CompletableFuture<Object> executeServerCommand(String commandId, Object... params) throws Exception {
 		List<LanguageServer> commandHandlers = new ArrayList<>();
 		LanguageServers.forProject(null).withCapability(serverCapabilities -> {
-				ExecuteCommandOptions executeCommandProvider = serverCapabilities.getExecuteCommandProvider();
-				return  Either.forLeft(executeCommandProvider != null ? 
-						executeCommandProvider.getCommands().contains(commandId) : false);
-			}).excludeInactive().collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
-			.thenAccept(commandHandlers::addAll).get(100, TimeUnit.MILLISECONDS);
+			ExecuteCommandOptions executeCommandProvider = serverCapabilities.getExecuteCommandProvider();
+			return Either.forLeft(
+					executeCommandProvider != null ? executeCommandProvider.getCommands().contains(commandId) : false);
+		}).excludeInactive().collectAll((w, ls) -> CompletableFuture.completedFuture(ls))
+				.thenAccept(commandHandlers::addAll).get(100, TimeUnit.MILLISECONDS);
 
 		if (commandHandlers.size() == 1) {
 			LanguageServer handler = commandHandlers.get(0);
